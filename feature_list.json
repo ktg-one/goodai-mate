@@ -1,0 +1,2935 @@
+[
+  {
+    "category": "functional",
+    "description": "SDF lens blur background canvas renders on page load using Three.js with OrthographicCamera",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify a <canvas> element exists in the DOM",
+      "Step 3: Verify the canvas is rendered by THREE.WebGLRenderer",
+      "Step 4: Verify the canvas uses position: fixed, top: 0, left: 0",
+      "Step 5: Verify the canvas sits at z-index 0 behind all UI elements",
+      "Step 6: Verify canvas width matches window.innerWidth",
+      "Step 7: Verify canvas height matches window.innerHeight",
+      "Step 8: Verify WebGL context is active (no context lost)",
+      "Step 9: Verify copper-tinted SDF shapes are visible on the canvas",
+      "Step 10: Verify UI content (wordmark, input) is visible above the canvas"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF shader uses OrthographicCamera with correct bounds matching viewport dimensions",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect Three.js scene — camera must be OrthographicCamera, not PerspectiveCamera",
+      "Step 3: Verify camera bounds: left=-w/2, right=w/2, top=h/2, bottom=-h/2",
+      "Step 4: Verify camera near=0.1, far=1000, position.z=1"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF shader renders PlaneGeometry(1,1) scaled to viewport dimensions",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify a PlaneGeometry(1,1) mesh exists in the scene",
+      "Step 3: Verify quad.scale equals (viewportWidth, viewportHeight, 1)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF shader uses exactly three uniforms: u_mouse, u_resolution, u_pixelRatio",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect ShaderMaterial uniforms object",
+      "Step 3: Verify u_mouse is vec2 type",
+      "Step 4: Verify u_mouse value is in page pixels (not normalized 0-1)",
+      "Step 5: Verify u_mouse points to damped vector, not raw mouse",
+      "Step 6: Verify u_resolution is vec2 type",
+      "Step 7: Verify u_resolution equals viewport dimensions * devicePixelRatio",
+      "Step 8: Verify u_pixelRatio is float type",
+      "Step 9: Verify u_pixelRatio is capped at 2 (Math.min(devicePixelRatio, 2))",
+      "Step 10: Verify no additional uniforms exist beyond these three"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF shader uses VAR=0 define for round rectangle stroke variation",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify ShaderMaterial defines include VAR: 0",
+      "Step 3: Verify no URL parameter switching logic exists"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF shader fragment.glsl is loaded as raw string import",
+    "steps": [
+      "Step 1: Verify fragment.glsl exists at src/shaders/fragment.glsl",
+      "Step 2: Verify next.config.ts configures raw loader for .glsl files",
+      "Step 3: Verify SdfBackground.tsx imports the shader as a string"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF shader vertex shader is inline (not a separate file)",
+    "steps": [
+      "Step 1: Verify no vertex.glsl file exists in the project",
+      "Step 2: Verify vertex shader is defined inline in SdfBackground.tsx as a template string",
+      "Step 3: Verify vertex shader passes through position and sets v_texcoord = uv"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF shader outputs copper-tinted color instead of monochrome white",
+    "steps": [
+      "Step 1: Open fragment.glsl",
+      "Step 2: Verify the final color output uses copper grading (vec3 based on #D86A3D)",
+      "Step 3: Verify the original vec3(sdf) monochrome output has been replaced",
+      "Step 4: Navigate to landing page and visually confirm copper-tinted SDF shapes on dark background"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF shader mouse tracking uses damped interpolation for smooth cursor following",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Move cursor quickly across the page",
+      "Step 3: Verify raw mouse position is captured via mousemove event listener",
+      "Step 4: Verify raw mouse position is also captured via pointermove event listener",
+      "Step 5: Verify raw mouse stored in vMouse (THREE.Vector2)",
+      "Step 6: Verify damped mouse stored in separate vMouseDamp (THREE.Vector2)",
+      "Step 7: Verify damping uses THREE.MathUtils.damp with lambda=8 and deltaTime",
+      "Step 8: Verify damping runs per-frame for both x and y independently",
+      "Step 9: Verify u_mouse uniform points to vMouseDamp reference, not vMouse",
+      "Step 10: Visually confirm smooth eased tracking of cursor in SDF shapes — no snapping"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF shader animation loop runs at 60fps using requestAnimationFrame",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Open Chrome DevTools Performance tab",
+      "Step 3: Record 3 seconds of idle animation",
+      "Step 4: Verify frame rate is stable around 60fps",
+      "Step 5: Verify delta time is calculated from performance.now() * 0.001"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF shader handles window resize correctly — updates camera, quad, resolution, pixelRatio",
+    "steps": [
+      "Step 1: Navigate to the landing page at 1920x1080",
+      "Step 2: Resize browser window to 1024x768",
+      "Step 3: Verify renderer.setSize called with new dimensions",
+      "Step 4: Verify camera bounds updated and updateProjectionMatrix called",
+      "Step 5: Verify quad.scale.set updated to new dimensions",
+      "Step 6: Verify u_resolution updated with new dimensions * dpr",
+      "Step 7: Verify u_pixelRatio updated",
+      "Step 8: Visually confirm shader fills viewport without distortion"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF shader pixel ratio is capped at 2 for performance",
+    "steps": [
+      "Step 1: Navigate to the landing page on a high-DPI display (3x)",
+      "Step 2: Verify Math.min(window.devicePixelRatio, 2) is used",
+      "Step 3: Verify renderer.setPixelRatio receives capped value"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF shader touch events prevent scroll with passive:false on touchmove",
+    "steps": [
+      "Step 1: Navigate to the landing page on a touch device",
+      "Step 2: Touch and drag on the canvas area",
+      "Step 3: Verify body touchmove event has preventDefault called",
+      "Step 4: Verify event listener uses { passive: false }"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF shader fragment.glsl contains correct SDF functions: sdRoundRect, sdCircle, sdPoly, aastep, fill, stroke",
+    "steps": [
+      "Step 1: Open fragment.glsl",
+      "Step 2: Verify coord(vec2 p) function exists for coordinate normalization",
+      "Step 3: Verify sdRoundRect(vec2 p, vec2 b, float r) function exists",
+      "Step 4: Verify sdCircle(vec2 st, vec2 center) function exists",
+      "Step 5: Verify sdPoly(vec2 p, float w, int sides) function exists",
+      "Step 6: Verify aastep(float threshold, float value) function exists using fwidth",
+      "Step 7: Verify fill(float x) basic fill function exists",
+      "Step 8: Verify fill(float x, float size, float edge) overload exists",
+      "Step 9: Verify stroke(float d, float t) basic stroke function exists",
+      "Step 10: Verify stroke(float x, float size, float w, float edge) overload exists",
+      "Step 11: Verify main() function uses VAR preprocessor conditional for shape selection"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF lens blur effect: cursor circle SDF modulates edge parameter of main shape",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Move cursor over the SDF shape",
+      "Step 3: Verify the shape edge softens/blurs near the cursor position",
+      "Step 4: Move cursor away from the shape — edge sharpens again",
+      "Step 5: Verify cursor circle SDF uses circleSize=0.3 and circleEdge=0.5 parameters",
+      "Step 6: Verify cursor circle fill value feeds into main shape stroke() edge parameter",
+      "Step 7: Verify this is edge parameter modulation, not a post-process blur filter",
+      "Step 8: Move cursor to different positions — verify effect follows smoothly",
+      "Step 9: Verify the effect works with VAR=0 round rectangle stroke variation",
+      "Step 10: Verify effect is visible on both desktop Chrome and Firefox"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Landing page wordmark displays as 'Good'ai' with correct formatting",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify wordmark text reads 'Good'ai' (lowercase good, apostrophe, lowercase ai)",
+      "Step 3: Verify wordmark is NOT displayed as 'GoodAI', 'GOODAI', 'Good AI', or 'Good.ai'",
+      "Step 4: Verify apostrophe character renders in accent color (#D86A3D) at 0.7 opacity"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Landing page subtitle displays 'business automations, sorted' in mono font",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify subtitle text reads 'business automations, sorted'",
+      "Step 3: Verify subtitle uses JetBrains Mono font",
+      "Step 4: Verify subtitle is uppercase"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Landing page input field has placeholder 'Tell us your problem.'",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify input field is present and centered",
+      "Step 3: Verify placeholder text reads 'Tell us your problem.'",
+      "Step 4: Verify input has max-width 540px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Landing page hint text displays 'We'll figure out how to fix it.' below input",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify hint text below input reads 'We'll figure out how to fix it.'",
+      "Step 3: Verify hint uses JetBrains Mono font"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Landing page Perth badge displays 'PERTH / WA' fixed at bottom center",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify Perth badge text reads 'PERTH / WA'",
+      "Step 3: Verify badge is fixed positioned at bottom center (28px from bottom)",
+      "Step 4: Verify slash character renders in accent-soft (#C4714D) color at 0.5 opacity",
+      "Step 5: Verify badge uses JetBrains Mono font-family",
+      "Step 6: Verify badge font-size is 10px",
+      "Step 7: Verify badge font-weight is 300",
+      "Step 8: Verify badge letter-spacing is 0.12em",
+      "Step 9: Verify badge text-transform is uppercase",
+      "Step 10: Verify badge color is text-dim (#6B6560)",
+      "Step 11: Verify badge fades up with 1.2s animation delay on load"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Landing page submit button is an arrow icon inside the input field, right-aligned",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify submit button is positioned absolute inside input wrapper, right 8px",
+      "Step 3: Verify button is 40x40px with transparent background",
+      "Step 4: Verify button contains an SVG arrow icon (18px, stroke currentColor)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Landing page staggered fade-up animations play on load with correct delays",
+    "steps": [
+      "Step 1: Navigate to the landing page (hard refresh)",
+      "Step 2: Verify wordmark fades up with 0.3s delay, 1s duration",
+      "Step 3: Verify subtitle fades up with 0.55s delay",
+      "Step 4: Verify input area fades up with 0.7s delay",
+      "Step 5: Verify Perth badge fades up with 1.2s delay",
+      "Step 6: Verify all animations use cubic-bezier(0.23, 1, 0.32, 1) easing"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Input field focus state: border color changes, box-shadow appears, background elevates",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect input field in default (unfocused) state",
+      "Step 3: Verify default border is 1px solid #2A2925",
+      "Step 4: Verify default background is #151514 (surface)",
+      "Step 5: Click on the input field to focus it",
+      "Step 6: Verify border-color changes to copper at 0.25 opacity",
+      "Step 7: Verify box-shadow appears with 4px accent-dim spread",
+      "Step 8: Verify box-shadow includes 32px dark blur component",
+      "Step 9: Verify background changes to surface-raised (#1C1C1A)",
+      "Step 10: Click away to blur the input",
+      "Step 11: Verify all focus styles revert to defaults smoothly"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Submitting a message transitions from landing state to conversation state",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Type 'My invoicing takes forever' in the input field",
+      "Step 3: Press Enter or click the submit button",
+      "Step 4: Verify container shifts from center-justified to flex-start with padding-top 48px",
+      "Step 5: Verify wordmark shrinks from 34px to 20px, margin-bottom reduces to 28px",
+      "Step 6: Verify subtitle is hidden",
+      "Step 7: Verify landing input area is hidden",
+      "Step 8: Verify conversation div becomes visible",
+      "Step 9: Verify fixed bottom input bar appears",
+      "Step 10: Verify Perth badge is hidden",
+      "Step 11: Verify user message appears as right-aligned copper bubble"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Conversation mode wordmark shrinks with smooth 0.5s ease transition",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Submit a message to trigger conversation mode",
+      "Step 3: Verify wordmark font-size transitions from 34px to 20px",
+      "Step 4: Verify transition duration is 0.5s with ease timing",
+      "Step 5: Verify margin-bottom transitions from 56px to 28px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "User message bubble renders with correct styling — right-aligned, copper-tinted",
+    "steps": [
+      "Step 1: Submit a message in the chat",
+      "Step 2: Verify message container has text-align: right",
+      "Step 3: Verify bubble has display: inline-block, max-width 85%",
+      "Step 4: Verify background is rgba(216,106,61,0.07)",
+      "Step 5: Verify border is 1px solid rgba(216,106,61,0.12)",
+      "Step 6: Verify border-radius is 16px 16px 4px 16px (bottom-right sharp)",
+      "Step 7: Verify padding is 14px 20px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI message bubble renders with correct styling — left-aligned, surface background, GOOD'AI label",
+    "steps": [
+      "Step 1: Submit a message and wait for AI response",
+      "Step 2: Verify AI message has 'GOOD'AI' label above the bubble",
+      "Step 3: Verify label uses JetBrains Mono, 10px, weight 400, letter-spacing 0.08em, uppercase",
+      "Step 4: Verify label color is accent-soft (#C4714D)",
+      "Step 5: Verify bubble background is surface (#151514)",
+      "Step 6: Verify bubble border is 1px solid border color (#2A2925)",
+      "Step 7: Verify border-radius is 16px 16px 16px 4px (bottom-left sharp)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Typing indicator shows three bouncing dots while waiting for AI response",
+    "steps": [
+      "Step 1: Submit a message in the chat",
+      "Step 2: Verify typing indicator appears inside an AI message bubble with GOOD'AI label",
+      "Step 3: Verify three dot spans are rendered, each 5px x 5px, border-radius 50%",
+      "Step 4: Verify dots use accent-soft color",
+      "Step 5: Verify dots have staggered bounce animation (0s, 0.2s, 0.4s delay)",
+      "Step 6: Verify typing indicator disappears when AI response arrives"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Input field is disabled and dimmed (opacity 0.5) while waiting for AI response",
+    "steps": [
+      "Step 1: Submit a message in the chat",
+      "Step 2: Verify the fixed bottom input field becomes disabled",
+      "Step 3: Verify input opacity drops to 0.5",
+      "Step 4: Try typing — verify input does not accept text",
+      "Step 5: After AI response arrives, verify input re-enables and opacity returns to 1"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Messages appear with fadeUp animation (translateY 10px, 0.5s duration)",
+    "steps": [
+      "Step 1: Submit a message in the chat",
+      "Step 2: Verify new user message animates in with fadeUp (translateY 10px to 0)",
+      "Step 3: Wait for AI response",
+      "Step 4: Verify AI message also animates in with fadeUp"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Conversation area auto-scrolls to bottom when new messages are added",
+    "steps": [
+      "Step 1: Send several messages to fill the conversation area",
+      "Step 2: Verify conversation scrolls to the bottom after each new message",
+      "Step 3: Verify scrolling happens for both user messages and AI responses"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Conversation area has custom scrollbar: 3px width, border color thumb, transparent track",
+    "steps": [
+      "Step 1: Send enough messages to make conversation scrollable",
+      "Step 2: Verify scrollbar width is 3px",
+      "Step 3: Verify scrollbar thumb color matches border color (#2A2925)",
+      "Step 4: Verify scrollbar track is transparent"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Chat history is stored in client-side array with { role, content } format",
+    "steps": [
+      "Step 1: Send a message",
+      "Step 2: Wait for AI response",
+      "Step 3: Verify messageHistory array contains user message with role 'user'",
+      "Step 4: Verify messageHistory array contains AI response with role 'ai'",
+      "Step 5: Send another message and verify array grows correctly"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Fixed bottom input bar appears only in conversation state with gradient background",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify no fixed bottom input bar is visible",
+      "Step 3: Submit a message to enter conversation mode",
+      "Step 4: Verify fixed bottom input bar appears at position: fixed, bottom: 0",
+      "Step 5: Verify background uses linear-gradient(transparent, var(--bg) 35%)",
+      "Step 6: Verify input wrapper has max-width 540px, centered"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Fixed bottom input bar has correct padding: 20px 40px 32px",
+    "steps": [
+      "Step 1: Enter conversation mode",
+      "Step 2: Verify fixed input bar padding is 20px top, 40px left/right, 32px bottom"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Conversation div has padding-bottom 120px to prevent messages being hidden behind fixed input",
+    "steps": [
+      "Step 1: Enter conversation mode",
+      "Step 2: Send several messages to fill the conversation area",
+      "Step 3: Verify conversation div has padding-bottom 120px",
+      "Step 4: Verify last message is visible above the fixed input bar"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Both landing and fixed input forms handle submit via Enter key and button click",
+    "steps": [
+      "Step 1: Navigate to landing page, type a message, press Enter",
+      "Step 2: Verify form submits and conversation mode activates",
+      "Step 3: In conversation mode, type a message in fixed input, press Enter",
+      "Step 4: Verify message submits",
+      "Step 5: Type another message and click the submit button",
+      "Step 6: Verify message submits via button click too"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Empty message submission is prevented — nothing happens on empty submit",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Click submit or press Enter with empty input",
+      "Step 3: Verify no message is sent and no transition occurs"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "API route /api/chat exists as a Next.js Route Handler accepting POST requests",
+    "steps": [
+      "Step 1: Send POST to /api/chat with { messages: [{ role: 'user', content: 'My invoicing takes forever' }] }",
+      "Step 2: Verify response status is 200",
+      "Step 3: Verify response body contains { response: string }",
+      "Step 4: Verify response text is non-empty"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "API route uses Vercel AI Gateway via @ai-sdk/openai-compatible, not direct Anthropic SDK",
+    "steps": [
+      "Step 1: Inspect /api/chat/route.ts source code",
+      "Step 2: Verify import of createOpenAICompatible from @ai-sdk/openai-compatible",
+      "Step 3: Verify baseURL is 'https://ai-gateway.vercel.sh/v1'",
+      "Step 4: Verify model is gateway('anthropic/claude-sonnet-4-20250514')",
+      "Step 5: Verify API key comes from process.env.AI_GATEWAY_API_KEY"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "API route maps frontend 'ai' role to 'assistant' role for API compatibility",
+    "steps": [
+      "Step 1: Send POST to /api/chat with messages containing role 'ai'",
+      "Step 2: Verify the route handler maps 'ai' to 'assistant' before sending to AI Gateway",
+      "Step 3: Verify response is returned successfully"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "API route enforces max_tokens: 300 for concise responses",
+    "steps": [
+      "Step 1: Inspect /api/chat/route.ts source code",
+      "Step 2: Verify max_tokens (or maxTokens) is set to 300",
+      "Step 3: Send a complex message and verify response is reasonably short"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "API route system prompt defines Good'ai intake assistant persona correctly",
+    "steps": [
+      "Step 1: Inspect /api/chat/route.ts source code",
+      "Step 2: Verify system prompt establishes identity as Good'ai intake assistant in Perth, WA",
+      "Step 3: Verify system prompt uses 'we' and 'us'",
+      "Step 4: Verify system prompt instructs AI to never say 'AI', 'artificial intelligence', etc.",
+      "Step 5: Verify system prompt instructs AI to never use bullet points or numbered lists",
+      "Step 6: Verify system prompt instructs AI to keep responses under 3 sentences",
+      "Step 7: Verify system prompt mentions Perth SME context (tradies, 50s-60s owners)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI response never contains the word 'AI' or 'artificial intelligence'",
+    "steps": [
+      "Step 1: Send message: 'What kind of AI do you use?'",
+      "Step 2: Verify response does not contain 'AI', 'artificial intelligence', 'machine learning', or 'neural network'",
+      "Step 3: Verify response uses terms like 'automation', 'system', 'workflow' instead"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI response never uses corporate speak: no 'leverage', 'synergy', 'optimize', 'utilize', 'streamline'",
+    "steps": [
+      "Step 1: Send message: 'How can you help my business?'",
+      "Step 2: Verify response does not contain 'leverage', 'synergy', 'optimize', 'utilize', or 'streamline'",
+      "Step 3: Verify tone is casual and direct"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI response never uses bullet points or numbered lists",
+    "steps": [
+      "Step 1: Send message: 'What services do you offer?'",
+      "Step 2: Verify response does not contain bullet points (-, *, •) or numbered lists (1., 2.)",
+      "Step 3: Verify response uses natural sentences instead"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI response is under 3 sentences for simple queries",
+    "steps": [
+      "Step 1: Send message: 'I spend too long on invoicing'",
+      "Step 2: Count sentences in the response",
+      "Step 3: Verify response is 3 sentences or fewer"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI first response acknowledges the problem, gives insight, asks one clarifying question",
+    "steps": [
+      "Step 1: Send first message: 'We waste hours manually entering data from emails'",
+      "Step 2: Verify response acknowledges the problem",
+      "Step 3: Verify response includes a useful insight about automation",
+      "Step 4: Verify response ends with or includes one clarifying question"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI recognizes Perth SME tools: Xero, MYOB, ServiceM8, Tradify, Cliniko, Square",
+    "steps": [
+      "Step 1: Send message: 'We use Xero for accounting but it takes ages'",
+      "Step 2: Verify response acknowledges familiarity with Xero",
+      "Step 3: Send follow-up: 'We also use ServiceM8 for job management'",
+      "Step 4: Verify response acknowledges ServiceM8"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI gently redirects off-topic questions back to business automations",
+    "steps": [
+      "Step 1: Send message: 'What's the weather like in Perth today?'",
+      "Step 2: Verify response gently redirects to business automations",
+      "Step 3: Verify response is not rude or dismissive"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "API route returns friendly message on 429 rate limit error",
+    "steps": [
+      "Step 1: Trigger a 429 rate limit error from the AI Gateway",
+      "Step 2: Verify response message is: 'We're getting a lot of traffic right now. Give it a sec and try again.'",
+      "Step 3: Verify no technical error details are exposed"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "API route returns friendly message on 500 server error",
+    "steps": [
+      "Step 1: Trigger a 500 server error",
+      "Step 2: Verify response message is: 'Something broke on our end. Try again in a moment.'",
+      "Step 3: Verify no stack traces are exposed"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI_GATEWAY_API_KEY is server-side only — never exposed to the browser",
+    "steps": [
+      "Step 1: Open browser DevTools Network tab",
+      "Step 2: Submit a chat message",
+      "Step 3: Inspect all requests — verify AI_GATEWAY_API_KEY does not appear in any request headers, body, or response",
+      "Step 4: Inspect page source — verify no API key in client-side JavaScript"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture card appears 600ms after first AI response",
+    "steps": [
+      "Step 1: Submit first message in the chat",
+      "Step 2: Wait for AI response to render",
+      "Step 3: Verify lead capture card appears approximately 600ms after the AI response",
+      "Step 4: Verify card is injected into the conversation flow (not a separate overlay)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture card heading reads 'Want us to look into this?'",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Verify heading text is 'Want us to look into this?'",
+      "Step 3: Verify heading is 15px, weight 600, text-bright color"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture card subtext reads 'Drop your details and we'll scope it out — no obligation, no runaround.'",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Verify subtext matches exactly",
+      "Step 3: Verify subtext is 13px, text-dim color, line-height 1.5"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture card has four fields in two rows: Name+Business, Phone+Email",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Verify Row 1 contains Name (required) and Business name (optional) fields",
+      "Step 3: Verify Row 2 contains Phone (required, type=tel) and Email (optional) fields",
+      "Step 4: Verify each row has two fields side by side (flex row, gap 10px)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture Name field is required",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Leave Name field empty, fill Phone",
+      "Step 3: Click submit",
+      "Step 4: Verify form validation prevents submission"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture Phone field is required and uses type=tel",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Verify Phone input has type='tel'",
+      "Step 3: Fill Name but leave Phone empty",
+      "Step 4: Click submit",
+      "Step 5: Verify form validation prevents submission"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture Business and Email fields are optional",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Fill only Name and Phone (required fields)",
+      "Step 3: Leave Business and Email empty",
+      "Step 4: Click submit",
+      "Step 5: Verify form submits successfully"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture submit button text is 'Get a callback'",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Verify submit button text is 'Get a callback'"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture submit button changes to 'Sending...' and disables during submission",
+    "steps": [
+      "Step 1: Fill in lead capture form fields",
+      "Step 2: Click 'Get a callback'",
+      "Step 3: Verify button text changes to 'Sending...'",
+      "Step 4: Verify button becomes disabled (opacity 0.5, no pointer events)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture form submits to Web3Forms API with correct payload",
+    "steps": [
+      "Step 1: Open DevTools Network tab",
+      "Step 2: Fill in lead capture form: Name='John', Business='Acme', Phone='0412345678', Email='john@acme.com'",
+      "Step 3: Click submit",
+      "Step 4: Verify POST request to https://api.web3forms.com/submit",
+      "Step 5: Verify payload contains access_key (WEB3FORMS_KEY)",
+      "Step 6: Verify payload contains subject 'New lead: John'",
+      "Step 7: Verify payload contains from_name \"Good'ai Website\"",
+      "Step 8: Verify payload contains name, business, phone, email fields",
+      "Step 9: Verify payload contains 'problem' field with first user message",
+      "Step 10: Verify payload contains 'conversation' field with full message history formatted as 'Them: ... / Us: ...'"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture success state shows checkmark and confirmation message",
+    "steps": [
+      "Step 1: Submit the lead capture form",
+      "Step 2: Verify card inner HTML replaces with success state",
+      "Step 3: Verify checkmark icon (28px, accent color) is displayed",
+      "Step 4: Verify text reads 'Nice one. We'll be in touch within 24 hours.'",
+      "Step 5: Verify success state is text-align center with 20px padding"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture shows success state even on Web3Forms error (never lose the lead)",
+    "steps": [
+      "Step 1: Block network request to web3forms.com (simulate error)",
+      "Step 2: Fill and submit the lead capture form",
+      "Step 3: Verify success state still shows (checkmark + confirmation text)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture card only shows once per session — leadCaptured flag prevents re-showing",
+    "steps": [
+      "Step 1: Submit first message, wait for AI response",
+      "Step 2: Verify lead capture card appears after 600ms",
+      "Step 3: Fill in Name and Phone fields",
+      "Step 4: Click 'Get a callback' to submit",
+      "Step 5: Verify success state replaces form",
+      "Step 6: Verify leadCaptured flag is set to true",
+      "Step 7: Send a second chat message",
+      "Step 8: Wait for second AI response",
+      "Step 9: Verify no second lead capture card appears",
+      "Step 10: Send a third chat message and wait for response",
+      "Step 11: Verify still no additional lead card — flag persists for session"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "User can continue chatting normally after submitting the lead form",
+    "steps": [
+      "Step 1: Complete the lead capture flow (submit form, see success)",
+      "Step 2: Type a new message in the fixed input",
+      "Step 3: Verify message sends and appears in conversation",
+      "Step 4: Verify AI responds normally",
+      "Step 5: Verify no errors or UI glitches"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Subsequent messages append below the lead card in the conversation flow",
+    "steps": [
+      "Step 1: Complete the lead capture flow",
+      "Step 2: Send a new message",
+      "Step 3: Verify the new message appears BELOW the lead card in the DOM",
+      "Step 4: Verify conversation order is: user msg, AI msg, lead card, user msg 2, AI msg 2"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Custom cursor renders as 20px circle with 1.5px copper border",
+    "steps": [
+      "Step 1: Navigate to the landing page on desktop",
+      "Step 2: Verify custom cursor div exists in the DOM",
+      "Step 3: Verify position: fixed on cursor element",
+      "Step 4: Verify z-index: 9999 on cursor element",
+      "Step 5: Verify pointer-events: none on cursor element",
+      "Step 6: Verify width is 20px and height is 20px",
+      "Step 7: Verify border-radius is 50%",
+      "Step 8: Verify border is 1.5px solid rgba(216,106,61,0.35)",
+      "Step 9: Verify mix-blend-mode: difference is applied",
+      "Step 10: Verify transform uses translate(-50%, -50%) for centering on cursor position"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Custom cursor expands to 48px on hover over interactive elements (inputs, buttons, links)",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Hover cursor over the input field",
+      "Step 3: Verify cursor expands to 48px x 48px",
+      "Step 4: Verify border color brightens to rgba(216,106,61,0.55)",
+      "Step 5: Move cursor away from input",
+      "Step 6: Verify cursor returns to 20px default"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Custom cursor follows mouse with smooth lerp (0.12 factor) via requestAnimationFrame",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Move mouse quickly across the screen",
+      "Step 3: Verify cursor follows with smooth lag (not snapping instantly to mouse position)",
+      "Step 4: Verify animation uses requestAnimationFrame loop with 0.12 lerp factor"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Custom cursor hover listeners re-register when new DOM elements are injected",
+    "steps": [
+      "Step 1: Navigate to the landing page, verify cursor expands on landing input hover",
+      "Step 2: Verify cursor expands on landing submit button hover",
+      "Step 3: Submit a message to enter conversation mode",
+      "Step 4: Hover over the new fixed bottom input — verify cursor expands to 48px",
+      "Step 5: Hover over the new fixed submit button — verify cursor expands",
+      "Step 6: Wait for lead capture card to appear",
+      "Step 7: Hover over lead card Name input — verify cursor expands",
+      "Step 8: Hover over lead card Business input — verify cursor expands",
+      "Step 9: Hover over lead card Phone input — verify cursor expands",
+      "Step 10: Hover over lead card Email input — verify cursor expands",
+      "Step 11: Hover over lead card 'Get a callback' button — verify cursor expands",
+      "Step 12: Move cursor away from all elements — verify cursor returns to 20px default"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Custom cursor is completely hidden on touch devices",
+    "steps": [
+      "Step 1: Navigate to the landing page on a touch device (or emulate touch in DevTools)",
+      "Step 2: Verify touch detection uses 'ontouchstart' in window check",
+      "Step 3: Verify custom cursor div is hidden (display: none or visibility: hidden)",
+      "Step 4: Verify body cursor CSS is set to 'auto' (native cursor visible)",
+      "Step 5: Verify ambient glow div is also hidden",
+      "Step 6: Verify no cursor-related requestAnimationFrame loop is running",
+      "Step 7: Verify input fields do NOT have cursor: none on touch devices",
+      "Step 8: Verify page is fully functional without custom cursor",
+      "Step 9: Verify touch interactions (tap, scroll) work normally",
+      "Step 10: Verify no hover expansion effects are attempted on touch"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Ambient glow renders as 700px radial gradient following cursor",
+    "steps": [
+      "Step 1: Navigate to the landing page on desktop",
+      "Step 2: Verify ambient glow div exists in the DOM",
+      "Step 3: Verify position: fixed on glow element",
+      "Step 4: Verify z-index: 0 on glow element",
+      "Step 5: Verify pointer-events: none on glow element",
+      "Step 6: Verify width is 700px and height is 700px",
+      "Step 7: Verify border-radius is 50%",
+      "Step 8: Verify background uses radial-gradient(circle, rgba(216,106,61,0.04) 0%, transparent 65%)",
+      "Step 9: Verify transition uses 0.9s cubic-bezier(0.23, 1, 0.32, 1)",
+      "Step 10: Move mouse — verify glow repositions with transform translate(mouseX-350, mouseY-350)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Ambient glow is hidden on touch devices",
+    "steps": [
+      "Step 1: Navigate to landing page on a touch device",
+      "Step 2: Verify ambient glow div is hidden"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Noise texture overlay renders via body::before pseudo-element",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify body::before pseudo-element exists",
+      "Step 3: Verify position: fixed on the pseudo-element",
+      "Step 4: Verify inset: 0 (covers full viewport)",
+      "Step 5: Verify z-index is 9998",
+      "Step 6: Verify pointer-events: none",
+      "Step 7: Verify opacity is 0.028 on desktop",
+      "Step 8: Verify background uses SVG feTurbulence filter",
+      "Step 9: Verify feTurbulence type is fractalNoise with baseFrequency 0.85",
+      "Step 10: Verify feTurbulence numOctaves is 4",
+      "Step 11: Verify background-size is 200px 200px with repeat"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Vignette overlay renders as radial gradient",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify vignette div/element exists with position: fixed, inset: 0",
+      "Step 3: Verify background uses radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%)",
+      "Step 4: Verify z-index is 0 with pointer-events: none"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Page loads in under 2 seconds on 4G connection",
+    "steps": [
+      "Step 1: Open Chrome DevTools, throttle network to Regular 4G",
+      "Step 2: Navigate to the landing page (hard refresh)",
+      "Step 3: Measure time to First Contentful Paint",
+      "Step 4: Measure time to Largest Contentful Paint",
+      "Step 5: Verify total load time is under 2 seconds"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lighthouse performance score is 90+ on desktop",
+    "steps": [
+      "Step 1: Run Lighthouse audit on the deployed page (desktop mode)",
+      "Step 2: Verify performance score is 90 or above",
+      "Step 3: Review any performance warnings"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "No console errors in production build",
+    "steps": [
+      "Step 1: Run 'npm run build' successfully with zero build errors",
+      "Step 2: Run 'npm start' to serve production build",
+      "Step 3: Open the page in Chrome",
+      "Step 4: Open DevTools Console (filter for errors)",
+      "Step 5: Verify zero errors on initial page load",
+      "Step 6: Move cursor around — verify no shader/WebGL errors",
+      "Step 7: Type a message and submit — verify no errors",
+      "Step 8: Wait for AI response — verify no fetch/network errors",
+      "Step 9: Interact with lead capture form — verify no errors",
+      "Step 10: Submit lead form — verify no Web3Forms errors",
+      "Step 11: Continue chatting after form submission — verify no errors"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "DM Sans font loads via next/font for body text",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect wordmark, input, and body text elements",
+      "Step 3: Verify computed font-family includes DM Sans",
+      "Step 4: Verify font loaded via next/font (check for CSS variable or class)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "JetBrains Mono font loads via next/font for utility text",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect subtitle, hint text, Perth badge, and AI label",
+      "Step 3: Verify computed font-family includes JetBrains Mono",
+      "Step 4: Verify font loaded via next/font"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Three.js is loaded as a project dependency (^0.164.1)",
+    "steps": [
+      "Step 1: Check package.json for three dependency",
+      "Step 2: Verify version is ^0.164.1 or compatible",
+      "Step 3: Verify three is importable in client components"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SdfBackground component is marked 'use client' and renders only on the client",
+    "steps": [
+      "Step 1: Open SdfBackground.tsx",
+      "Step 2: Verify 'use client' directive at top of file",
+      "Step 3: Verify Three.js initialization happens in useEffect (not during SSR)",
+      "Step 4: Verify no server-side errors from Three.js/WebGL references"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SdfBackground component cleans up Three.js resources on unmount",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify SdfBackground component mounts and renders canvas",
+      "Step 3: Navigate away or trigger component unmount",
+      "Step 4: Verify renderer.dispose() is called in cleanup",
+      "Step 5: Verify requestAnimationFrame is cancelled (cancelAnimationFrame)",
+      "Step 6: Verify mousemove event listener is removed",
+      "Step 7: Verify pointermove event listener is removed",
+      "Step 8: Verify resize event listener is removed",
+      "Step 9: Verify touchmove event listener is removed",
+      "Step 10: Verify canvas element is removed from DOM"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "LandingHero component is marked 'use client'",
+    "steps": [
+      "Step 1: Open LandingHero.tsx",
+      "Step 2: Verify 'use client' directive at top",
+      "Step 3: Verify component handles state for input and conversation transition"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "ChatInterface component is marked 'use client' and manages conversation state",
+    "steps": [
+      "Step 1: Open ChatInterface.tsx",
+      "Step 2: Verify 'use client' directive",
+      "Step 3: Verify component manages messageHistory state",
+      "Step 4: Verify component handles message rendering and typing indicator"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "LeadCaptureCard component is marked 'use client' and uses shadcn Card, Input, Button",
+    "steps": [
+      "Step 1: Open LeadCaptureCard.tsx",
+      "Step 2: Verify 'use client' directive",
+      "Step 3: Verify imports from shadcn/ui: Card, Input, Button",
+      "Step 4: Verify component handles form state and Web3Forms submission"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "CustomCursor component is marked 'use client' and handles cursor tracking",
+    "steps": [
+      "Step 1: Open CustomCursor.tsx",
+      "Step 2: Verify 'use client' directive",
+      "Step 3: Verify component manages cursor position state",
+      "Step 4: Verify component handles hover detection and touch device exclusion"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Page root layout.tsx sets up metadata, fonts, and global styles",
+    "steps": [
+      "Step 1: Open layout.tsx",
+      "Step 2: Verify DM Sans and JetBrains Mono configured via next/font/google",
+      "Step 3: Verify metadata title and description are set",
+      "Step 4: Verify globals.css is imported"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Page root page.tsx is a Server Component that renders client components",
+    "steps": [
+      "Step 1: Open page.tsx",
+      "Step 2: Verify NO 'use client' directive (it's a Server Component)",
+      "Step 3: Verify it imports and renders SdfBackground, LandingHero, ChatInterface, CustomCursor",
+      "Step 4: Verify heavy client components use next/dynamic if needed"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "CSS custom properties (design tokens) are defined in globals.css",
+    "steps": [
+      "Step 1: Open globals.css",
+      "Step 2: Verify --bg: #0C0C0C (Deep Tech Onyx)",
+      "Step 3: Verify --surface: #151514",
+      "Step 4: Verify --surface-raised: #1C1C1A",
+      "Step 5: Verify --border: #2A2925",
+      "Step 6: Verify --border-hover: #3D3A35",
+      "Step 7: Verify --text: #D7D2CB (Cottesloe Sand)",
+      "Step 8: Verify --text-bright: #EDE9E3",
+      "Step 9: Verify --text-dim: #6B6560",
+      "Step 10: Verify --accent: #D86A3D (Silicon Copper)",
+      "Step 11: Verify --accent-soft: #C4714D",
+      "Step 12: Verify custom properties are in :root selector"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Vercel deployment config (vercel.json) exists with correct settings",
+    "steps": [
+      "Step 1: Open vercel.json",
+      "Step 2: Verify deployment configuration is appropriate for Next.js"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": ".env.example documents required environment variables",
+    "steps": [
+      "Step 1: Open .env.example",
+      "Step 2: Verify AI_GATEWAY_API_KEY is listed",
+      "Step 3: Verify WEB3FORMS_KEY is listed"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Full end-to-end flow: landing page load to lead capture submission",
+    "steps": [
+      "Step 1: Navigate to the landing page — SDF background renders, content fades in",
+      "Step 2: Verify wordmark 'Good'ai', subtitle, input, Perth badge are all visible",
+      "Step 3: Move cursor around — verify SDF reacts, custom cursor follows, ambient glow tracks",
+      "Step 4: Type 'We spend 3 hours a day on manual data entry' in the input",
+      "Step 5: Press Enter to submit",
+      "Step 6: Verify transition to conversation mode — container shifts up, elements hide/show correctly",
+      "Step 7: Verify user message appears as right-aligned copper bubble",
+      "Step 8: Verify typing indicator appears with three bouncing dots",
+      "Step 9: Wait for AI response — verify it arrives, follows persona rules",
+      "Step 10: Verify lead capture card slides in 600ms after AI response",
+      "Step 11: Fill lead form: Name='Test User', Phone='0412345678'",
+      "Step 12: Click 'Get a callback' — verify button shows 'Sending...'",
+      "Step 13: Verify success state appears: checkmark + 'Nice one. We'll be in touch within 24 hours.'",
+      "Step 14: Type another message in the fixed input — verify chat continues normally",
+      "Step 15: Verify no console errors throughout the entire flow"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Full end-to-end flow: multi-turn conversation with Perth-specific business context",
+    "steps": [
+      "Step 1: Navigate to landing page",
+      "Step 2: Submit: 'My plumbing business does about 50 jobs a week and scheduling is killing us'",
+      "Step 3: Verify AI acknowledges plumbing business context, asks clarifying question",
+      "Step 4: Reply: 'We use Tradify but still have to manually update job statuses'",
+      "Step 5: Verify AI acknowledges Tradify familiarity",
+      "Step 6: Reply: 'Yeah and then someone has to update Xero at the end of the day'",
+      "Step 7: Verify AI acknowledges Xero, discusses automation potential",
+      "Step 8: Verify all responses use casual Perth voice throughout",
+      "Step 9: Verify no response contains 'AI', bullet points, or corporate speak",
+      "Step 10: Verify conversation flows naturally with lead card present but not intrusive",
+      "Step 11: Verify all messages are stored in messageHistory array correctly"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Page background color is Deep Tech Onyx (#0C0C0C)",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify body/html background-color is #0C0C0C"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Wordmark typography: DM Sans, 34px, weight 700, letter-spacing -0.04em, text-bright color",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect wordmark element",
+      "Step 3: Verify font-family is DM Sans",
+      "Step 4: Verify font-size is 34px",
+      "Step 5: Verify font-weight is 700",
+      "Step 6: Verify letter-spacing is -0.04em",
+      "Step 7: Verify color is #EDE9E3 (text-bright)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Wordmark apostrophe is copper (#D86A3D) at 0.7 opacity",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect the apostrophe span within the wordmark",
+      "Step 3: Verify color is #D86A3D (accent)",
+      "Step 4: Verify opacity is 0.7"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Wordmark has margin-bottom 56px in landing state",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect wordmark element",
+      "Step 3: Verify margin-bottom is 56px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Subtitle typography: JetBrains Mono, 11px, weight 300, letter-spacing 0.14em, uppercase, text-dim",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect subtitle element",
+      "Step 3: Verify font-family is JetBrains Mono",
+      "Step 4: Verify font-size is 11px",
+      "Step 5: Verify font-weight is 300",
+      "Step 6: Verify letter-spacing is 0.14em",
+      "Step 7: Verify text-transform is uppercase",
+      "Step 8: Verify color is #6B6560 (text-dim)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Subtitle has negative margin-top (-40px) pulling up toward wordmark",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect subtitle element",
+      "Step 3: Verify margin-top is -40px",
+      "Step 4: Verify margin-bottom is 56px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Input field styling: surface bg, border, 14px border-radius, 16px font, correct padding",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect input field",
+      "Step 3: Verify background-color is #151514 (surface)",
+      "Step 4: Verify border is 1px solid #2A2925 (border)",
+      "Step 5: Verify border-radius is 14px",
+      "Step 6: Verify font-size is 16px",
+      "Step 7: Verify padding: 20px top/bottom, 24px left, 56px right"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Input field placeholder uses text-dim color and weight 300",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect input placeholder styling",
+      "Step 3: Verify placeholder color is #6B6560 (text-dim)",
+      "Step 4: Verify placeholder font-weight is 300"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Input field uses cursor: none (custom cursor active)",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect input field cursor CSS property",
+      "Step 3: Verify cursor is set to 'none'"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Submit button styling: 40x40px, transparent bg, 10px border-radius, text-dim default",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect submit button",
+      "Step 3: Verify width and height are 40px",
+      "Step 4: Verify background is transparent",
+      "Step 5: Verify border-radius is 10px",
+      "Step 6: Verify default color is #6B6560 (text-dim)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Submit button hover: accent color with accent-dim background",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Hover over submit button",
+      "Step 3: Verify color changes to #D86A3D (accent)",
+      "Step 4: Verify background changes to accent-dim"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Hint text styling: JetBrains Mono, 12px, weight 300, letter-spacing 0.04em, opacity 0.7, text-dim",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect hint text element",
+      "Step 3: Verify font-family is JetBrains Mono",
+      "Step 4: Verify font-size is 12px",
+      "Step 5: Verify font-weight is 300",
+      "Step 6: Verify letter-spacing is 0.04em",
+      "Step 7: Verify opacity is 0.7",
+      "Step 8: Verify color is #6B6560 (text-dim)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Hint text has margin-top 16px below the input",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect hint text",
+      "Step 3: Verify margin-top is 16px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Perth badge styling: JetBrains Mono, 10px, weight 300, letter-spacing 0.12em, uppercase",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect Perth badge",
+      "Step 3: Verify font-family is JetBrains Mono",
+      "Step 4: Verify font-size is 10px",
+      "Step 5: Verify font-weight is 300",
+      "Step 6: Verify letter-spacing is 0.12em",
+      "Step 7: Verify text-transform is uppercase"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Perth badge slash character renders in accent-soft at 0.5 opacity",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect the slash span within Perth badge",
+      "Step 3: Verify color is #C4714D (accent-soft)",
+      "Step 4: Verify opacity is 0.5"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Perth badge is positioned fixed, bottom 28px, centered horizontally",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect Perth badge",
+      "Step 3: Verify position is fixed",
+      "Step 4: Verify bottom is 28px",
+      "Step 5: Verify it is horizontally centered"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Container uses flex column, center-aligned, center-justified, 100vh, padding 40px",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect main container",
+      "Step 3: Verify display: flex, flex-direction: column",
+      "Step 4: Verify align-items: center, justify-content: center",
+      "Step 5: Verify min-height: 100vh",
+      "Step 6: Verify padding is 40px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "UI container sits at z-index 1 above the canvas background",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect UI container",
+      "Step 3: Verify position: relative and z-index: 1 or higher",
+      "Step 4: Verify content is visible above the SDF background canvas"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Chat body text styling: DM Sans, 15px, weight 400, line-height 1.65",
+    "steps": [
+      "Step 1: Enter conversation mode",
+      "Step 2: Inspect message bubble text",
+      "Step 3: Verify font-family is DM Sans",
+      "Step 4: Verify font-size is 15px",
+      "Step 5: Verify line-height is 1.65"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "AI message label styling: JetBrains Mono, 10px, weight 400, 0.08em tracking, uppercase, accent-soft",
+    "steps": [
+      "Step 1: Enter conversation mode, wait for AI response",
+      "Step 2: Inspect GOOD'AI label above AI message",
+      "Step 3: Verify font-family is JetBrains Mono",
+      "Step 4: Verify font-size is 10px",
+      "Step 5: Verify font-weight is 400",
+      "Step 6: Verify letter-spacing is 0.08em",
+      "Step 7: Verify text-transform is uppercase",
+      "Step 8: Verify color is #C4714D (accent-soft)",
+      "Step 9: Verify margin-bottom is 6px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "User message bubble: copper bg at 0.07, copper border at 0.12, rounded with sharp bottom-right",
+    "steps": [
+      "Step 1: Enter conversation mode",
+      "Step 2: Inspect user message bubble",
+      "Step 3: Verify background is rgba(216,106,61,0.07)",
+      "Step 4: Verify border is 1px solid rgba(216,106,61,0.12)",
+      "Step 5: Verify padding is 14px 20px",
+      "Step 6: Verify border-radius is 16px 16px 4px 16px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "AI message bubble: surface bg, default border, rounded with sharp bottom-left",
+    "steps": [
+      "Step 1: Enter conversation mode, wait for AI response",
+      "Step 2: Inspect AI message bubble",
+      "Step 3: Verify background is #151514 (surface)",
+      "Step 4: Verify border is 1px solid #2A2925 (border)",
+      "Step 5: Verify border-radius is 16px 16px 16px 4px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Typing indicator dots: 5px each, accent-soft color, 5px gap",
+    "steps": [
+      "Step 1: Submit a message and observe typing indicator",
+      "Step 2: Inspect dot spans",
+      "Step 3: Verify each dot is 5px x 5px, border-radius: 50%",
+      "Step 4: Verify color is #C4714D (accent-soft)",
+      "Step 5: Verify gap between dots is 5px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Typing indicator animation: typingDot keyframe, 1.4s duration, staggered delays",
+    "steps": [
+      "Step 1: Submit a message and observe typing indicator",
+      "Step 2: Verify animation name is typingDot",
+      "Step 3: Verify duration is 1.4s, ease-in-out, infinite",
+      "Step 4: Verify keyframes: 0%/60%/100% translateY(0) opacity 0.3; 30% translateY(-4px) opacity 0.8",
+      "Step 5: Verify dot 2 delay is 0.2s, dot 3 delay is 0.4s"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead capture card: surface-raised bg, accent border, 14px radius, 24px padding",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Inspect card inner element",
+      "Step 3: Verify background is #1C1C1A (surface-raised)",
+      "Step 4: Verify border is 1px solid #D86A3D (accent)",
+      "Step 5: Verify border-radius is 14px",
+      "Step 6: Verify padding is 24px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead capture card gradient overlay: copper linear-gradient at 0.06 opacity from top-left",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Inspect card inner ::before pseudo-element",
+      "Step 3: Verify linear-gradient(135deg, rgba(216,106,61,0.06) 0%, transparent 60%)",
+      "Step 4: Verify position: absolute, inset: 0, pointer-events: none"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead capture card heading styling: 15px, weight 600, text-bright, margin-bottom 4px",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Inspect heading element",
+      "Step 3: Verify font-size is 15px",
+      "Step 4: Verify font-weight is 600",
+      "Step 5: Verify color is #EDE9E3 (text-bright)",
+      "Step 6: Verify margin-bottom is 4px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead capture card subtext styling: 13px, text-dim, margin-bottom 16px, line-height 1.5",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Inspect subtext element",
+      "Step 3: Verify font-size is 13px",
+      "Step 4: Verify color is #6B6560 (text-dim)",
+      "Step 5: Verify margin-bottom is 16px",
+      "Step 6: Verify line-height is 1.5"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead capture field styling: DM Sans 14px, surface bg, border, 10px radius, 12px 16px padding",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Inspect a lead form input field",
+      "Step 3: Verify font-family is DM Sans, font-size 14px",
+      "Step 4: Verify background is #151514 (surface)",
+      "Step 5: Verify border is 1px solid #2A2925 (border)",
+      "Step 6: Verify border-radius is 10px",
+      "Step 7: Verify padding is 12px 16px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead capture field focus: border-color copper at 0.3",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Click on a lead form input to focus",
+      "Step 3: Verify border-color changes to copper at ~0.3 opacity"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead capture submit button: accent bg, bg-colored text, 14px weight 600, 10px radius",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Inspect submit button",
+      "Step 3: Verify background-color is #D86A3D (accent)",
+      "Step 4: Verify text color is #0C0C0C (bg)",
+      "Step 5: Verify font-size is 14px, font-weight is 600",
+      "Step 6: Verify border-radius is 10px",
+      "Step 7: Verify padding is 12px 24px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead capture submit button hover: opacity 0.9, translateY(-1px)",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Hover over submit button",
+      "Step 3: Verify opacity changes to 0.9",
+      "Step 4: Verify transform includes translateY(-1px)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead capture success state: text-align center, 20px padding, checkmark 28px in accent",
+    "steps": [
+      "Step 1: Submit the lead capture form",
+      "Step 2: Inspect success state element",
+      "Step 3: Verify text-align is center",
+      "Step 4: Verify padding is 20px",
+      "Step 5: Verify checkmark is 28px and accent color (#D86A3D)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead capture card fadeUp animation: translateY(12px), 0.6s, cubic-bezier easing",
+    "steps": [
+      "Step 1: Submit first message and wait for lead card to appear",
+      "Step 2: Verify card animates in with translateY from 12px to 0",
+      "Step 3: Verify duration is 0.6s",
+      "Step 4: Verify easing is cubic-bezier(0.23, 1, 0.32, 1)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Custom cursor transition timing: 0.15s ease for position, 0.3s ease for size/color",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Inspect cursor element transitions",
+      "Step 3: Verify transform transition is 0.15s ease",
+      "Step 4: Verify width/height/border-color transition is 0.3s ease"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Conversation mode container transition: 0.6s ease for justify-content change",
+    "steps": [
+      "Step 1: Submit a message to trigger conversation mode",
+      "Step 2: Verify container transitions smoothly (not instant snap)",
+      "Step 3: Verify padding-top transitions to 48px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Input state transitions: 0.3s ease for border-color, box-shadow, background",
+    "steps": [
+      "Step 1: Click on the input to focus",
+      "Step 2: Verify border-color transition is smooth (0.3s ease)",
+      "Step 3: Verify box-shadow transition is smooth",
+      "Step 4: Verify background-color transition is smooth",
+      "Step 5: Click away to blur — verify transitions back smoothly"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Button transitions: 0.3s ease for color and background changes",
+    "steps": [
+      "Step 1: Hover over the submit button",
+      "Step 2: Verify color and background transitions are 0.3s ease"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead button hover transform transition: 0.15s ease",
+    "steps": [
+      "Step 1: Hover over lead capture submit button",
+      "Step 2: Verify transform (translateY) transition is 0.15s ease"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "No Australian-trope styling: no ochre, kangaroo, boomerang, or stereotypical motifs",
+    "steps": [
+      "Step 1: Visually inspect the entire landing page",
+      "Step 2: Verify no Australian stereotypical imagery or motifs",
+      "Step 3: Verify no ochre/outback color tones",
+      "Step 4: Verify branding is modern tech, not tourism"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Responsive: wordmark shrinks to 26px on mobile (640px breakpoint)",
+    "steps": [
+      "Step 1: Navigate to the landing page on a 375px-wide viewport",
+      "Step 2: Inspect wordmark",
+      "Step 3: Verify font-size is 26px (down from 34px)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Responsive: container padding is 24px on mobile (down from 40px)",
+    "steps": [
+      "Step 1: Resize to 375px width",
+      "Step 2: Inspect main container",
+      "Step 3: Verify padding is 24px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Responsive: fixed input bar padding is 16px 24px 24px on mobile",
+    "steps": [
+      "Step 1: Enter conversation mode on a 375px viewport",
+      "Step 2: Inspect fixed input bar",
+      "Step 3: Verify padding is 16px top, 24px left/right, 24px bottom"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Responsive: input font-size is 15px on mobile with reduced padding",
+    "steps": [
+      "Step 1: Resize to 375px width",
+      "Step 2: Inspect input field",
+      "Step 3: Verify font-size is 15px",
+      "Step 4: Verify padding is reduced from desktop values"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Responsive: Perth badge is 20px from bottom on mobile (down from 28px)",
+    "steps": [
+      "Step 1: Resize to 375px width",
+      "Step 2: Inspect Perth badge",
+      "Step 3: Verify bottom positioning is 20px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Responsive: noise overlay opacity is 0.02 on mobile (down from 0.028)",
+    "steps": [
+      "Step 1: Resize to 375px width",
+      "Step 2: Inspect body::before pseudo-element",
+      "Step 3: Verify opacity is 0.02"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Responsive: lead capture field rows stack vertically on mobile",
+    "steps": [
+      "Step 1: Trigger lead capture card on a 375px viewport",
+      "Step 2: Inspect lead-row elements",
+      "Step 3: Verify flex-direction is column (stacked vertically)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Responsive: SDF shader reduces resolution on mobile for performance",
+    "steps": [
+      "Step 1: Navigate to landing page on a mobile viewport",
+      "Step 2: Verify devicePixelRatio cap is lowered (e.g., capped at 1 instead of 2)",
+      "Step 3: Verify shader still renders correctly at lower resolution"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Responsive: custom cursor completely disabled on touch devices",
+    "steps": [
+      "Step 1: Navigate on a touch device (or emulate)",
+      "Step 2: Verify custom cursor div is hidden",
+      "Step 3: Verify ambient glow is hidden",
+      "Step 4: Verify native cursor works normally"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Responsive: mobile layout has no horizontal scroll",
+    "steps": [
+      "Step 1: Navigate to landing page on 375px viewport",
+      "Step 2: Verify no horizontal scrollbar appears",
+      "Step 3: Enter conversation mode — verify no horizontal scroll",
+      "Step 4: Trigger lead card — verify no horizontal scroll"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Responsive: full mobile chat flow works with touch input",
+    "steps": [
+      "Step 1: Navigate to landing page on mobile viewport",
+      "Step 2: Tap input field — verify keyboard opens",
+      "Step 3: Type a message and tap submit",
+      "Step 4: Verify conversation mode activates correctly",
+      "Step 5: Verify AI response appears",
+      "Step 6: Verify lead card appears and form fields are tappable",
+      "Step 7: Fill form with touch input — verify submission works",
+      "Step 8: Verify continued chatting works on mobile"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF background renders on mobile (lower resolution) without crashing",
+    "steps": [
+      "Step 1: Navigate to landing page on a mobile device",
+      "Step 2: Verify SDF shader canvas renders (not blank)",
+      "Step 3: Verify no WebGL errors in console",
+      "Step 4: Verify performance is acceptable (no major frame drops)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Touch input on mobile feeds into SDF shader mouse tracking",
+    "steps": [
+      "Step 1: Navigate to landing page on mobile",
+      "Step 2: Touch and drag on the background",
+      "Step 3: Verify SDF shape responds to touch position",
+      "Step 4: Verify lens blur effect follows touch"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Conversation container has max-width 540px, centered",
+    "steps": [
+      "Step 1: Enter conversation mode",
+      "Step 2: Inspect conversation div",
+      "Step 3: Verify max-width is 540px",
+      "Step 4: Verify it is horizontally centered"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Input area has max-width 540px in both landing and conversation states",
+    "steps": [
+      "Step 1: In landing state, inspect input area wrapper",
+      "Step 2: Verify max-width is 540px",
+      "Step 3: Enter conversation mode",
+      "Step 4: Inspect fixed input bar wrapper",
+      "Step 5: Verify max-width is 540px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Web3Forms key is the only client-side credential — not a secret API key",
+    "steps": [
+      "Step 1: Search client-side JavaScript bundle for any API keys",
+      "Step 2: Verify only WEB3FORMS_KEY is present client-side",
+      "Step 3: Verify AI_GATEWAY_API_KEY is NOT in any client-side code"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture email payload includes first user message as 'problem' field",
+    "steps": [
+      "Step 1: Submit a specific first message: 'Our quoting process takes 3 hours'",
+      "Step 2: Wait for AI response and lead card",
+      "Step 3: Fill and submit lead form",
+      "Step 4: Inspect network request to Web3Forms",
+      "Step 5: Verify 'problem' field contains 'Our quoting process takes 3 hours'"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture email payload includes full conversation transcript",
+    "steps": [
+      "Step 1: Have a 3-turn conversation before submitting the lead form",
+      "Step 2: Fill and submit lead form",
+      "Step 3: Inspect network request to Web3Forms",
+      "Step 4: Verify 'conversation' field contains all messages formatted as 'Them: ... / Us: ...'"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture email subject line is 'New lead: {name}'",
+    "steps": [
+      "Step 1: Fill lead form with Name='Jane Smith'",
+      "Step 2: Submit the form",
+      "Step 3: Inspect network request",
+      "Step 4: Verify subject field is 'New lead: Jane Smith'"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture email from_name is \"Good'ai Website\"",
+    "steps": [
+      "Step 1: Submit the lead capture form",
+      "Step 2: Inspect network request",
+      "Step 3: Verify from_name is \"Good'ai Website\""
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "No display:none/block transitions — these are instant toggles",
+    "steps": [
+      "Step 1: Submit a message to trigger conversation mode",
+      "Step 2: Verify subtitle hides instantly (no fade/slide transition on the display property)",
+      "Step 3: Verify Perth badge hides instantly",
+      "Step 4: Verify conversation div shows instantly"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF background is not a particle system or grid — it uses signed distance functions",
+    "steps": [
+      "Step 1: Inspect SdfBackground component source",
+      "Step 2: Verify no particle system code exists",
+      "Step 3: Verify no grid background code exists",
+      "Step 4: Verify shader uses SDF functions (sdRoundRect, sdCircle)",
+      "Step 5: Verify output is edge-modulated SDF shapes, not particles"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "next.config.ts configures raw loader for .glsl file imports",
+    "steps": [
+      "Step 1: Open next.config.ts",
+      "Step 2: Verify webpack or turbopack config handles .glsl files",
+      "Step 3: Verify .glsl imports resolve to raw string content"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Components use direct imports, not barrel imports (performance rule)",
+    "steps": [
+      "Step 1: Search for barrel imports (e.g., import from @/components or from @/lib)",
+      "Step 2: Verify each import points directly to the module file",
+      "Step 3: Verify no index.ts barrel files exist in component directories"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Heavy component SdfBackground uses next/dynamic for code splitting",
+    "steps": [
+      "Step 1: Open page.tsx",
+      "Step 2: Verify SdfBackground (Three.js) is imported via next/dynamic with ssr: false",
+      "Step 3: Verify Three.js bundle does not block initial page render"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Independent async operations use Promise.all() for parallel execution",
+    "steps": [
+      "Step 1: Search codebase for async operations that are independent",
+      "Step 2: Verify Promise.all() is used where multiple independent fetches/operations occur"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Shader module declaration exists for .glsl TypeScript import support",
+    "steps": [
+      "Step 1: Check for a .d.ts file declaring module '*.glsl'",
+      "Step 2: Verify the declaration allows .glsl files to be imported as strings in TypeScript"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "API route does not expose CORS issues (same-origin in Next.js)",
+    "steps": [
+      "Step 1: Open the landing page",
+      "Step 2: Submit a chat message",
+      "Step 3: Verify no CORS errors in the console",
+      "Step 4: Verify /api/chat request is same-origin"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Build succeeds with zero errors: npm run build",
+    "steps": [
+      "Step 1: Run 'npm run build'",
+      "Step 2: Verify build completes with zero errors",
+      "Step 3: Verify no TypeScript compilation errors",
+      "Step 4: Verify no missing module errors"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Dev server starts successfully with npm run dev",
+    "steps": [
+      "Step 1: Run 'npm run dev'",
+      "Step 2: Verify Turbopack dev server starts without errors",
+      "Step 3: Navigate to localhost:3000",
+      "Step 4: Verify page renders correctly"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "ESLint passes with no errors",
+    "steps": [
+      "Step 1: Run 'npm run lint'",
+      "Step 2: Verify zero ESLint errors"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI never asks for contact details in conversation (form handles capture)",
+    "steps": [
+      "Step 1: Have a multi-turn conversation",
+      "Step 2: Verify AI never asks for name, email, phone, or contact details",
+      "Step 3: Verify system prompt instructs AI not to ask for details (form handles it)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI conversation flow: acknowledge problem, give insight, ask clarifying question on first message",
+    "steps": [
+      "Step 1: Send first message: 'Payroll takes us all day every fortnight'",
+      "Step 2: Verify response acknowledges the payroll pain point",
+      "Step 3: Verify response includes a useful automation insight",
+      "Step 4: Verify response asks one clarifying question about their current process"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI paints a picture of automated day when enough info is gathered",
+    "steps": [
+      "Step 1: Have 3-4 turn conversation providing details about a specific workflow",
+      "Step 2: Verify AI eventually describes what the user's day could look like with automation",
+      "Step 3: Verify description is concrete, not vague promises"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Shift+Enter does nothing special in the input (single line input)",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Type text in the input",
+      "Step 3: Press Shift+Enter",
+      "Step 4: Verify no line break is added (single line input)",
+      "Step 5: Verify message does not submit on Shift+Enter alone"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Multiple rapid submissions are handled gracefully (no duplicate messages)",
+    "steps": [
+      "Step 1: Enter conversation mode",
+      "Step 2: Type a message and rapidly click submit multiple times",
+      "Step 3: Verify only one message is sent (guard against re-submission while waiting)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Message history correctly formats roles for conversation continuity",
+    "steps": [
+      "Step 1: Send 3 messages in a conversation",
+      "Step 2: Inspect the POST request to /api/chat after the third message",
+      "Step 3: Verify messages array contains all 5 entries (3 user + 2 AI) in correct order",
+      "Step 4: Verify roles alternate correctly: user, ai, user, ai, user"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Overall visual impression: premium, award-site feel without being distracting",
+    "steps": [
+      "Step 1: Load the landing page on a 1920x1080 display",
+      "Step 2: Evaluate: SDF background creates depth and motion",
+      "Step 3: Evaluate: noise + vignette add subtle analog texture",
+      "Step 4: Evaluate: copper on onyx reads warm and local",
+      "Step 5: Evaluate: typography pairing is clean without being generic",
+      "Step 6: Evaluate: overall page feels premium, not template-generic"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Chat transition is seamless — no layout jump or flicker",
+    "steps": [
+      "Step 1: Navigate to landing page",
+      "Step 2: Submit a message",
+      "Step 3: Verify no visible layout jump during transition",
+      "Step 4: Verify no flicker of elements appearing/disappearing",
+      "Step 5: Verify transition feels intentional and smooth"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead card feels like part of the conversation, not an intrusive popup",
+    "steps": [
+      "Step 1: Submit first message and wait for lead card",
+      "Step 2: Verify card appears inline in the conversation flow",
+      "Step 3: Verify card uses consistent styling (same surface family, border radius)",
+      "Step 4: Verify card animation is subtle, not jarring"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Perth badge is understated — visible but not competing for attention",
+    "steps": [
+      "Step 1: Navigate to landing page",
+      "Step 2: Verify Perth badge is visible at bottom",
+      "Step 3: Verify badge text is dim, small, and does not draw primary attention",
+      "Step 4: Verify badge does not obscure or overlap other content"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Every transition has intentional easing — nothing snaps or pops",
+    "steps": [
+      "Step 1: Interact with all animated elements: cursor, input focus, buttons, conversation mode",
+      "Step 2: Verify no element uses linear timing or instant snapping",
+      "Step 3: Verify all transitions use cubic-bezier or ease timing functions"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead card copper border is the only hard-accent element, drawing eye to conversion",
+    "steps": [
+      "Step 1: Enter conversation mode with lead card visible",
+      "Step 2: Verify lead card is the ONLY element with a solid accent-colored border",
+      "Step 3: Verify no other element competes with the lead card's visual prominence"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Color consistency: all colors match the design token palette exactly",
+    "steps": [
+      "Step 1: Navigate to the landing page",
+      "Step 2: Verify page background is #0C0C0C",
+      "Step 3: Verify input field background is #151514 (surface)",
+      "Step 4: Verify focused input background is #1C1C1A (surface-raised)",
+      "Step 5: Verify input border is #2A2925",
+      "Step 6: Verify body text color is #D7D2CB",
+      "Step 7: Verify wordmark color is #EDE9E3 (text-bright)",
+      "Step 8: Verify hint text color is #6B6560 (text-dim)",
+      "Step 9: Verify accent color on apostrophe/buttons is #D86A3D",
+      "Step 10: Verify AI label color is #C4714D (accent-soft)",
+      "Step 11: Verify no off-palette colors are used anywhere in the UI"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Ningaloo Blue (#00B4D8) is NOT used anywhere in v1",
+    "steps": [
+      "Step 1: Search all CSS and component files for #00B4D8",
+      "Step 2: Verify no element uses this color in v1",
+      "Step 3: Confirm it is reserved for future interactive states only"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Vercel project is linked (goodai_site, team: ktg88)",
+    "steps": [
+      "Step 1: Check vercel.json or .vercel directory",
+      "Step 2: Verify project is linked to goodai_site",
+      "Step 3: Verify team is ktg88"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Domain goodai.au resolves to the Vercel deployment",
+    "steps": [
+      "Step 1: Navigate to https://goodai.au",
+      "Step 2: Verify the landing page loads",
+      "Step 3: Verify HTTPS certificate is valid"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Domain www.goodai.au redirects to goodai.au",
+    "steps": [
+      "Step 1: Navigate to https://www.goodai.au",
+      "Step 2: Verify it redirects to https://goodai.au"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Environment variables are set in Vercel dashboard: AI_GATEWAY_API_KEY",
+    "steps": [
+      "Step 1: Check Vercel project settings for environment variables",
+      "Step 2: Verify AI_GATEWAY_API_KEY is set",
+      "Step 3: Verify it is NOT exposed as NEXT_PUBLIC_ prefix"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Production deployment: SDF background renders and responds to cursor",
+    "steps": [
+      "Step 1: Navigate to deployed site on goodai.au",
+      "Step 2: Verify SDF background canvas renders",
+      "Step 3: Move cursor — verify SDF lens blur effect responds",
+      "Step 4: Verify 60fps performance"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Production deployment: chat works end-to-end",
+    "steps": [
+      "Step 1: Navigate to deployed site",
+      "Step 2: Type a message and submit",
+      "Step 3: Verify AI responds within 3 seconds",
+      "Step 4: Verify response follows persona rules"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Production deployment: lead form submits and email arrives",
+    "steps": [
+      "Step 1: Navigate to deployed site",
+      "Step 2: Complete full flow: chat, lead card, form submission",
+      "Step 3: Verify email arrives at kevinktg@goodai.au",
+      "Step 4: Verify email contains name, phone, problem, conversation transcript"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Production deployment: mobile layout is correct and responsive",
+    "steps": [
+      "Step 1: Navigate to deployed site on a mobile device",
+      "Step 2: Verify responsive layout applies (no horizontal scroll)",
+      "Step 3: Verify custom cursor is hidden",
+      "Step 4: Verify chat and lead form work via touch"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI response arrives within 3 seconds of message submission",
+    "steps": [
+      "Step 1: Submit a chat message",
+      "Step 2: Start a timer when message sends",
+      "Step 3: Stop timer when AI response appears",
+      "Step 4: Verify total time is under 3 seconds"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Streaming: AI response streams in via SSE if supported by AI Gateway",
+    "steps": [
+      "Step 1: Open DevTools Network tab",
+      "Step 2: Submit a chat message",
+      "Step 3: Check if response uses Server-Sent Events (EventStream content type)",
+      "Step 4: If SSE: verify tokens stream incrementally",
+      "Step 5: If not SSE: verify full response returns as a single payload"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SEO: page has appropriate meta title and description for Good'ai",
+    "steps": [
+      "Step 1: Inspect page <head>",
+      "Step 2: Verify <title> contains Good'ai and relevant keywords",
+      "Step 3: Verify <meta name='description'> describes business automations in Perth"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SSR: page.tsx renders as Server Component for SEO benefits",
+    "steps": [
+      "Step 1: View page source (right-click > View Page Source)",
+      "Step 2: Verify initial HTML contains wordmark, subtitle, and input field markup",
+      "Step 3: Verify page content is present in server-rendered HTML (not just client-rendered)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Input area wrapper has consistent max-width 540px across all states",
+    "steps": [
+      "Step 1: In landing state, verify input wrapper max-width is 540px",
+      "Step 2: In conversation state, verify fixed input wrapper max-width is 540px",
+      "Step 3: Verify both are centered horizontally"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Conversation mode padding-top is 48px",
+    "steps": [
+      "Step 1: Enter conversation mode",
+      "Step 2: Inspect container",
+      "Step 3: Verify padding-top is 48px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Fixed bottom input background gradient fades from transparent to bg color at 35%",
+    "steps": [
+      "Step 1: Enter conversation mode",
+      "Step 2: Inspect fixed bottom input bar background",
+      "Step 3: Verify linear-gradient(transparent, var(--bg) 35%)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Message bubbles have max-width 85% to prevent full-width text",
+    "steps": [
+      "Step 1: Send a short message",
+      "Step 2: Inspect message bubble",
+      "Step 3: Verify max-width is 85%",
+      "Step 4: Send a very long message — verify bubble does not exceed 85% width"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Conversation scrollbar: thin 3px, border color thumb, transparent track",
+    "steps": [
+      "Step 1: Send enough messages to make conversation scrollable",
+      "Step 2: Verify scrollbar width is 3px",
+      "Step 3: Verify thumb color is #2A2925",
+      "Step 4: Verify track is transparent"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Custom cursor mix-blend-mode: difference creates visual contrast effect",
+    "steps": [
+      "Step 1: Move cursor over light elements (text, accent borders)",
+      "Step 2: Verify cursor appearance changes due to mix-blend-mode: difference",
+      "Step 3: Move cursor over dark areas — verify different visual result"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Ambient glow uses cubic-bezier(0.23, 1, 0.32, 1) for smooth trailing effect",
+    "steps": [
+      "Step 1: Move mouse quickly across the screen",
+      "Step 2: Verify ambient glow trails behind with smooth deceleration",
+      "Step 3: Verify transition timing is cubic-bezier(0.23, 1, 0.32, 1)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF coord() function normalizes gl_FragCoord to centered, aspect-corrected coordinates",
+    "steps": [
+      "Step 1: Open fragment.glsl",
+      "Step 2: Verify coord(vec2 p) function exists",
+      "Step 3: Verify it normalizes coordinates to centered and aspect-corrected values"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture form fields have correct placeholder text",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Verify Name field placeholder is 'Name'",
+      "Step 3: Verify Business field placeholder is 'Business name'",
+      "Step 4: Verify Phone field placeholder is 'Phone'",
+      "Step 5: Verify Email field placeholder is 'Email (optional)'"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture card has max-width 540px, centered in conversation flow",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Inspect card container",
+      "Step 3: Verify max-width is 540px",
+      "Step 4: Verify it is centered within the conversation area"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "WebGL context is available — SDF background gracefully degrades if not",
+    "steps": [
+      "Step 1: Navigate to landing page in a WebGL-capable browser",
+      "Step 2: Verify canvas renders normally",
+      "Step 3: Simulate WebGL unavailable (disabled in browser settings)",
+      "Step 4: Verify page still loads and functions without the shader (graceful degradation)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI system prompt uses 'we' and 'us' — identity as part of the Good'ai team",
+    "steps": [
+      "Step 1: Send message: 'Who are you?'",
+      "Step 2: Verify response uses 'we' or 'us' (not 'I' or 'it')",
+      "Step 3: Verify AI identifies as part of Good'ai team"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI matches user energy: acknowledges frustration before solving",
+    "steps": [
+      "Step 1: Send frustrated message: 'I'm sick of wasting hours on paperwork every single day'",
+      "Step 2: Verify AI acknowledges the frustration first",
+      "Step 3: Verify AI then provides helpful direction"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI does not oversell — no specific savings or timelines promised",
+    "steps": [
+      "Step 1: Send message: 'How much money will this save me?'",
+      "Step 2: Verify AI does not promise specific dollar amounts or percentages",
+      "Step 3: Verify AI does not promise specific timelines for results"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Body has cursor: none CSS rule when custom cursor is active (desktop)",
+    "steps": [
+      "Step 1: Navigate to landing page on desktop",
+      "Step 2: Inspect body element",
+      "Step 3: Verify cursor CSS property is 'none'",
+      "Step 4: Verify only custom cursor div is visible"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Noise overlay background-size is 200px 200px with repeat",
+    "steps": [
+      "Step 1: Navigate to landing page",
+      "Step 2: Inspect body::before",
+      "Step 3: Verify background-size is 200px 200px",
+      "Step 4: Verify background-repeat is repeat"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead form fields use cursor: none (custom cursor active)",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Inspect lead form input fields",
+      "Step 3: Verify cursor CSS is 'none'"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "User message text color is text-bright (#EDE9E3)",
+    "steps": [
+      "Step 1: Send a message in chat",
+      "Step 2: Inspect user message bubble text",
+      "Step 3: Verify color is #EDE9E3 (text-bright)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI message text color is text (#D7D2CB)",
+    "steps": [
+      "Step 1: Wait for AI response in chat",
+      "Step 2: Inspect AI message bubble text",
+      "Step 3: Verify color is #D7D2CB (text)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Input field text color is text-bright (#EDE9E3) when typing",
+    "steps": [
+      "Step 1: Click on input field",
+      "Step 2: Type text",
+      "Step 3: Verify text color is #EDE9E3 (text-bright)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Focus on fixed input field is set when entering conversation mode",
+    "steps": [
+      "Step 1: Submit first message on landing page",
+      "Step 2: Verify conversation mode activates",
+      "Step 3: Verify fixed bottom input field is automatically focused"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "No database required — chat is client-side only, leads go to Web3Forms",
+    "steps": [
+      "Step 1: Inspect package.json for any database dependencies (prisma, drizzle, etc.)",
+      "Step 2: Verify none exist",
+      "Step 3: Verify no database connection code in the project",
+      "Step 4: Verify chat history is stored in React state only"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "API route is stateless — no session storage or database writes",
+    "steps": [
+      "Step 1: Inspect /api/chat/route.ts",
+      "Step 2: Verify no session management code",
+      "Step 3: Verify no database write operations",
+      "Step 4: Verify each request is independent (messages sent from client)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Border-hover color (#3D3A35) is used for hover state borders on inputs",
+    "steps": [
+      "Step 1: Navigate to landing page",
+      "Step 2: Hover over input field (not focused)",
+      "Step 3: Verify border-color changes to #3D3A35 (border-hover)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Landing page elements are vertically centered within the viewport",
+    "steps": [
+      "Step 1: Navigate to landing page at various viewport heights",
+      "Step 2: Verify wordmark, subtitle, input are vertically centered",
+      "Step 3: Verify centering works at 768px, 900px, and 1080px heights"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "DM Sans weight range covers 300-700 as specified",
+    "steps": [
+      "Step 1: Inspect next/font configuration for DM Sans",
+      "Step 2: Verify weights 300, 400, 500, 600, 700 are loaded",
+      "Step 3: Verify all weight usages in the design map to loaded weights"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "JetBrains Mono weight range covers 300-400 as specified",
+    "steps": [
+      "Step 1: Inspect next/font configuration for JetBrains Mono",
+      "Step 2: Verify weights 300 and 400 are loaded",
+      "Step 3: Verify no unnecessary additional weights are loaded"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF background clears to #0C0C0C (or transparent matching bg) — not pure black",
+    "steps": [
+      "Step 1: Navigate to landing page",
+      "Step 2: Inspect renderer clear color",
+      "Step 3: Verify clear color matches --bg (#0C0C0C) or is transparent",
+      "Step 4: Verify no visual gap between canvas and page background"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Complete accessibility: all interactive elements are keyboard-focusable",
+    "steps": [
+      "Step 1: Navigate to landing page",
+      "Step 2: Press Tab — verify input field receives focus with visible focus indicator",
+      "Step 3: Press Tab — verify submit button receives focus",
+      "Step 4: Press Enter on submit button — verify form submits (if input has text)",
+      "Step 5: Enter conversation mode",
+      "Step 6: Verify fixed input field is auto-focused",
+      "Step 7: Press Tab — verify fixed submit button receives focus",
+      "Step 8: Trigger lead card",
+      "Step 9: Tab through all lead form fields: Name, Business, Phone, Email",
+      "Step 10: Tab to 'Get a callback' button — verify it receives focus",
+      "Step 11: Press Enter on lead submit button — verify form submits"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Conversation text is selectable (not prevented by cursor:none or pointer-events)",
+    "steps": [
+      "Step 1: Enter conversation mode",
+      "Step 2: Try to select/highlight AI response text",
+      "Step 3: Verify text is selectable",
+      "Step 4: Verify pointer-events on overlays do not block text selection"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SVG arrow icon in submit button: 18px, stroke currentColor, weight 2",
+    "steps": [
+      "Step 1: Inspect submit button SVG element",
+      "Step 2: Verify SVG dimensions or viewBox accommodates 18px rendering",
+      "Step 3: Verify stroke is currentColor",
+      "Step 4: Verify stroke-width is 2"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Noise overlay uses SVG feTurbulence filter: fractalNoise, baseFrequency 0.85, 4 octaves",
+    "steps": [
+      "Step 1: Inspect the noise overlay CSS or inline SVG filter",
+      "Step 2: Verify feTurbulence type is fractalNoise",
+      "Step 3: Verify baseFrequency is 0.85",
+      "Step 4: Verify numOctaves is 4"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "utils.ts cn() helper exists and works correctly (clsx + tailwind-merge)",
+    "steps": [
+      "Step 1: Open src/lib/utils.ts",
+      "Step 2: Verify cn() function is exported",
+      "Step 3: Verify it uses clsx and tailwind-merge",
+      "Step 4: Verify it is used by shadcn/ui components"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "shadcn/ui components are installed: Input, Button, Card, Dialog, Form, Badge, Label, Skeleton",
+    "steps": [
+      "Step 1: Check src/components/ui/ directory exists",
+      "Step 2: Verify input.tsx exists and exports Input component",
+      "Step 3: Verify button.tsx exists and exports Button component",
+      "Step 4: Verify card.tsx exists and exports Card, CardHeader, CardContent, CardFooter",
+      "Step 5: Verify dialog.tsx exists and exports Dialog components",
+      "Step 6: Verify form.tsx exists and exports Form components",
+      "Step 7: Verify badge.tsx exists and exports Badge component",
+      "Step 8: Verify label.tsx exists and exports Label component",
+      "Step 9: Verify skeleton.tsx exists and exports Skeleton component",
+      "Step 10: Verify all components import cn() from @/lib/utils"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture card uses shadcn Card component for consistent styling",
+    "steps": [
+      "Step 1: Open LeadCaptureCard.tsx",
+      "Step 2: Verify it imports Card from shadcn/ui",
+      "Step 3: Verify it uses shadcn Input for form fields",
+      "Step 4: Verify it uses shadcn Button for submit"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "TypeScript strict mode is enabled in tsconfig.json",
+    "steps": [
+      "Step 1: Open tsconfig.json",
+      "Step 2: Verify strict is true or strictNullChecks/strictFunctionTypes are enabled"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Turbopack is used for dev server (Next.js 16 default)",
+    "steps": [
+      "Step 1: Run 'npm run dev'",
+      "Step 2: Verify Turbopack message appears in terminal output",
+      "Step 3: Verify fast refresh works"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Landing page elements are rendered as Server Components where possible",
+    "steps": [
+      "Step 1: Open page.tsx",
+      "Step 2: Verify it does NOT have 'use client' directive",
+      "Step 3: Verify client components are imported as child components",
+      "Step 4: Verify static text content (wordmark, subtitle) could be server-rendered"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Wordmark margin-bottom reduces from 56px to 28px in conversation mode",
+    "steps": [
+      "Step 1: Navigate to landing page — verify wordmark margin-bottom is 56px",
+      "Step 2: Enter conversation mode",
+      "Step 3: Verify wordmark margin-bottom transitions to 28px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead form .lead-fields has flex column layout with 10px gap",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Inspect .lead-fields or equivalent form container",
+      "Step 3: Verify display: flex, flex-direction: column, gap: 10px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead form .lead-row has flex row layout with 10px gap",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Inspect a .lead-row container",
+      "Step 3: Verify display: flex, flex-direction: row, gap: 10px"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead form fields have flex: 1 for equal width distribution",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Inspect lead form input fields",
+      "Step 3: Verify each field has flex: 1",
+      "Step 4: Verify both fields in a row have equal width"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Conversation area uses flex: 1 and overflow-y: auto for scrollability",
+    "steps": [
+      "Step 1: Enter conversation mode",
+      "Step 2: Inspect conversation div",
+      "Step 3: Verify flex: 1 is set",
+      "Step 4: Verify overflow-y is auto",
+      "Step 5: Send enough messages to trigger scrolling"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Input clear after submission — input field is emptied after sending a message",
+    "steps": [
+      "Step 1: Type a message in the input",
+      "Step 2: Submit the message",
+      "Step 3: Verify input field is cleared (empty string)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "AI Gateway dashboard shows requests after chat interactions",
+    "steps": [
+      "Step 1: Send 3 chat messages on the deployed site",
+      "Step 2: Open Vercel AI Gateway dashboard",
+      "Step 3: Verify 3 requests are logged",
+      "Step 4: Verify model shows anthropic/claude-sonnet-4-20250514"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Tailwind CSS v4 is properly configured with PostCSS",
+    "steps": [
+      "Step 1: Verify postcss.config.mjs includes @tailwindcss/postcss",
+      "Step 2: Verify tailwindcss v4 is in devDependencies",
+      "Step 3: Verify Tailwind classes render correctly in the browser"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Design tokens are mapped to both CSS custom properties and Tailwind theme",
+    "steps": [
+      "Step 1: Open globals.css",
+      "Step 2: Verify CSS custom properties (--bg, --surface, --accent, etc.) are defined",
+      "Step 3: Verify Tailwind theme references these custom properties",
+      "Step 4: Verify components can use both var(--accent) and Tailwind utilities"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SDF background component is a React client component wrapping Three.js correctly",
+    "steps": [
+      "Step 1: Open SdfBackground.tsx",
+      "Step 2: Verify 'use client' directive at top of file",
+      "Step 3: Verify it uses useEffect for Three.js scene setup (not in render body)",
+      "Step 4: Verify it uses useRef for container/canvas reference",
+      "Step 5: Verify Three.js scene, camera, renderer are created inside useEffect",
+      "Step 6: Verify animation loop starts inside useEffect",
+      "Step 7: Verify cleanup function disposes renderer",
+      "Step 8: Verify cleanup cancels animation frame",
+      "Step 9: Verify cleanup removes event listeners",
+      "Step 10: Verify component renders a div for canvas mounting with correct styling"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "No @ai-sdk/anthropic direct dependency — only @ai-sdk/openai-compatible",
+    "steps": [
+      "Step 1: Check package.json dependencies",
+      "Step 2: Verify @ai-sdk/openai-compatible is listed",
+      "Step 3: Verify @ai-sdk/anthropic is NOT listed",
+      "Step 4: Verify 'ai' package is listed for generateText/streamText"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Complete conversation flow end-to-end test with professional services scenario",
+    "steps": [
+      "Step 1: Navigate to landing page",
+      "Step 2: Submit: 'We run an accounting firm and spend half our day chasing clients for documents'",
+      "Step 3: Verify AI acknowledges accounting context, asks about current process",
+      "Step 4: Reply: 'We email them, then follow up manually, takes about 5 back-and-forths per client'",
+      "Step 5: Verify AI explores the pain point, mentions potential automation",
+      "Step 6: Verify lead card appeared after first response",
+      "Step 7: Fill lead form: Name='Sarah Chen', Business='Chen & Associates', Phone='0893217654', Email='sarah@chen.com.au'",
+      "Step 8: Submit form — verify success state",
+      "Step 9: Continue chatting: 'Do you work with MYOB?'",
+      "Step 10: Verify AI acknowledges MYOB familiarity",
+      "Step 11: Verify all messages in correct order in conversation",
+      "Step 12: Verify no console errors throughout"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Complete conversation flow end-to-end test with tradie scenario",
+    "steps": [
+      "Step 1: Navigate to landing page",
+      "Step 2: Submit: 'I run an electrical business and scheduling jobs is a nightmare'",
+      "Step 3: Verify AI acknowledges electrical business, asks clarifying question",
+      "Step 4: Reply: 'We use ServiceM8 but still have to manually update everything'",
+      "Step 5: Verify AI acknowledges ServiceM8",
+      "Step 6: Reply: 'Then we have to reconcile everything in Xero at end of month'",
+      "Step 7: Verify AI mentions automation between ServiceM8 and Xero",
+      "Step 8: Verify AI paints picture of automated workflow",
+      "Step 9: Verify all responses are under 3 sentences",
+      "Step 10: Verify no 'AI', bullet points, or corporate speak in any response",
+      "Step 11: Verify lead card is present and functional"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Performance: SDF shader does not cause memory leaks over extended usage",
+    "steps": [
+      "Step 1: Navigate to landing page",
+      "Step 2: Take initial memory snapshot",
+      "Step 3: Interact with the page for 5 minutes (move cursor, chat, submit lead form)",
+      "Step 4: Take second memory snapshot",
+      "Step 5: Verify no significant memory growth indicating leaks"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Cross-browser: landing page renders correctly on Chrome, Firefox, Safari",
+    "steps": [
+      "Step 1: Open landing page in Chrome — verify SDF background, layout, interactions",
+      "Step 2: Open in Firefox — verify same",
+      "Step 3: Open in Safari — verify same",
+      "Step 4: Verify no browser-specific rendering issues"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Cross-browser: WebGL SDF shader renders in all major browsers",
+    "steps": [
+      "Step 1: Open landing page in Chrome — verify shader renders",
+      "Step 2: Open in Firefox — verify shader renders",
+      "Step 3: Open in Safari — verify shader renders (may need WebGL2 checks)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Disabled input field styling: opacity 0.5 with no additional visual clutter",
+    "steps": [
+      "Step 1: Submit a message to trigger waiting state",
+      "Step 2: Inspect disabled input field",
+      "Step 3: Verify opacity is 0.5",
+      "Step 4: Verify no additional disabled styling (no strikethrough, no different bg)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "style",
+    "description": "Lead capture card overflow:hidden clips the gradient pseudo-element",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Inspect card inner element",
+      "Step 3: Verify overflow: hidden is set",
+      "Step 4: Verify gradient ::before does not extend beyond card borders"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Application handles network disconnection gracefully during chat",
+    "steps": [
+      "Step 1: Enter conversation mode",
+      "Step 2: Disconnect network (DevTools offline mode)",
+      "Step 3: Submit a message",
+      "Step 4: Verify error is handled gracefully (friendly message, not crash)",
+      "Step 5: Reconnect network — verify app recovers"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Lead capture card inner content has position:relative for z-index stacking over gradient",
+    "steps": [
+      "Step 1: Trigger lead capture card",
+      "Step 2: Inspect heading, subtext, and form elements",
+      "Step 3: Verify they have position: relative to stack above the gradient pseudo-element"
+    ],
+    "passes": false
+  }
+]

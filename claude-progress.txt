@@ -1,0 +1,53 @@
+## NEXT AGENT
+The next agent to run is the Coding Agent at: .claude/agents/coding_agent.md
+It will read feature_list.json, pick the highest-priority failing test, implement it, verify via Chrome DevTools MCP, mark it passing, and commit. Loop until all 200+ tests pass.
+
+Specs are at: inbox/app-spec.md and inbox/app-spec-ui.md
+GSD planning docs at: .planning/
+Init script: init.ps1
+
+---
+
+## Init Agent Summary — 2026-04-01
+
+### What was done
+
+1. **Read all specs** — inbox/app-spec.md (complete project specification), inbox/app-spec-ui.md (UI layout and design system), .planning/PROJECT.md (project context).
+
+2. **Created feature_list.json** — 251 end-to-end test cases covering every feature in both specs.
+   - 174 functional tests + 77 style tests
+   - 26 tests with 10+ steps (comprehensive end-to-end flows)
+   - Priority order: shader background -> landing UI -> chat interface -> AI backend -> lead capture -> cursor/effects -> responsive -> deployment
+   - All tests start with passes: false
+   - Covers: SDF shader (uniforms, damping, resize, touch, SDF functions, color grading), landing page (wordmark, subtitle, input, hint, badge, animations), chat interface (message bubbles, typing indicator, transitions, scrolling), AI backend (gateway config, system prompt, persona rules, error handling), lead capture (form fields, Web3Forms payload, success state, session flag), custom cursor (lerp, hover expansion, touch exclusion, re-registration), ambient glow, noise/vignette overlays, responsive breakpoints, deployment, accessibility, cross-browser
+
+3. **Created init.ps1** — PowerShell setup script that:
+   - Installs npm dependencies
+   - Installs three@^0.164.1 + @types/three
+   - Installs @ai-sdk/openai-compatible and ai packages
+   - Verifies project structure
+   - Checks for .env.local
+   - Starts dev server with access info
+
+4. **No source code modified** — only scaffold files created as instructed.
+
+### What the coding agent should do next
+
+1. Run `powershell -ExecutionPolicy Bypass -File init.ps1` to set up deps
+2. Read feature_list.json — tests are ordered by priority
+3. Start with SDF shader background tests (tests 0-14): port fragment.glsl, create SdfBackground.tsx client component, configure next.config.ts for .glsl raw imports
+4. Then landing page UI tests (tests 15-22): LandingHero.tsx with wordmark, subtitle, input, hint, Perth badge
+5. Then chat interface (tests 23-37): ChatInterface.tsx, conversation mode transition, message bubbles
+6. Then AI backend (tests 38-53): /api/chat/route.ts with Vercel AI Gateway
+7. Then lead capture (tests 54-70): LeadCaptureCard.tsx, Web3Forms integration
+8. Then cursor/effects (tests 71-80): CustomCursor.tsx, ambient glow, noise, vignette
+9. Then responsive + deployment (remaining tests)
+
+### Key implementation notes from specs
+- Shader: VAR=0 (round rect stroke), copper-tinted output, exactly 3 uniforms
+- Vertex shader is INLINE (no vertex.glsl file)
+- AI Gateway: createOpenAICompatible with baseURL 'https://ai-gateway.vercel.sh/v1'
+- Model: gateway('anthropic/claude-sonnet-4-20250514'), maxTokens: 300
+- Lead capture: Web3Forms client-side POST, show success even on error
+- Custom cursor: hidden on touch devices, re-register hover listeners on DOM injection
+- SdfBackground should use next/dynamic with ssr: false
