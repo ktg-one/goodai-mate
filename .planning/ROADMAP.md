@@ -29,10 +29,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Perth Disruptor color tokens (#0C0C0C, #D86A3D, #D7D2CB, #EDE9E3) are available as Tailwind classes and CSS custom properties
   3. DM Sans and JetBrains Mono render on the page with zero layout shift
   4. TypeScript provides autocomplete for `.glsl`, `.frag`, `.vert` imports without type errors
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] 01-01: TBD
+- [ ] 01-01-PLAN.md — GLSL pipeline, Perth Disruptor design tokens, and brand fonts
 
 ### Phase 2: Visual Layer
 **Goal**: Visitor sees a premium, cursor-reactive landing page with shader background, branded layout, and smooth animations
@@ -104,7 +104,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/? | Not started | - |
+| 1. Foundation | 0/1 | Not started | - |
 | 2. Visual Layer | 0/? | Not started | - |
 | 3. Chat Core | 0/? | Not started | - |
 | 4. Lead Capture | 0/? | Not started | - |
