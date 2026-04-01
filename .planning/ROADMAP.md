@@ -12,7 +12,7 @@ Good'ai ships in five phases that deliver incrementally from config through to p
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Next.js config, design tokens, fonts, GLSL imports
+- [x] **Phase 1: Foundation** - Next.js config, design tokens, fonts, GLSL imports (completed 2026-04-01)
 - [ ] **Phase 2: Visual Layer** - SDF shader background, landing UI, custom cursor
 - [ ] **Phase 3: Chat Core** - AI backend route, chat interface, landing-to-chat transition
 - [ ] **Phase 4: Lead Capture** - Lead form card, Web3Forms submission, conversation transcript
@@ -29,7 +29,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Perth Disruptor color tokens (#0C0C0C, #D86A3D, #D7D2CB, #EDE9E3) are available as Tailwind classes and CSS custom properties
   3. DM Sans and JetBrains Mono render on the page with zero layout shift
   4. TypeScript provides autocomplete for `.glsl`, `.frag`, `.vert` imports without type errors
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
 - [ ] 01-01-PLAN.md — GLSL pipeline, Perth Disruptor design tokens, and brand fonts
@@ -105,7 +105,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/1 | Not started | - |
+| 1. Foundation | 1/1 | Complete   | 2026-04-01 |
 | 2. Visual Layer | 0/3 | Not started | - |
 | 3. Chat Core | 0/2 | Not started | - |
 | 4. Lead Capture | 0/1 | Not started | - |

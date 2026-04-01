@@ -9,10 +9,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Foundation
 
-- [ ] **FOUND-01**: Next.js config supports .glsl file imports (Turbopack raw type + webpack raw-loader)
-- [ ] **FOUND-02**: Design tokens (Perth Disruptor palette) mapped to Tailwind CSS v4 theme + CSS custom properties
-- [ ] **FOUND-03**: DM Sans + JetBrains Mono loaded via next/font with correct weights
-- [ ] **FOUND-04**: TypeScript declarations for .glsl/.frag/.vert module imports
+- [x] **FOUND-01**: Next.js config supports .glsl file imports (Turbopack raw type + webpack raw-loader)
+- [x] **FOUND-02**: Design tokens (Perth Disruptor palette) mapped to Tailwind CSS v4 theme + CSS custom properties
+- [x] **FOUND-03**: DM Sans + JetBrains Mono loaded via next/font with correct weights
+- [x] **FOUND-04**: TypeScript declarations for .glsl/.frag/.vert module imports
 
 ### Shader Background
 
@@ -134,10 +134,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | Phase 1 | Pending |
-| FOUND-02 | Phase 1 | Pending |
-| FOUND-03 | Phase 1 | Pending |
-| FOUND-04 | Phase 1 | Pending |
+| FOUND-01 | Phase 1 | Complete |
+| FOUND-02 | Phase 1 | Complete |
+| FOUND-03 | Phase 1 | Complete |
+| FOUND-04 | Phase 1 | Complete |
 | SHDR-01 | Phase 2 | Pending |
 | SHDR-02 | Phase 2 | Pending |
 | SHDR-03 | Phase 2 | Pending |
