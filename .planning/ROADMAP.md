@@ -77,10 +77,10 @@ Plans:
   3. Web3Forms receives the contact details plus the full conversation transcript
   4. Card only appears once per session -- dismissed or submitted, it does not return
   5. Visitor can continue chatting after submitting or ignoring the lead form
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] 04-01: TBD
+- [ ] 04-01-PLAN.md — LeadCaptureCard component, Web3Forms submission, chat flow integration
 
 ### Phase 5: Polish + Hardening
 **Goal**: Site works flawlessly on mobile, loads fast on 4G, and deploys to production on goodai.au
@@ -108,5 +108,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Foundation | 0/1 | Not started | - |
 | 2. Visual Layer | 0/? | Not started | - |
 | 3. Chat Core | 0/? | Not started | - |
-| 4. Lead Capture | 0/? | Not started | - |
+| 4. Lead Capture | 0/1 | Not started | - |
 | 5. Polish + Hardening | 0/2 | Not started | - |
