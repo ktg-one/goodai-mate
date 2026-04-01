@@ -61,11 +61,11 @@ Plans:
   3. User and AI messages are visually distinct (right-aligned copper vs left-aligned surface with "GOOD'AI" label)
   4. Typing indicator with bouncing dots appears while waiting for AI response, and input is disabled during that time
   5. Rate limit (429) and server errors (500) display friendly messages instead of error traces
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [ ] 03-01-PLAN.md — AI backend route handler via Vercel AI Gateway with Perth-voice system prompt (AIBE-01..08)
+- [ ] 03-02-PLAN.md — Chat interface UI with landing-to-conversation transition, message bubbles, typing indicator (CHAT-01..10)
 
 ### Phase 4: Lead Capture
 **Goal**: Engaged visitor leaves their contact details without interrupting the conversation flow
@@ -107,6 +107,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/1 | Not started | - |
 | 2. Visual Layer | 0/3 | Not started | - |
-| 3. Chat Core | 0/? | Not started | - |
+| 3. Chat Core | 0/2 | Not started | - |
 | 4. Lead Capture | 0/1 | Not started | - |
 | 5. Polish + Hardening | 0/2 | Not started | - |
