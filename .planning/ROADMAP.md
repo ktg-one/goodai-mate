@@ -44,12 +44,12 @@ Plans:
   3. Custom cursor follows mouse with smooth lerp, expands on hover over interactive elements, and is completely absent on touch devices
   4. Noise texture overlay and vignette are visible, adding visual depth without obscuring content
   5. If WebGL is unavailable, a dark gradient fallback renders instead of a broken canvas
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
-- [ ] 02-03: TBD
+- [ ] 02-01-PLAN.md — SDF lens blur shader background (Three.js, copper color grading, WebGL fallback)
+- [ ] 02-02-PLAN.md — Landing UI (wordmark, subtitle, input, badge, noise overlay, vignette)
+- [ ] 02-03-PLAN.md — Custom cursor + ambient glow (lerp follow, hover expansion, touch detection)
 
 ### Phase 3: Chat Core
 **Goal**: Visitor types a problem, gets a warm Perth-voice AI response, and can hold a natural conversation
@@ -106,7 +106,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/1 | Not started | - |
-| 2. Visual Layer | 0/? | Not started | - |
+| 2. Visual Layer | 0/3 | Not started | - |
 | 3. Chat Core | 0/? | Not started | - |
 | 4. Lead Capture | 0/1 | Not started | - |
 | 5. Polish + Hardening | 0/2 | Not started | - |
