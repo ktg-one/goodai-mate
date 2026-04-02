@@ -1,0 +1,275 @@
+'use client';
+
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Input } from '@/components/ui/input';
+import ChatInterface from '@/components/ChatInterface';
+
+/** Cursor-reactive 3D tilt on any element */
+function useTilt(strength = 14) {
+  const onMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * strength;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * strength;
+    el.style.transform = `perspective(400px) rotateY(${x}deg) rotateX(${-y}deg)`;
+    el.style.filter = `drop-shadow(0 0 ${6 + Math.abs(x) + Math.abs(y)}px rgba(216,106,61,0.12))`;
+  }, [strength]);
+
+  const onMouseLeave = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    e.currentTarget.style.transform = '';
+    e.currentTarget.style.filter = '';
+  }, []);
+
+  return { onMouseMove, onMouseLeave };
+}
+
+/** Logo "drowning" effect — sinks when cursor dwells near center */
+function useDrown(logoRef: React.RefObject<HTMLDivElement | null>) {
+  const mousePos = useRef({ x: 0, y: 0 });
+  const dwellTime = useRef(0);
+  const lastMove = useRef(Date.now());
+  const raf = useRef(0);
+
+  useEffect(() => {
+    const logo = logoRef.current;
+    if (!logo) return;
+
+    const parent = logo.closest('[data-cursor-hover]') as HTMLElement;
+    if (!parent) return;
+
+    const onMove = (e: MouseEvent) => {
+      mousePos.current = { x: e.clientX, y: e.clientY };
+      lastMove.current = Date.now();
+    };
+
+    const onLeave = () => {
+      dwellTime.current = 0;
+      logo.style.transform = '';
+      logo.style.filter = '';
+      logo.style.opacity = '0.45';
+    };
+
+    const tick = () => {
+      const rect = parent.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dist = Math.hypot(mousePos.current.x - cx, mousePos.current.y - cy);
+      const inCenter = dist < 180;
+      const idle = Date.now() - lastMove.current > 400; // cursor stopped moving
+
+      if (inCenter && idle) {
+        dwellTime.current = Math.min(dwellTime.current + 0.008, 1);
+      } else {
+        dwellTime.current = Math.max(dwellTime.current - 0.025, 0);
+      }
+
+      const t = dwellTime.current;
+      const mouth = logo.querySelector('[data-mouth]') as HTMLElement | null;
+
+      if (t > 0.01) {
+        const sinkY = t * 45;
+        const squishX = 1 + t * 0.18;
+        const squishY = 1 - t * 0.3;
+        const wobble = Math.sin(Date.now() * 0.004) * t * 5;
+        const fade = 0.45 - t * 0.15;
+
+        logo.style.transform = `translateY(${sinkY}px) scaleX(${squishX}) scaleY(${squishY}) rotate(${wobble}deg)`;
+        logo.style.filter = '';
+        logo.style.opacity = `${Math.max(fade, 0.2)}`;
+
+        // Mouth: smile (1) → flat (0) → frown (-1)
+        if (mouth) {
+          const mouthFlip = 1 - t * 2; // 1 → -1
+          mouth.style.transform = `translateX(-50%) scaleY(${mouthFlip})`;
+          // Flatten height in the middle of the transition
+          const flatness = 1 - Math.abs(mouthFlip);
+          mouth.style.height = `${20 - flatness * 14}px`;
+        }
+      } else {
+        logo.style.transform = '';
+        logo.style.filter = '';
+        logo.style.opacity = '0.45';
+        if (mouth) {
+          mouth.style.transform = 'translateX(-50%) scaleY(1)';
+          mouth.style.height = '20px';
+        }
+      }
+
+      raf.current = requestAnimationFrame(tick);
+    };
+
+    raf.current = requestAnimationFrame(tick);
+    window.addEventListener('mousemove', onMove);
+    parent.addEventListener('mouseleave', onLeave);
+
+    return () => {
+      cancelAnimationFrame(raf.current);
+      window.removeEventListener('mousemove', onMove);
+      parent.removeEventListener('mouseleave', onLeave);
+    };
+  }, [logoRef]);
+}
+
+type PagePhase = 'landing' | 'chatting';
+
+export default function HeroSection() {
+  const [phase, setPhase] = useState<PagePhase>('landing');
+  const [initialMessage, setInitialMessage] = useState('');
+  const [landingInput, setLandingInput] = useState('');
+
+  function handleFirstMessage(text: string) {
+    setInitialMessage(text);
+    setPhase('chatting');
+  }
+
+  function handleLandingSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!landingInput.trim()) return;
+    handleFirstMessage(landingInput.trim());
+  }
+
+  const isChatting = phase === 'chatting';
+  const tilt = useTilt(14);
+  const logoRef = useRef<HTMLDivElement>(null);
+  useDrown(logoRef);
+
+  return (
+    <main
+      className={[
+        'flex flex-col items-center relative z-[1] px-10',
+        isChatting ? 'justify-start pt-12' : 'justify-center min-h-screen',
+      ].join(' ')}
+    >
+      {/* Brand group — cursor-reactive tilt, transparent so SDF shows through */}
+      <div
+        className="flex flex-col items-center relative"
+        data-cursor-hover
+        {...(!isChatting ? tilt : {})}
+        style={{
+          transition: 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), filter 0.5s ease',
+        }}
+      >
+        {/* Invisible expanded hit area for tilt detection */}
+        {!isChatting && (
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              inset: '-80px -120px',
+              pointerEvents: 'auto',
+              zIndex: -1,
+            }}
+          />
+        )}
+        {/* Wordmark */}
+        <h1
+          className={[
+            'font-bold tracking-[-0.04em] text-[var(--text-bright)] animate-fadeUp transition-all duration-500',
+            isChatting ? 'text-[20px] mb-7' : 'text-[34px] mb-4',
+          ].join(' ')}
+          style={{ animationDelay: '0.3s' }}
+        >
+          Good<span className="text-[var(--accent)] opacity-70">&apos;</span>ai
+        </h1>
+
+        {/* Logo icon — large, translucent, SDF circle shows through */}
+        {!isChatting && (
+          <div
+            ref={logoRef}
+            className="animate-fadeUp mb-3 relative"
+            style={{
+              width: '320px',
+              height: '320px',
+              animationDelay: '0.4s',
+              pointerEvents: 'none',
+              transition: 'transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease',
+            }}
+          >
+            <img
+              src="/assets/logo-light-nomouth.svg"
+              alt="Good'ai icon"
+              style={{
+                width: '100%',
+                height: '100%',
+                opacity: 0.45,
+                mixBlendMode: 'screen',
+              }}
+            />
+            {/* CSS mouth — arc that flips from smile to frown */}
+            <div
+              data-mouth
+              style={{
+                position: 'absolute',
+                left: '50%',
+                top: '56%',
+                transform: 'translateX(-50%) scaleY(1)',
+                width: '42px',
+                height: '20px',
+                borderBottom: '3px solid rgba(215, 210, 203, 0.45)',
+                borderRadius: '0 0 50% 50%',
+                transition: 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), border-radius 0.4s ease, height 0.4s ease',
+                mixBlendMode: 'screen',
+              }}
+            />
+          </div>
+        )}
+
+        {/* Subtitle */}
+        {!isChatting && (
+          <p
+            className="font-mono text-[11px] font-light uppercase tracking-[0.14em] text-[var(--text-dim)] mb-14 animate-fadeUp"
+            style={{ animationDelay: '0.55s' }}
+          >
+            business automations, sorted
+          </p>
+        )}
+      </div>
+
+      {/* Landing input — hidden in chatting */}
+      {!isChatting && (
+        <div className="max-w-[440px] w-full animate-fadeUp mt-6" style={{ animationDelay: '0.7s' }}>
+          <form onSubmit={handleLandingSubmit} className="relative">
+            <Input
+              value={landingInput}
+              onChange={(e) => setLandingInput(e.target.value)}
+              placeholder="Tell us your problem."
+              className={[
+                'w-full py-5 pl-6 pr-14',
+                'bg-[var(--surface)]/80 border-[var(--border)] rounded-[14px]',
+                'text-base text-[var(--text-bright)]',
+                'placeholder:text-[var(--text-dim)] placeholder:font-light',
+                'focus-visible:border-[rgba(216,106,61,0.25)]',
+                'focus-visible:shadow-[0_0_4px_var(--accent-dim),0_0_32px_rgba(0,0,0,0.5)]',
+                'focus-visible:bg-[var(--surface-raised)] focus-visible:ring-0',
+              ].join(' ')}
+            />
+            <button
+              type="submit"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-[10px] text-[var(--text-dim)] hover:text-[var(--accent)] hover:bg-[var(--accent-dim)] flex items-center justify-center transition-colors"
+            >
+              <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </button>
+          </form>
+          <p className="mt-4 font-mono text-xs font-light tracking-[0.04em] text-[var(--text-dim)] opacity-70">
+            We&apos;ll figure out how to fix it.
+          </p>
+        </div>
+      )}
+
+      {/* Chat interface — shown in chatting */}
+      {isChatting && <ChatInterface initialMessage={initialMessage} />}
+
+      {/* Perth badge — hidden in chatting */}
+      {!isChatting && (
+        <div
+          className="fixed bottom-7 left-1/2 -translate-x-1/2 font-mono text-[10px] font-light uppercase tracking-[0.12em] text-[var(--text-dim)] animate-fadeUp"
+          style={{ animationDelay: '1.2s' }}
+        >
+          PERTH <span className="text-[var(--accent-soft)] opacity-50">/</span> WA
+        </div>
+      )}
+    </main>
+  );
+}

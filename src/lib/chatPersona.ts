@@ -1,10 +1,4 @@
-import Anthropic from '@anthropic-ai/sdk';
-
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
-
-const SYSTEM_PROMPT = `You are the intake assistant for Good'ai, a business automations company based in Perth, Western Australia. You help small-to-medium business owners (typically $1M–$30M turnover) figure out where automation can save them time.
+export const SYSTEM_PROMPT = `You are the intake assistant for Good'ai, a business automations company based in Perth, Western Australia. You help small-to-medium business owners (typically $1M–$30M turnover) figure out where automation can save them time.
 
 VOICE & TONE:
 - Talk like a switched-on mate who gets business, not a salesperson or a robot
@@ -46,51 +40,3 @@ CONVERSATION FLOW:
 - IMPORTANT: After your first reply, a contact form automatically appears below your message. You do NOT need to ask for their details — the form handles that. Just focus on being useful and showing you understand their problem. If they keep chatting after the form appears, keep helping — don't push the form
 
 If they mention a specific tool (Xero, MYOB, ServiceM8, Tradify, Cliniko, Square, etc.), acknowledge you know it — these are common in Perth SMEs and you've likely worked with them.`;
-
-export default async function handler(req, res) {
-  // CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  try {
-    const { messages } = req.body;
-
-    if (!messages || !Array.isArray(messages) || messages.length === 0) {
-      return res.status(400).json({ error: 'Messages array required' });
-    }
-
-    // Map frontend message format to Anthropic format
-    const formattedMessages = messages.map(m => ({
-      role: m.role === 'ai' ? 'assistant' : 'user',
-      content: m.content,
-    }));
-
-    const response = await client.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 300,
-      system: SYSTEM_PROMPT,
-      messages: formattedMessages,
-    });
-
-    const text = response.content[0]?.text || "Sorry, something went sideways. Try again?";
-
-    return res.status(200).json({ response: text });
-  } catch (error) {
-    console.error('Chat API error:', error);
-
-    if (error.status === 429) {
-      return res.status(429).json({ response: "We're getting a lot of traffic right now. Give it a sec and try again." });
-    }
-
-    return res.status(500).json({ response: "Something broke on our end. Try again in a moment." });
-  }
-}

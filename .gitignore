@@ -49,3 +49,62 @@ CLAUDE.local.md
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# dev tooling configs (personal, not project)
+.codex/
+.gemini/
+.vscode/
+mcp-webdev/
+autonomous-coding/
+
+# inbox reference files (large, not deployable)
+inbox/
+
+# claude agent internals (python, notebooks, images)
+.claude/agents/__init__.py
+.claude/agents/agent.py
+.claude/agents/agent_demo.ipynb
+.claude/agents/test_message_params.py
+.claude/agents/tools/
+.claude/agents/utils/
+.claude/image.png
+.claude/skills/image.png
+
+# unused component
+src/components/LogoIcon.tsx
+
+# ===========================================
+# SCAFFOLD / AGENT INFRASTRUCTURE (NOT DEPLOYED)
+# ===========================================
+
+# Claude agent scaffold
+.claude/
+CLAUDE.md
+claude-progress.txt
+
+# Agent orchestration files
+AGENTS.md
+.mcp.json
+.mcp/
+autonomous-coding/
+mcp-webdev/
+
+# Planning documents
+.planning/
+
+# External CLI configs
+.codex/
+.gemini/
+
+# Test files (keep __tests__ if you want tests in repo)
+__tests__/
+
+# Database files
+in-memoria.db
+
+# External scripts not needed for deployment
+google-apps-script.js
+init.ps1
+
+# Feature documentation
+feature_list.json
