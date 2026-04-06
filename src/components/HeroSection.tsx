@@ -128,33 +128,54 @@ export default function HeroSection() {
     handleFirstMessage(landingInput.trim());
   }
 
+  function handleBack() {
+    setPhase('landing');
+    setInitialMessage('');
+    setLandingInput('');
+  }
+
   const isChatting = phase === 'chatting';
   const tilt = useTilt(6);
   const logoRef = useRef<HTMLDivElement>(null);
   useDrown(logoRef);
 
   return (
+    <>
+      {/* Fixed header — chat mode only (back nav + centered wordmark) */}
+      {isChatting && (
+        <header
+          className="fixed top-0 left-0 right-0 z-20 flex items-center py-4 px-6"
+          style={{ background: 'linear-gradient(var(--bg) 60%, transparent)' }}
+        >
+          <button
+            onClick={handleBack}
+            className="text-[var(--text-dim)] hover:text-[var(--text)] transition-colors"
+            aria-label="Back to home"
+          >
+            <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+          </button>
+          <h1 className="flex-1 text-center font-bold tracking-[-0.04em] text-lg text-[var(--text-bright)]">
+            Good<span className="text-[var(--accent)] opacity-70">&apos;</span>ai
+          </h1>
+          <div className="w-5" />
+        </header>
+      )}
+
     <main
       className={[
         'flex flex-col items-center relative z-[1] px-10',
-        isChatting ? 'justify-start pt-12' : 'justify-center min-h-screen',
+        isChatting ? 'justify-start pt-16' : 'justify-center min-h-screen',
       ].join(' ')}
     >
-      {/* Wordmark — pinned top-left when landing, inline when chatting */}
+      {/* Wordmark — pinned top-left on landing (chat uses fixed header above) */}
       {!isChatting && (
         <div className="fixed top-0 left-0 w-full z-10 flex items-center px-10 py-6 animate-fadeUp" style={{ animationDelay: '0.3s' }}>
           <h1 className="font-bold tracking-[-0.04em] text-[20px] text-[var(--text-bright)]">
             Good<span className="text-[var(--accent)] opacity-70">&apos;</span>ai
           </h1>
         </div>
-      )}
-      {isChatting && (
-        <h1
-          className="font-bold tracking-[-0.04em] text-[20px] mb-7 text-[var(--text-bright)] animate-fadeUp transition-all duration-500"
-          style={{ animationDelay: '0.3s' }}
-        >
-          Good<span className="text-[var(--accent)] opacity-70">&apos;</span>ai
-        </h1>
       )}
 
       {/* Brand group — cursor-reactive tilt, transparent so SDF shows through */}
@@ -259,7 +280,7 @@ export default function HeroSection() {
       )}
 
       {/* Chat interface — shown in chatting */}
-      {isChatting && <ChatInterface initialMessage={initialMessage} />}
+      {isChatting && <ChatInterface initialMessage={initialMessage} onBack={handleBack} />}
 
       {/* Service marquee — fixed bottom strip */}
       {!isChatting && (
@@ -311,5 +332,6 @@ export default function HeroSection() {
         </div>
       )}
     </main>
+    </>
   );
 }
