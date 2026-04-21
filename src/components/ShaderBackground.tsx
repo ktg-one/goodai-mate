@@ -73,7 +73,7 @@ export default function ShaderBackground() {
       const h = window.innerHeight;
       const dpr = window.innerWidth < 640
         ? Math.min(window.devicePixelRatio, 1)
-        : Math.min(window.devicePixelRatio, 2);
+        : Math.min(window.devicePixelRatio, 1.5);
 
       renderer.setSize(w, h);
       renderer.setPixelRatio(dpr);

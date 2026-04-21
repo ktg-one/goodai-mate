@@ -129,7 +129,7 @@ export default function HeroSection() {
   }
 
   const isChatting = phase === 'chatting';
-  const tilt = useTilt(14);
+  const tilt = useTilt(6);
   const logoRef = useRef<HTMLDivElement>(null);
   useDrown(logoRef);
 
@@ -140,6 +140,23 @@ export default function HeroSection() {
         isChatting ? 'justify-start pt-12' : 'justify-center min-h-screen',
       ].join(' ')}
     >
+      {/* Wordmark — pinned top-left when landing, inline when chatting */}
+      {!isChatting && (
+        <div className="fixed top-0 left-0 w-full z-10 flex items-center px-10 py-6 animate-fadeUp" style={{ animationDelay: '0.3s' }}>
+          <h1 className="font-bold tracking-[-0.04em] text-[20px] text-[var(--text-bright)]">
+            Good<span className="text-[var(--accent)] opacity-70">&apos;</span>ai
+          </h1>
+        </div>
+      )}
+      {isChatting && (
+        <h1
+          className="font-bold tracking-[-0.04em] text-[20px] mb-7 text-[var(--text-bright)] animate-fadeUp transition-all duration-500"
+          style={{ animationDelay: '0.3s' }}
+        >
+          Good<span className="text-[var(--accent)] opacity-70">&apos;</span>ai
+        </h1>
+      )}
+
       {/* Brand group — cursor-reactive tilt, transparent so SDF shows through */}
       <div
         className="flex flex-col items-center relative"
@@ -160,22 +177,12 @@ export default function HeroSection() {
             }}
           />
         )}
-        {/* Wordmark */}
-        <h1
-          className={[
-            'font-bold tracking-[-0.04em] text-[var(--text-bright)] animate-fadeUp transition-all duration-500',
-            isChatting ? 'text-[20px] mb-7' : 'text-[34px] mb-4',
-          ].join(' ')}
-          style={{ animationDelay: '0.3s' }}
-        >
-          Good<span className="text-[var(--accent)] opacity-70">&apos;</span>ai
-        </h1>
 
         {/* Logo icon — large, translucent, SDF circle shows through */}
         {!isChatting && (
           <div
             ref={logoRef}
-            className="animate-fadeUp mb-3 relative"
+            className="animate-fadeUp animate-ambient-pulse mb-3 relative"
             style={{
               width: '320px',
               height: '320px',
@@ -213,46 +220,39 @@ export default function HeroSection() {
           </div>
         )}
 
-        {/* Subtitle */}
-        {!isChatting && (
-          <p
-            className="font-mono text-[11px] font-light uppercase tracking-[0.14em] text-[var(--text-dim)] mb-14 animate-fadeUp"
-            style={{ animationDelay: '0.55s' }}
-          >
-            business automations, sorted
-          </p>
-        )}
+
       </div>
+
+      {/* Subtitle — outside tilt zone */}
+      {!isChatting && (
+        <p
+          className="font-mono text-[14px] font-light uppercase tracking-[0.14em] text-[var(--text-dim)] mb-8 animate-fadeUp"
+          style={{ animationDelay: '0.55s' }}
+        >
+          business automations, sorted
+        </p>
+      )}
 
       {/* Landing input — hidden in chatting */}
       {!isChatting && (
-        <div className="max-w-[440px] w-full animate-fadeUp mt-6" style={{ animationDelay: '0.7s' }}>
+        <div className="max-w-[440px] w-full animate-fadeUp mt-6" style={{ animationDelay: '0.8s' }}>
           <form onSubmit={handleLandingSubmit} className="relative">
             <Input
               value={landingInput}
               onChange={(e) => setLandingInput(e.target.value)}
               placeholder="Tell us your problem."
               className={[
-                'w-full py-5 pl-6 pr-14',
+                'w-full py-6 pl-7 pr-14',
                 'bg-[var(--surface)]/80 border-[var(--border)] rounded-[14px]',
-                'text-base text-[var(--text-bright)]',
+                'text-lg text-[var(--text-bright)]',
                 'placeholder:text-[var(--text-dim)] placeholder:font-light',
                 'focus-visible:border-[rgba(216,106,61,0.25)]',
                 'focus-visible:shadow-[0_0_4px_var(--accent-dim),0_0_32px_rgba(0,0,0,0.5)]',
                 'focus-visible:bg-[var(--surface-raised)] focus-visible:ring-0',
               ].join(' ')}
             />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-[10px] text-[var(--text-dim)] hover:text-[var(--accent)] hover:bg-[var(--accent-dim)] flex items-center justify-center transition-colors"
-            >
-              <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
-            </button>
           </form>
-          <p className="mt-4 font-mono text-xs font-light tracking-[0.04em] text-[var(--text-dim)] opacity-70">
+          <p className="mt-5 font-mono text-sm font-light tracking-[0.04em] text-[var(--text-dim)] opacity-70">
             We&apos;ll figure out how to fix it.
           </p>
         </div>
@@ -261,10 +261,50 @@ export default function HeroSection() {
       {/* Chat interface — shown in chatting */}
       {isChatting && <ChatInterface initialMessage={initialMessage} />}
 
+      {/* Service marquee — fixed bottom strip */}
+      {!isChatting && (
+        <div
+          className="fixed bottom-14 left-0 w-full overflow-hidden animate-fadeUp"
+          style={{ animationDelay: '1s' }}
+        >
+          <div className="flex animate-marquee whitespace-nowrap gap-4 py-3">
+            {[
+              'Email Drafting',
+              'Invoice Processing',
+              'CRM Sync',
+              'Social Scheduling',
+              'Custom Cartoons',
+              'AI Voice Agents',
+              'Workflow Automation',
+              'Data Entry',
+              'Lead Capture',
+              'Report Generation',
+              'Email Drafting',
+              'Invoice Processing',
+              'CRM Sync',
+              'Social Scheduling',
+              'Custom Cartoons',
+              'AI Voice Agents',
+              'Workflow Automation',
+              'Data Entry',
+              'Lead Capture',
+              'Report Generation',
+            ].map((s, i) => (
+              <span
+                key={`${s}-${i}`}
+                className="inline-block text-[12px] font-mono tracking-wide text-[var(--text-dim)]/40 flex-shrink-0"
+              >
+                {s}<span className="mx-4 text-[var(--accent)]/20">/</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Perth badge — hidden in chatting */}
       {!isChatting && (
         <div
-          className="fixed bottom-7 left-1/2 -translate-x-1/2 font-mono text-[10px] font-light uppercase tracking-[0.12em] text-[var(--text-dim)] animate-fadeUp"
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 font-mono text-[12px] font-light uppercase tracking-[0.12em] text-[var(--text-dim)] animate-fadeUp"
           style={{ animationDelay: '1.2s' }}
         >
           PERTH <span className="text-[var(--accent-soft)] opacity-50">/</span> WA
