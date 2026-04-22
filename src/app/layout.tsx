@@ -19,6 +19,8 @@ export const metadata: Metadata = {
   description: "Perth-based business automations for SMEs. Tell us your problem, we'll figure out how to fix it.",
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({
   children,
 }: Readonly<{
