@@ -30,7 +30,7 @@ export default function ShaderBackground() {
 
   useEffect(() => {
     if (!isWebGLAvailable()) {
-      setNoWebGL(true);
+      setTimeout(() => setNoWebGL(true), 0);
       return;
     }
 

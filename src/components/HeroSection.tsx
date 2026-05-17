@@ -27,7 +27,8 @@ function useTilt(strength = 14) {
 function useDrown(logoRef: React.RefObject<HTMLDivElement | null>) {
   const mousePos = useRef({ x: 0, y: 0 });
   const dwellTime = useRef(0);
-  const lastMove = useRef(Date.now());
+  const lastMove = useRef(0);
+  useEffect(() => { lastMove.current = Date.now(); }, []);
   const raf = useRef(0);
 
   useEffect(() => {

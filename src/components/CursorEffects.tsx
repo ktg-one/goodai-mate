@@ -19,7 +19,7 @@ export default function CursorEffects() {
   useEffect(() => {
     // Touch detection — must run client-side only
     const touch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    setIsTouch(touch);
+    setTimeout(() => setIsTouch(touch), 0);
 
     if (touch) {
       document.body.style.cursor = 'auto';
@@ -62,13 +62,11 @@ export default function CursorEffects() {
       cursorPos.current.y += (mouseRef.current.y - cursorPos.current.y) * lerp;
 
       if (cursorRef.current) {
-        cursorRef.current.style.left = `${cursorPos.current.x}px`;
-        cursorRef.current.style.top = `${cursorPos.current.y}px`;
+        cursorRef.current.style.transform = `translate3d(${cursorPos.current.x}px, ${cursorPos.current.y}px, 0) translate(-50%, -50%)`;
       }
 
       if (glowRef.current) {
-        glowRef.current.style.left = `${mouseRef.current.x}px`;
-        glowRef.current.style.top = `${mouseRef.current.y}px`;
+        glowRef.current.style.transform = `translate3d(${mouseRef.current.x}px, ${mouseRef.current.y}px, 0) translate(-350px, -350px)`;
       }
 
       rafRef.current = requestAnimationFrame(tick);
@@ -103,7 +101,7 @@ export default function CursorEffects() {
           width: '20px',
           height: '20px',
           border: '1.5px solid rgba(216,106,61,0.35)',
-          transform: 'translate(-50%, -50%)',
+          transform: 'translate3d(0px, 0px, 0) translate(-50%, -50%)',
           transition: 'width 0.3s ease, height 0.3s ease, border-color 0.3s ease',
           left: 0,
           top: 0,
@@ -119,8 +117,8 @@ export default function CursorEffects() {
           width: '700px',
           height: '700px',
           background: 'radial-gradient(circle, var(--accent-glow) 0%, transparent 65%)',
-          transform: 'translate(-350px, -350px)',
-          transition: 'left 0.9s cubic-bezier(0.23, 1, 0.32, 1), top 0.9s cubic-bezier(0.23, 1, 0.32, 1)',
+          transform: 'translate3d(0px, 0px, 0) translate(-350px, -350px)',
+          transition: 'transform 0.9s cubic-bezier(0.23, 1, 0.32, 1)',
           left: 0,
           top: 0,
         }}
