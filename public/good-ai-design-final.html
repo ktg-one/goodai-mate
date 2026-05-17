@@ -1,0 +1,1109 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Good'AI — Brand &amp; Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Brand — straight off the logo */
+    --orange:        #F25C2B;
+    --orange-deep:   #D7591A;
+    --orange-tint:   #FBD8C7;
+    /* WA Ocean — third brand colour */
+    --ocean:         #006B8F;
+    --ocean-deep:    #003D56;
+    --ocean-soft:    #E6F3F7;
+    /* Neutrals — cool off-white, not Anthropic beige */
+    --ink:           #0B0B0B;
+    --ink-soft:      #1F1D1A;
+    --paper:         #F8F8F6;
+    --paper-2:       #EFEEEC;
+    --paper-3:       #E0DFDC;
+    --cream-line:    #CCCAC6;
+    /* Supporting */
+    --hi-yellow:     #FFD400;
+    --trust-blue:    #1A3FA8;
+    --warn:          #B53A1F;
+    --ok:            #2E6E3E;
+
+    --r-sharp: 0;
+    --r-soft: 6px;
+    --r-pill: 999px;
+
+    --shadow-stamp: 4px 4px 0 0 var(--ink);
+    --shadow-stamp-orange: 4px 4px 0 0 var(--orange);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(11,11,11,0.025) 0 1px, transparent 1px 4px);
+  }
+
+  .display { font-family: 'Fraunces', Georgia, serif; font-weight: 700; letter-spacing: -0.025em; line-height: 0.92; font-variation-settings: "opsz" 144; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+  /* ---------- page chrome ---------- */
+  .page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 40px 120px;
+  }
+
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 12px;
+    margin-bottom: 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .topbar .left, .topbar .right { display: flex; gap: 18px; align-items: center; }
+  .stamp {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--ink); color: var(--paper);
+    padding: 4px 10px;
+    font-weight: 700;
+  }
+  .stamp.orange { background: var(--orange); color: var(--ink); }
+  .stamp .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--orange); }
+  .stamp.orange .dot { background: var(--ink); }
+
+  /* ---------- hero ---------- */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 32px;
+    align-items: stretch;
+    border: 3px solid var(--ink);
+    background: var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 90% 12%, rgba(242,92,43,0.12) 0 14%, transparent 14.5%),
+      radial-gradient(circle at 10% 90%, rgba(11,11,11,0.04) 0 22%, transparent 22.5%);
+    pointer-events: none;
+  }
+  .hero-left { padding: 36px 36px 32px; position: relative; }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink); display: inline-block;
+    border-bottom: 2px solid var(--ink); padding-bottom: 4px; margin-bottom: 22px;
+  }
+  .hero h1 {
+    margin: 0;
+    font-family: 'Fraunces', Georgia, serif;
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 .ai { color: var(--orange); }
+  .hero h1 .tick {
+    display: inline-block; width: 0.55em; height: 0.55em; background: var(--orange);
+    border-radius: 999px; transform: translateY(0.05em); margin: 0 0.04em;
+  }
+  .hero-sub {
+    margin: 22px 0 0; font-size: 19px; max-width: 46ch;
+    line-height: 1.4; font-weight: 500;
+  }
+  .hero-meta {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px;
+  }
+  .hero-meta .stamp { font-size: 11px; }
+
+  .hero-right {
+    border-left: 3px solid var(--ink);
+    background:
+      linear-gradient(180deg, var(--paper-2) 0 50%, var(--paper) 50% 100%);
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 460px;
+  }
+  .hero-right img {
+    width: 78%; max-width: 460px; height: auto; display: block;
+  }
+  .hero-right .corner {
+    position: absolute; top: 14px; right: 14px;
+    background: var(--orange); color: var(--ink);
+    font-family: 'DM Sans', sans-serif; font-weight: 800;
+    padding: 6px 10px;
+    transform: rotate(6deg);
+    border: 2px solid var(--ink);
+  }
+  .hero-right .ribbon {
+    position: absolute; left: -8px; bottom: 28px;
+    background: var(--ink); color: var(--paper);
+    font-family: 'DM Sans', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: 0.06em;
+    padding: 8px 14px 8px 18px;
+  }
+  .hero-right .ribbon::before {
+    content: ""; position: absolute; left: -1px; top: 100%;
+    border: 8px solid transparent; border-top-color: var(--orange-deep); border-right-color: var(--orange-deep);
+  }
+
+  /* ---------- section base ---------- */
+  .section { margin-top: 72px; }
+  .section-head {
+    display: grid; grid-template-columns: 90px 1fr auto; align-items: end;
+    gap: 18px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 14px;
+    margin-bottom: 28px;
+  }
+  .section-num {
+    font-family: 'Fraunces', Georgia, serif; font-size: 64px; line-height: 0.85;
+    font-weight: 700; color: var(--orange); -webkit-text-stroke: 1.5px var(--ink);
+    font-variation-settings: "opsz" 144;
+  }
+  .section-title {
+    font-family: 'Fraunces', Georgia, serif; font-size: 38px; line-height: 0.95;
+    font-weight: 700; letter-spacing: -0.02em; font-variation-settings: "opsz" 72;
+  }
+  .section-kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper); padding: 4px 8px;
+  }
+
+  /* ---------- voice ---------- */
+  .voice {
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px;
+  }
+  .voice-card {
+    background: var(--paper-2);
+    border: 2px solid var(--ink);
+    padding: 24px;
+  }
+  .voice-card h3 {
+    margin: 0 0 8px; font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; letter-spacing: -0.015em;
+  }
+  .voice-card p { margin: 0 0 12px; }
+  .voice-card .pullquote {
+    font-family: 'Fraunces', serif; font-weight: 700; font-size: 26px; line-height: 1.1;
+    letter-spacing: -0.02em;
+    border-left: 6px solid var(--orange); padding-left: 14px;
+  }
+  }
+  .voice-rules {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border: 2px solid var(--ink);
+  }
+  .voice-rules li {
+    padding: 14px 16px;
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    background: var(--paper);
+    font-size: 14px;
+  }
+  .voice-rules li:nth-child(2n) { border-right: none; }
+  .voice-rules li:nth-last-child(-n+2) { border-bottom: none; }
+  .voice-rules .yes { color: var(--ok); font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.08em; }
+  .voice-rules .no  { color: var(--warn); font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.08em; }
+  .voice-rules b { display: block; font-family: 'Fraunces', serif; font-weight: 700; font-size: 16px; margin-top: 4px; letter-spacing: -0.01em; }
+
+  /* ---------- colors ---------- */
+  .colors {
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px;
+  }
+  .swatch {
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .swatch .chip { height: 110px; }
+  .swatch .meta {
+    padding: 10px 12px;
+    border-top: 2px solid var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+  .swatch .meta b {
+    display: block; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 13px;
+    text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px;
+  }
+  .swatch.primary { grid-column: span 4; }
+  .swatch.primary .chip { height: 170px; }
+  .swatch.brand   { grid-column: span 4; }
+  .swatch.brand .chip   { height: 170px; }
+  .swatch.paper   { grid-column: span 4; }
+  .swatch.paper .chip   { height: 170px; }
+  .swatch.sm      { grid-column: span 3; }
+  .swatch.sm .chip { height: 80px; }
+
+  /* ---------- type ---------- */
+  .type-grid {
+    display: grid; grid-template-columns: 220px 1fr; gap: 0;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+  }
+  .type-row { display: contents; }
+  .type-row .label, .type-row .sample {
+    border-bottom: 2px solid var(--ink);
+    padding: 18px 20px;
+  }
+  .type-row .label {
+    background: var(--paper-2);
+    border-right: 2px solid var(--ink);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .type-row .label b { display: block; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 14px; margin-top: 4px; text-transform: none; letter-spacing: 0; }
+  .type-row:last-child .label, .type-row:last-child .sample { border-bottom: none; }
+  .t-display-xxl { font-family: 'Fraunces', serif; font-weight: 700; font-size: 88px; line-height: 0.88; letter-spacing: -0.03em; font-variation-settings: "opsz" 144; }
+  .t-display-xl  { font-family: 'Fraunces', serif; font-weight: 700; font-size: 56px; line-height: 0.93; letter-spacing: -0.025em; font-variation-settings: "opsz" 144; }
+  .t-h1          { font-family: 'Fraunces', serif; font-weight: 700; font-size: 64px; line-height: 0.95; letter-spacing: -0.025em; font-variation-settings: "opsz" 144; }
+  .t-h2          { font-family: 'Fraunces', serif; font-weight: 600; font-size: 36px; line-height: 1.05; letter-spacing: -0.015em; font-variation-settings: "opsz" 72; }
+  .t-h3          { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 24px; line-height: 1.2; }
+  .t-lede        { font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 20px; line-height: 1.5; color: var(--ink-soft); }
+  .t-body        { font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 16px; line-height: 1.55; }
+  .t-mono        { font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.02em; }
+  .t-eyebrow     { font-family: 'JetBrains Mono', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 0.16em; }
+  .t-mono        { font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.02em; }
+  .t-eyebrow     { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; }
+
+  /* ---------- shapes ---------- */
+  .shapes {
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px;
+  }
+  .shape-pad {
+    border: 2px solid var(--ink); background: var(--paper);
+    padding: 28px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px;
+    align-items: end;
+  }
+  .shape-pad figure {
+    margin: 0; display: flex; flex-direction: column; align-items: center; gap: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  }
+  .shape-pad .shp { width: 84px; height: 84px; }
+  .shp.circle      { background: var(--ink); border-radius: 999px; }
+  .shp.circle-o    { background: var(--orange); border-radius: 999px; }
+  .shp.donut       { background: var(--ink); border-radius: 999px; box-shadow: inset 0 0 0 22px var(--ink); position: relative; }
+  .shp.donut::after{ content:""; position:absolute; inset:22px; background: var(--paper); border-radius: 999px; }
+  .shp.donut       { position: relative; }
+  .shp.half-up     { background: var(--orange); border-radius: 999px 999px 0 0; height: 42px; align-self: end; }
+  .shp.half-down   { background: var(--orange); border-radius: 0 0 999px 999px; height: 42px; }
+  .shp.tri         { width: 0; height: 0; border-left: 42px solid transparent; border-right: 42px solid transparent; border-bottom: 84px solid var(--ink); background: transparent; }
+  .shp.bar         { background: var(--ink); width: 24px; height: 84px; }
+  .shp.split       {
+    background: linear-gradient(180deg, var(--ink) 0 50%, var(--orange) 50% 100%);
+    border-radius: 999px;
+  }
+  .shapes-rules {
+    border: 2px solid var(--ink); background: var(--paper-2);
+    padding: 20px 22px;
+  }
+  .shapes-rules h4 { margin: 0 0 8px; font-family: 'Fraunces', serif; font-weight: 700; font-size: 18px; letter-spacing: -0.01em; }
+  .shapes-rules ul { padding-left: 18px; margin: 0 0 14px; }
+  .shapes-rules li { margin: 6px 0; font-size: 14px; }
+
+  /* ---------- spacing / radius ---------- */
+  .scales {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;
+  }
+  .scale-card {
+    border: 2px solid var(--ink); background: var(--paper); padding: 20px;
+  }
+  .scale-card h4 { margin: 0 0 14px; font-family: 'Fraunces', serif; font-weight: 700; font-size: 18px; letter-spacing: -0.01em; }
+  .scale-row {
+    display: flex; align-items: center; gap: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    padding: 6px 0; border-top: 1px dashed var(--cream-line);
+  }
+  .scale-row:first-of-type { border-top: none; }
+  .scale-row .bar { background: var(--orange); height: 14px; }
+  .scale-row .box { background: var(--ink); width: 60px; height: 36px; flex: none; }
+
+  /* ---------- buttons ---------- */
+  .buttons {
+    border: 2px solid var(--ink); background: var(--paper); padding: 28px;
+  }
+  .btn-row {
+    display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+    padding: 18px 0; border-top: 1px dashed var(--cream-line);
+  }
+  .btn-row:first-child { border-top: none; padding-top: 0; }
+  .btn-row .label {
+    width: 160px; flex: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .btn {
+    font-family: 'DM Sans', sans-serif; font-weight: 800; font-size: 14px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 12px 18px;
+    border: 2px solid var(--ink);
+    background: var(--ink); color: var(--paper);
+    cursor: pointer;
+    box-shadow: var(--shadow-stamp-orange);
+    transition: transform 80ms ease, box-shadow 80ms ease;
+  }
+  .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 0 var(--orange); }
+  .btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 0 var(--orange); }
+  .btn.orange { background: var(--orange); color: var(--ink); box-shadow: 4px 4px 0 0 var(--ink); }
+  .btn.orange:hover { box-shadow: 6px 6px 0 0 var(--ink); }
+  .btn.paper  { background: var(--paper); color: var(--ink); }
+  .btn.paper:hover { box-shadow: 6px 6px 0 0 var(--ink); }
+  .btn.ghost  { background: transparent; color: var(--ink); box-shadow: none; border-style: dashed; }
+  .btn.ghost:hover { background: var(--paper-2); transform: none; }
+  .btn.pill   { border-radius: 999px; }
+  .btn.sm     { font-size: 12px; padding: 8px 12px; }
+  .btn.lg     { font-size: 18px; padding: 16px 26px; }
+  .btn .arrow { display: inline-block; margin-left: 8px; }
+
+  /* ---------- cards ---------- */
+  .card-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+  }
+  .card {
+    background: var(--paper); border: 2px solid var(--ink);
+    box-shadow: var(--shadow-stamp);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .card .cap {
+    background: var(--ink); color: var(--paper);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 6px 12px;
+    display: flex; justify-content: space-between;
+  }
+  .card .cap .pulse { display: inline-flex; align-items: center; gap: 6px; }
+  .card .cap .pulse::before { content:""; width: 8px; height: 8px; background: var(--orange); border-radius: 999px; }
+  .card .body { padding: 22px; }
+  .card h3 { font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; margin: 0 0 6px; line-height: 1.05; letter-spacing: -0.015em; }
+  .card p { margin: 0 0 14px; font-size: 14px; }
+  .card .meta { display: flex; justify-content: space-between; align-items: center; padding: 14px 22px; border-top: 2px dashed var(--cream-line); font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .card.alt { background: var(--orange); }
+  .card.alt h3, .card.alt p { color: var(--ink); }
+  .card.alt .cap { background: var(--ink); color: var(--paper); }
+  .card.dark { background: var(--ink); color: var(--paper); }
+  .card.dark h3 { color: var(--paper); }
+  .card.dark p  { color: var(--paper-3); }
+  .card.dark .meta { color: var(--orange); border-color: rgba(244,239,230,0.2); }
+
+  /* ---------- badges ---------- */
+  .badges {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    border: 2px solid var(--ink); background: var(--paper); padding: 22px;
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700;
+    padding: 6px 10px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+  }
+  .badge .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--ink); }
+  .badge.ink      { background: var(--ink); color: var(--paper); }
+  .badge.ink .dot { background: var(--orange); }
+  .badge.orange   { background: var(--orange); color: var(--ink); }
+  .badge.yellow   { background: var(--hi-yellow); color: var(--ink); }
+  .badge.blue     { background: var(--trust-blue); color: var(--paper); }
+  .badge.outline  { background: transparent; }
+  .badge.pill     { border-radius: 999px; }
+
+  /* ---------- forms ---------- */
+  .forms {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 22px;
+  }
+  .form-card {
+    border: 2px solid var(--ink); background: var(--paper); padding: 22px;
+  }
+  .field { display: block; margin-bottom: 14px; }
+  .field-label {
+    display: block; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .input, .select, .textarea {
+    width: 100%; padding: 12px 14px;
+    font-family: 'DM Sans', sans-serif; font-size: 15px;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    border-radius: 0;
+    outline: none;
+  }
+  .input:focus, .select:focus, .textarea:focus {
+    background: #FFF;
+    box-shadow: var(--shadow-stamp-orange);
+    transform: translate(-2px, -2px);
+  }
+  .check {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 14px; line-height: 1.35;
+    padding: 10px 12px; border: 2px dashed var(--ink); margin-bottom: 10px;
+  }
+  .check input { accent-color: var(--orange); margin-top: 2px; }
+  .form-card .submit { margin-top: 8px; }
+
+  /* ---------- 90s ad sample ---------- */
+  .ad {
+    border: 3px solid var(--ink);
+    background:
+      repeating-linear-gradient(45deg, var(--paper-2) 0 12px, var(--paper) 12px 24px);
+    padding: 0;
+    overflow: hidden;
+  }
+  .ad-band {
+    background: var(--orange); color: var(--ink);
+    text-align: center; padding: 8px;
+    font-family: 'DM Sans', sans-serif; font-weight: 800; letter-spacing: 0.16em; font-size: 14px;
+    border-bottom: 3px solid var(--ink);
+  }
+  .ad-body { display: grid; grid-template-columns: 1.2fr 1fr; gap: 0; }
+  .ad-left { padding: 32px; border-right: 3px solid var(--ink); background: var(--paper); }
+  .ad-left .kicker {
+    display: inline-block; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper); padding: 4px 8px; margin-bottom: 18px;
+  }
+  .ad-left h2 {
+    font-family: 'Fraunces', serif; font-weight: 700; font-size: 64px; line-height: 0.9; margin: 0 0 18px;
+    letter-spacing: -0.03em; font-variation-settings: "opsz" 144;
+  }
+  .ad-left h2 em { font-style: normal; color: var(--orange); }
+  .ad-left p { font-size: 16px; max-width: 42ch; margin: 0 0 14px; }
+  .ad-left .bullets { list-style: none; padding: 0; margin: 18px 0 22px; }
+  .ad-left .bullets li {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 15px; padding: 6px 0;
+    border-top: 1px dashed var(--cream-line);
+  }
+  .ad-left .bullets li:first-child { border-top: none; }
+  .ad-left .bullets li::before {
+    content:""; flex: none; width: 14px; height: 14px; background: var(--orange);
+    margin-top: 4px; border-radius: 999px; box-shadow: 2px 2px 0 var(--ink);
+  }
+  .ad-left .cta-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .ad-left .fineprint {
+    margin-top: 18px; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.06em; color: var(--ink-soft);
+  }
+
+  .ad-right {
+    background: var(--ink); color: var(--paper);
+    padding: 32px; position: relative;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .ad-right .price {
+    font-family: 'DM Sans', sans-serif; font-weight: 800; font-size: 18px; letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .ad-right .big {
+    font-family: 'Fraunces', serif; font-weight: 700; font-size: 120px; line-height: 0.85;
+    color: var(--orange); letter-spacing: -0.04em; font-variation-settings: "opsz" 144;
+  }
+  .ad-right .big sup { font-size: 36px; vertical-align: top; }
+  .ad-right .strike { font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; color: var(--paper-3); text-decoration: line-through; }
+  .ad-right .promise {
+    border-top: 2px dashed var(--paper-3); padding-top: 18px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .ad-right .stick {
+    position: absolute; top: 18px; right: 18px;
+    background: var(--hi-yellow); color: var(--ink);
+    width: 110px; height: 110px; border-radius: 999px;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    font-family: 'DM Sans', sans-serif; font-weight: 800; font-size: 13px; line-height: 1; letter-spacing: 0.04em;
+    transform: rotate(-12deg);
+    border: 2px solid var(--ink);
+  }
+
+  /* ---------- logo lockups ---------- */
+  .lockups {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+  }
+  .lockup {
+    border: 2px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    aspect-ratio: 4 / 3;
+    background: var(--paper);
+    position: relative;
+  }
+  .lockup img { width: 60%; max-height: 70%; object-fit: contain; }
+  .lockup.ink { background: var(--ink); }
+  .lockup.ink img { filter: invert(1) hue-rotate(180deg); }
+  .lockup.orange { background: var(--orange); }
+  .lockup .tag {
+    position: absolute; top: 10px; left: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    background: var(--ink); color: var(--paper); padding: 3px 6px;
+    letter-spacing: 0.08em;
+  }
+  .lockup.ink .tag, .lockup.orange .tag { background: var(--paper); color: var(--ink); }
+
+  /* ---------- footer ---------- */
+  .footer {
+    margin-top: 96px;
+    border-top: 2px solid var(--ink);
+    padding-top: 22px;
+    display: flex; justify-content: space-between; align-items: end;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .footer .big {
+    font-family: 'Fraunces', serif; font-weight: 700; font-size: 64px; line-height: 0.85; text-transform: none; letter-spacing: -0.03em; font-variation-settings: "opsz" 144;
+  }
+
+  /* ---------- print marks ---------- */
+  .crop {
+    position: relative;
+  }
+  .crop::before, .crop::after {
+    content: ""; position: absolute; width: 14px; height: 14px;
+    border: 1.5px solid var(--ink);
+  }
+  .crop::before { top: -8px; left: -8px; border-right: 0; border-bottom: 0; }
+  .crop::after  { bottom: -8px; right: -8px; border-left: 0; border-top: 0; }
+
+  @media (max-width: 980px) {
+    .page { padding: 24px 22px 80px; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { border-left: 0; border-top: 3px solid var(--ink); min-height: 320px; }
+    .voice, .shapes, .scales, .card-grid, .forms, .lockups, .ad-body { grid-template-columns: 1fr; }
+    .colors { grid-template-columns: repeat(6, 1fr); }
+    .swatch.primary, .swatch.brand, .swatch.paper { grid-column: span 6; }
+    .swatch.sm { grid-column: span 3; }
+    .ad-right { border-top: 3px solid var(--ink); }
+    .ad-left { border-right: 0; border-bottom: 3px solid var(--ink); }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="left">
+      <span class="stamp"><span class="dot"></span>Good'AI / Brand Book v1.0</span>
+      <span>Perth · Western Australia</span>
+    </div>
+    <div class="right">
+      <span>Filed: May 2026</span>
+      <span>Internal · No Faxing Required</span>
+      <span class="stamp orange"><span class="dot"></span>Approved</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero crop" data-screen-label="01 Cover">
+    <div class="hero-left">
+      <span class="hero-eyebrow">The Brand Book · Edition One</span>
+      <h1 class="display">
+        G'day,<br>
+        we're <span class="ai">Good<span class="tick"></span>AI</span>.
+      </h1>
+      <p class="hero-sub">
+        Perth-built, plain-spoken AI for the small and mid-sized businesses that <i>actually</i> keep the country moving. We knock off problems so you can knock off early.
+      </p>
+      <div class="hero-meta">
+        <span class="stamp">EST. 2024 · WA</span>
+        <span class="stamp orange">Solo Dev Operation</span>
+        <span class="stamp">Brand Book v1.0</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <span class="corner">As Good As Advertised</span>
+      <img src="assets/goodai-logo.png" alt="Good'AI logo">
+      <span class="ribbon">No-Nonsense · Made in Perth</span>
+    </div>
+  </section>
+
+  <!-- 01 VOICE -->
+  <section class="section" data-screen-label="02 Voice">
+    <header class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Voice. Tone. Vibe.</h2>
+      <span class="section-kicker">How we sound</span>
+    </header>
+
+    <div class="voice">
+      <div class="voice-card">
+        <h3>The pitch, in one breath</h3>
+        <p class="pullquote">"AI for tradies, bakeries, brokers and bookkeepers — not Silicon Valley."</p>
+        <p style="margin-top:16px;">We speak like the bloke at the counter who actually knows the answer. No deep-tech jargon, no Bay Area buzzwords, no "synergies." We're optimistic without being naïve, blunt without being rude, and we always — <b>always</b> — tell you what something costs before we start.</p>
+      </div>
+
+      <ul class="voice-rules">
+        <li>
+          <span class="yes">DO ✓</span>
+          <b>"We'll handle the boring stuff."</b>
+          Promises in plain English.
+        </li>
+        <li>
+          <span class="no">DON'T ✗</span>
+          <b>"Leveraging synergistic ML pipelines."</b>
+          Never. Honestly.
+        </li>
+        <li>
+          <span class="yes">DO ✓</span>
+          <b>"Built in Perth, runs everywhere."</b>
+          Proudly local.
+        </li>
+        <li>
+          <span class="no">DON'T ✗</span>
+          <b>"AI-powered hyper-scale solutions."</b>
+          That's a billboard, not a brand.
+        </li>
+        <li>
+          <span class="yes">DO ✓</span>
+          <b>"Knock off early on Friday."</b>
+          Why we exist.
+        </li>
+        <li>
+          <span class="no">DON'T ✗</span>
+          <b>"Disrupt the future of work."</b>
+          The future is already disrupted, mate.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 02 COLOUR -->
+  <section class="section" data-screen-label="03 Colour">
+    <header class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Colour. Tight palette, loud where it counts.</h2>
+      <span class="section-kicker">Three colours do most of the work</span>
+    </header>
+
+    <div class="colors">
+      <div class="swatch primary">
+        <div class="chip" style="background:#0B0B0B"></div>
+        <div class="meta">
+          <b>Ink</b>
+          #0B0B0B · oklch(13% 0 0)<br>
+          Text, borders, hard edges. Use without fear.
+        </div>
+      </div>
+      <div class="swatch brand">
+        <div class="chip" style="background:#F25C2B"></div>
+        <div class="meta">
+          <b>Brand Orange</b>
+          #F25C2B · oklch(67% 0.18 39)<br>
+          The Good'AI shout. One per surface, maximum.
+        </div>
+      </div>
+      <div class="swatch paper">
+        <div class="chip" style="background:#F4EFE6"></div>
+        <div class="meta">
+          <b>Paper</b>
+          #F4EFE6 · oklch(94% 0.012 80)<br>
+          Default background. Direct-mail warmth.
+        </div>
+      </div>
+
+      <div class="swatch sm">
+        <div class="chip" style="background:#D7591A"></div>
+        <div class="meta"><b>Orange Deep</b>#D7591A · drop-shadow</div>
+      </div>
+      <div class="swatch sm">
+        <div class="chip" style="background:#FBD8C7"></div>
+        <div class="meta"><b>Orange Tint</b>#FBD8C7 · highlight bg</div>
+      </div>
+      <div class="swatch sm">
+        <div class="chip" style="background:#EAE2D2"></div>
+        <div class="meta"><b>Paper 2</b>#EAE2D2 · panel</div>
+      </div>
+      <div class="swatch sm">
+        <div class="chip" style="background:#DDD2BC"></div>
+        <div class="meta"><b>Paper 3</b>#DDD2BC · divider tone</div>
+      </div>
+
+      <div class="swatch sm">
+        <div class="chip" style="background:#FFD400"></div>
+        <div class="meta"><b>Sticker Yellow</b>#FFD400 · alerts, "SALE!"</div>
+      </div>
+      <div class="swatch sm">
+        <div class="chip" style="background:#1A3FA8"></div>
+        <div class="meta"><b>Form Blue</b>#1A3FA8 · links, hyperlinks</div>
+      </div>
+      <div class="swatch sm">
+        <div class="chip" style="background:#2E6E3E"></div>
+        <div class="meta"><b>OK Green</b>#2E6E3E · success</div>
+      </div>
+      <div class="swatch sm">
+        <div class="chip" style="background:#B53A1F"></div>
+        <div class="meta"><b>Warn Red</b>#B53A1F · errors</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 TYPE -->
+  <section class="section" data-screen-label="04 Type">
+    <header class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Type. Shouty headlines, honest body.</h2>
+      <span class="section-kicker">Fraunces · DM Sans · JetBrains Mono</span>
+    </header>
+
+    <div class="type-grid">
+      <div class="type-row">
+        <div class="label">H1<br><b>Fraunces 700 · 64px</b></div>
+        <div class="sample"><div class="t-h1">We'll sort it.</div></div>
+      </div>
+      <div class="type-row">
+        <div class="label">H2<br><b>Fraunces 600 · 36px</b></div>
+        <div class="sample"><div class="t-h2">Tell us your problem.</div></div>
+      </div>
+      <div class="type-row">
+        <div class="label">H3<br><b>DM Sans 700 · 24px</b></div>
+        <div class="sample"><div class="t-h3">Want us to look into this?</div></div>
+      </div>
+      <div class="type-row">
+        <div class="label">Lede<br><b>DM Sans 400 · 20px</b></div>
+        <div class="sample"><div class="t-lede">Drop your details and we'll scope it out — no obligation.</div></div>
+      </div>
+      <div class="type-row">
+        <div class="label">Body<br><b>DM Sans 400 · 16px</b></div>
+        <div class="sample"><div class="t-body">Talk like a switched-on mate who gets business.</div></div>
+      </div>
+      <div class="type-row">
+        <div class="label">Eyebrow<br><b>Mono 12 / UPPER · +0.16em</b></div>
+        <div class="sample"><div class="t-eyebrow">Perth / WA</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 SHAPES -->
+  <section class="section" data-screen-label="05 Shapes">
+    <header class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Shape language. From the logo, into everything.</h2>
+      <span class="section-kicker">Circles · half-circles · triangles · bars</span>
+    </header>
+
+    <div class="shapes">
+      <div class="shape-pad">
+        <figure><div class="shp circle"></div><figcaption>circle/ink</figcaption></figure>
+        <figure><div class="shp circle-o"></div><figcaption>circle/orange</figcaption></figure>
+        <figure><div class="shp split"></div><figcaption>split disc</figcaption></figure>
+        <figure><div class="shp donut"></div><figcaption>donut</figcaption></figure>
+
+        <figure><div class="shp half-up"></div><figcaption>half/up</figcaption></figure>
+        <figure><div class="shp half-down"></div><figcaption>half/down</figcaption></figure>
+        <figure><div class="shp tri"></div><figcaption>triangle</figcaption></figure>
+        <figure><div class="shp bar"></div><figcaption>bar</figcaption></figure>
+      </div>
+
+      <div class="shapes-rules">
+        <h4>Rules of the road</h4>
+        <ul>
+          <li>The shape vocabulary comes straight out of the logo. Use it for bullets, dividers, status dots and decoration — <b>not</b> as a substitute for icons.</li>
+          <li>Pair one ink shape with one orange shape per composition. Two oranges in close range is a yelling match.</li>
+          <li>The split disc is the "AI mark." Use it where the brand says hello — favicons, app icons, badges.</li>
+          <li>Triangles point forwards. Bars terminate things. Half-circles bounce. Stop them doing anything else.</li>
+        </ul>
+        <h4 style="margin-top:14px;">Off-limits</h4>
+        <ul>
+          <li>No gradients on the shapes. Flat fills only.</li>
+          <li>No 3D, no bevel, no drop-glow. (We did 1995 already.)</li>
+          <li>Never recreate the swan in pieces. The swan is the swan.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 SPACING -->
+  <section class="section" data-screen-label="06 Spacing">
+    <header class="section-head">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Spacing, radii &amp; the stamp shadow.</h2>
+      <span class="section-kicker">8-pt base, sharp corners, hard shadows</span>
+    </header>
+
+    <div class="scales">
+      <div class="scale-card">
+        <h4>Spacing scale · 8pt base</h4>
+        <div class="scale-row"><span style="width:48px">2xs</span><div class="bar" style="width:4px"></div><span>4px</span></div>
+        <div class="scale-row"><span style="width:48px">xs</span><div class="bar" style="width:8px"></div><span>8px</span></div>
+        <div class="scale-row"><span style="width:48px">sm</span><div class="bar" style="width:12px"></div><span>12px</span></div>
+        <div class="scale-row"><span style="width:48px">md</span><div class="bar" style="width:16px"></div><span>16px</span></div>
+        <div class="scale-row"><span style="width:48px">lg</span><div class="bar" style="width:24px"></div><span>24px</span></div>
+        <div class="scale-row"><span style="width:48px">xl</span><div class="bar" style="width:40px"></div><span>40px</span></div>
+        <div class="scale-row"><span style="width:48px">2xl</span><div class="bar" style="width:64px"></div><span>64px</span></div>
+        <div class="scale-row"><span style="width:48px">3xl</span><div class="bar" style="width:96px"></div><span>96px</span></div>
+      </div>
+
+      <div class="scale-card">
+        <h4>Radius · sharp by default</h4>
+        <div class="scale-row"><div class="box" style="border-radius:0"></div><span>0px — buttons, cards, the works</span></div>
+        <div class="scale-row"><div class="box" style="border-radius:4px"></div><span>4px — inputs, tags</span></div>
+        <div class="scale-row"><div class="box" style="border-radius:8px"></div><span>8px — soft surface only</span></div>
+        <div class="scale-row"><div class="box" style="border-radius:999px"></div><span>pill — chips &amp; dots only</span></div>
+        <p style="font-size:13px; margin: 14px 0 0;">Sharp corners do the heavy lifting. The pill is for ornamentation, not buttons.</p>
+      </div>
+
+      <div class="scale-card">
+        <h4>Stamp shadow</h4>
+        <div style="display:flex; gap:14px; flex-wrap:wrap; margin-bottom:14px;">
+          <div style="width:90px;height:60px;background:var(--paper);border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);"></div>
+          <div style="width:90px;height:60px;background:var(--paper);border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);"></div>
+          <div style="width:90px;height:60px;background:var(--paper);border:2px solid var(--ink);box-shadow:4px 4px 0 var(--orange);"></div>
+        </div>
+        <p style="font-size:13px; margin: 0;">Use the hard offset shadow — never a blurred shadow. Ink behind paper. Orange behind ink. Never both.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 BUTTONS -->
+  <section class="section" data-screen-label="07 Buttons">
+    <header class="section-head">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Buttons. Press here, mate.</h2>
+      <span class="section-kicker">Primary · Secondary · Ghost · Pill</span>
+    </header>
+
+    <div class="buttons">
+      <div class="btn-row">
+        <span class="label">Primary</span>
+        <button class="btn">Get started <span class="arrow">→</span></button>
+        <button class="btn orange">Call us now <span class="arrow">↗</span></button>
+        <button class="btn paper">Read the case</button>
+      </div>
+      <div class="btn-row">
+        <span class="label">Sizes</span>
+        <button class="btn sm">Small</button>
+        <button class="btn">Default</button>
+        <button class="btn lg">Big knock-off button</button>
+      </div>
+      <div class="btn-row">
+        <span class="label">Variants</span>
+        <button class="btn pill orange">Try free for 30 days</button>
+        <button class="btn ghost">Maybe later</button>
+        <button class="btn" disabled style="opacity:.4; box-shadow:none; cursor:not-allowed;">Disabled</button>
+      </div>
+      <div class="btn-row">
+        <span class="label">In context</span>
+        <span style="font-size:14px;">Lead with one orange button per surface. Pair with one ghost or paper. Never sit two oranges next to each other — they cancel out.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 CARDS -->
+  <section class="section" data-screen-label="08 Cards">
+    <header class="section-head">
+      <span class="section-num">07</span>
+      <h2 class="section-title">Cards. The newspaper-clipping system.</h2>
+      <span class="section-kicker">Capped · stamped · honest</span>
+    </header>
+
+    <div class="card-grid">
+      <article class="card">
+        <div class="cap"><span class="pulse">Case Study</span><span>0118 999 88199 7253</span></div>
+        <div class="body">
+          <h3>Fremantle Bakery: 11 hrs/week back on the bench.</h3>
+          <p>Replaced manual stock counts with a phone-tap inventory. Owner now leaves at 3, not 7.</p>
+        </div>
+        <div class="meta"><span>Hospitality · Perth</span><span>Read →</span></div>
+      </article>
+
+      <article class="card alt">
+        <div class="cap"><span class="pulse">This Month</span><span>FREE QUOTE</span></div>
+        <div class="body">
+          <h3>Book a 20-min "is this even worth it" chat.</h3>
+          <p>No deck. No demo. Just a conversation about whether AI fits what you actually do.</p>
+        </div>
+        <div class="meta" style="border-color: rgba(11,11,11,0.25)"><span>30-day promise</span><span>Reserve →</span></div>
+      </article>
+
+      <article class="card dark">
+        <div class="cap"><span class="pulse">Briefing 04</span><span>Internal</span></div>
+        <div class="body">
+          <h3>The 2030 problem &amp; why we started Good'AI.</h3>
+          <p>Big mining doesn't need help. The 200-person manufacturer in Wangara does. Here's the plan.</p>
+        </div>
+        <div class="meta"><span>Op-Ed · 6 min</span><span>Read →</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 08 BADGES -->
+  <section class="section" data-screen-label="09 Badges">
+    <header class="section-head">
+      <span class="section-num">08</span>
+      <h2 class="section-title">Badges, chips &amp; status flags.</h2>
+      <span class="section-kicker">Small, loud, monospaced</span>
+    </header>
+
+    <div class="badges">
+      <span class="badge"><span class="dot"></span>Default</span>
+      <span class="badge ink"><span class="dot"></span>In production</span>
+      <span class="badge orange"><span class="dot" style="background:var(--ink)"></span>Limited spots</span>
+      <span class="badge yellow"><span class="dot" style="background:var(--ink)"></span>50% off this month</span>
+      <span class="badge blue"><span class="dot" style="background:var(--paper)"></span>Government-approved</span>
+      <span class="badge outline">v1.0 · Perth WA</span>
+      <span class="badge pill orange">NEW</span>
+      <span class="badge pill outline">SOLO DEV</span>
+      <span class="badge" style="background:var(--ok);color:var(--paper);"><span class="dot" style="background:var(--paper)"></span>Live</span>
+      <span class="badge" style="background:var(--warn);color:var(--paper);"><span class="dot" style="background:var(--paper)"></span>Down</span>
+    </div>
+  </section>
+
+  <!-- 09 FORMS -->
+  <section class="section" data-screen-label="10 Forms">
+    <header class="section-head">
+      <span class="section-num">09</span>
+      <h2 class="section-title">Forms. Read like a fax-back card.</h2>
+      <span class="section-kicker">Inputs · checkboxes · the submit button</span>
+    </header>
+
+    <div class="forms">
+      <form class="form-card" onsubmit="event.preventDefault()">
+        <h3 class="display" style="font-size:22px; margin:0 0 14px;">Book a knock-off-early chat.</h3>
+        <label class="field">
+          <span class="field-label">Your name</span>
+          <input class="input" type="text" placeholder="e.g. Daz from the workshop">
+        </label>
+        <label class="field">
+          <span class="field-label">Business</span>
+          <input class="input" type="text" placeholder="What do you actually do?">
+        </label>
+        <label class="field">
+          <span class="field-label">Where's the pain?</span>
+          <select class="select">
+            <option>Quoting / admin sucks the day</option>
+            <option>Customer enquiries pile up</option>
+            <option>Stock / scheduling mess</option>
+            <option>Honestly, no idea — that's why I'm here</option>
+          </select>
+        </label>
+        <label class="check">
+          <input type="checkbox" checked>
+          <span>Send me the monthly bulletin. <b>Plain English, no spam, unsubscribe with one tap.</b></span>
+        </label>
+        <button class="btn orange submit lg" type="submit">Send it through →</button>
+      </form>
+
+      <form class="form-card" onsubmit="event.preventDefault()">
+        <h3 class="display" style="font-size:22px; margin:0 0 14px;">Quick quote estimator.</h3>
+        <label class="field">
+          <span class="field-label">Headcount</span>
+          <input class="input" type="number" value="12">
+        </label>
+        <label class="field">
+          <span class="field-label">Hours/week on busywork</span>
+          <input class="input" type="number" value="38">
+        </label>
+        <label class="field">
+          <span class="field-label">Notes</span>
+          <textarea class="textarea" rows="3" placeholder="Tell us what's eating the week."></textarea>
+        </label>
+        <div style="display:flex; gap:10px; align-items:center; padding:12px 14px; background:var(--paper-2); border:2px solid var(--ink); margin-bottom:14px;">
+          <div style="font-family:'Fraunces',serif; font-weight:700; font-size:28px; color:var(--orange); letter-spacing:-0.02em;">≈ $1,800/mo</div>
+          <div style="font-family:'JetBrains Mono', monospace; font-size:11px; line-height:1.3;">Estimated. We'll confirm before anything ships. Fixed-fee, never hourly.</div>
+        </div>
+        <button class="btn" type="submit">Get the proper quote →</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 10 LOGO LOCKUPS -->
+  <section class="section" data-screen-label="11 Logo">
+    <header class="section-head">
+      <span class="section-num">10</span>
+      <h2 class="section-title">Logo lockups. Three backgrounds, no negotiation.</h2>
+      <span class="section-kicker">Paper · ink · orange</span>
+    </header>
+
+    <div class="lockups">
+      <div class="lockup">
+        <span class="tag">PREFERRED · on paper</span>
+        <img src="assets/goodai-logo.png" alt="Good'AI on paper">
+      </div>
+      <div class="lockup ink">
+        <span class="tag">REVERSED · on ink</span>
+        <img src="assets/goodai-logo.png" alt="Good'AI on ink">
+      </div>
+      <div class="lockup orange">
+        <span class="tag">ACCENT · on orange</span>
+        <img src="assets/goodai-logo.png" alt="Good'AI on orange">
+      </div>
+    </div>
+    <p style="font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.1em; margin-top:14px;">
+      Clearspace = the height of the lowercase "g". Never crop the swan. Never recolour the bird's beak. Never animate the logo into being a hamburger menu.
+    </p>
+  </section>
+
+  <!-- 11 SAMPLE AD -->
+  <section class="section" data-screen-label="12 Sample Ad">
+    <header class="section-head">
+      <span class="section-num">11</span>
+      <h2 class="section-title">Putting it together: the back-of-the-Yellow-Pages ad.</h2>
+      <span class="section-kicker">Hero composition · 1995 energy · 2026 software</span>
+    </header>
+
+    <div class="ad">
+      <div class="ad-band">★ NEW · DIRECT FROM PERTH · NO FAX-BACK REQUIRED ★ NEW · DIRECT FROM PERTH ★</div>
+      <div class="ad-body">
+        <div class="ad-left">
+          <span class="kicker">An Open Letter to Small Business, Western Australia</span>
+          <h2>Stop hating your<br>Monday morning. <em>We mean it.</em></h2>
+          <p>If you own a shop, a workshop, a clinic or a crew of fewer than 200 — and you're still doing the same admin you were doing in 2014 — this is for you. Good'AI quietly wires the boring bits to a brain that doesn't sleep, doesn't complain and doesn't ask for super.</p>
+          <ul class="bullets">
+            <li><b>30-day money-back, no questions.</b> Doesn't help? You don't pay. Simple as.</li>
+            <li><b>Fixed-fee, never hourly.</b> You'll know what it costs before we touch a keyboard.</li>
+            <li><b>One human (me), based in Perth.</b> Same phone number Monday to Friday.</li>
+            <li><b>No lock-in, no contract, no "Enterprise Plan."</b> You own everything we build.</li>
+          </ul>
+          <div class="cta-row">
+            <button class="btn orange lg">Book the 20-min chat →</button>
+            <button class="btn ghost">Read the case studies</button>
+          </div>
+          <p class="fineprint">★ Operators standing by during business hours, west coast time. Subject to taking the dog for a walk between 2 and 2:30pm. ★</p>
+        </div>
+        <div class="ad-right">
+          <div class="stick">LIMITED<br>SPOTS<br>MAY '26</div>
+          <div>
+            <div class="price">Pilots from</div>
+            <div class="big"><sup>$</sup>1,800<span style="font-size:24px; letter-spacing:0">/mo</span></div>
+            <div class="strike">$4,200/mo "industry standard"</div>
+          </div>
+          <div class="promise">
+            ▶ 30-day return policy<br>
+            ▶ Fixed-fee, never hourly<br>
+            ▶ Built in Perth, runs everywhere<br>
+            ▶ Knock off Friday at 3
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div>
+      <div class="big">end of book.</div>
+      <span>Good'AI Pty Ltd · Perth WA · 2026</span>
+    </div>
+    <div style="text-align:right;">
+      <span>brand book v1.0</span><br>
+      <span>built once, for the eleventh time</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

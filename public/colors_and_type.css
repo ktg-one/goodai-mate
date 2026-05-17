@@ -1,0 +1,245 @@
+/* ============================================================
+   Good'AI — Colors & Type  (source of truth)
+   ------------------------------------------------------------
+   Palette: Black + Orange + Warm Beige.
+   Derived directly from the logo: #0B0B0B, #F25C2B, #D7591A.
+   No teal. No hallucinated pivots.
+   ============================================================ */
+
+/* -------- Fonts -------- */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+/* Fraunces — local variable file with SOFT + WONK axes (in addition to opsz + wght) */
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype-variations"),
+       url("fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/Fraunces-Italic-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype-variations"),
+       url("fonts/Fraunces-Italic-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  /* ---------------------------------------------------------
+     COLOUR — Brand (straight off the logo)
+     --------------------------------------------------------- */
+  --orange:       #F25C2B;   /* brand orange — CTA, highlights */
+  --orange-deep:  #D7591A;   /* shadow / beak depth */
+  --orange-tint:  #FBD8C7;   /* soft orange surface */
+  --orange-100:   #FFD2BF;
+  --orange-50:    #FFEDE6;
+
+  /* ---------------------------------------------------------
+     COLOUR — WA Ocean (third brand colour — Indian Ocean blue)
+     --------------------------------------------------------- */
+  --ocean-50:    #E6F3F7;
+  --ocean-100:   #B3DBEA;
+  --ocean-200:   #66B8D5;
+  --ocean-300:   #1A94BB;
+  --ocean-400:   #006B8F;   /* primary ocean — use as brand surface */
+  --ocean-500:   #005372;
+  --ocean-600:   #003D56;
+
+  /* ---------------------------------------------------------
+     COLOUR — Neutrals (cool off-white — NOT warm beige)
+     --------------------------------------------------------- */
+  --paper:        #F8F8F6;   /* page canvas — cool off-white, not warm cream */
+  --paper-2:      #EFEEEC;   /* raised surface / panel (alias for --paper-deep) */
+  --paper-deep:   #EFEEEC;   /* legacy alias of --paper-2 */
+  --paper-3:      #E0DFDC;   /* divider tone */
+  --cream-line:   #CCCAC6;   /* hairline border (named for historical reasons) */
+
+  --ink:          #0B0B0B;   /* true black — matches logo */
+  --ink-soft:     #1F1D1A;   /* body text */
+  --ink-mute:     #5A5652;   /* secondary / labels */
+  --ink-faint:    #8C8880;   /* placeholder / disabled */
+
+  /* ---------------------------------------------------------
+     COLOUR — Supporting (used sparingly)
+     --------------------------------------------------------- */
+  --hi-yellow:    #FFD400;   /* alert / "SALE!" sticker */
+  --sun-100:      #FFF2B8;   /* yellow highlight tint — feature chip bg */
+  --sun-200:      #FFE16A;   /* yellow highlight — italic underline */
+  --sun-500:      #D9A900;   /* yellow highlight text */
+  --trust-blue:   #1A3FA8;   /* links */
+  --ok:           #2E6E3E;   /* success */
+  --warn:         #B53A1F;   /* error */
+  --danger:       #D14545;
+
+  /* ---------------------------------------------------------
+     COLOUR — Semantic tokens
+     --------------------------------------------------------- */
+  --bg:            var(--paper);
+  --bg-raised:     #FFFFFF;
+  --bg-sunken:     var(--paper-deep);
+  --bg-brand:      var(--ink);
+  --bg-accent:     var(--orange);
+  --bg-ocean:      var(--ocean-400);
+
+  --fg:            var(--ink);
+  --fg-soft:       var(--ink-soft);
+  --fg-mute:       var(--ink-mute);
+  --fg-faint:      var(--ink-faint);
+  --fg-on-brand:   var(--paper);
+  --fg-on-ocean:   #FFFFFF;
+
+  --border:        var(--cream-line);
+  --border-strong: #A8A6A2;
+
+  --accent:        var(--orange);
+  --accent-hover:  var(--orange-deep);
+  --accent-soft:   var(--orange-tint);
+
+  --highlight:     var(--hi-yellow);
+  --success:       var(--ok);
+
+  /* stamp shadows */
+  --shadow-stamp:        3px 3px 0 var(--ink);
+  --shadow-stamp-orange: 3px 3px 0 var(--orange);
+  --shadow-stamp-ocean:  3px 3px 0 var(--ocean-600);
+  --shadow-stamp-deep:   4px 4px 0 var(--ink);
+
+  /* ---------------------------------------------------------
+     TYPE — Families
+     --------------------------------------------------------- */
+  --font-sans:    "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* ---------------------------------------------------------
+     TYPE — Scale
+     --------------------------------------------------------- */
+  --fs-12: 0.75rem;    /* eyebrow */
+  --fs-16: 1rem;       /* body */
+  --fs-20: 1.25rem;    /* lede */
+  --fs-24: 1.5rem;     /* h3 */
+  --fs-36: 2.25rem;    /* h2 */
+  --fs-64: 4rem;       /* h1 */
+
+  /* ---------------------------------------------------------
+     SPACING
+     --------------------------------------------------------- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ---------------------------------------------------------
+     SPACING / RADIUS / SHADOW
+     --------------------------------------------------------- */
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+  --radius-xl:   26px;
+  --radius-pill: 999px;
+
+  /* ---------------------------------------------------------
+     SHADOW — flat "stamp" only. No blurs.
+     --------------------------------------------------------- */
+  --shadow-stamp:        3px 3px 0 var(--ink);
+  --shadow-stamp-orange: 3px 3px 0 var(--orange);
+  --shadow-stamp-deep:   4px 4px 0 var(--ink);
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--fs-16);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ============================================================
+   TYPE CLASSES
+   ============================================================ */
+
+.h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-64);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  font-variation-settings: "opsz" 144;
+  color: var(--fg);
+}
+
+.h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-36);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 72;
+  color: var(--fg);
+}
+
+.h3 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: var(--fs-24);
+  line-height: 1.2;
+  color: var(--fg);
+}
+
+.lede {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--fs-20);
+  line-height: 1.5;
+  color: var(--fg-soft);
+}
+
+.body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--fs-16);
+  line-height: 1.55;
+  color: var(--fg-soft);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+  color: var(--fg-soft);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  font-variation-settings: "opsz" 144;
+}
+.wordmark .apos { color: var(--orange); }

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Colors · Semantic</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 24px; }
+  .row { display: grid; grid-template-columns: 140px 1fr 110px; gap: 12px; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--cream-line); }
+  .row:last-child { border-bottom: 0; }
+  .swatch { width: 28px; height: 28px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.06); display: inline-block; vertical-align: middle; margin-right: 10px; }
+  .tok { font-family: var(--font-mono); font-size: 12px; }
+  .desc { font-family: var(--font-sans); font-size: 13px; color: var(--ink-soft); }
+  .hex { font-family: var(--font-mono); font-size: 11px; color: var(--ink-mute); text-align: right; }
+</style>
+</head>
+<body>
+  <div class="row"><div><span class="swatch" style="background: var(--bg);"></span><span class="tok">--bg</span></div><div class="desc">Page canvas — cool off-white</div><div class="hex">#F8F8F6</div></div>
+  <div class="row"><div><span class="swatch" style="background: var(--accent);"></span><span class="tok">--accent</span></div><div class="desc">Primary CTA, active links</div><div class="hex">#F25C2B</div></div>
+  <div class="row"><div><span class="swatch" style="background: var(--bg-brand);"></span><span class="tok">--bg-brand</span></div><div class="desc">Hero block, brand chip — ink</div><div class="hex">#0B0B0B</div></div>
+  <div class="row"><div><span class="swatch" style="background: var(--bg-ocean);"></span><span class="tok">--bg-ocean</span></div><div class="desc">Third brand surface — WA Ocean</div><div class="hex">#006B8F</div></div>
+  <div class="row"><div><span class="swatch" style="background: var(--highlight);"></span><span class="tok">--highlight</span></div><div class="desc">Sticker, alert, "SALE!"</div><div class="hex">#FFD400</div></div>
+  <div class="row"><div><span class="swatch" style="background: var(--success);"></span><span class="tok">--success</span></div><div class="desc">Confirmed, paid, sent</div><div class="hex">#2E6E3E</div></div>
+  <div class="row"><div><span class="swatch" style="background: var(--warn);"></span><span class="tok">--warn</span></div><div class="desc">Error, blocked</div><div class="hex">#B53A1F</div></div>
+  <div class="row"><div><span class="swatch" style="background: var(--danger);"></span><span class="tok">--danger</span></div><div class="desc">Destroy, fail</div><div class="hex">#D14545</div></div>
+</body>
+</html>

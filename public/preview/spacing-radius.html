@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Spacing · Radius</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 24px; }
+  .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+  .tile { background: #fff; border: 1px solid var(--border); height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+  .tok { font-family: var(--font-mono); font-size: 11px; color: var(--ink-mute); }
+  .px { font-family: var(--font-mono); font-size: 10px; color: var(--ink-faint); }
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div class="tile" style="border-radius: 6px;"><span class="tok">xs</span><span class="px">6</span></div>
+    <div class="tile" style="border-radius: 10px;"><span class="tok">sm</span><span class="px">10</span></div>
+    <div class="tile" style="border-radius: 14px;"><span class="tok">md ★</span><span class="px">14</span></div>
+    <div class="tile" style="border-radius: 20px;"><span class="tok">lg</span><span class="px">20</span></div>
+    <div class="tile" style="border-radius: 28px;"><span class="tok">xl</span><span class="px">28</span></div>
+    <div class="tile" style="border-radius: 999px;"><span class="tok">pill</span><span class="px">999</span></div>
+  </div>
+</body>
+</html>

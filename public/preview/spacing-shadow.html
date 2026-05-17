@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Spacing · Shadow + Stamp</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 28px; background: var(--paper); }
+  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; align-items: end; }
+  .tile { background: #fff; height: 70px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 11px; color: var(--ink-mute); }
+  .stamp { border: 2px solid var(--ink); }
+  .stamp-ocean { border: 2px solid var(--ocean-600); background: var(--ocean-400); color: var(--paper); }
+  .stamp-sun { border: 2px solid var(--hi-yellow); background: var(--hi-yellow); color: var(--ink); }
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div class="tile" style="box-shadow: var(--shadow-1);">shadow-1</div>
+    <div class="tile" style="box-shadow: var(--shadow-2);">shadow-2</div>
+    <div class="tile" style="box-shadow: var(--shadow-3);">shadow-3</div>
+    <div class="tile stamp" style="box-shadow: var(--shadow-stamp);">stamp · ink</div>
+    <div class="tile stamp-ocean" style="box-shadow: var(--shadow-stamp-ocean);">stamp · ocean</div>
+  </div>
+</body>
+</html>

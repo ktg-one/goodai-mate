@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Colors · Orange + Yellow accents</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 24px; display: grid; gap: 12px; }
+  .scale { display: grid; gap: 4px; height: 60px; }
+  .step { border-radius: var(--radius-sm); padding: 6px 8px; display: flex; flex-direction: column; justify-content: space-between; }
+  .num { font-family: var(--font-mono); font-size: 10px; }
+  .hex { font-family: var(--font-mono); font-size: 9px; opacity: 0.85; }
+  .ttl { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: -4px; }
+</style>
+</head>
+<body>
+  <div class="ttl">Brand Orange — CTA / accent (one per surface, max)</div>
+  <div class="scale" style="grid-template-columns: repeat(5, 1fr);">
+    <div class="step" style="background: var(--orange-50);   color: var(--orange-deep);"><span class="num">50</span><span class="hex">#FFEDE6</span></div>
+    <div class="step" style="background: var(--orange-100);  color: var(--orange-deep);"><span class="num">100</span><span class="hex">#FFD2BF</span></div>
+    <div class="step" style="background: var(--orange-tint); color: var(--ink);"><span class="num">tint</span><span class="hex">#FBD8C7</span></div>
+    <div class="step" style="background: var(--orange);      color: var(--paper);"><span class="num">400★</span><span class="hex">#F25C2B</span></div>
+    <div class="step" style="background: var(--orange-deep); color: var(--paper);"><span class="num">deep</span><span class="hex">#D7591A</span></div>
+  </div>
+
+  <div class="ttl">Sticker Yellow — alerts &amp; "SALE!" only</div>
+  <div class="scale" style="grid-template-columns: 1fr;">
+    <div class="step" style="background: var(--hi-yellow); color: var(--ink);"><span class="num">hi-yellow</span><span class="hex">#FFD400</span></div>
+  </div>
+</body>
+</html>

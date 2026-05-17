@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Components · Buttons</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 24px; background: var(--paper); }
+  .group { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); width: 90px; flex-shrink: 0; }
+
+  .btn {
+    font-family: var(--font-sans); font-size: 14px; font-weight: 700;
+    padding: 12px 20px; border-radius: var(--radius-sm);
+    border: 2px solid var(--ink); cursor: pointer;
+    transition: transform 80ms ease, box-shadow 80ms ease;
+    box-shadow: var(--shadow-stamp);
+  }
+  .btn:hover  { transform: translate(-2px,-2px); box-shadow: var(--shadow-stamp-deep); }
+  .btn:active { transform: translate(1px,1px);   box-shadow: none; }
+
+  /* Primary — orange fill */
+  .btn-primary { background: var(--orange); color: var(--ink); }
+  .btn-primary:hover { background: var(--orange-deep); }
+
+  /* Secondary — paper fill */
+  .btn-secondary { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-stamp); }
+
+  /* Ghost — no fill, dashed border */
+  .btn-ghost { background: transparent; color: var(--ink-soft); border-style: dashed; box-shadow: none; }
+  .btn-ghost:hover { background: var(--paper-deep); transform: none; box-shadow: none; }
+
+  /* Ink — dark fill */
+  .btn-ink { background: var(--ink); color: var(--paper); box-shadow: var(--shadow-stamp-orange); }
+  .btn-ink:hover { box-shadow: 5px 5px 0 var(--orange); }
+
+  /* Sizes */
+  .btn-sm { font-size: 12px; padding: 8px 14px; }
+  .btn-lg { font-size: 17px; padding: 16px 28px; }
+
+  /* Icon helper */
+  .btn-icon { width: 16px; height: 16px; vertical-align: -3px; margin-right: 6px; }
+</style>
+</head>
+<body>
+  <div class="group"><span class="label">Primary</span>
+    <button class="btn btn-primary">Get a callback</button>
+    <button class="btn btn-primary">
+      <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      Send it through
+    </button>
+    <button class="btn btn-primary btn-lg">Book the chat →</button>
+  </div>
+  <div class="group"><span class="label">Secondary</span>
+    <button class="btn btn-secondary">Tell us your problem</button>
+    <button class="btn btn-ink">Go home mate</button>
+    <button class="btn btn-ghost">Skip for now</button>
+  </div>
+  <div class="group"><span class="label">Small</span>
+    <button class="btn btn-primary btn-sm">Get a callback</button>
+    <button class="btn btn-secondary btn-sm">Cancel</button>
+    <button class="btn btn-ghost btn-sm">Maybe later</button>
+  </div>
+</body>
+</html>

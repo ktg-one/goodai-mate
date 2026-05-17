@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Brand · Wordmark</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 28px 32px 36px; background: var(--paper); }
+
+  .head { display: flex; justify-content: space-between; align-items: end; margin-bottom: 18px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+  .head h1 { font-family: var(--font-display); font-weight: 600; font-size: 22px; margin: 0; letter-spacing: -0.02em; }
+  .head .meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
+
+  .section-title { display: flex; align-items: baseline; gap: 12px; margin: 22px 0 12px; }
+  .section-title h2 { font-family: var(--font-display); font-weight: 600; font-size: 16px; margin: 0; letter-spacing: -0.01em; }
+  .section-title .kicker { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
+  .section-title .rule { flex: 1; height: 1px; background: var(--line); }
+
+  /* ---- Hero: the mark ---- */
+  .hero {
+    background: var(--bg-raised);
+    border: 1.5px solid var(--ink); border-radius: var(--radius-lg);
+    padding: 52px 64px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; box-shadow: var(--shadow-stamp); min-height: 360px;
+  }
+  .hero img { height: 280px; width: auto; display: block; }
+  .hero .badge {
+    position: absolute; top: 14px; right: 16px;
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; padding: 3px 8px;
+    background: var(--ink); color: var(--paper); border-radius: var(--radius-pill);
+  }
+  .hero .note {
+    position: absolute; bottom: 14px; left: 20px;
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-mute);
+  }
+
+  /* ---- One-off callout ---- */
+  .oneoff {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .oneoff .card {
+    background: var(--bg-raised); border: 1.5px solid var(--ink);
+    border-radius: var(--radius-md); padding: 18px 20px;
+    box-shadow: var(--shadow-stamp);
+  }
+  .oneoff .card h3 { font-family: var(--font-display); font-weight: 600; font-size: 18px; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .oneoff .card p { margin: 0; font-size: 13px; color: var(--ink-mute); line-height: 1.6; }
+  .oneoff .card .tag {
+    display: inline-block; font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px;
+    padding: 2px 8px; border-radius: var(--radius-pill);
+  }
+  .oneoff .card .tag.mark { background: var(--ink); color: var(--paper); }
+  .oneoff .card .tag.type { background: var(--ocean-50); color: var(--ocean-600); border: 1px solid var(--ocean-200); }
+
+  /* ---- Display type (the thing that isn't the logo) ---- */
+  .type-demo {
+    border: 1.5px solid var(--ink); border-radius: var(--radius-md);
+    background: var(--bg-raised); overflow: hidden; box-shadow: var(--shadow-stamp);
+  }
+  .type-row { display: grid; grid-template-columns: 160px 1fr; }
+  .type-row .lbl {
+    background: var(--paper-deep); border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 16px;
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-mute);
+    display: flex; align-items: center;
+  }
+  .type-row .lbl b { display: block; font-family: var(--font-sans); font-weight: 600; font-size: 12px; letter-spacing: 0; color: var(--ink); text-transform: none; margin-top: 2px; }
+  .type-row .sample {
+    padding: 16px 20px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: center;
+  }
+  .type-row:last-child .lbl,
+  .type-row:last-child .sample { border-bottom: none; }
+
+  .t-display { font-family: var(--font-display); font-weight: 700; font-size: 80px; line-height: 0.9; letter-spacing: -0.04em; color: var(--ink); font-variation-settings: "opsz" 144; }
+  .t-display .a { color: var(--orange); }
+  .t-h1 { font-family: var(--font-display); font-weight: 600; font-size: 48px; line-height: 0.95; letter-spacing: -0.03em; color: var(--ink); }
+  .t-h2 { font-family: var(--font-display); font-weight: 500; font-size: 32px; line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); }
+  .t-body { font-family: var(--font-sans); font-size: 16px; color: var(--ink-mute); line-height: 1.6; }
+  .t-mono { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.08em; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+  <div class="head">
+    <h1>Wordmark</h1>
+    <span class="meta">Custom one-off mark · not a font · SVG always</span>
+  </div>
+
+  <!-- THE MARK -->
+  <div class="hero">
+    <span class="badge">CUSTOM MARK</span>
+    <img src="../assets/logo.svg" alt="Good'AI logo">
+    <span class="note">One-off illustration · black #0B0B0B + orange #F25C2B · SVG source of truth</span>
+  </div>
+
+  <!-- ONE-OFF EXPLANATION -->
+  <div class="section-title">
+    <h2>Mark vs. type</h2>
+    <span class="kicker">Two separate things</span>
+    <div class="rule"></div>
+  </div>
+
+  <div class="oneoff">
+    <div class="card">
+      <span class="tag mark">The mark</span>
+      <h3>good·AI is a custom illustration.</h3>
+      <p>The letterforms, the swan, the orange breast and beak — all drawn by hand. Not a font. Never reproduced in type. Use the SVG as-is; don&rsquo;t try to recreate it in any other tool.</p>
+    </div>
+    <div class="card">
+      <span class="tag type">Display type</span>
+      <h3>Fraunces is the brand voice in text.</h3>
+      <p>For headlines, pull-quotes and display text across the UI, Fraunces 700 takes over. It carries the same warmth and character as the mark — without competing with it.</p>
+    </div>
+  </div>
+
+  <!-- DISPLAY TYPE SCALE -->
+  <div class="section-title">
+    <h2>Display type · Fraunces</h2>
+    <span class="kicker">Used in headlines &amp; UI — not in the logo</span>
+    <div class="rule"></div>
+  </div>
+
+  <div class="type-demo">
+    <div class="type-row">
+      <div class="lbl">Display<br><b>Fraunces 700 · 80px</b></div>
+      <div class="sample"><span class="t-display">Knock off early<span class="a">.</span></span></div>
+    </div>
+    <div class="type-row">
+      <div class="lbl">H1<br><b>Fraunces 600 · 48px</b></div>
+      <div class="sample"><span class="t-h1">Built in Perth.</span></div>
+    </div>
+    <div class="type-row">
+      <div class="lbl">H2<br><b>Fraunces 500 · 32px</b></div>
+      <div class="sample"><span class="t-h2">Give us the crappy jobs.</span></div>
+    </div>
+    <div class="type-row">
+      <div class="lbl">Body<br><b>DM Sans · 16px</b></div>
+      <div class="sample"><span class="t-body">For small and medium businesses across WA — we sort the boring stuff so you can knock off early.</span></div>
+    </div>
+    <div class="type-row">
+      <div class="lbl">Mono<br><b>JetBrains Mono · 13px</b></div>
+      <div class="sample"><span class="t-mono">$ goodai deploy --to=fremantle-bakery   # ships in 4 min</span></div>
+    </div>
+  </div>
+
+</body>
+</html>

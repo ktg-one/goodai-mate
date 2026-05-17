@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Components · Inputs</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 24px; background: var(--paper); display: grid; gap: 12px; }
+  .input { width: 100%; padding: 14px 18px; border-radius: 14px; border: 1px solid var(--border-strong); background: #fff; font-family: var(--font-sans); font-size: 15px; color: var(--ink); box-sizing: border-box; transition: border-color 150ms; }
+  .input::placeholder { color: var(--ink-faint); font-weight: 400; }
+  .input:focus { outline: none; border-color: var(--ocean-400); box-shadow: 0 0 0 3px rgba(0,107,143,0.18); }
+  .input.lg { padding: 18px 22px; font-size: 17px; border-radius: 16px; }
+  .row { display: flex; gap: 10px; }
+  .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: -4px; }
+  .help { font-family: var(--font-sans); font-size: 13px; color: var(--ink-mute); }
+</style>
+</head>
+<body>
+  <span class="label">Hero — large</span>
+  <input class="input lg" placeholder="Tell us your problem.">
+  <span class="label">Form pair (focused on left)</span>
+  <div class="row">
+    <input class="input" placeholder="Name" value="Joey" style="border-color: var(--ocean-400); box-shadow: 0 0 0 3px rgba(0,107,143,0.18);">
+    <input class="input" placeholder="Business name">
+  </div>
+</body>
+</html>

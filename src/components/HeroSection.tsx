@@ -1,337 +1,184 @@
-'use client';
-
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Input } from '@/components/ui/input';
+import Image from 'next/image';
+import { Mic, ShieldCheck, Volume2, WandSparkles, Zap } from 'lucide-react';
 import ChatInterface from '@/components/ChatInterface';
 
-/** Cursor-reactive 3D tilt on any element */
-function useTilt(strength = 14) {
-  const onMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    const el = e.currentTarget;
-    const rect = el.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * strength;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * strength;
-    el.style.transform = `perspective(400px) rotateY(${x}deg) rotateX(${-y}deg)`;
-    el.style.filter = `drop-shadow(0 0 ${6 + Math.abs(x) + Math.abs(y)}px rgba(216,106,61,0.12))`;
-  }, [strength]);
+const brandMarkSrc = '/assets/logo-mark.svg';
 
-  const onMouseLeave = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    e.currentTarget.style.transform = '';
-    e.currentTarget.style.filter = '';
-  }, []);
+const featureChips = [
+  {
+    icon: Mic,
+    label: 'Voice-ready intake',
+    detail: 'Start with the messy version',
+    iconClassName: 'bg-[var(--ocean-100)] text-[var(--ocean-600)]',
+  },
+  {
+    icon: Volume2,
+    label: 'Plain-language replies',
+    detail: 'No hype, just what would help',
+    iconClassName: 'bg-[var(--sun-100)] text-[var(--sun-500)]',
+  },
+  {
+    icon: WandSparkles,
+    label: 'Workflow thinking',
+    detail: 'Focused on the boring bits',
+    iconClassName: 'bg-[var(--orange-50)] text-[var(--orange-500)]',
+  },
+  {
+    icon: Zap,
+    label: 'Fast first pass',
+    detail: 'Straight into the problem',
+    iconClassName: 'bg-[rgba(26,63,168,0.12)] text-[var(--trust-blue)]',
+  },
+  {
+    icon: ShieldCheck,
+    label: 'Private by default',
+    detail: 'No data resold',
+    iconClassName: 'bg-[rgba(46,110,62,0.12)] text-[var(--ok)]',
+  },
+];
 
-  return { onMouseMove, onMouseLeave };
-}
-
-/** Logo "drowning" effect — sinks when cursor dwells near center */
-function useDrown(logoRef: React.RefObject<HTMLDivElement | null>) {
-  const mousePos = useRef({ x: 0, y: 0 });
-  const dwellTime = useRef(0);
-  const lastMove = useRef(Date.now());
-  const raf = useRef(0);
-
-  useEffect(() => {
-    const logo = logoRef.current;
-    if (!logo) return;
-
-    const parent = logo.closest('[data-cursor-hover]') as HTMLElement;
-    if (!parent) return;
-
-    const onMove = (e: MouseEvent) => {
-      mousePos.current = { x: e.clientX, y: e.clientY };
-      lastMove.current = Date.now();
-    };
-
-    const onLeave = () => {
-      dwellTime.current = 0;
-      logo.style.transform = '';
-      logo.style.filter = '';
-      logo.style.opacity = '0.45';
-    };
-
-    const tick = () => {
-      const rect = parent.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dist = Math.hypot(mousePos.current.x - cx, mousePos.current.y - cy);
-      const inCenter = dist < 180;
-      const idle = Date.now() - lastMove.current > 400; // cursor stopped moving
-
-      if (inCenter && idle) {
-        dwellTime.current = Math.min(dwellTime.current + 0.008, 1);
-      } else {
-        dwellTime.current = Math.max(dwellTime.current - 0.025, 0);
-      }
-
-      const t = dwellTime.current;
-      const mouth = logo.querySelector('[data-mouth]') as HTMLElement | null;
-
-      if (t > 0.01) {
-        const sinkY = t * 45;
-        const squishX = 1 + t * 0.18;
-        const squishY = 1 - t * 0.3;
-        const wobble = Math.sin(Date.now() * 0.004) * t * 5;
-        const fade = 0.45 - t * 0.15;
-
-        logo.style.transform = `translateY(${sinkY}px) scaleX(${squishX}) scaleY(${squishY}) rotate(${wobble}deg)`;
-        logo.style.filter = '';
-        logo.style.opacity = `${Math.max(fade, 0.2)}`;
-
-        // Mouth: smile (1) → flat (0) → frown (-1)
-        if (mouth) {
-          const mouthFlip = 1 - t * 2; // 1 → -1
-          mouth.style.transform = `translateX(-50%) scaleY(${mouthFlip})`;
-          // Flatten height in the middle of the transition
-          const flatness = 1 - Math.abs(mouthFlip);
-          mouth.style.height = `${20 - flatness * 14}px`;
-        }
-      } else {
-        logo.style.transform = '';
-        logo.style.filter = '';
-        logo.style.opacity = '0.45';
-        if (mouth) {
-          mouth.style.transform = 'translateX(-50%) scaleY(1)';
-          mouth.style.height = '20px';
-        }
-      }
-
-      raf.current = requestAnimationFrame(tick);
-    };
-
-    raf.current = requestAnimationFrame(tick);
-    window.addEventListener('mousemove', onMove);
-    parent.addEventListener('mouseleave', onLeave);
-
-    return () => {
-      cancelAnimationFrame(raf.current);
-      window.removeEventListener('mousemove', onMove);
-      parent.removeEventListener('mouseleave', onLeave);
-    };
-  }, [logoRef]);
-}
-
-type PagePhase = 'landing' | 'chatting';
+const serviceMarquee = [
+  'Email drafting',
+  'Invoice processing',
+  'CRM sync',
+  'Quote builders',
+  'Booking flows',
+  'Voice agents',
+  'Lead capture',
+  'Report generation',
+  'Onboarding',
+  'Data entry',
+];
 
 export default function HeroSection() {
-  const [phase, setPhase] = useState<PagePhase>('landing');
-  const [initialMessage, setInitialMessage] = useState('');
-  const [landingInput, setLandingInput] = useState('');
-
-  function handleFirstMessage(text: string) {
-    setInitialMessage(text);
-    setPhase('chatting');
-  }
-
-  function handleLandingSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!landingInput.trim()) return;
-    handleFirstMessage(landingInput.trim());
-  }
-
-  function handleBack() {
-    setPhase('landing');
-    setInitialMessage('');
-    setLandingInput('');
-  }
-
-  const isChatting = phase === 'chatting';
-  const tilt = useTilt(6);
-  const logoRef = useRef<HTMLDivElement>(null);
-  useDrown(logoRef);
-
   return (
-    <>
-      {/* Fixed header — chat mode only (back nav + centered wordmark) */}
-      {isChatting && (
-        <header
-          className="fixed top-0 left-0 right-0 z-20 flex items-center py-4 px-6"
-          style={{ background: 'linear-gradient(var(--bg) 60%, transparent)' }}
-        >
-          <button
-            onClick={handleBack}
-            className="text-[var(--text-dim)] hover:text-[var(--text)] transition-colors"
-            aria-label="Back to home"
-          >
-            <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-              <path d="m15 18-6-6 6-6" />
-            </svg>
-          </button>
-          <h1 className="flex-1 text-center font-bold tracking-[-0.04em] text-lg text-[var(--text-bright)]">
-            Good<span className="text-[var(--accent)] opacity-70">&apos;</span>ai
-          </h1>
-          <div className="w-5" />
-        </header>
-      )}
-
-    <main
-      className={[
-        'flex flex-col items-center relative z-[1] px-10',
-        isChatting ? 'justify-start pt-16' : 'justify-center min-h-screen',
-      ].join(' ')}
-    >
-      {/* Wordmark — pinned top-left on landing (chat uses fixed header above) */}
-      {!isChatting && (
-        <div className="fixed top-0 left-0 w-full z-10 flex items-center px-10 py-6 animate-fadeUp" style={{ animationDelay: '0.3s' }}>
-          <h1 className="font-bold tracking-[-0.04em] text-[20px] text-[var(--text-bright)]">
-            Good<span className="text-[var(--accent)] opacity-70">&apos;</span>ai
-          </h1>
-        </div>
-      )}
-
-      {/* Brand group — cursor-reactive tilt, transparent so SDF shows through */}
-      <div
-        className="flex flex-col items-center relative"
-        data-cursor-hover
-        {...(!isChatting ? tilt : {})}
-        style={{
-          transition: 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), filter 0.5s ease',
-        }}
-      >
-        {/* Invisible expanded hit area for tilt detection */}
-        {!isChatting && (
-          <div
-            className="absolute pointer-events-none"
-            style={{
-              inset: '-80px -120px',
-              pointerEvents: 'auto',
-              zIndex: -1,
-            }}
-          />
-        )}
-
-        {/* Logo icon — large, translucent, SDF circle shows through */}
-        {!isChatting && (
-          <div
-            ref={logoRef}
-            className="animate-fadeUp animate-ambient-pulse mb-3 relative"
-            style={{
-              width: '320px',
-              height: '320px',
-              animationDelay: '0.4s',
-              pointerEvents: 'none',
-              transition: 'transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease',
-            }}
-          >
-            <img
-              src="/assets/logo-light-nomouth.svg"
-              alt="Good'ai icon"
-              style={{
-                width: '100%',
-                height: '100%',
-                opacity: 0.45,
-                mixBlendMode: 'screen',
-              }}
-            />
-            {/* CSS mouth — arc that flips from smile to frown */}
-            <div
-              data-mouth
-              style={{
-                position: 'absolute',
-                left: '50%',
-                top: '56%',
-                transform: 'translateX(-50%) scaleY(1)',
-                width: '42px',
-                height: '20px',
-                borderBottom: '3px solid rgba(215, 210, 203, 0.45)',
-                borderRadius: '0 0 50% 50%',
-                transition: 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), border-radius 0.4s ease, height 0.4s ease',
-                mixBlendMode: 'screen',
-              }}
-            />
-          </div>
-        )}
-
-
+    <main className="relative min-h-screen overflow-hidden px-5 pb-0 pt-6 text-[var(--fg)] sm:px-8 lg:px-12">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div className="absolute -left-28 -top-20 size-[360px] rounded-full bg-[rgba(0,107,143,0.14)] blur-3xl" />
+        <div className="absolute -right-16 top-0 size-[320px] rounded-full bg-[rgba(255,212,0,0.18)] blur-3xl" />
+        <div className="absolute bottom-6 right-[12%] size-[300px] rounded-full bg-[rgba(242,92,43,0.14)] blur-3xl" />
       </div>
 
-      {/* Subtitle — outside tilt zone */}
-      {!isChatting && (
-        <p
-          className="font-mono text-[14px] font-light uppercase tracking-[0.14em] text-[var(--text-dim)] mb-8 animate-fadeUp"
-          style={{ animationDelay: '0.55s' }}
-        >
-          business automations, sorted
-        </p>
-      )}
+      <div className="relative z-10 mx-auto flex max-w-[1100px] items-center justify-between gap-4">
+        <span className="gai-wordmark text-[1.45rem] text-[var(--ink)] sm:text-[1.7rem]">
+          Good<span className="apos">&rsquo;</span>ai
+        </span>
+        <span className="rounded-full border-2 border-[var(--ink)] bg-white px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--ink)] shadow-[3px_3px_0_var(--ink)]">
+          Perth <span className="px-1 text-[var(--orange)]">/</span> WA
+        </span>
+      </div>
 
-      {/* Landing input — hidden in chatting */}
-      {!isChatting && (
-        <div className="max-w-[440px] w-full animate-fadeUp mt-6" style={{ animationDelay: '0.8s' }}>
-          <form onSubmit={handleLandingSubmit} className="relative">
-            <Input
-              value={landingInput}
-              onChange={(e) => setLandingInput(e.target.value)}
-              placeholder="Tell us your problem."
-              className={[
-                'w-full py-6 pl-7 pr-14',
-                'bg-[var(--surface)]/80 border-[var(--border)] rounded-[14px]',
-                'text-lg text-[var(--text-bright)]',
-                'placeholder:text-[var(--text-dim)] placeholder:font-light',
-                'focus-visible:border-[rgba(216,106,61,0.25)]',
-                'focus-visible:shadow-[0_0_4px_var(--accent-dim),0_0_32px_rgba(0,0,0,0.5)]',
-                'focus-visible:bg-[var(--surface-raised)] focus-visible:ring-0',
-              ].join(' ')}
-            />
-          </form>
-          <p className="mt-5 font-mono text-sm font-light tracking-[0.04em] text-[var(--text-dim)] opacity-70">
-            We&apos;ll figure out how to fix it.
-          </p>
+      <section className="relative z-10 mx-auto mt-10 max-w-[760px] text-center">
+        <div className="mx-auto flex h-[88px] w-[88px] items-center justify-center rounded-[22px] border-2 border-[var(--ink)] bg-[var(--bg-ocean)] shadow-[4px_4px_0_var(--ink)]">
+          <Image
+            src={brandMarkSrc}
+            alt="Good'ai brand mark"
+            width={44}
+            height={76}
+            priority
+            className="h-[60px] w-auto"
+          />
         </div>
-      )}
 
-      {/* Chat interface — shown in chatting */}
-      {isChatting && <ChatInterface initialMessage={initialMessage} onBack={handleBack} />}
+        <span className="mt-6 inline-block font-mono text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--ocean-600)]">
+          Business automations · Perth · WA
+        </span>
 
-      {/* Service marquee — fixed bottom strip */}
-      {!isChatting && (
-        <div
-          className="fixed bottom-14 left-0 w-full overflow-hidden animate-fadeUp"
-          style={{ animationDelay: '1s' }}
-        >
-          <div className="flex animate-marquee whitespace-nowrap gap-4 py-3">
-            {[
-              'Email Drafting',
-              'Invoice Processing',
-              'CRM Sync',
-              'Social Scheduling',
-              'Custom Cartoons',
-              'AI Voice Agents',
-              'Workflow Automation',
-              'Data Entry',
-              'Lead Capture',
-              'Report Generation',
-              'Email Drafting',
-              'Invoice Processing',
-              'CRM Sync',
-              'Social Scheduling',
-              'Custom Cartoons',
-              'AI Voice Agents',
-              'Workflow Automation',
-              'Data Entry',
-              'Lead Capture',
-              'Report Generation',
-            ].map((s, i) => (
-              <span
-                key={`${s}-${i}`}
-                className="inline-block text-[12px] font-mono tracking-wide text-[var(--text-dim)]/40 flex-shrink-0"
-              >
-                {s}<span className="mx-4 text-[var(--accent)]/20">/</span>
+        <h1 className="mt-4 font-[family-name:var(--font-display)] text-[clamp(2.4rem,5vw,4rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[var(--ink)] [font-variation-settings:'opsz'_144]">
+          Knock off early.
+          <br />
+          <em className="relative z-0 inline-block font-semibold italic text-[var(--orange)] after:absolute after:inset-x-[-0.04em] after:bottom-[0.08em] after:z-[-1] after:h-[0.22em] after:-skew-x-6 after:rounded-[4px] after:bg-[var(--sun-200)]">
+            We&apos;ll sort the boring stuff.
+          </em>
+        </h1>
+
+        <p className="mx-auto mt-5 max-w-[500px] text-[clamp(1.05rem,1.7vw,1.25rem)] leading-[1.55] text-[var(--ink-soft)]">
+          Tell us your problem. We&apos;ll figure out how to fix it.
+        </p>
+
+        <div className="mt-8">
+          <ChatInterface />
+        </div>
+      </section>
+
+      <section className="relative z-10 mx-auto mt-10 flex max-w-[980px] flex-wrap justify-center gap-3">
+        {featureChips.map(({ icon: Icon, label, detail, iconClassName }) => (
+          <div
+            key={label}
+            className="flex items-center gap-3 rounded-full border-2 border-[var(--ink)] bg-white px-3 py-2 shadow-[3px_3px_0_var(--ink)] transition-transform duration-150 hover:-translate-x-px hover:-translate-y-px hover:shadow-[4px_4px_0_var(--ink)]"
+          >
+            <span className={`flex size-8 items-center justify-center rounded-full ${iconClassName}`}>
+              <Icon size={16} />
+            </span>
+            <span className="text-left leading-[1.1]">
+              <strong className="block text-[13px] text-[var(--ink)]">{label}</strong>
+              <span className="block pt-0.5 text-[11px] text-[var(--ink-mute)]">{detail}</span>
+            </span>
+          </div>
+        ))}
+      </section>
+
+      <div className="relative z-10 mt-10 -mx-5 overflow-hidden border-y border-[var(--line)] bg-[rgba(248,248,246,0.72)] py-3 backdrop-blur-sm sm:-mx-8 lg:-mx-12">
+        <div className="flex w-max animate-[gai-scroll_36s_linear_infinite] whitespace-nowrap">
+          {[...Array(2)].flatMap((_, group) =>
+            serviceMarquee.map((service) => (
+              <span key={`${group}-${service}`} className="font-mono text-[13px] tracking-[0.04em] text-[var(--ink-soft)]">
+                {service}
+                <span className="px-4 text-[var(--orange-300)]">/</span>
               </span>
-            ))}
+            ))
+          )}
+        </div>
+      </div>
+
+      <footer className="relative z-10 mt-14 -mx-5 bg-[var(--ink)] px-5 py-10 text-[var(--paper)] sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12">
+        <div className="mx-auto grid max-w-[1100px] gap-10 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+          <div>
+            <span className="gai-wordmark text-[2rem] text-[var(--paper)]">
+              Good<span className="apos">&rsquo;</span>ai
+            </span>
+            <p className="mt-3 max-w-[26rem] text-[15px] leading-7 text-[rgba(248,248,246,0.76)]">
+              Business automations, sorted. We help Perth operators get the boring stuff off their desk.
+            </p>
+            <div className="mt-5 inline-flex rounded-full border border-[rgba(248,248,246,0.22)] bg-[rgba(255,255,255,0.06)] px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--sun-200)]">
+              Knock off early. We&apos;ll sort it.
+            </div>
+          </div>
+
+          <div className="grid gap-8 sm:grid-cols-3">
+            <div>
+              <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-[rgba(248,248,246,0.56)]">Work</h2>
+              <div className="mt-3 space-y-2 text-[15px] text-[rgba(248,248,246,0.82)]">
+                <p>Invoice flows</p>
+                <p>CRM sync</p>
+                <p>Voice agents</p>
+                <p>Custom builds</p>
+              </div>
+            </div>
+            <div>
+              <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-[rgba(248,248,246,0.56)]">Company</h2>
+              <div className="mt-3 space-y-2 text-[15px] text-[rgba(248,248,246,0.82)]">
+                <p>How we work</p>
+                <p>Pricing</p>
+                <p>Contact</p>
+              </div>
+            </div>
+            <div>
+              <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-[rgba(248,248,246,0.56)]">Local</h2>
+              <div className="mt-3 space-y-2 text-[15px] text-[rgba(248,248,246,0.82)]">
+                <p>Perth, WA</p>
+                <p>gday@goodai.au</p>
+                <p>+61 (08) 0000 0000</p>
+              </div>
+            </div>
           </div>
         </div>
-      )}
 
-      {/* Perth badge — hidden in chatting */}
-      {!isChatting && (
-        <div
-          className="fixed bottom-4 left-1/2 -translate-x-1/2 font-mono text-[12px] font-light uppercase tracking-[0.12em] text-[var(--text-dim)] animate-fadeUp"
-          style={{ animationDelay: '1.2s' }}
-        >
-          PERTH <span className="text-[var(--accent-soft)] opacity-50">/</span> WA
+        <div className="mx-auto mt-10 flex max-w-[1100px] items-center justify-between gap-4 border-t border-[rgba(248,248,246,0.14)] pt-5 text-[12px] text-[rgba(248,248,246,0.56)]">
+          <span>© Good&apos;ai 2026</span>
+          <span>Built for Perth businesses that want their time back.</span>
         </div>
-      )}
+      </footer>
     </main>
-    </>
   );
 }

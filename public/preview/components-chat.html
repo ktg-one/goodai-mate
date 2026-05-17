@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Components · Chat bubbles</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 24px; background: var(--paper); display: flex; flex-direction: column; gap: 10px; }
+  .row { display: flex; }
+  .row.r { justify-content: flex-end; }
+  .bubble { max-width: 76%; padding: 12px 18px; font-family: var(--font-sans); font-size: 15px; line-height: 1.5; }
+  .b-user { background: var(--orange-100); color: var(--ink); border-radius: 18px 18px 4px 18px; border: 1px solid var(--orange-tint); }
+  .b-ai   { background: #fff; color: var(--ink-soft); border-radius: 18px 18px 18px 4px; border: 1px solid var(--border); }
+  .typing { display: inline-flex; gap: 5px; padding: 14px 18px; background: #fff; border: 1px solid var(--border); border-radius: 18px 18px 18px 4px; }
+  .typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--ocean-400); }
+</style>
+</head>
+<body>
+  <div class="row r"><div class="bubble b-user">My invoicing is taking 6 hrs every Friday.</div></div>
+  <div class="row"><div class="bubble b-ai">Yeah that&rsquo;s rough — Friday Xero runs are usually where the bleeding is. What software are you using to send them out?</div></div>
+  <div class="row r"><div class="bubble b-user">Xero, mostly. Sometimes Excel.</div></div>
+  <div class="row"><div class="typing"><span></span><span></span><span></span></div></div>
+</body>
+</html>

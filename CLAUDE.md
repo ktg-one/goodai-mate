@@ -36,6 +36,24 @@
 <!-- After corrections, add entries here so the mistake isn't repeated -->
 <!-- Format: [DATE] MISTAKE → FIX -->
 
+## Agent skills
+
+### Issue tracker
+
+Issues and PRDs are tracked in GitHub Issues for `ktg-one/goodai-mate`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Use the standard Matt Pocock triage label vocabulary. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+This is a single-context repo; read root domain docs and ADRs when present. See `docs/agents/domain.md`.
+
+### Brand design guardrail
+
+Do not default to Claude/Anthropic editorial minimalism. Use the Good'ai mark and pivot tokens as the palette source: black/ink structure, cool off-white paper, WA ocean blue brand surfaces, orange as a restrained CTA accent, and practical production UI.
+
 ## Agent Dispatch
 See `.claude/agents/` for available agents. Resolution order:
 1. Skill (inline, zero context overhead)

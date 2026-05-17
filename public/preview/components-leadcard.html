@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Components · Lead capture card</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 24px; background: var(--paper); }
+  .lc { background: #fff; border: 2px solid var(--ink); border-radius: 18px; box-shadow: 3px 3px 0 var(--ink); padding: 22px; max-width: 540px; }
+  h3 { margin: 0 0 4px; font-family: var(--font-sans); font-weight: 700; font-size: 17px; color: var(--ink); }
+  p { margin: 0 0 14px; font-family: var(--font-sans); font-size: 13.5px; line-height: 1.5; color: var(--ink-mute); }
+  .row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .input { flex: 1; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--border-strong); background: var(--paper); font-family: var(--font-sans); font-size: 13.5px; color: var(--ink); }
+  .input:focus { outline: none; border-color: var(--ocean-400); }
+  .btn { display: block; width: 100%; padding: 12px; background: var(--orange); color: var(--paper); border: 2px solid var(--ink); border-radius: 10px; font-family: var(--font-sans); font-weight: 600; font-size: 14px; cursor: pointer; box-shadow: 2px 2px 0 var(--ink); margin-top: 4px; }
+</style>
+</head>
+<body>
+  <div class="lc">
+    <h3>Want us to look into this?</h3>
+    <p>Drop your details and we&rsquo;ll scope it out — no obligation, no runaround.</p>
+    <div class="row">
+      <input class="input" placeholder="Name">
+      <input class="input" placeholder="Business name">
+    </div>
+    <div class="row">
+      <input class="input" placeholder="Phone">
+      <input class="input" placeholder="Email">
+    </div>
+    <button class="btn">Get a callback</button>
+  </div>
+</body>
+</html>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -12,6 +13,23 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   weight: ["300", "400"],
+});
+
+const fraunces = localFont({
+  variable: "--font-fraunces",
+  src: [
+    {
+      path: "../../public/fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.ttf",
+      style: "normal",
+      weight: "100 900",
+    },
+    {
+      path: "../../public/fonts/Fraunces-Italic-VariableFont_SOFT_WONK_opsz_wght.ttf",
+      style: "italic",
+      weight: "100 900",
+    },
+  ],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -29,7 +47,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${dmSans.variable} ${jetbrainsMono.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

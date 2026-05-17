@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Components · Cards</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 24px; background: var(--paper); display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .card { background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 22px; }
+  .card-stamp { border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); border-radius: 18px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ocean-600); margin-bottom: 8px; }
+  h3 { margin: 0 0 6px; font-family: var(--font-sans); font-weight: 700; font-size: 17px; color: var(--ink); letter-spacing: -0.01em; }
+  p { margin: 0; font-family: var(--font-sans); font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
+  .price { font-family: var(--font-display); font-weight: 600; font-size: 30px; color: var(--ink); line-height: 1; margin-top: 12px; }
+  .price small { font-size: 13px; font-family: var(--font-mono); color: var(--ink-mute); margin-left: 4px; letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="eyebrow">Workflow · 02</div>
+    <h3>Invoice processing, sorted</h3>
+    <p>Pulls jobs from ServiceM8 → drafts the Xero invoice → emails the PDF. Friday afternoon back.</p>
+  </div>
+  <div class="card card-stamp">
+    <div class="eyebrow" style="color: var(--ink-soft);">Most popular</div>
+    <h3>Pilot scope</h3>
+    <p>One workflow, two-week build, real before/after numbers. No lock-in.</p>
+    <div class="price">$2.4k<small>+ GST · one-off</small></div>
+  </div>
+</body>
+</html>
