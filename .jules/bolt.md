@@ -1,0 +1,3 @@
+## 2026-05-18 - Enabled SSG for Landing Page
+**Learning:** The marketing page in `src/app/page.tsx` was unnecessarily using `export const dynamic = 'force-dynamic';`, forcing server-side rendering on every request for static content. Furthermore, there were abandoned protoypes inside the `public/` folder (e.g. `public/tts-feature` and `public/ui_kits`) which bloated the static asset bundle.
+**Action:** Removed `force-dynamic` to enable Static Site Generation (SSG), massively improving TTFB. Deleted the abandoned public prototypes to reduce deployment bundle size and remove public-facing source code leaks.
