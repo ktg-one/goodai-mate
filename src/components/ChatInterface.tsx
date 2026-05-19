@@ -3,7 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
 import { Send, Volume2, VolumeX } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
 
@@ -74,6 +74,25 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
 
   const isBusy = status === 'submitted' || status === 'streaming';
 
+  // ⚡ Bolt Optimization: Memoize expensive message parsing to avoid
+  // O(N) recalculations on every keystroke in the controlled Input.
+  const parsedMessages = useMemo(() => {
+    return messages.map((msg) => {
+      const text = msg.parts
+        ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
+        .map((p) => p.text)
+        .join('') ?? '';
+      return { ...msg, text };
+    });
+  }, [messages]);
+
+  const conversationTranscript = useMemo(() => {
+    return parsedMessages
+      .filter((m) => m.text)
+      .map((m) => (m.role === 'user' ? `Them: ${m.text}` : `Us: ${m.text}`))
+      .join(' / ');
+  }, [parsedMessages]);
+
   useEffect(() => {
     if (!initialMessage || initialSent.current) return;
     initialSent.current = true;
@@ -100,23 +119,19 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   useEffect(() => {
     if (!ttsEnabled) return;
 
-    const latestAssistant = [...messages]
+    const latestAssistant = [...parsedMessages]
       .reverse()
       .find((msg) => msg.role === 'assistant' && !spokenMessageIds.current.has(msg.id));
 
     if (!latestAssistant) return;
 
-    const text = latestAssistant.parts
-      ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
-      .map((p) => p.text)
-      .join('')
-      .trim();
+    const text = latestAssistant.text.trim();
 
     if (!text) return;
 
     spokenMessageIds.current.add(latestAssistant.id);
     speakText(text);
-  }, [messages, speakText, ttsEnabled]);
+  }, [parsedMessages, speakText, ttsEnabled]);
 
   useEffect(() => {
     if (showLeadCard) {
@@ -174,12 +189,8 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
             </div>
           </div>
 
-          {messages.map((msg) => {
-            const text = msg.parts
-              ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
-              .map((p) => p.text)
-              .join('') ?? '';
-            if (!text) return null;
+          {parsedMessages.map((msg) => {
+            if (!msg.text) return null;
 
             const isUser = msg.role === 'user';
 
@@ -194,12 +205,12 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
                         : 'border-[var(--ocean-400)] bg-[var(--ocean-50)] text-[var(--ink)] shadow-[3px_3px_0_var(--ocean-600)]',
                     ].join(' ')}
                   >
-                    {text}
+                    {msg.text}
                   </div>
                   {!isUser && (
                     <button
                       type="button"
-                      onClick={() => speakText(text)}
+                      onClick={() => speakText(msg.text)}
                       className="mb-1 inline-flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-[var(--ink)] bg-white text-[var(--ink)] shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-x-px hover:-translate-y-px"
                       aria-label="Play this message"
                     >
@@ -215,13 +226,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
             <div ref={leadCardRef}>
               <LeadCaptureCard
                 firstMessage={firstMessage}
-                conversationTranscript={messages.map((m) => {
-                  const text = m.parts
-                    ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
-                    .map((p) => p.text)
-                    .join('') ?? '';
-                  return m.role === 'user' ? `Them: ${text}` : `Us: ${text}`;
-                }).join(' / ')}
+                conversationTranscript={conversationTranscript}
                 onDismiss={() => {
                   setShowLeadCard(false);
                   setLeadCaptured(true);
