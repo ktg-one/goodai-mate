@@ -2,8 +2,10 @@
 
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
+import type { UIMessage } from 'ai';
 import { Send, Volume2, VolumeX } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React from 'react';
 import { Input } from '@/components/ui/input';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
 
@@ -11,6 +13,45 @@ interface ChatInterfaceProps {
   initialMessage?: string;
   onFirstResponse?: () => void;
 }
+
+// ⚡ Bolt: Memoized MessageItem to prevent re-rendering and text re-parsing for all previous messages during streaming
+const MessageItem = React.memo(({ msg, speakText }: { msg: UIMessage; speakText: (text: string) => void }) => {
+  const text = msg.parts
+    ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
+    .map((p) => p.text)
+    .join('') ?? '';
+  if (!text) return null;
+
+  const isUser = msg.role === 'user';
+
+  return (
+    <div className={`mb-4 flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+      <div className="flex items-end gap-2">
+        <div
+          className={[
+            'max-w-[88%] whitespace-pre-wrap rounded-[18px] border-2 px-4 py-3 text-[16px] leading-snug shadow-[var(--shadow-stamp)]',
+            isUser
+              ? 'border-[var(--ink)] bg-[var(--orange)] text-[var(--paper)]'
+              : 'border-[var(--ocean-400)] bg-[var(--ocean-50)] text-[var(--ink)] shadow-[3px_3px_0_var(--ocean-600)]',
+          ].join(' ')}
+        >
+          {text}
+        </div>
+        {!isUser && (
+          <button
+            type="button"
+            onClick={() => speakText(text)}
+            className="mb-1 inline-flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-[var(--ink)] bg-white text-[var(--ink)] shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-x-px hover:-translate-y-px"
+            aria-label="Play this message"
+          >
+            <Volume2 size={13} />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+});
+MessageItem.displayName = 'MessageItem';
 
 export default function ChatInterface({ initialMessage = '', onFirstResponse }: ChatInterfaceProps) {
   const [input, setInput] = useState('');
@@ -74,6 +115,18 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
 
   const isBusy = status === 'submitted' || status === 'streaming';
 
+  // ⚡ Bolt: Memoize conversation transcript generation to prevent re-computation on every keystroke
+  const conversationTranscript = useMemo(() => {
+    if (!showLeadCard) return '';
+    return messages.map((m) => {
+      const text = m.parts
+        ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
+        .map((p) => p.text)
+        .join('') ?? '';
+      return m.role === 'user' ? `Them: ${text}` : `Us: ${text}`;
+    }).join(' / ');
+  }, [messages, showLeadCard]);
+
   useEffect(() => {
     if (!initialMessage || initialSent.current) return;
     initialSent.current = true;
@@ -100,9 +153,14 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   useEffect(() => {
     if (!ttsEnabled) return;
 
-    const latestAssistant = [...messages]
-      .reverse()
-      .find((msg) => msg.role === 'assistant' && !spokenMessageIds.current.has(msg.id));
+    // ⚡ Bolt: Avoid O(N) array copy & reverse on every stream chunk by iterating backwards
+    let latestAssistant;
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role === 'assistant' && !spokenMessageIds.current.has(messages[i].id)) {
+        latestAssistant = messages[i];
+        break;
+      }
+    }
 
     if (!latestAssistant) return;
 
@@ -174,54 +232,15 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
             </div>
           </div>
 
-          {messages.map((msg) => {
-            const text = msg.parts
-              ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
-              .map((p) => p.text)
-              .join('') ?? '';
-            if (!text) return null;
-
-            const isUser = msg.role === 'user';
-
-            return (
-              <div key={msg.id} className={`mb-4 flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-                <div className="flex items-end gap-2">
-                  <div
-                    className={[
-                      'max-w-[88%] whitespace-pre-wrap rounded-[18px] border-2 px-4 py-3 text-[16px] leading-snug shadow-[var(--shadow-stamp)]',
-                      isUser
-                        ? 'border-[var(--ink)] bg-[var(--orange)] text-[var(--paper)]'
-                        : 'border-[var(--ocean-400)] bg-[var(--ocean-50)] text-[var(--ink)] shadow-[3px_3px_0_var(--ocean-600)]',
-                    ].join(' ')}
-                  >
-                    {text}
-                  </div>
-                  {!isUser && (
-                    <button
-                      type="button"
-                      onClick={() => speakText(text)}
-                      className="mb-1 inline-flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-[var(--ink)] bg-white text-[var(--ink)] shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-x-px hover:-translate-y-px"
-                      aria-label="Play this message"
-                    >
-                      <Volume2 size={13} />
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+          {messages.map((msg) => (
+            <MessageItem key={msg.id} msg={msg} speakText={speakText} />
+          ))}
 
           {showLeadCard && !leadCaptured && (
             <div ref={leadCardRef}>
               <LeadCaptureCard
                 firstMessage={firstMessage}
-                conversationTranscript={messages.map((m) => {
-                  const text = m.parts
-                    ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
-                    .map((p) => p.text)
-                    .join('') ?? '';
-                  return m.role === 'user' ? `Them: ${text}` : `Us: ${text}`;
-                }).join(' / ')}
+                conversationTranscript={conversationTranscript}
                 onDismiss={() => {
                   setShowLeadCard(false);
                   setLeadCaptured(true);

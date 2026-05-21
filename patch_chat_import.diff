@@ -1,0 +1,10 @@
+<<<<<<< SEARCH
+import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport } from 'ai';
+import { Send, Volume2, VolumeX } from 'lucide-react';
+=======
+import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport } from 'ai';
+import type { UIMessage } from 'ai';
+import { Send, Volume2, VolumeX } from 'lucide-react';
+>>>>>>> REPLACE

@@ -1,0 +1,43 @@
+<<<<<<< SEARCH
+export default function ChatInterface({ initialMessage = '', onFirstResponse }: ChatInterfaceProps) {
+=======
+// ⚡ Bolt: Memoized MessageItem to prevent re-rendering and text re-parsing for all previous messages during streaming
+const MessageItem = React.memo(({ msg, speakText }: { msg: any; speakText: (text: string) => void }) => {
+  const text = msg.parts
+    ?.filter((p: any): p is { type: 'text'; text: string } => p.type === 'text')
+    .map((p: any) => p.text)
+    .join('') ?? '';
+  if (!text) return null;
+
+  const isUser = msg.role === 'user';
+
+  return (
+    <div className={`mb-4 flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+      <div className="flex items-end gap-2">
+        <div
+          className={[
+            'max-w-[88%] whitespace-pre-wrap rounded-[18px] border-2 px-4 py-3 text-[16px] leading-snug shadow-[var(--shadow-stamp)]',
+            isUser
+              ? 'border-[var(--ink)] bg-[var(--orange)] text-[var(--paper)]'
+              : 'border-[var(--ocean-400)] bg-[var(--ocean-50)] text-[var(--ink)] shadow-[3px_3px_0_var(--ocean-600)]',
+          ].join(' ')}
+        >
+          {text}
+        </div>
+        {!isUser && (
+          <button
+            type="button"
+            onClick={() => speakText(text)}
+            className="mb-1 inline-flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-[var(--ink)] bg-white text-[var(--ink)] shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-x-px hover:-translate-y-px"
+            aria-label="Play this message"
+          >
+            <Volume2 size={13} />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+});
+
+export default function ChatInterface({ initialMessage = '', onFirstResponse }: ChatInterfaceProps) {
+>>>>>>> REPLACE

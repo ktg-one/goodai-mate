@@ -1,0 +1,3 @@
+## 2026-05-21 - [Streaming State Optimization]
+**Learning:** During AI response streaming using Vercel AI SDK, `messages` array changes trigger frequent React re-renders. `O(N)` operations like array copy (`[...messages]`) or mapping components over the entire history inside these renders cause heavy CPU usage and garbage collection, noticeably impacting performance as message history grows.
+**Action:** Avoid copying/reversing the messages array on the active stream loop. Memoize message component list items with `React.memo` to prevent re-processing and re-rendering of all historical messages when only the current streaming chunk changes.
