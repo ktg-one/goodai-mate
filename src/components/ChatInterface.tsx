@@ -1,11 +1,52 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
+import { DefaultChatTransport, UIMessage } from 'ai';
 import { Send, Volume2, VolumeX } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, memo } from 'react';
 import { Input } from '@/components/ui/input';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
+
+// ⚡ Bolt: Memoized ChatMessage component to prevent O(N*M) unnecessary re-renders of the entire
+// message history for every single streaming token received.
+const ChatMessage = memo(({ msg, onSpeak }: { msg: UIMessage; onSpeak: (text: string) => void }) => {
+  const text = msg.parts
+    ?.filter((p: any): p is { type: 'text'; text: string } => p.type === 'text')
+    .map((p: any) => p.text)
+    .join('') ?? '';
+
+  if (!text) return null;
+
+  const isUser = msg.role === 'user';
+
+  return (
+    <div className={`mb-4 flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+      <div className="flex items-end gap-2">
+        <div
+          className={[
+            'max-w-[88%] whitespace-pre-wrap rounded-[18px] border-2 px-4 py-3 text-[16px] leading-snug shadow-[var(--shadow-stamp)]',
+            isUser
+              ? 'border-[var(--ink)] bg-[var(--orange)] text-[var(--paper)]'
+              : 'border-[var(--ocean-400)] bg-[var(--ocean-50)] text-[var(--ink)] shadow-[3px_3px_0_var(--ocean-600)]',
+          ].join(' ')}
+        >
+          {text}
+        </div>
+        {!isUser && (
+          <button
+            type="button"
+            onClick={() => onSpeak(text)}
+            className="mb-1 inline-flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-[var(--ink)] bg-white text-[var(--ink)] shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-x-px hover:-translate-y-px"
+            aria-label="Play this message"
+          >
+            <Volume2 size={13} />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+});
+ChatMessage.displayName = 'ChatMessage';
 
 interface ChatInterfaceProps {
   initialMessage?: string;
@@ -174,42 +215,9 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
             </div>
           </div>
 
-          {messages.map((msg) => {
-            const text = msg.parts
-              ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
-              .map((p) => p.text)
-              .join('') ?? '';
-            if (!text) return null;
-
-            const isUser = msg.role === 'user';
-
-            return (
-              <div key={msg.id} className={`mb-4 flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-                <div className="flex items-end gap-2">
-                  <div
-                    className={[
-                      'max-w-[88%] whitespace-pre-wrap rounded-[18px] border-2 px-4 py-3 text-[16px] leading-snug shadow-[var(--shadow-stamp)]',
-                      isUser
-                        ? 'border-[var(--ink)] bg-[var(--orange)] text-[var(--paper)]'
-                        : 'border-[var(--ocean-400)] bg-[var(--ocean-50)] text-[var(--ink)] shadow-[3px_3px_0_var(--ocean-600)]',
-                    ].join(' ')}
-                  >
-                    {text}
-                  </div>
-                  {!isUser && (
-                    <button
-                      type="button"
-                      onClick={() => speakText(text)}
-                      className="mb-1 inline-flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-[var(--ink)] bg-white text-[var(--ink)] shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-x-px hover:-translate-y-px"
-                      aria-label="Play this message"
-                    >
-                      <Volume2 size={13} />
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+          {messages.map((msg) => (
+            <ChatMessage key={msg.id} msg={msg} onSpeak={speakText} />
+          ))}
 
           {showLeadCard && !leadCaptured && (
             <div ref={leadCardRef}>
