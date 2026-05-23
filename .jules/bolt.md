@@ -1,0 +1,3 @@
+## 2025-05-23 - [Input State Colocation Anti-Pattern]
+**Learning:** [In Next.js / React, placing frequent-updating state like text inputs (`input`, `setInput`) inside a large parent component (`ChatInterface.tsx`) causes the entire component, including expensive children like message history and TTS components, to re-render on every keystroke. This is a common performance anti-pattern in React applications when building complex interfaces.]
+**Action:** [Always colocate state. Extract input fields and their associated state into their own isolated components so that typing only triggers re-renders within that specific input component, sparing the rest of the UI.]
