@@ -1,0 +1,3 @@
+## 2024-05-24 - [Chat Input Typing Performance]
+**Learning:** In the `ChatInterface.tsx` component, user input state (`input`) resides in the same component as the complex `messages` array rendering and the `LeadCaptureCard` rendering which computes a transcript. This causes the entire message list (including string joining/filtering) to re-evaluate on every single keystroke. Also, never call hooks inside JSX as that leads to anti-pattern violations and hook call ordering issues when conditionals are involved.
+**Action:** Extract large mapping iterations to `useMemo` hooks positioned correctly at the top level of the component scope, returning the fully mapped block. This achieves the performance benefits cleanly while honoring the Rules of Hooks.
