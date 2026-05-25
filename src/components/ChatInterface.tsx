@@ -100,9 +100,16 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   useEffect(() => {
     if (!ttsEnabled) return;
 
-    const latestAssistant = [...messages]
-      .reverse()
-      .find((msg) => msg.role === 'assistant' && !spokenMessageIds.current.has(msg.id));
+    // ⚡ Bolt Optimization: Use backwards for-loop instead of [...messages].reverse().find()
+    // Avoids creating array copies and reverses on every streaming update chunk.
+    let latestAssistant = undefined;
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const msg = messages[i];
+      if (msg.role === 'assistant' && !spokenMessageIds.current.has(msg.id)) {
+        latestAssistant = msg;
+        break;
+      }
+    }
 
     if (!latestAssistant) return;
 
