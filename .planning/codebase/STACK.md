@@ -1,123 +1,71 @@
-# Technology Stack
+# Stack
 
-**Analysis Date:** 2026-04-01
+Mapped: 2026-05-25
 
-## Languages
+## Product Assumption
 
-**Primary:**
-- TypeScript 5.x - Full codebase with strict mode enabled
-- JSX/TSX - React component syntax throughout
-
-**Secondary:**
-- CSS - Tailwind CSS v4 for styling
-- JavaScript - Build/config files (ESM format)
+The intended product is a Next.js site for Good'ai, not the embedded Vite/Gemini TTS prototype in `public/tts-feature/`.
+That prototype is treated as a stray artifact or future reference only.
 
 ## Runtime
 
-**Environment:**
-- Node.js (version specified in package.json via type: "module" ESM convention)
+- Node.js project managed by npm.
+- Main app framework: Next.js App Router from `next`.
+- React runtime: React 19 from `react` and `react-dom`.
+- TypeScript strict mode is enabled through `tsconfig.json`.
+- Styling uses Tailwind CSS v4 through `@tailwindcss/postcss` in `postcss.config.mjs`.
+- Deployment target is Vercel, with `vercel.json` declaring `"framework": "nextjs"`.
 
-**Package Manager:**
-- npm (npm workspace compatible)
-- Lockfile: `package-lock.json` present (237KB)
+## Main Dependencies
 
-## Frameworks
+- `next` powers routing, rendering, metadata, and image/font helpers.
+- `react` and `react-dom` provide the UI runtime.
+- `ai`, `@ai-sdk/react`, and `@ai-sdk/openai-compatible` are present for chat and streaming AI workflows.
+- `lucide-react` is the icon library.
+- `radix-ui`, `class-variance-authority`, `clsx`, and `tailwind-merge` support shadcn-style UI primitives.
+- `react-hook-form` and `zod` are installed, though the current lead form in `src/components/LeadCaptureCard.tsx` uses local state instead.
+- `three`, `@types/three`, and `raw-loader` are installed for possible shader/WebGL work, but the current mapped product direction does not use a shader surface.
 
-**Core:**
-- Next.js 16.2.1 - App Router, React 19 support, Turbopack, Edge Runtime compatible
-- React 19.2.4 - UI library with new compiler and hooks
-- React DOM 19.2.4 - DOM rendering
+## Scripts
 
-**UI Component Library:**
-- Radix UI 1.4.2 - Headless, accessible component primitives
-- shadcn/ui - Pre-built accessible UI components (via `components.json`)
-  - Components in `src/components/ui/` include: button, card, dialog, form, input, label, badge, skeleton
-  - Configured for New York style, RSC enabled, Tailwind CSS variables
-
-**Form Handling:**
-- react-hook-form 7.54.2 - Efficient form state and validation
-- Zod 4.3.6 - Schema validation library
-
-**Styling:**
-- Tailwind CSS 4 - Utility-first CSS framework
-- @tailwindcss/postcss 4 - PostCSS plugin for Tailwind
-- class-variance-authority 0.7.1 - Variant management for styled components
-- tailwind-merge 3.5.0 - Merging Tailwind class names intelligently
-
-**Icons:**
-- lucide-react 0.468.0 - Lightweight icon library
-
-## Key Dependencies
-
-**Critical:**
-- clsx 2.1.1 - Conditional class name concatenation
-
-**Utilities:**
-- zod 4.3.6 - TypeScript-first schema validation for API contracts
+- `npm run dev` runs `next dev`.
+- `npm run build` runs `next build`.
+- `npm run start` runs `next start`.
+- `npm run lint` runs `eslint .`.
 
 ## Configuration
 
-**TypeScript:**
-- Target: ES2017
-- Strict mode: Enabled
-- Module resolution: bundler
-- Path aliases: `@/*` maps to `./src/*`
-- JSX: react-jsx
-- Incremental compilation enabled
-- Config file: `tsconfig.json`
+- `next.config.ts` sets `turbopack.root` to `process.cwd()`.
+- `next.config.ts` configures `.glsl`, `.vert`, and `.frag` imports through `raw-loader` for both Turbopack and webpack.
+- `tsconfig.json` uses `moduleResolution: "bundler"` and path alias `@/* -> ./src/*`.
+- `components.json` configures shadcn-style components with aliases for `@/components`, `@/components/ui`, `@/lib`, and `@/hooks`.
+- `eslint.config.mjs` uses Next core-web-vitals and TypeScript presets.
 
-**Build:**
-- Next.js default turbo build system
-- PostCSS configured in `postcss.config.mjs`
-- ESLint config in `eslint.config.mjs` (flat config format)
-  - Uses `eslint-config-next/core-web-vitals`
-  - Uses `eslint-config-next/typescript`
-  - Ignores: `.next/`, `out/`, `build/`, `next-env.d.ts`
+## Styling Stack
 
-**Tailwind CSS:**
-- Config via `components.json` (shadcn/ui convention)
-- CSS variables enabled for theming
-- Base color: slate
-- Paths: `src/app/globals.css` (global styles)
+- Global CSS lives in `src/app/globals.css`.
+- Brand tokens are CSS custom properties under `:root`.
+- Tailwind v4 theme tokens are exposed with `@theme inline`.
+- The current visual system is paper/ink/orange/ocean, based on `public/README.md` and `public/colors_and_type.css`.
+- `next/font/google` loads DM Sans and JetBrains Mono in `src/app/layout.tsx`.
+- `next/font/local` attempts to load Fraunces files from `public/fonts/`.
 
-**Environment:**
-- Next.js telemetry disabled via `NEXT_TELEMETRY_DISABLED=1`
+## Public Assets
 
-## Platform Requirements
+- Brand and design-system assets live under `public/`.
+- `public/README.md` describes the brand system and references `public/good-ai-design-final.html` as the design source of truth.
+- `public/ui_kits/web/` is a static UI kit/reference implementation.
+- `public/preview/` contains design-system preview pages.
+- `public/assets/` contains SVG and PNG brand assets, though several referenced or tracked assets are currently broken or zero bytes.
 
-**Development:**
-- Node.js (npm workspaces compatible)
-- TypeScript compiler
-- Modern browser with ES2017 support
+## Environment Variables
 
-**Production:**
-- Vercel Edge Runtime (indicated by `vercel.json`)
-- Node.js 18+ recommended (Next.js 16 best practices)
+- `.env.example` documents `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_APP_NAME`, `DATABASE_URL`, `AUTH_SECRET`, `AI_GATEWAY_API_KEY`, and telemetry settings.
+- `src/app/api/chat/route.ts` requires `AI_GATEWAY_API_KEY` at runtime.
+- `src/components/LeadCaptureCard.tsx` expects `NEXT_PUBLIC_WEB3FORMS_KEY`, but this variable is not documented in `.env.example`.
 
-## Build & Development Scripts
+## Out-Of-Scope Prototype
 
-```bash
-npm run dev          # Start development server (next dev)
-npm run build        # Build for production (next build)
-npm start            # Start production server (next start)
-npm run lint         # Run ESLint
-```
-
-## Next.js Configuration
-
-- Config file: `next.config.ts`
-- Currently minimal (placeholder config)
-- Entry point: `src/app/layout.tsx` (root layout)
-- Fonts: Google Fonts (Geist Sans and Geist Mono via `next/font/google`)
-
-## Test Framework
-
-**Testing:** Configured structure in `__tests__/` directory
-- Unit tests: `__tests__/unit/`
-- Integration tests: `__tests__/integration/`
-- E2E tests: `__tests__/e2e/`
-- Framework: Not yet configured in package.json (Vitest + Playwright per CLAUDE.md)
-
----
-
-*Stack analysis: 2026-04-01*
+- `public/tts-feature/` is a separate Vite + Express + WebSocket + Gemini Live prototype.
+- It has its own `package.json`, `server.ts`, `vite.config.ts`, `src/App.tsx`, and lockfile.
+- Based on the current clarification, do not treat `public/tts-feature/` as the architecture for the Next site.

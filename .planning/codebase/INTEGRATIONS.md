@@ -1,144 +1,73 @@
-# External Integrations
+# Integrations
 
-**Analysis Date:** 2026-04-01
+Mapped: 2026-05-25
 
-## APIs & External Services
+## Product Assumption
 
-**AI Providers (Optional):**
-- Anthropic Claude - SDK not installed, keys optional via `ANTHROPIC_API_KEY`
-- OpenAI - SDK not installed, keys optional via `OPENAI_API_KEY`
-- Google Generative AI - SDK not installed, keys optional via `GOOGLE_GENERATIVE_AI_API_KEY`
+The intended integration surface is the Next.js site.
+The Gemini Live integration under `public/tts-feature/` is documented only as a stray prototype/reference, not as the current site direction.
 
-**Current Status:** No active AI provider SDKs installed. Environment variables defined in `src/types/env.d.ts` for future integration.
+## Vercel Hosting
 
-## Data Storage
+- `vercel.json` declares the framework as Next.js.
+- `src/app/layout.tsx` exports `dynamic = 'force-dynamic'`.
+- `src/app/page.tsx` also exports `dynamic = 'force-dynamic'`.
+- `src/app/api/chat/route.ts` exports `maxDuration = 60`, which is relevant to Vercel route execution limits.
 
-**Databases:**
-- Type/Provider: Not yet configured
-- Connection: `DATABASE_URL` environment variable defined
-- Client/ORM: None installed (framework-agnostic placeholder)
+## Vercel AI Gateway
 
-**File Storage:**
-- Local filesystem only (no S3, GCS, or cloud storage SDKs)
+- `src/app/api/chat/route.ts` creates an OpenAI-compatible client through `createOpenAICompatible`.
+- The base URL is `https://ai-gateway.vercel.sh/v1`.
+- The API key comes from `process.env.AI_GATEWAY_API_KEY`.
+- The selected model is `anthropic/claude-sonnet-4-20250514`.
+- The route streams output using `streamText` and returns `toUIMessageStreamResponse()`.
+- The system prompt comes from `src/lib/chatPersona.ts`.
 
-**Caching:**
-- None configured (no Redis, Memcached, or caching middleware)
+## Chat API Contract
 
-## Authentication & Identity
+- Endpoint: `POST /api/chat` from `src/app/api/chat/route.ts`.
+- Expected body shape: `{ messages: UIMessage[] }`.
+- Invalid or empty `messages` returns `{ error: 'Messages array required' }` with status 400.
+- Valid requests are converted with `convertToModelMessages(messages)`.
+- Output token cap is currently `maxOutputTokens: 300`.
 
-**Auth Provider:**
-- Custom implementation placeholder
-- Environment variable: `AUTH_SECRET` required in `.env.local`
-- No third-party auth SDK installed (Firebase, Auth0, Clerk, etc.)
+## Web3Forms Lead Capture
 
-**Current Status:** Auth infrastructure designed but not implemented. Scaffold is API-ready via `AUTH_SECRET` pattern.
+- `src/components/LeadCaptureCard.tsx` posts to `https://api.web3forms.com/submit`.
+- It sends `access_key`, `subject`, `from_name`, contact fields, the first visitor message, and the conversation transcript.
+- The access key is read from `process.env.NEXT_PUBLIC_WEB3FORMS_KEY`.
+- Provider errors are swallowed intentionally so the visitor is not blocked.
+- The current form marks success after the fetch attempt regardless of provider response content.
 
-## Monitoring & Observability
+## Fonts
 
-**Error Tracking:**
-- None configured (no Sentry, Rollbar, or error tracking SDK)
+- `src/app/layout.tsx` uses `next/font/google` for DM Sans and JetBrains Mono.
+- `src/app/layout.tsx` uses `next/font/local` for two Fraunces files under `public/fonts/`.
+- Current concern: both Fraunces files in `public/fonts/` are zero-byte files, so font loading/build behavior is likely broken.
 
-**Logs:**
-- Console-based (no structured logging framework installed)
+## Images And Brand Assets
 
-**Analytics:**
-- Feature flag: `NEXT_PUBLIC_ENABLE_ANALYTICS` (disabled by default)
-- No tracking SDK installed (no Segment, Mixpanel, or GA)
+- `src/components/HeroSection.tsx` uses `next/image`.
+- It references `/assets/logo-mark.svg`.
+- Current concern: `public/assets/logo-mark.svg` is not present in the current file list.
+- Current concern: several PNG assets under `public/assets/` are zero-byte files.
 
-## CI/CD & Deployment
+## No Current Database
 
-**Hosting:**
-- Vercel (indicated by `vercel.json` configuration)
-- Edge Runtime compatible (Vercel Edge Functions capable)
+- `DATABASE_URL` exists in `.env.example`.
+- No database client, ORM, migrations, or data access layer were found in `src/`.
+- No server action or API route currently persists lead data.
 
-**Deployment Config:**
-- File: `vercel.json`
-- Build command: Not specified (uses Next.js defaults)
-- Output directory: `public/`
-- Framework: Null (Next.js auto-detected)
-- Rewrites: API routes configured (`/api/:path*` → `/api/:path*`)
+## No Current Auth Provider
 
-**CI Pipeline:**
-- Not detected (no GitHub Actions, GitLab CI, or CI config files)
+- `AUTH_SECRET` exists in `.env.example`.
+- No auth library or authenticated route group was found.
+- No middleware file was found.
 
-## Environment Configuration
+## Stray Gemini Live Prototype
 
-**Required env vars (from `.env.example`):**
-
-**Public (client-safe):**
-- `NEXT_PUBLIC_APP_URL` - Application base URL (default: `http://localhost:3000`)
-- `NEXT_PUBLIC_APP_NAME` - Application display name
-
-**Server-only:**
-- `DATABASE_URL` - Database connection string (required)
-- `AUTH_SECRET` - Authentication secret (required, 32+ bytes recommended)
-
-**Optional AI Provider Keys (server-only):**
-- `ANTHROPIC_API_KEY` - Anthropic API key (if using Claude)
-- `OPENAI_API_KEY` - OpenAI API key (if using GPT models)
-- `GOOGLE_GENERATIVE_AI_API_KEY` - Google Generative AI key (if using Gemini)
-
-**Optional Feature Flags:**
-- `NEXT_PUBLIC_ENABLE_ANALYTICS` - Enable telemetry/analytics (default: false/unset)
-
-**Telemetry:**
-- `NEXT_TELEMETRY_DISABLED=1` (already set to disable Next.js telemetry)
-
-**Secrets location:**
-- `.env.local` for local development (git-ignored)
-- Production: Vercel Environment Variables dashboard
-
-## Webhooks & Callbacks
-
-**Incoming:**
-- None detected
-
-**Outgoing:**
-- None detected
-
-## API Response Types
-
-**Defined in `src/types/api.d.ts`:**
-
-```typescript
-interface ApiResponse<T = unknown> {
-  data?: T
-  error?: string
-  details?: Record<string, unknown>
-  code?: string
-}
-
-interface PaginationMeta {
-  page: number
-  limit: number
-  total: number
-  totalPages: number
-}
-
-interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  meta: PaginationMeta
-}
-```
-
-Standard patterns for API responses and pagination support are scaffolded but no API routes currently exist.
-
-## Component Library Integration
-
-**shadcn/ui Integration:**
-- Configuration: `components.json`
-- UI components pre-built and available in `src/components/ui/`
-- Forms via react-hook-form + Zod validation
-- Icons via lucide-react
-
-## Future Integration Points
-
-Based on environment configuration, the following integrations are planned but not yet implemented:
-1. **Database** - Set `DATABASE_URL` and add ORM (Prisma, Drizzle, etc.)
-2. **Authentication** - Implement `AUTH_SECRET` based auth or integrate third-party provider
-3. **AI/LLM** - Install and configure one or more AI provider SDKs
-4. **Analytics** - Enable `NEXT_PUBLIC_ENABLE_ANALYTICS` and integrate tracking SDK
-5. **API Routes** - Create `src/app/api/**/route.ts` files using defined response types
-
----
-
-*Integration audit: 2026-04-01*
+- `public/tts-feature/server.ts` uses `@google/genai`, Express, and `ws`.
+- It expects `GEMINI_API_KEY`.
+- It opens a WebSocket endpoint at `/ws/live`.
+- It uses model `gemini-3.1-flash-live-preview`.
+- Because the product is meant to be the Next site, this folder should not drive architecture until explicitly adopted.

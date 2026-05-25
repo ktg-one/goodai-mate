@@ -1,149 +1,87 @@
 # Architecture
 
-**Analysis Date:** 2026-04-01
+Mapped: 2026-05-25
 
-## Pattern Overview
+## Product Assumption
 
-**Overall:** Server-first Next.js 16 App Router with layered separation of concerns (UI components, utilities, types, API routes)
+This map describes the intended Next.js site.
+The embedded `public/tts-feature/` app is treated as accidental or exploratory material, not as the site architecture.
 
-**Key Characteristics:**
-- Server Components as default rendering strategy with selective client interactivity
-- Route groups for semantic separation of pages: `(marketing)`, `(app)`, `(auth)`
-- Shadcn/ui component library for reusable, styled, accessible UI primitives
-- React Hook Form with Zod validation for form handling
-- Utility-first styling with Tailwind CSS v4
-- TypeScript strict mode with path aliases for imports
+## Application Shape
 
-## Layers
+- The app uses Next.js App Router under `src/app/`.
+- The public home page is `src/app/page.tsx`.
+- The root shell is `src/app/layout.tsx`.
+- The only API route currently present is `src/app/api/chat/route.ts`.
+- There are no route groups such as `(marketing)` or `(app)` in the current tree.
 
-**Presentation (UI Components):**
-- Purpose: Reusable React components for user interfaces
-- Location: `src/components/ui/`
-- Contains: Unstyled primitives (Button, Input, Card, Form, Dialog, Badge, Label, Skeleton)
-- Depends on: React, Tailwind CSS, CVA for variant management, Radix UI for underlying accessibility
-- Used by: Page components, custom application components
+## Rendering Strategy
 
-**Page/Route Layer:**
-- Purpose: Next.js App Router pages and layouts defining URL structure
-- Location: `src/app/layout.tsx`, `src/app/page.tsx`
-- Contains: Root layout (HTML structure, fonts), page components, route groups for organization
-- Depends on: React Server Components, Next.js primitives
-- Used by: Browser directly via routing
+- `src/app/layout.tsx` exports `dynamic = 'force-dynamic'`.
+- `src/app/page.tsx` exports `dynamic = 'force-dynamic'`.
+- This means the current site is dynamic even though it looks like a public marketing/intake page.
+- If the final site remains mostly static, this dynamic setting may need to be revisited.
 
-**Utilities/Libraries:**
-- Purpose: Shared helper functions and cross-cutting utilities
-- Location: `src/lib/`
-- Contains: `cn()` function for Tailwind class merging (uses clsx + tailwind-merge)
-- Depends on: External libraries (clsx, tailwind-merge)
-- Used by: All layers needing class composition
+## UI Composition
 
-**Types/Contracts:**
-- Purpose: TypeScript interface and type definitions
-- Location: `src/types/` (both `.d.ts` for globals and `.ts` for module types)
-- Contains: API response shapes (`ApiResponse`, `PaginatedResponse`), environment variable types
-- Depends on: TypeScript
-- Used by: API routes, components, utilities
+- `src/app/page.tsx` renders `HomeClient`.
+- `src/components/HomeClient.tsx` renders `HeroSection`.
+- `src/components/HeroSection.tsx` renders the page structure, hero copy, feature chips, chat mount, marquee, and footer.
+- `src/components/HeroSection.tsx` imports `ChatInterface` from `src/components/ChatInterface.tsx`.
+- `src/components/LeadCaptureCard.tsx` is the lead form that should appear after chat interaction.
+- `src/components/ui/` contains shadcn-style primitives used by feature components.
 
-**API Routes:**
-- Purpose: Server-side endpoints for data operations
-- Location: `src/app/api/` (route.ts files only)
-- Contains: Request handlers, business logic
-- Depends on: Next.js Request/Response API, database, external services
-- Used by: Client-side fetch requests, external callers
+## Server And Client Boundaries
 
-## Data Flow
+- Server Components are the default in the app.
+- `src/components/LeadCaptureCard.tsx` is a Client Component because it uses `useState` and form submission state.
+- `src/components/HomeClient.tsx` is named like a Client Component but does not currently include `'use client'`.
+- `src/components/HeroSection.tsx` does not include `'use client'`.
+- `src/components/ChatInterface.tsx` is currently zero bytes, so its intended server/client boundary is unknown.
+- If chat uses `@ai-sdk/react`, `ChatInterface` will need to be a Client Component.
 
-**Server Component Rendering:**
+## Chat Flow
 
-1. Browser requests URL → Next.js router matches to page/layout
-2. Page/layout (Server Component by default) executes on server
-3. Database or API call (if needed) happens server-side
-4. HTML renders and ships to browser
-5. Hydration attaches interactivity for any `use client` components
+- Browser UI should send `UIMessage[]` to `POST /api/chat`.
+- `src/app/api/chat/route.ts` validates that messages exist.
+- The route calls Vercel AI Gateway with the Good'ai persona from `src/lib/chatPersona.ts`.
+- The response streams back in UI message stream format.
+- The persona says a contact form appears automatically after the first reply, implying `ChatInterface` should coordinate the first message, transcript, and `LeadCaptureCard`.
 
-**Client Interactivity:**
+## Lead Flow
 
-1. Form submission in `<Form>` → React Hook Form validates with Zod schema
-2. useFormField hook provides field state and error messages
-3. FormControl wraps input primitives (Button, Input, etc.)
-4. FormMessage displays validation errors from form state
-5. Optional: Client component calls API route via fetch
+- `src/components/LeadCaptureCard.tsx` receives `firstMessage` and `conversationTranscript`.
+- On submit, it posts lead details to Web3Forms.
+- The component does not currently validate with `zod` or `react-hook-form`.
+- It does not inspect the Web3Forms response before showing success.
 
-**API Request Cycle:**
+## Brand And Design System
 
-1. Client component or Server Component calls `fetch()` to `src/app/api/*` route
-2. Route handler executes business logic
-3. Returns `ApiResponse<T>` shape with data/error/code/details
-4. Client consumes response and updates state/UI
+- The active app consumes tokens from `src/app/globals.css`.
+- The design reference material is under `public/`.
+- `public/README.md` describes the brand as ink, orange, paper, and WA ocean.
+- `public/ui_kits/web/` provides a static HTML/JSX reference for the marketing/chat/lead flow.
+- `public/colors_and_type.css` provides token and type references parallel to the app's `globals.css`.
 
-**State Management:**
+## Asset Flow
 
-- Form state: React Hook Form (FormProvider context)
-- Field state: useFormField context + useFormState hook
-- Page-level state: Server Component props passed from layout/parent pages
-- Cross-component state: Context API (Form/FormField context)
+- `src/app/layout.tsx` loads fonts globally.
+- `src/components/HeroSection.tsx` loads a brand mark with `next/image`.
+- Public assets are served directly from `public/`.
+- Several public asset references are currently stale or broken, so the asset layer needs cleanup before visual verification.
 
-## Key Abstractions
+## Automation/Agent Support
 
-**ButtonVariants (CVA):**
-- Purpose: Type-safe component variants using class-variance-authority
-- Examples: `src/components/ui/button.tsx`
-- Pattern: Define variants object (color, size) with Tailwind classes, apply dynamically at runtime
-
-**Form System:**
-- Purpose: End-to-end form handling with validation and error display
-- Examples: `src/components/ui/form.tsx`, `src/components/ui/input.tsx`, `src/components/ui/label.tsx`
-- Pattern: React Hook Form as base, context wrapping for field access (FormFieldContext, FormItemContext)
-
-**cn() Utility:**
-- Purpose: Merge Tailwind classes with conflict resolution
-- Examples: `src/lib/utils.ts`
-- Pattern: Compose clsx() for conditional classes, then run through twMerge() to prevent duplicates
-
-**Route Groups:**
-- Purpose: Organize pages semantically without affecting URL structure
-- Examples: `src/app/(marketing)/`, `src/app/(app)/`, `src/app/(auth)/`
-- Pattern: Use parentheses in folder names; can share layout context within group
+- Project-local agent and skill material exists under `.agents/`.
+- Planning documents live under `.planning/`.
+- These support development workflow but are not part of the runtime app.
 
 ## Entry Points
 
-**Root Layout:**
-- Location: `src/app/layout.tsx`
-- Triggers: Every page request (sets HTML wrapper, fonts, metadata)
-- Responsibilities: HTML document structure, font registration (Geist Sans/Mono), global styles import, body wrapper
-
-**Home Page:**
-- Location: `src/app/page.tsx`
-- Triggers: GET request to `/`
-- Responsibilities: Displays landing page with Next.js template content
-
-**API Routes:**
-- Location: `src/app/api/` (empty; ready for implementation)
-- Triggers: Fetch requests to `/api/*` paths
-- Responsibilities: Server-side data operations, validation, database calls
-
-## Error Handling
-
-**Strategy:** Explicit error response wrapper at API level; client-side form validation with Zod
-
-**Patterns:**
-- API: Return `ApiResponse` with `error`, `code`, `details` fields; let client parse
-- Forms: Zod schema validation before submission; react-hook-form displays field-level errors via FormMessage
-- Server: Server Components can throw errors; Next.js captures and shows error boundary
-- Types: TypeScript strict mode catches type mismatches at build time
-
-## Cross-Cutting Concerns
-
-**Logging:** Not detected (ready for integration)
-
-**Validation:** Zod schemas (ready to integrate with forms or API routes)
-
-**Authentication:** Environment variables defined (`AUTH_SECRET`); auth provider not yet implemented
-
-**Dark Mode:** CSS variables (`--background`, `--foreground`) with media query (@prefers-color-scheme: dark); Tailwind dark: modifier available
-
-**Styling:** Global `globals.css` imports Tailwind with @import "tailwindcss"; inline theme variables override defaults
-
----
-
-*Architecture analysis: 2026-04-01*
+- Main page: `src/app/page.tsx`.
+- Root layout and metadata: `src/app/layout.tsx`.
+- Global styles: `src/app/globals.css`.
+- Chat API: `src/app/api/chat/route.ts`.
+- Chat persona: `src/lib/chatPersona.ts`.
+- Hero surface: `src/components/HeroSection.tsx`.
+- Lead form: `src/components/LeadCaptureCard.tsx`.
