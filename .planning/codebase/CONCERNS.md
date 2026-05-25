@@ -5,16 +5,16 @@ Mapped: 2026-05-25
 ## Product Direction
 
 The intended product is the Next.js site.
-`public/tts-feature/` is a separate Vite/Express/Gemini Live prototype and should not be treated as the app unless explicitly adopted.
+`public/voice-feature/` is a separate Vite/Express/Gemini Live prototype and should not be treated as the app unless explicitly adopted.
 Keeping that folder under `public/` risks confusing future agents and may expose prototype source as static public files.
 
 ## Build Blockers
 
 - `src/components/ChatInterface.tsx` is zero bytes.
 - `src/components/HeroSection.tsx` imports `ChatInterface`, so the home page likely fails to compile.
-- `src/components/HeroSection.tsx` uses `brandMarkSrc = '/assets/logo-mark.svg'`, but `public/assets/logo-mark.svg` was not found.
+- `src/components/HeroSection.tsx` uses `brandMarkSrc = '/assets/logo-mark.svg'`, but the only kept asset is `public/assets/goodai/uploads/G.jpg`.
 - `src/app/layout.tsx` loads local Fraunces files from `public/fonts/`, but both files are zero bytes.
-- `public/assets/goodai-logo.png`, `public/assets/logo-v1.png`, `public/assets/logo-v2.png`, and `public/assets/logo.png` are zero-byte files.
+- `public/assets/` now only contains `public/assets/goodai/uploads/G.jpg`, so current code references to old logo SVG/PNG assets are stale.
 
 ## Symlink Fragility
 
@@ -64,7 +64,8 @@ Keeping that folder under `public/` risks confusing future agents and may expose
 
 ## Public Folder Hygiene
 
-- `public/tts-feature/` contains source code, package files, and server code inside the public asset tree.
+- `public/voice-feature/` contains source code, package files, and server code inside the public asset tree.
+- `public/voice-feature.zip` is also present under `public/`.
 - `public/ui_kits/web/` is useful reference material but is not production code.
 - `public/preview/` and design artifacts are useful locally, but decide whether they should ship publicly.
 
@@ -76,7 +77,7 @@ Keeping that folder under `public/` risks confusing future agents and may expose
 
 ## Immediate Recovery Order
 
-1. Decide whether to delete, move, or ignore `public/tts-feature/`.
+1. Decide whether to delete, move, or ignore `public/voice-feature/`.
 2. Restore or replace missing/zero-byte brand and font assets.
 3. Implement `src/components/ChatInterface.tsx`.
 4. Document `NEXT_PUBLIC_WEB3FORMS_KEY` in `.env.example`.

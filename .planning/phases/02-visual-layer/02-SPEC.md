@@ -17,10 +17,10 @@ The visual direction has pivoted away from the original dark shader/cursor plan.
 Several blockers prevent safe visual execution today:
 
 - `src/components/ChatInterface.tsx` is a zero-byte file, while `HeroSection` imports it.
-- `HeroSection` references `/assets/logo-mark.svg`, but `public/assets/logo-mark.svg` is missing.
+- `HeroSection` references `/assets/logo-mark.svg`, but the only kept asset is `public/assets/goodai/uploads/G.jpg`.
 - `src/app/layout.tsx` loads local Fraunces font files that are currently zero bytes.
 - `.env.example` does not document `NEXT_PUBLIC_WEB3FORMS_KEY`, even though `LeadCaptureCard` reads it.
-- `public/tts-feature/` is a separate Vite/Express/Gemini Live prototype inside the public tree and can be mistaken for the production app.
+- `public/voice-feature/` is a separate Vite/Express/Gemini Live prototype inside the public tree and can be mistaken for the production app.
 - Older Phase 2 requirements and roadmap text still refer to shader and custom cursor behavior that is no longer the v1 direction.
 
 ## Requirements
@@ -31,9 +31,9 @@ Several blockers prevent safe visual execution today:
    - Acceptance: Searching `.planning/ROADMAP.md` and `.planning/REQUIREMENTS.md` for `superseded` and `paper-brand` finds the updated Phase 2 scope.
 
 2. **Valid brand mark**: The hero must not reference a missing or zero-byte brand asset.
-   - Current: `src/components/HeroSection.tsx` references `/assets/logo-mark.svg`, but `public/assets/logo-mark.svg` is absent.
-   - Target: The hero image source points to an existing non-empty SVG asset under `public/assets/`.
-   - Acceptance: `Test-Path public/assets/logo-mark.svg` passes or `brandMarkSrc` points to another existing non-empty SVG; `npm run build` does not fail due to a missing hero image.
+   - Current: `src/components/HeroSection.tsx` references `/assets/logo-mark.svg`, but the only kept asset is `public/assets/goodai/uploads/G.jpg`.
+   - Target: The hero image source points to an existing non-empty brand asset, or a new logo asset is intentionally added from the current design source.
+   - Acceptance: `Test-Path public/assets/goodai/uploads/G.jpg` passes and `brandMarkSrc` points to an existing non-empty asset; `npm run build` does not fail due to a missing hero image.
 
 3. **Robust display font loading**: The app must not fail because local Fraunces font files are empty or unavailable.
    - Current: `src/app/layout.tsx` loads two local Fraunces files from `public/fonts/`, and both files are zero bytes.
@@ -60,23 +60,23 @@ Several blockers prevent safe visual execution today:
    - Target: At desktop width and at 390px mobile width, the first viewport shows the Good'ai identity, Perth/WA signal, headline, and usable chat/intake area without horizontal scroll or text collision.
    - Acceptance: Manual browser inspection at desktop width and 390px width confirms no horizontal scroll, no overlapping core text/controls, and visible chat input; `npm run build` passes.
 
-8. **Prototype clearly non-production**: The Vite/Gemini TTS prototype under `public/tts-feature/` must not be confused with the production Next.js app.
-   - Current: `public/tts-feature/` contains a separate app/server prototype inside the public asset tree.
-   - Target: Root docs and/or `public/tts-feature/README.md` clearly label it as a non-production prototype; production work is documented as happening under `src/`.
-   - Acceptance: Searching `README.md` and `public/tts-feature/README.md` for `prototype`, `not production`, or `src/` finds clear guidance.
+8. **Prototype clearly non-production**: The Vite/Gemini voice prototype under `public/voice-feature/` must not be confused with the production Next.js app.
+   - Current: `public/voice-feature/` contains a separate app/server prototype inside the public asset tree.
+   - Target: Root docs and/or `public/voice-feature/README.md` clearly label it as a non-production prototype; production work is documented as happening under `src/`.
+   - Acceptance: Searching `README.md` and `public/voice-feature/README.md` for `prototype`, `not production`, or `src/` finds clear guidance.
 
 ## Boundaries
 
 **In scope:**
 
 - Locking the Phase 2 pivot away from shader/cursor work in planning docs.
-- Restoring, replacing, or repointing missing hero brand assets.
+- Repointing the hero brand asset to the kept G photo, or intentionally adding a new logo asset from the current design source.
 - Making display font loading safe when local font files are missing or broken.
 - Documenting `NEXT_PUBLIC_WEB3FORMS_KEY` as an empty example env var.
 - Implementing a buildable `ChatInterface` client component.
 - Wiring the existing `LeadCaptureCard` to the first-response chat flow.
 - Responsive first-viewport layout safety for desktop and mobile.
-- Clear documentation that `public/tts-feature/` is a prototype, not the production Next app.
+- Clear documentation that `public/voice-feature/` is a prototype, not the production Next app.
 
 **Out of scope:**
 
@@ -84,12 +84,12 @@ Several blockers prevent safe visual execution today:
 - Implementing a custom hidden cursor or ambient cursor glow — superseded and explicitly avoided by the brand guide.
 - Full Web3Forms reliability hardening or server-side lead persistence — belongs to the lead-capture phase unless needed for basic wiring.
 - Production deployment, Lighthouse tuning, and domain configuration — belongs to polish/deploy hardening.
-- Moving or deleting the entire TTS prototype if that creates broad churn — document first, move only if clearly safe.
+- Moving or deleting the entire voice prototype if that creates broad churn — document first, move only if clearly safe.
 - Adding a complete Playwright suite — desirable after the page compiles, but not required for this spec.
 
 ## Constraints
 
-- The active app is the root Next.js app under `src/`; do not use `public/tts-feature/` as the implementation architecture.
+- The active app is the root Next.js app under `src/`; do not use `public/voice-feature/` as the implementation architecture.
 - Use the current Good'ai paper-brand system from `public/README.md`: ink, orange, cool paper, WA ocean, practical language.
 - Do not introduce WebGL shaders, `cursor: none`, full-page pointer tracking, or ambient cursor glow.
 - Preserve unrelated dirty worktree changes; inspect typechanged/symlinked assets before editing.
@@ -99,13 +99,13 @@ Several blockers prevent safe visual execution today:
 ## Acceptance Criteria
 
 - [ ] Phase 2 docs state that shader/cursor work is superseded by the paper-brand direction.
-- [ ] Hero brand image points to an existing non-empty SVG and build does not fail on the image path.
+- [ ] Hero brand image points to an existing non-empty asset and build does not fail on the image path.
 - [ ] Build does not fail because of zero-byte local Fraunces font files.
 - [ ] `.env.example` contains an empty `NEXT_PUBLIC_WEB3FORMS_KEY=` entry.
 - [ ] `src/components/ChatInterface.tsx` is a non-empty Client Component with accessible input, submit, local history, loading state, and friendly error display.
 - [ ] `ChatInterface` can render `LeadCaptureCard` only after the first assistant response and passes `firstMessage` plus `conversationTranscript`.
 - [ ] Desktop and 390px mobile first viewports have no horizontal scroll or overlapping core text/controls.
-- [ ] Root/prototype docs clearly identify `public/tts-feature/` as non-production and the root `src/` tree as the production Next site.
+- [ ] Root/prototype docs clearly identify `public/voice-feature/` as non-production and the root `src/` tree as the production Next site.
 - [ ] `npm run lint` and `npm run build` pass, or any remaining failure is documented with the exact unrelated blocker.
 
 ## Ambiguity Report

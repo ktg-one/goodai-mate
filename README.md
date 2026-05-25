@@ -1,4 +1,8 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is the Good'ai Next.js site. Production app work happens under `src/`.
+
+`public/voice-feature/` is a separate Vite/Gemini Live voice prototype kept as reference material, not the production Next app.
+
+This project was bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 

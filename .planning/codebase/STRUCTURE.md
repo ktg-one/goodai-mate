@@ -5,7 +5,7 @@ Mapped: 2026-05-25
 ## Top-Level Layout
 
 - `src/` contains the intended Next.js application.
-- `public/` contains brand assets, design-system references, previews, and a stray TTS prototype.
+- `public/` contains brand assets, design-system references, previews, and a stray voice prototype.
 - `.planning/` contains project planning and codebase maps.
 - `.agents/`, `.claude/`, `.codex/`, and `.mcp/` contain local agent/tooling configuration.
 - `docs/agents/` contains project notes for agent workflows.
@@ -52,13 +52,14 @@ Mapped: 2026-05-25
 - `public/colors_and_type.css` contains brand tokens and type utilities.
 - `public/ui_kits/web/` contains a static web UI kit.
 - `public/preview/` contains standalone design preview pages.
-- `public/assets/` contains brand SVG/PNG assets.
+- `public/assets/` currently contains only `goodai/uploads/G.jpg`.
 - `public/fonts/` is intended to contain local Fraunces font files.
 
 ## Stray Prototype
 
-- `public/tts-feature/` is a separate Vite/React/Express/Gemini Live project.
-- Its files include `public/tts-feature/package.json`, `public/tts-feature/server.ts`, `public/tts-feature/vite.config.ts`, and `public/tts-feature/src/App.tsx`.
+- `public/voice-feature/` is a separate Vite/React/Express/Gemini Live project.
+- Its files include `public/voice-feature/package.json`, `public/voice-feature/server.ts`, `public/voice-feature/vite.config.ts`, and `public/voice-feature/src/App.tsx`.
+- `public/voice-feature.zip` is the archived copy of that prototype.
 - Because it lives under `public/`, it is structurally mixed into the static asset tree even though it is not the intended Next site.
 - Treat it as cleanup/future-reference unless the product direction changes again.
 
@@ -83,7 +84,7 @@ Mapped: 2026-05-25
 
 ## Current Structural Mismatch
 
-- `src/components/HeroSection.tsx` imports `/assets/logo-mark.svg`, but that asset is not present.
+- `src/components/HeroSection.tsx` imports `/assets/logo-mark.svg`, but the only kept asset is `public/assets/goodai/uploads/G.jpg`.
 - `src/components/HeroSection.tsx` imports `src/components/ChatInterface.tsx`, but that file is empty.
 - `src/app/layout.tsx` imports local fonts that currently exist as zero-byte files.
 - Several public files are symlinks to paths outside this repo, which makes portability fragile.

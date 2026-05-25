@@ -42,15 +42,15 @@ The project instructions mention Vitest and Playwright, but the root `package.js
 
 - `src/components/ChatInterface.tsx` is zero bytes.
 - `src/components/HeroSection.tsx` imports `ChatInterface`, so the app likely cannot compile as-is.
-- `src/components/HeroSection.tsx` references `/assets/logo-mark.svg`, which was not found.
+- `src/components/HeroSection.tsx` references `/assets/logo-mark.svg`, but the only kept asset is `public/assets/goodai/uploads/G.jpg`.
 - `src/app/layout.tsx` references local Fraunces font files that are currently zero bytes.
 - Root `package-lock.json` is a symlink to another project path, which may make dependency verification inconsistent across machines.
 
 ## Root Versus Prototype Testing
 
-- `public/tts-feature/package.json` has its own `lint` script that runs `tsc --noEmit`.
+- `public/voice-feature/package.json` has its own `lint` script that runs `tsc --noEmit`.
 - That prototype is not part of the intended Next site testing surface.
-- Do not use `public/tts-feature/` checks as evidence that the Next site works.
+- Do not use `public/voice-feature/` checks as evidence that the Next site works.
 
 ## Suggested Minimal Test Setup
 

@@ -5,7 +5,7 @@ Mapped: 2026-05-25
 ## Product Assumption
 
 Use the Next.js site conventions as the source of truth.
-Do not infer product conventions from `public/tts-feature/` unless that prototype is explicitly adopted.
+Do not infer product conventions from `public/voice-feature/` unless that prototype is explicitly adopted.
 
 ## TypeScript
 

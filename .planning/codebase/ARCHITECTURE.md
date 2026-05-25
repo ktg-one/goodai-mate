@@ -5,7 +5,7 @@ Mapped: 2026-05-25
 ## Product Assumption
 
 This map describes the intended Next.js site.
-The embedded `public/tts-feature/` app is treated as accidental or exploratory material, not as the site architecture.
+The embedded `public/voice-feature/` app is treated as accidental or exploratory material, not as the site architecture.
 
 ## Application Shape
 

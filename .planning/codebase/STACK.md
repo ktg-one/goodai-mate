@@ -4,7 +4,7 @@ Mapped: 2026-05-25
 
 ## Product Assumption
 
-The intended product is a Next.js site for Good'ai, not the embedded Vite/Gemini TTS prototype in `public/tts-feature/`.
+The intended product is a Next.js site for Good'ai, not the embedded Vite/Gemini voice prototype in `public/voice-feature/`.
 That prototype is treated as a stray artifact or future reference only.
 
 ## Runtime
@@ -56,7 +56,7 @@ That prototype is treated as a stray artifact or future reference only.
 - `public/README.md` describes the brand system and references `public/good-ai-design-final.html` as the design source of truth.
 - `public/ui_kits/web/` is a static UI kit/reference implementation.
 - `public/preview/` contains design-system preview pages.
-- `public/assets/` contains SVG and PNG brand assets, though several referenced or tracked assets are currently broken or zero bytes.
+- `public/assets/` currently contains only the kept G photo at `public/assets/goodai/uploads/G.jpg`.
 
 ## Environment Variables
 
@@ -66,6 +66,7 @@ That prototype is treated as a stray artifact or future reference only.
 
 ## Out-Of-Scope Prototype
 
-- `public/tts-feature/` is a separate Vite + Express + WebSocket + Gemini Live prototype.
+- `public/voice-feature/` is a separate Vite + Express + WebSocket + Gemini Live prototype.
 - It has its own `package.json`, `server.ts`, `vite.config.ts`, `src/App.tsx`, and lockfile.
-- Based on the current clarification, do not treat `public/tts-feature/` as the architecture for the Next site.
+- `public/voice-feature.zip` is the archived copy of that prototype.
+- Based on the current clarification, do not treat `public/voice-feature/` as the architecture for the Next site.

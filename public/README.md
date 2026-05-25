@@ -14,10 +14,11 @@ The brand book is a 1995-direct-mail / "back-of-the-Yellow-Pages" composition sy
 | --- | --- |
 | `good-ai-design-final.html` | **Source of truth.** The brand book (v1.0) — every token, scale, shape rule and component spec lives here. If anything else disagrees with this file, this file wins. |
 | `colors_and_type.css` | Drop-in tokens — colour, font, spacing, radii, shadow, plus semantic type classes (`.h1`, `.h2`, `.lede`, `.body`, `.eyebrow`, `.mono`, `.wordmark`). |
-| `assets/` | Brand mark + wordmark (`goodai-logo.png`, `goodai-logo.svg`, `logo-mark.svg`, etc.). |
+| `assets/` | Current kept image asset: `assets/goodai/uploads/G.jpg`. Old logo/wordmark exports were removed during the asset cleanup. |
 | `fonts/` | Self-hosted Fraunces variable font (SOFT/WONK/opsz/wght axes). DM Sans + JetBrains Mono come from Google Fonts. |
 | `preview/` | Self-contained card files for the Design System tab (palette, type, shapes, components). |
 | `ui_kits/web/` | Marketing-site UI kit — hero, chat intake, lead-capture, services strip, footer. |
+| `voice-feature/` | Separate Vite/Gemini Live voice prototype. Reference only, not the production Next app. |
 | `SKILL.md` | Skill manifest. Lets this folder be used as a Claude Code skill. |
 | `README.md` | You are here. |
 
@@ -110,12 +111,13 @@ Warm, sunlit, real. Perth tradies, Perth shopfronts, hands on tools, old laptops
 
 - **`good-ai-design-final.html`** — the brand book (source of truth).
 - **`colors_and_type.css`** — drop-in tokens + semantic type classes.
-- **`assets/`** — logo files. Canonical mark: `goodai-logo.png`.
+- **`assets/`** — current kept image asset: `goodai/uploads/G.jpg`.
 - **`fonts/`** — self-hosted Fraunces variable.
 - **`preview/`** — design-system cards (palette, type specimens, components).
 - **`ui_kits/web/`** — full marketing-site recreation.
   - `index.html` — integrated demo.
   - `Hero.jsx`, `ChatThread.jsx`, `LeadCard.jsx`, `ServicesMarquee.jsx`, `Footer.jsx`, `primitives.jsx`.
+- **`voice-feature/`** — separate Vite/Gemini Live voice prototype; reference only.
 - **`SKILL.md`** — skill manifest for Claude Code.
 
 ---

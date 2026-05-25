@@ -19,7 +19,7 @@ This phase should make the site buildable and visually coherent. It should not r
 ### Locked Decisions
 
 - Treat the intended product as the root Next.js app under `src/`.
-- Treat `public/tts-feature/` as stray prototype/reference material, not production architecture.
+- Treat `public/voice-feature/` as stray prototype/reference material, not production architecture.
 - Preserve the current paper-brand direction documented in `public/README.md`.
 - Do not implement the old SDF shader background, custom cursor, or ambient glow in this phase.
 - Keep the first screen as the actual usable intake/chat experience, not a marketing-only landing page.
@@ -82,7 +82,7 @@ This phase should make the site buildable and visually coherent. It should not r
 <deferred>
 ## Deferred Ideas
 
-- Full external cleanup of `public/tts-feature/` can be deferred if moving/removing it risks unrelated churn.
+- Full external cleanup of `public/voice-feature/` can be deferred if moving/removing it risks unrelated churn.
 - Deeper lead capture reliability and Web3Forms response handling can be Phase 4 unless touched directly by chat shell wiring.
 - Production deployment, Lighthouse, and domain checks remain Phase 5.
 </deferred>

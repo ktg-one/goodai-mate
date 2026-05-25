@@ -5,7 +5,7 @@ Mapped: 2026-05-25
 ## Product Assumption
 
 The intended integration surface is the Next.js site.
-The Gemini Live integration under `public/tts-feature/` is documented only as a stray prototype/reference, not as the current site direction.
+The Gemini Live integration under `public/voice-feature/` is documented only as a stray prototype/reference, not as the current site direction.
 
 ## Vercel Hosting
 
@@ -50,7 +50,7 @@ The Gemini Live integration under `public/tts-feature/` is documented only as a 
 - `src/components/HeroSection.tsx` uses `next/image`.
 - It references `/assets/logo-mark.svg`.
 - Current concern: `public/assets/logo-mark.svg` is not present in the current file list.
-- Current concern: several PNG assets under `public/assets/` are zero-byte files.
+- Current concern: `public/assets/` now only contains `public/assets/goodai/uploads/G.jpg`, so the active hero asset path must be repointed or restored.
 
 ## No Current Database
 
@@ -64,9 +64,9 @@ The Gemini Live integration under `public/tts-feature/` is documented only as a 
 - No auth library or authenticated route group was found.
 - No middleware file was found.
 
-## Stray Gemini Live Prototype
+## Voice Feature Prototype
 
-- `public/tts-feature/server.ts` uses `@google/genai`, Express, and `ws`.
+- `public/voice-feature/server.ts` uses `@google/genai`, Express, and `ws`.
 - It expects `GEMINI_API_KEY`.
 - It opens a WebSocket endpoint at `/ws/live`.
 - It uses model `gemini-3.1-flash-live-preview`.
