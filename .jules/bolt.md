@@ -1,0 +1,3 @@
+## 2025-01-08 - Prevent Vercel AI SDK Re-renders with Memoized Input Component
+**Learning:** In Next.js/React applications using the Vercel AI SDK, keeping the text input state within the same component that renders the potentially large message list (e.g., `ChatInterface`) causes the entire list to re-render on every single keystroke. This is a common performance bottleneck in chat UI architectures.
+**Action:** Always extract the text input and its local state into a separate, `React.memo()`-wrapped child component. Pass `isBusy` state and an `onSubmit` callback (wrapped in `useCallback`) to this memoized input component to isolate keystroke re-renders.
