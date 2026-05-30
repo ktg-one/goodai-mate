@@ -3,7 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
 import { Send, Volume2, VolumeX } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
 
@@ -12,8 +12,57 @@ interface ChatInterfaceProps {
   onFirstResponse?: () => void;
 }
 
-export default function ChatInterface({ initialMessage = '', onFirstResponse }: ChatInterfaceProps) {
+// ⚡ Bolt Performance Optimization:
+// Extracted the input form into a separate memoized component.
+// Why: In chat interfaces using Vercel AI SDK (or similar state models),
+// keeping the text input state in the parent causes the entire message list
+// to re-render on every single keystroke.
+// Impact: Prevents O(N) re-renders where N is the number of messages. Keystroke latency is minimized.
+const ChatInputForm = React.memo(function ChatInputForm({
+  isBusy,
+  onSendMessage,
+  onFirstMessageSet
+}: {
+  isBusy: boolean;
+  onSendMessage: (text: string) => void;
+  onFirstMessageSet: (text: string) => void;
+}) {
   const [input, setInput] = useState('');
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const text = input.trim();
+    if (!text || isBusy) return;
+
+    onFirstMessageSet(text);
+    onSendMessage(text);
+    setInput('');
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="border-t border-[var(--cream-line)] bg-white p-3">
+      <div className="flex items-center gap-2 rounded-[18px] border-2 border-[var(--ink)] bg-[var(--paper)] p-2 shadow-[3px_3px_0_var(--ink)]">
+        <Input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder={isBusy ? 'Thinking...' : 'My admin mess is...'}
+          disabled={isBusy}
+          className="h-12 flex-1 border-0 bg-transparent px-4 text-[16px] text-[var(--ink)] shadow-none outline-none placeholder:text-[var(--ink-faint)] focus-visible:border-0 focus-visible:ring-0"
+        />
+        <button
+          type="submit"
+          disabled={isBusy || !input.trim()}
+          className="flex size-11 shrink-0 items-center justify-center rounded-[12px] border-2 border-[var(--ink)] bg-[var(--orange)] text-[var(--paper)] shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-x-px hover:-translate-y-px hover:bg-[var(--orange-deep)] disabled:cursor-not-allowed disabled:opacity-45"
+          aria-label="Send"
+        >
+          <Send size={17} />
+        </button>
+      </div>
+    </form>
+  );
+});
+
+export default function ChatInterface({ initialMessage = '', onFirstResponse }: ChatInterfaceProps) {
   const [showLeadCard, setShowLeadCard] = useState(false);
   const [leadCaptured, setLeadCaptured] = useState(false);
   const [firstMessage, setFirstMessage] = useState(initialMessage);
@@ -127,19 +176,16 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, status, showLeadCard]);
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const text = input.trim();
-    if (!text || isBusy) return;
+  const handleSendMessage = useCallback((text: string) => {
+    sendMessage({ text });
+  }, [sendMessage]);
 
+  const handleFirstMessageSet = useCallback((text: string) => {
     if (!firstMessageRef.current) {
       firstMessageRef.current = text;
       setFirstMessage(text);
     }
-
-    sendMessage({ text });
-    setInput('');
-  }
+  }, []);
 
   return (
     <section className="min-h-[620px] overflow-hidden rounded-[24px] border-2 border-[var(--ink)] bg-white text-[var(--ink)] shadow-[4px_4px_0_var(--ink)]">
@@ -243,25 +289,11 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
           <div ref={messagesEndRef} />
         </div>
 
-        <form onSubmit={handleSubmit} className="border-t border-[var(--cream-line)] bg-white p-3">
-          <div className="flex items-center gap-2 rounded-[18px] border-2 border-[var(--ink)] bg-[var(--paper)] p-2 shadow-[3px_3px_0_var(--ink)]">
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={isBusy ? 'Thinking...' : 'My admin mess is...'}
-              disabled={isBusy}
-              className="h-12 flex-1 border-0 bg-transparent px-4 text-[16px] text-[var(--ink)] shadow-none outline-none placeholder:text-[var(--ink-faint)] focus-visible:border-0 focus-visible:ring-0"
-            />
-            <button
-              type="submit"
-              disabled={isBusy || !input.trim()}
-              className="flex size-11 shrink-0 items-center justify-center rounded-[12px] border-2 border-[var(--ink)] bg-[var(--orange)] text-[var(--paper)] shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-x-px hover:-translate-y-px hover:bg-[var(--orange-deep)] disabled:cursor-not-allowed disabled:opacity-45"
-              aria-label="Send"
-            >
-              <Send size={17} />
-            </button>
-          </div>
-        </form>
+        <ChatInputForm
+          isBusy={isBusy}
+          onSendMessage={handleSendMessage}
+          onFirstMessageSet={handleFirstMessageSet}
+        />
       </div>
     </section>
   );
