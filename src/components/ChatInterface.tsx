@@ -16,6 +16,25 @@ function getMessageText(message: UIMessage) {
   return message.parts.filter(isTextPart).map((part) => part.text).join('');
 }
 
+const ChatMessage = memo(function ChatMessage({
+  message,
+}: {
+  message: UIMessage;
+}) {
+  const text = getMessageText(message);
+  if (!text) return null;
+  const isUser = message.role === 'user';
+
+  return (
+    <div className={`gai-bubble-row ${isUser ? 'is-user' : ''}`}>
+      <div className={`gai-bubble ${isUser ? 'gai-bubble-user' : 'gai-bubble-ai'}`}>
+        {text}
+      </div>
+    </div>
+  );
+});
+ChatMessage.displayName = 'ChatMessage';
+
 interface ChatInterfaceProps {
   initialMessage?: string;
   onFirstResponse?: () => void;
@@ -97,19 +116,9 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
             </div>
           </div>
 
-          {messages.map((message) => {
-            const text = getMessageText(message);
-            if (!text) return null;
-            const isUser = message.role === 'user';
-
-            return (
-              <div key={message.id} className={`gai-bubble-row ${isUser ? 'is-user' : ''}`}>
-                <div className={`gai-bubble ${isUser ? 'gai-bubble-user' : 'gai-bubble-ai'}`}>
-                  {text}
-                </div>
-              </div>
-            );
-          })}
+          {messages.map((message) => (
+            <ChatMessage key={message.id} message={message} />
+          ))}
 
           {isBusy && (
             <div className="gai-bubble-row">
