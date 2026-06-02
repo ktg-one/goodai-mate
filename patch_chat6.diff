@@ -1,0 +1,10 @@
+<<<<<<< SEARCH
+});
+
+export default function ChatInterface({ initialMessage = '', onFirstResponse }: ChatInterfaceProps) {
+=======
+});
+MessageItem.displayName = 'MessageItem';
+
+export default function ChatInterface({ initialMessage = '', onFirstResponse }: ChatInterfaceProps) {
+>>>>>>> REPLACE
