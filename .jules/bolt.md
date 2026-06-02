@@ -1,0 +1,3 @@
+## 2024-05-14 - Vercel AI SDK Chat Re-render Bottleneck
+**Learning:** In chat interfaces using the Vercel AI SDK (`useChat`), keeping the text `input` state in the main chat component causes the entire component (including the potentially massive, auto-scrolling message list) to re-render on every single keystroke. This causes severe input lag as the conversation grows.
+**Action:** Always extract text input and its state into a separate, memoized child component (like `ChatInput`). Pass a `useCallback` to handle submission. This isolates the high-frequency state updates from the heavy message list.
