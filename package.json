@@ -2,6 +2,9 @@
   "name": "nextjs",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9.0 <21"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,17 +14,20 @@
   "dependencies": {
     "@ai-sdk/openai-compatible": "^2.0.37",
     "@ai-sdk/react": "^3.0.148",
+    "@gsap/react": "^2.1.2",
     "@tailwindcss/typography": "^0.5.19",
     "ai": "^6.0.142",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "gsap": "^3.15.0",
     "lucide-react": "^0.468.0",
+    "motion": "^12.40.0",
     "next": "^16.2.3",
     "radix-ui": "^1.4.2",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.54.2",
-    "tailwind-merge": "^3.5.0",
+    "tailwind-merge": "^3.6.0",
     "three": "^0.183.2",
     "zod": "^4.3.6"
   },

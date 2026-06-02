@@ -1,11 +1,20 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
-import { Send, Volume2, VolumeX } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Input } from '@/components/ui/input';
+import { DefaultChatTransport, type UIMessage } from 'ai';
+import { Send } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
+
+type TextPart = UIMessage['parts'][number] & { type: 'text'; text: string };
+
+function isTextPart(part: UIMessage['parts'][number]): part is TextPart {
+  return part.type === 'text' && 'text' in part && typeof part.text === 'string';
+}
+
+function getMessageText(message: UIMessage) {
+  return message.parts.filter(isTextPart).map((part) => part.text).join('');
+}
 
 interface ChatInterfaceProps {
   initialMessage?: string;
@@ -14,65 +23,29 @@ interface ChatInterfaceProps {
 
 export default function ChatInterface({ initialMessage = '', onFirstResponse }: ChatInterfaceProps) {
   const [input, setInput] = useState('');
-  const [showLeadCard, setShowLeadCard] = useState(false);
-  const [leadCaptured, setLeadCaptured] = useState(false);
   const [firstMessage, setFirstMessage] = useState(initialMessage);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const leadCardRef = useRef<HTMLDivElement>(null);
-  const hasCalledFirstResponse = useRef(false);
-  const leadCardShown = useRef(false);
-  const initialSent = useRef(false);
-  const aiResponseCount = useRef(0);
+  const [showLeadCard, setShowLeadCard] = useState(false);
+  const [leadDismissed, setLeadDismissed] = useState(false);
   const firstMessageRef = useRef(initialMessage);
-  const spokenMessageIds = useRef(new Set<string>());
-  const [ttsEnabled, setTtsEnabled] = useState(true);
+  const initialSent = useRef(false);
+  const firstResponseHandled = useRef(false);
 
-  const pickVoice = useCallback((): SpeechSynthesisVoice | null => {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return null;
-    const voices = window.speechSynthesis.getVoices();
-    if (!voices.length) return null;
-
-    return (
-      voices.find((voice) => voice.lang.toLowerCase().startsWith('en-au')) ??
-      voices.find((voice) => voice.lang.toLowerCase().startsWith('en')) ??
-      voices[0]
-    );
-  }, []);
-
-  const speakText = useCallback((text: string) => {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-    const cleaned = text.trim();
-    if (!cleaned) return;
-
-    window.speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(cleaned);
-    const voice = pickVoice();
-    if (voice) utterance.voice = voice;
-    utterance.rate = 0.96;
-    utterance.pitch = 1;
-    utterance.volume = 1;
-    window.speechSynthesis.speak(utterance);
-  }, [pickVoice]);
-
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, status, error } = useChat({
     transport: new DefaultChatTransport({ api: '/api/chat' }),
     onFinish() {
-      aiResponseCount.current += 1;
-
-      if (!hasCalledFirstResponse.current) {
-        hasCalledFirstResponse.current = true;
-        onFirstResponse?.();
-      }
-
-      if (aiResponseCount.current === 1 && !leadCardShown.current) {
-        leadCardShown.current = true;
-        setTimeout(() => setShowLeadCard(true), 1800);
-      }
+      if (firstResponseHandled.current) return;
+      firstResponseHandled.current = true;
+      onFirstResponse?.();
+      setShowLeadCard(true);
     },
   });
 
   const isBusy = status === 'submitted' || status === 'streaming';
+  const conversationTranscript = useMemo(
+    () => messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n'),
+    [messages],
+  );
+  const errorMessage = error?.message?.trim() || 'Something went sideways. Try again in a moment.';
 
   useEffect(() => {
     if (!initialMessage || initialSent.current) return;
@@ -81,54 +54,8 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
     sendMessage({ text: initialMessage });
   }, [initialMessage, sendMessage]);
 
-  useEffect(() => {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-
-    // Voice lists can load async in some browsers; this nudges availability.
-    const primeVoices = () => {
-      window.speechSynthesis.getVoices();
-    };
-
-    primeVoices();
-    window.speechSynthesis.addEventListener('voiceschanged', primeVoices);
-    return () => {
-      window.speechSynthesis.removeEventListener('voiceschanged', primeVoices);
-      window.speechSynthesis.cancel();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!ttsEnabled) return;
-
-    const latestAssistant = [...messages]
-      .reverse()
-      .find((msg) => msg.role === 'assistant' && !spokenMessageIds.current.has(msg.id));
-
-    if (!latestAssistant) return;
-
-    const text = latestAssistant.parts
-      ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
-      .map((p) => p.text)
-      .join('')
-      .trim();
-
-    if (!text) return;
-
-    spokenMessageIds.current.add(latestAssistant.id);
-    speakText(text);
-  }, [messages, speakText, ttsEnabled]);
-
-  useEffect(() => {
-    if (showLeadCard) {
-      leadCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      return;
-    }
-
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, status, showLeadCard]);
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     const text = input.trim();
     if (!text || isBusy) return;
 
@@ -142,127 +69,89 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   }
 
   return (
-    <section className="min-h-[620px] overflow-hidden rounded-[24px] border-2 border-[var(--ink)] bg-white text-[var(--ink)] shadow-[4px_4px_0_var(--ink)]">
-      <div className="border-b border-[var(--cream-line)] bg-[rgba(255,255,255,0.92)] px-5 py-4">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--ocean-600)]">Good&apos;ai / Voice</p>
-            <h2 className="mt-1 text-[18px] font-bold leading-tight text-[var(--ink)]">Tell us what&apos;s chewing time.</h2>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setTtsEnabled((v) => !v)}
-              className="inline-flex items-center gap-1.5 rounded-full border-2 border-[var(--ink)] bg-[var(--paper)] px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--ink)] shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-x-px hover:-translate-y-px"
-              aria-label={ttsEnabled ? 'Disable voice playback' : 'Enable voice playback'}
-            >
-              {ttsEnabled ? <Volume2 size={12} /> : <VolumeX size={12} />}
-              {ttsEnabled ? 'TTS On' : 'TTS Off'}
-            </button>
-            <span className="rounded-full border border-[var(--border-strong)] bg-[var(--paper)] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--ink-mute)]">
-              Live
-            </span>
-          </div>
-        </div>
+    <div className="gai-chat">
+      {/* Header bar */}
+      <div className="border-b border-[var(--ink)] bg-[var(--paper)] px-4 py-3">
+        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--ocean-600)]">
+          Good&apos;ai intake
+        </p>
+        <h2 className="mt-1 text-[17px] font-bold leading-tight text-[var(--ink)]">
+          Tell us what keeps landing back on your desk.
+        </h2>
       </div>
 
-      <div className="flex h-[490px] flex-col bg-[rgba(248,248,246,0.58)]">
-        <div className="flex-1 overflow-y-auto px-5 py-5">
-          <div className="mb-4 flex justify-start">
-            <div className="max-w-[88%] rounded-[18px] border-2 border-[var(--ink)] bg-[var(--bg-ocean)] px-4 py-3 text-[16px] leading-snug text-[var(--fg-on-ocean)] shadow-[3px_3px_0_var(--ocean-600)]">
-              Tell us the boring task that keeps landing back on your desk. We&apos;ll ask a couple of straight questions and work out what system would sort it.
+      {/* Scrollable thread */}
+      <div className="gai-chat-scroll">
+        <div className="gai-chat-inner">
+          {/* Initial prompt bubble */}
+          <div className="gai-bubble-row">
+            <div className="gai-bubble gai-bubble-ai">
+              What is the boring task you want off your plate first?
             </div>
           </div>
 
-          {messages.map((msg) => {
-            const text = msg.parts
-              ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
-              .map((p) => p.text)
-              .join('') ?? '';
+          {messages.map((message) => {
+            const text = getMessageText(message);
             if (!text) return null;
-
-            const isUser = msg.role === 'user';
+            const isUser = message.role === 'user';
 
             return (
-              <div key={msg.id} className={`mb-4 flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-                <div className="flex items-end gap-2">
-                  <div
-                    className={[
-                      'max-w-[88%] whitespace-pre-wrap rounded-[18px] border-2 px-4 py-3 text-[16px] leading-snug shadow-[var(--shadow-stamp)]',
-                      isUser
-                        ? 'border-[var(--ink)] bg-[var(--orange)] text-[var(--paper)]'
-                        : 'border-[var(--ocean-400)] bg-[var(--ocean-50)] text-[var(--ink)] shadow-[3px_3px_0_var(--ocean-600)]',
-                    ].join(' ')}
-                  >
-                    {text}
-                  </div>
-                  {!isUser && (
-                    <button
-                      type="button"
-                      onClick={() => speakText(text)}
-                      className="mb-1 inline-flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-[var(--ink)] bg-white text-[var(--ink)] shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-x-px hover:-translate-y-px"
-                      aria-label="Play this message"
-                    >
-                      <Volume2 size={13} />
-                    </button>
-                  )}
+              <div key={message.id} className={`gai-bubble-row ${isUser ? 'is-user' : ''}`}>
+                <div className={`gai-bubble ${isUser ? 'gai-bubble-user' : 'gai-bubble-ai'}`}>
+                  {text}
                 </div>
               </div>
             );
           })}
 
-          {showLeadCard && !leadCaptured && (
-            <div ref={leadCardRef}>
-              <LeadCaptureCard
-                firstMessage={firstMessage}
-                conversationTranscript={messages.map((m) => {
-                  const text = m.parts
-                    ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
-                    .map((p) => p.text)
-                    .join('') ?? '';
-                  return m.role === 'user' ? `Them: ${text}` : `Us: ${text}`;
-                }).join(' / ')}
-                onDismiss={() => {
-                  setShowLeadCard(false);
-                  setLeadCaptured(true);
-                }}
-              />
-            </div>
-          )}
-
-          {status === 'submitted' && (
-            <div className="mb-4 flex justify-start">
-              <div className="inline-flex gap-[5px] rounded-[18px] border-2 border-[var(--ocean-400)] bg-[var(--ocean-50)] px-5 py-4 shadow-[3px_3px_0_var(--ocean-600)]">
-                <span className="size-[6px] rounded-full bg-[var(--ocean-500)] animate-[gai-typing_1.4s_ease-in-out_infinite]" />
-                <span className="size-[6px] rounded-full bg-[var(--ocean-500)] animate-[gai-typing_1.4s_ease-in-out_infinite] [animation-delay:0.2s]" />
-                <span className="size-[6px] rounded-full bg-[var(--ocean-500)] animate-[gai-typing_1.4s_ease-in-out_infinite] [animation-delay:0.4s]" />
+          {isBusy && (
+            <div className="gai-bubble-row">
+              <div className="gai-bubble gai-bubble-ai gai-typing">
+                <span key="a" /><span key="b" /><span key="c" />
               </div>
             </div>
           )}
 
-          <div ref={messagesEndRef} />
-        </div>
+          {error && (
+            <div className="gai-error">{errorMessage}</div>
+          )}
 
-        <form onSubmit={handleSubmit} className="border-t border-[var(--cream-line)] bg-white p-3">
-          <div className="flex items-center gap-2 rounded-[18px] border-2 border-[var(--ink)] bg-[var(--paper)] p-2 shadow-[3px_3px_0_var(--ink)]">
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={isBusy ? 'Thinking...' : 'My admin mess is...'}
-              disabled={isBusy}
-              className="h-12 flex-1 border-0 bg-transparent px-4 text-[16px] text-[var(--ink)] shadow-none outline-none placeholder:text-[var(--ink-faint)] focus-visible:border-0 focus-visible:ring-0"
+          {showLeadCard && !leadDismissed && firstMessage && (
+            <LeadCaptureCard
+              firstMessage={firstMessage}
+              conversationTranscript={conversationTranscript}
+              onDismiss={() => setLeadDismissed(true)}
             />
-            <button
-              type="submit"
-              disabled={isBusy || !input.trim()}
-              className="flex size-11 shrink-0 items-center justify-center rounded-[12px] border-2 border-[var(--ink)] bg-[var(--orange)] text-[var(--paper)] shadow-[2px_2px_0_var(--ink)] transition-all hover:-translate-x-px hover:-translate-y-px hover:bg-[var(--orange-deep)] disabled:cursor-not-allowed disabled:opacity-45"
-              aria-label="Send"
-            >
-              <Send size={17} />
-            </button>
-          </div>
+          )}
+        </div>
+      </div>
+
+      {/* Input bar */}
+      <div className="gai-chat-bar">
+        <form onSubmit={handleSubmit} className="gai-chat-bar-inner">
+          <input
+            className="gai-input flex-1"
+            aria-label="Admin problem description input"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={isBusy ? 'Working…' : 'My admin mess is...'}
+            disabled={isBusy}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                // allow form submit
+              }
+            }}
+          />
+          <button
+            type="submit"
+            disabled={isBusy || !input.trim()}
+            aria-label="Send"
+            className="gai-iconbtn-send"
+          >
+            <Send size={17} />
+          </button>
         </form>
       </div>
-    </section>
+    </div>
   );
 }

@@ -16,6 +16,7 @@ This project was bootstrapped with [`create-next-app`](https://nextjs.org/docs/a
 First, run the development server:
 
 ```bash
+nvm use 20
 npm run dev
 # or
 yarn dev
@@ -24,6 +25,8 @@ pnpm dev
 # or
 bun dev
 ```
+
+Use **Node 20** for local development. Vercel will use the `package.json` `engines.node` setting during deploys.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Components · Cards</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body {
+    margin: 0;
+    padding: 28px 32px;
+    background:
+      repeating-linear-gradient(0deg, rgba(11,11,11,0.025) 0 1px, transparent 1px 4px),
+      var(--paper);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+  .card {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow-stamp);
+    padding: 22px;
+    display: flex; flex-direction: column; gap: 6px;
+    border-radius: 4px;
+  }
+
+  /* COLOR VARIANTS */
+  .card.yellow { background: var(--hi-yellow); }
+  .card.ocean { background: var(--ocean-400); color: var(--paper); box-shadow: var(--shadow-stamp); }
+  .card.orange { background: var(--orange); color: var(--ink); }
+  .card.ink { background: var(--ink); color: var(--paper); box-shadow: var(--shadow-stamp-orange); }
+
+  /* eyebrow stripe */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 8px;
+    align-self: flex-start;
+    margin-bottom: 6px;
+  }
+  .card.ink .eyebrow { background: var(--orange); color: var(--ink); }
+  .card.ocean .eyebrow { background: var(--paper); color: var(--ocean-400); }
+  .card.orange .eyebrow { background: var(--ink); color: var(--orange); }
+  .card.yellow .eyebrow { background: var(--ink); color: var(--hi-yellow); }
+
+  h3 {
+    margin: 0 0 4px;
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 22px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-variation-settings: "opsz" 96, "SOFT" 50;
+  }
+  p {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 14px; line-height: 1.5;
+  }
+  .card p { color: var(--ink-soft); }
+  .card.ink p, .card.ocean p { color: var(--paper); opacity: 0.92; }
+  .card.orange p, .card.yellow p { color: var(--ink); }
+
+  .price {
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 36px;
+    line-height: 1; margin-top: 14px;
+    letter-spacing: -0.025em;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+  }
+  .price small {
+    font-size: 12px;
+    font-family: var(--font-mono);
+    margin-left: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  .card p + .price { margin-top: 16px; }
+  .price small { color: var(--ink-mute); }
+  .card.ink .price small { color: var(--paper); opacity: 0.6; }
+  .card.ocean .price small { color: var(--paper); opacity: 0.7; }
+
+  .foot {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--ink);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .card.ink .foot, .card.ocean .foot { border-top-color: rgba(248,248,246,0.3); color: var(--paper); }
+  .foot .arrow { font-weight: 700; font-size: 14px; }
+</style>
+</head>
+<body>
+
+  <div class="card yellow">
+    <span class="eyebrow">Sticker · Sale</span>
+    <h3>Onboarding pack, half off.</h3>
+    <p>One-week pilot scope, two new starters wired into the CRM. October only.</p>
+    <div class="foot"><span>This month</span><span class="arrow">→</span></div>
+  </div>
+
+  <div class="card ocean">
+    <span class="eyebrow">Brand block</span>
+    <h3>Built in Perth, runs everywhere.</h3>
+    <p>WA-based team. We turn up to the workshop. We answer the phone on a Tuesday.</p>
+    <div class="foot"><span>Meet the crew</span><span class="arrow">→</span></div>
+  </div>
+
+  <div class="card ink">
+    <span class="eyebrow">Pilot</span>
+    <h3>Two-week pilot, real numbers.</h3>
+    <p>One workflow, before-and-after data, no lock-in. The smart way to start.</p>
+    <div class="price">$2.4k<small>+ GST · one-off</small></div>
+  </div>
+
+</body>
+</html>

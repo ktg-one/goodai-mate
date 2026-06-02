@@ -12,7 +12,7 @@ The Good'ai home page changes from a broken/stale visual layer into a buildable 
 
 The current repo is a Next.js App Router site under `src/`. The active home route is `src/app/page.tsx`, which renders `src/components/HomeClient.tsx`, which renders `src/components/HeroSection.tsx`.
 
-The visual direction has pivoted away from the original dark shader/cursor plan. `public/README.md` now defines a paper-brand direction using ink, orange, cool paper, and WA ocean. It explicitly avoids WebGL shaders, hidden cursors, full-page pointer tracking, and glow-heavy effects.
+The visual direction has pivoted away from the original dark shader/cursor plan. `public/SKILL.md`, `public/README.md`, and `public/colors_and_type.css` now define the readable paper-brand direction using ink, orange, cool paper, and WA ocean. They explicitly avoid WebGL shaders, hidden cursors, full-page pointer tracking, blurred shadows, glow-heavy effects, and large soft radii. `public/good-ai-design-final.html` is supposed to be the source of truth, but is currently a broken symlink into a browser cache path; no `design.md` file is present in this working tree.
 
 Several blockers prevent safe visual execution today:
 
@@ -22,6 +22,7 @@ Several blockers prevent safe visual execution today:
 - `.env.example` does not document `NEXT_PUBLIC_WEB3FORMS_KEY`, even though `LeadCaptureCard` reads it.
 - `public/voice-feature/` is a separate Vite/Express/Gemini Live prototype inside the public tree and can be mistaken for the production app.
 - Older Phase 2 requirements and roadmap text still refer to shader and custom cursor behavior that is no longer the v1 direction.
+- The design-source status and exact recovery corrections are written in `.planning/phases/02-visual-layer/02-DESIGN-AUDIT.md`.
 
 ## Requirements
 
@@ -91,7 +92,9 @@ Several blockers prevent safe visual execution today:
 
 - The active app is the root Next.js app under `src/`; do not use `public/voice-feature/` as the implementation architecture.
 - Use the current Good'ai paper-brand system from `public/README.md`: ink, orange, cool paper, WA ocean, practical language.
+- Treat `.planning/phases/02-visual-layer/02-DESIGN-AUDIT.md` as required context for current design-source availability and recovery gaps.
 - Do not introduce WebGL shaders, `cursor: none`, full-page pointer tracking, or ambient cursor glow.
+- Do not introduce blur blobs, blurred drop shadows, backdrop blur, or card/button radii above 8px unless the element is explicitly a chip/dot.
 - Preserve unrelated dirty worktree changes; inspect typechanged/symlinked assets before editing.
 - Do not expose `AI_GATEWAY_API_KEY` or any real Web3Forms key in client code or docs.
 - Use existing project commands as gates: `npm run lint` and `npm run build`.

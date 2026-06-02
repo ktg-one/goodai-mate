@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Spacing · Radius</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 28px; background: var(--paper); display: grid; gap: 18px; }
+  .lead { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
+  .lead b { color: var(--ink); }
+  .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+  .tile {
+    background: var(--navy); color: var(--paper);
+    border: 2px solid var(--ink); box-shadow: var(--shadow-stamp);
+    height: 92px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  }
+  .tile.star { background: var(--red); box-shadow: var(--shadow-stamp-ocean); }
+  .tile.pill-tile { background: var(--gold); color: var(--ink); }
+  .tok { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
+  .px  { font-family: var(--font-mono); font-size: 10px; opacity: 0.8; }
+  .note { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; opacity: 0.85; margin-top: 2px; }
+</style>
+</head>
+<body>
+  <div class="lead"><b>Sharp is the default.</b> Cards &amp; buttons stay 0&ndash;8px. Pills (999px) are the labelled exception &mdash; chips, status dots, counters only.</div>
+  <div class="grid">
+    <div class="tile star" style="border-radius: 0;"><span class="tok">sharp &starf;</span><span class="px">0px</span><span class="note">default</span></div>
+    <div class="tile" style="border-radius: 4px;"><span class="tok">xs</span><span class="px">4px</span></div>
+    <div class="tile" style="border-radius: 8px;"><span class="tok">sm</span><span class="px">8px</span></div>
+    <div class="tile" style="border-radius: 12px;"><span class="tok">md</span><span class="px">12px</span><span class="note">soft max</span></div>
+    <div class="tile" style="border-radius: 18px;"><span class="tok">lg</span><span class="px">18px</span></div>
+    <div class="tile pill-tile" style="border-radius: 999px;"><span class="tok">pill</span><span class="px">999px</span><span class="note">chips only</span></div>
+  </div>
+</body>
+</html>

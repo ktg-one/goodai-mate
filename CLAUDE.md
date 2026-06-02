@@ -71,3 +71,11 @@ See `.claude/agents/` for available agents. Resolution order:
 1. `.claude/settings.json` — team-shared (committed)
 2. `.claude/settings.local.json` — personal (git-ignored)
 3. `~/.claude/settings.json` — global personal defaults
+
+## Design Context
+- Primary register for marketing/landing work: **brand** (design IS the product experience).
+- Strategic source of truth: `PRODUCT.md` (created for impeccable + other design agents).
+- Visual / token source of truth: `public/good-ai-design-final.html`, `public/README.md`, and `public/colors_and_type.css`.
+- All brand work must follow the locked Good'ai system (ink, orange, cool paper, WA Ocean, Fraunces/DM Sans/JetBrains Mono, stamp shadows, one orange per surface, 1995-direct-mail brutality on 2026 execution).
+- Voice: switched-on Perth mate / tradie who knows systems. No AI jargon. "We'll handle the boring stuff."
+- Before any high-end design pass, design agents should load `PRODUCT.md` + the relevant register reference.

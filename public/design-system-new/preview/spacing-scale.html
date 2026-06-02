@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Spacing · Scale</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body {
+    margin: 0;
+    padding: 28px 32px;
+    background:
+      repeating-linear-gradient(0deg, rgba(11,11,11,0.025) 0 1px, transparent 1px 4px),
+      var(--paper);
+    color: var(--ink);
+  }
+  .hd {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex; justify-content: space-between;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+  }
+  .hd b { font-weight: 700; }
+  .hd .right { color: var(--ink-mute); }
+
+  .row {
+    display: grid;
+    grid-template-columns: 90px 1fr 56px;
+    gap: 16px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--cream-line);
+  }
+  .row:last-child { border-bottom: none; }
+
+  .tok {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .tok span {
+    display: block;
+    color: var(--ink-mute);
+    font-weight: 400;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .barwrap {
+    display: flex; align-items: center; gap: 0;
+    height: 28px;
+  }
+  .bar {
+    background: var(--orange);
+    height: 28px;
+    border: 2px solid var(--ink);
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+  /* Tick marks every 8px to make scale legible */
+  .ticks {
+    position: relative;
+    height: 28px;
+    flex: 1;
+    margin-left: 8px;
+    background:
+      repeating-linear-gradient(90deg,
+        var(--cream-line) 0 1px,
+        transparent 1px 8px);
+    border-bottom: 1px dashed var(--ink-faint);
+    opacity: 0.6;
+  }
+
+  .px {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink);
+    text-align: right;
+    font-weight: 700;
+  }
+  .px span { color: var(--ink-mute); font-weight: 400; font-size: 10px; }
+
+  /* highlight the 8pt baseline rows */
+  .row.baseline {
+    background: color-mix(in oklab, var(--hi-yellow) 30%, var(--paper));
+    margin: 0 -32px;
+    padding-left: 32px; padding-right: 32px;
+  }
+  .row.baseline .tok::after {
+    content: "★";
+    color: var(--ink);
+    margin-left: 6px;
+  }
+
+  .legend {
+    margin-top: 14px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    border-top: 2px solid var(--ink);
+    padding-top: 8px;
+    display: flex; gap: 18px; flex-wrap: wrap;
+  }
+  .legend b { color: var(--ink); font-weight: 700; }
+  .legend .star { color: var(--ink); }
+</style>
+</head>
+<body>
+  <div class="hd"><b>Spacing · 4pt scale</b><span class="right">★ = 8pt baseline</span></div>
+
+  <div class="row"><div class="tok">space-1<span>0.25rem</span></div><div class="barwrap"><div class="bar" style="width: 4px;"></div><div class="ticks"></div></div><div class="px">4<span>px</span></div></div>
+  <div class="row baseline"><div class="tok">space-2<span>0.5rem</span></div><div class="barwrap"><div class="bar" style="width: 8px;"></div><div class="ticks"></div></div><div class="px">8<span>px</span></div></div>
+  <div class="row"><div class="tok">space-3<span>0.75rem</span></div><div class="barwrap"><div class="bar" style="width: 12px;"></div><div class="ticks"></div></div><div class="px">12<span>px</span></div></div>
+  <div class="row baseline"><div class="tok">space-4<span>1rem</span></div><div class="barwrap"><div class="bar" style="width: 16px;"></div><div class="ticks"></div></div><div class="px">16<span>px</span></div></div>
+  <div class="row"><div class="tok">space-5<span>1.25rem</span></div><div class="barwrap"><div class="bar" style="width: 20px;"></div><div class="ticks"></div></div><div class="px">20<span>px</span></div></div>
+  <div class="row baseline"><div class="tok">space-6<span>1.5rem</span></div><div class="barwrap"><div class="bar" style="width: 24px;"></div><div class="ticks"></div></div><div class="px">24<span>px</span></div></div>
+  <div class="row baseline"><div class="tok">space-8<span>2rem</span></div><div class="barwrap"><div class="bar" style="width: 32px;"></div><div class="ticks"></div></div><div class="px">32<span>px</span></div></div>
+  <div class="row baseline"><div class="tok">space-10<span>2.5rem</span></div><div class="barwrap"><div class="bar" style="width: 40px; background: var(--ink);"></div><div class="ticks"></div></div><div class="px">40<span>px</span></div></div>
+  <div class="row baseline"><div class="tok">space-12<span>3rem</span></div><div class="barwrap"><div class="bar" style="width: 48px; background: var(--ink);"></div><div class="ticks"></div></div><div class="px">48<span>px</span></div></div>
+  <div class="row baseline"><div class="tok">space-16<span>4rem</span></div><div class="barwrap"><div class="bar" style="width: 64px; background: var(--ink);"></div><div class="ticks"></div></div><div class="px">64<span>px</span></div></div>
+  <div class="row baseline"><div class="tok">space-20<span>5rem</span></div><div class="barwrap"><div class="bar" style="width: 80px; background: var(--ink);"></div><div class="ticks"></div></div><div class="px">80<span>px</span></div></div>
+  <div class="row baseline"><div class="tok">space-24<span>6rem</span></div><div class="barwrap"><div class="bar" style="width: 96px; background: var(--ink);"></div><div class="ticks"></div></div><div class="px">96<span>px</span></div></div>
+
+  <div class="legend">
+    <span><b>Orange</b> · tight (4–32)</span>
+    <span><b>Ink</b> · room (40–96)</span>
+    <span><b>Ticks</b> · 8px guides</span>
+  </div>
+</body>
+</html>

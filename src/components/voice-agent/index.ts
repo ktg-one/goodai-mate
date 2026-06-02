@@ -1,0 +1,1 @@
+export { VoiceAgentHero } from './VoiceAgentHero';

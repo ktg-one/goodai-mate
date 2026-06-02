@@ -21,6 +21,9 @@ This phase should make the site buildable and visually coherent. It should not r
 - Treat the intended product as the root Next.js app under `src/`.
 - Treat `public/voice-feature/` as stray prototype/reference material, not production architecture.
 - Preserve the current paper-brand direction documented in `public/README.md`.
+- Treat `public/SKILL.md`, `public/README.md`, and `public/colors_and_type.css` as the readable design authority until `public/good-ai-design-final.html` is restored.
+- `public/good-ai-design-final.html` is currently a broken symlink into a browser cache path and cannot be used as a canonical source.
+- No `design.md` file is currently present in this working tree.
 - Do not implement the old SDF shader background, custom cursor, or ambient glow in this phase.
 - Keep the first screen as the actual usable intake/chat experience, not a marketing-only landing page.
 - Fix build blockers before visual polish.
@@ -32,7 +35,7 @@ This phase should make the site buildable and visually coherent. It should not r
 ### the agent's Discretion
 
 - Whether to use `@ai-sdk/react` immediately in `ChatInterface` or build a compile-safe visual shell first.
-- Whether to restore `logo-mark.svg` from design assets or point `HeroSection` at an existing valid SVG.
+- Whether to add a new SVG brand mark from the restored design source or keep using the existing `G.jpg` asset.
 - Whether to remove stale shader dependencies now or leave them for a later cleanup if removing them risks dependency churn.
 - Exact mobile spacing as long as text does not overlap and the first viewport remains useful.
 </decisions>
@@ -53,6 +56,8 @@ This phase should make the site buildable and visually coherent. It should not r
 
 ### Brand
 
+- `.planning/phases/02-visual-layer/02-DESIGN-AUDIT.md` - Current design-source availability, brand rules, recovery corrections, and remaining design gaps.
+- `public/SKILL.md` - Active Good'ai design skill and brand rules.
 - `public/README.md` - Good'ai brand book summary and pivot rules.
 - `public/colors_and_type.css` - Brand tokens and typography reference.
 - `public/ui_kits/web/README.md` - Static UI kit structure and production differences.
@@ -74,7 +79,9 @@ This phase should make the site buildable and visually coherent. It should not r
 - First execution should reconcile stale planning docs so future agents stop following the old shader/cursor plan.
 - Prefer direct file imports and existing shadcn/ui primitives.
 - Use Lucide icons for UI controls.
-- Keep cards at restrained radii where possible, but preserve current component style unless actively correcting brand drift.
+- Keep cards and buttons at 0-8px radius unless they are chips/dots, which may use pill radius.
+- Do not use blurred decorative blobs, blurred shadows, backdrop blur, glow, shader backgrounds, or hidden cursor behavior.
+- Use flat stamp shadows only.
 - Verify with `npm run lint` and `npm run build` after each plan where feasible.
 - If build fails due to pre-existing symlink/asset state, document the exact blocker in the plan summary.
 </specifics>

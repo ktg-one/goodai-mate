@@ -108,3 +108,9 @@ init.ps1
 
 # Feature documentation
 feature_list.json
+
+# Local agent directories
+.agents/
+.antigravitycli/
+.understand-anything/
+.githooks/
