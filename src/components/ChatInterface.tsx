@@ -3,7 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
 import { Send } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, memo, useCallback } from 'react';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
 
 type TextPart = UIMessage['parts'][number] & { type: 'text'; text: string };
@@ -22,13 +22,14 @@ interface ChatInterfaceProps {
 }
 
 export default function ChatInterface({ initialMessage = '', onFirstResponse }: ChatInterfaceProps) {
-  const [input, setInput] = useState('');
   const [firstMessage, setFirstMessage] = useState(initialMessage);
   const [showLeadCard, setShowLeadCard] = useState(false);
   const [leadDismissed, setLeadDismissed] = useState(false);
   const firstMessageRef = useRef(initialMessage);
   const initialSent = useRef(false);
   const firstResponseHandled = useRef(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const leadCardRef = useRef<HTMLDivElement>(null);
 
   const { messages, sendMessage, status, error } = useChat({
     transport: new DefaultChatTransport({ api: '/api/chat' }),
@@ -54,9 +55,16 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
     sendMessage({ text: initialMessage });
   }, [initialMessage, sendMessage]);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const text = input.trim();
+  useEffect(() => {
+    if (showLeadCard) {
+      leadCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, status, showLeadCard]);
+
+  const handleMessageSubmit = useCallback((text: string) => {
     if (!text || isBusy) return;
 
     if (!firstMessageRef.current) {
@@ -65,8 +73,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
     }
 
     sendMessage({ text });
-    setInput('');
-  }
+  }, [isBusy, sendMessage]);
 
   return (
     <div className="gai-chat">
@@ -117,41 +124,63 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
           )}
 
           {showLeadCard && !leadDismissed && firstMessage && (
-            <LeadCaptureCard
-              firstMessage={firstMessage}
-              conversationTranscript={conversationTranscript}
-              onDismiss={() => setLeadDismissed(true)}
-            />
+            <div ref={leadCardRef}>
+              <LeadCaptureCard
+                firstMessage={firstMessage}
+                conversationTranscript={conversationTranscript}
+                onDismiss={() => setLeadDismissed(true)}
+              />
+            </div>
           )}
+
+          <div ref={messagesEndRef} />
         </div>
       </div>
 
       {/* Input bar */}
       <div className="gai-chat-bar">
-        <form onSubmit={handleSubmit} className="gai-chat-bar-inner">
-          <input
-            className="gai-input flex-1"
-            aria-label="Admin problem description input"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={isBusy ? 'Working…' : 'My admin mess is...'}
-            disabled={isBusy}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                // allow form submit
-              }
-            }}
-          />
-          <button
-            type="submit"
-            disabled={isBusy || !input.trim()}
-            aria-label="Send"
-            className="gai-iconbtn-send"
-          >
-            <Send size={17} />
-          </button>
-        </form>
+        <ChatInputForm isBusy={isBusy} onSubmit={handleMessageSubmit} />
       </div>
     </div>
   );
 }
+
+const ChatInputForm = memo(function ChatInputForm({
+  isBusy,
+  onSubmit,
+}: {
+  isBusy: boolean;
+  onSubmit: (text: string) => void;
+}) {
+  const [input, setInput] = useState('');
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const text = input.trim();
+    if (!text || isBusy) return;
+
+    onSubmit(text);
+    setInput('');
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="gai-chat-bar-inner">
+      <input
+        className="gai-input flex-1"
+        aria-label="Admin problem description input"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder={isBusy ? 'Working…' : 'My admin mess is...'}
+        disabled={isBusy}
+      />
+      <button
+        type="submit"
+        disabled={isBusy || !input.trim()}
+        aria-label="Send"
+        className="gai-iconbtn-send"
+      >
+        <Send size={17} />
+      </button>
+    </form>
+  );
+});
