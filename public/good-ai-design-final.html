@@ -1,1 +1,380 @@
-C:/Users/kevin/AppData/Local/BraveSoftware/Brave-Browser/User Data/Default/Cache/Cache_Data/f_014fc0
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Good'ai — Brand Book v1.0 (Source of Truth)</title>
+  <link rel="stylesheet" href="colors_and_type.css">
+  <style>
+    /* Add horizontal paper grain default on top of color_and_type styles */
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: repeating-linear-gradient(0deg, rgba(11, 11, 11, 0.025) 0 1px, transparent 1px 4px);
+      background-attachment: fixed;
+      font-family: var(--font-sans);
+      color: var(--fg-soft);
+    }
+    
+    .brand-book-container {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 24px;
+    }
+
+    .brand-header {
+      background: var(--paper-raised);
+      border: 3px solid var(--ink);
+      box-shadow: var(--shadow-stamp-deep);
+      border-radius: var(--radius-sm);
+      padding: 40px;
+      margin-bottom: 60px;
+      position: relative;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+      line-height: 0.95;
+      margin: 0 0 16px;
+    }
+    .brand-title .apos {
+      color: var(--orange);
+    }
+
+    .section-card {
+      background: #ffffff;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-stamp);
+      padding: 32px;
+      margin-bottom: 48px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: var(--fs-36);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin: 0 0 24px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    /* Palette grid */
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .color-chip {
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-stamp);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .color-swatch {
+      height: 140px;
+    }
+    .color-meta {
+      padding: 16px;
+      background: #ffffff;
+      border-top: 2px solid var(--ink);
+      flex: 1;
+    }
+    .color-name {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--ink);
+      margin: 0 0 4px;
+    }
+    .color-hex {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--ink-mute);
+    }
+
+    /* Shadow demos */
+    .shadow-demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .shadow-block {
+      background: var(--paper-raised);
+      border: 2px solid var(--ink);
+      padding: 24px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      text-align: center;
+    }
+    .shadow-block-default { box-shadow: var(--shadow-stamp); }
+    .shadow-block-orange { box-shadow: var(--shadow-stamp-orange); }
+    .shadow-block-deep { box-shadow: var(--shadow-stamp-deep); border-width: 3px; }
+
+    /* Voice table */
+    .voice-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+    .voice-table th, .voice-table td {
+      border: 2px solid var(--ink);
+      padding: 14px 18px;
+      text-align: left;
+    }
+    .voice-table th {
+      background: var(--paper-deep);
+      font-weight: 700;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .voice-table td.ok { background: #f0f7f2; color: #1e4624; }
+    .voice-table td.bad { background: #fff1f0; color: #721c24; }
+
+    /* Radii display */
+    .radius-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .radius-box {
+      border: 2px solid var(--ink);
+      background: var(--paper-deep);
+      padding: 16px 20px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    /* Custom previews */
+    .marquee-preview {
+      overflow: hidden;
+      border: 2px solid var(--ink);
+      padding: 12px 0;
+      background: #ffffff;
+      position: relative;
+      margin: 20px 0;
+    }
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marqueespin 15s linear infinite;
+    }
+    .marquee-item {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      padding-right: 20px;
+      color: var(--ink);
+    }
+    .marquee-sep { color: var(--orange); padding-left: 20px; }
+    @keyframes marqueespin {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .badge-perth {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--ink);
+      background: #ffffff;
+      border: 2px solid var(--ink);
+      box-shadow: 2px 2px 0 var(--ink);
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      display: inline-block;
+    }
+    .badge-perth span { color: var(--orange); font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <div class="brand-book-container">
+  
+    <!-- Brand Header -->
+    <header class="brand-header">
+      <div class="badge-perth" style="margin-bottom: 24px;">PERTH <span>/</span> WA</div>
+      <h1 class="brand-title">Good<span class="apos">&apos;</span>ai</h1>
+      <p class="lede" style="margin: 0; max-width: 650px;">
+        <strong>Brand Book v1.0 — Canonical Design Reference</strong><br>
+        A 1995-direct-mail "back-of-the-Yellow-Pages" structural system running on 2026 software. Ink black structure, brand orange shouting, and cool paper surface. Pure layout, premium typography, zero blur.
+      </p>
+    </header>
+
+    <!-- Palette Section -->
+    <section class="section-card">
+      <h2 class="section-title">01. Colors</h2>
+      <div class="palette-grid">
+        <!-- Paper -->
+        <div class="color-chip">
+          <div class="color-swatch" style="background-color: var(--paper);"></div>
+          <div class="color-meta">
+            <h3 class="color-name">Cool Paper</h3>
+            <span class="color-hex">#F8F8F6</span>
+            <p style="margin: 8px 0 0; font-size: 13px;">Default page canvas background.</p>
+          </div>
+        </div>
+        <!-- Ink -->
+        <div class="color-chip">
+          <div class="color-swatch" style="background-color: var(--ink);"></div>
+          <div class="color-meta">
+            <h3 class="color-name">True Ink</h3>
+            <span class="color-hex">#0B0B0B</span>
+            <p style="margin: 8px 0 0; font-size: 13px;">Borders, text, shapes, stamp structures.</p>
+          </div>
+        </div>
+        <!-- Orange -->
+        <div class="color-chip">
+          <div class="color-swatch" style="background-color: var(--orange);"></div>
+          <div class="color-meta">
+            <h3 class="color-name">Brand Orange</h3>
+            <span class="color-hex">#F25C2B</span>
+            <p style="margin: 8px 0 0; font-size: 13px;">Brand shout. Maximum one per surface.</p>
+          </div>
+        </div>
+        <!-- Ocean -->
+        <div class="color-chip">
+          <div class="color-swatch" style="background-color: var(--ocean-400);"></div>
+          <div class="color-meta">
+            <h3 class="color-name">WA Ocean</h3>
+            <span class="color-hex">#006B8F</span>
+            <p style="margin: 8px 0 0; font-size: 13px;">Third brand surface, buttons, AI accents.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Typography Section -->
+    <section class="section-card">
+      <h2 class="section-title">02. Typography</h2>
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+        <div>
+          <span class="eyebrow">Display Typeface</span>
+          <p class="h2" style="margin: 8px 0 0; font-family: var(--font-display); font-variation-settings: 'opsz' 72;">Fraunces Soft Wonk (Georgia Fallback)</p>
+          <p class="body" style="margin: 8px 0 0;">Used for heroes, headline statements, and page titles. Distinctive, slabby, and optical.</p>
+        </div>
+        <div>
+          <span class="eyebrow">UI & Body Typeface</span>
+          <p class="h3" style="margin: 8px 0 0;">DM Sans (300 / 400 / 600 / 700)</p>
+          <p class="body" style="margin: 8px 0 0;">Used for all UI, message inputs, bubbles, forms, descriptions, and structural copy.</p>
+        </div>
+        <div>
+          <span class="eyebrow">Utility & Eyebrows</span>
+          <p class="mono" style="margin: 8px 0 0; font-family: var(--font-mono); font-weight: 500;">JetBrains Mono</p>
+          <p class="body" style="margin: 8px 0 0;">Used strictly for eyebrows in UPPERCASE, marquee text, system chips, code blocks, and the Perth WA tag.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shapes & Radii Section -->
+    <section class="section-card">
+      <h2 class="section-title">03. Shapes, Radii & Shadows</h2>
+      
+      <span class="eyebrow">Stamp Shadows (Offset, No Blur)</span>
+      <div class="shadow-demo-grid" style="margin: 16px 0 32px;">
+        <div class="shadow-block shadow-block-default">
+          --shadow-stamp<br><span style="font-size:12px; font-weight:normal;">3px 3px 0 var(--ink)</span>
+        </div>
+        <div class="shadow-block shadow-block-orange">
+          --shadow-stamp-orange<br><span style="font-size:12px; font-weight:normal;">3px 3px 0 var(--orange)</span>
+        </div>
+        <div class="shadow-block shadow-block-deep">
+          --shadow-stamp-deep<br><span style="font-size:12px; font-weight:normal;">4px 4px 0 var(--ink)</span>
+        </div>
+      </div>
+
+      <span class="eyebrow">Strict Corner Radii (0-8px Sharpness)</span>
+      <p class="body" style="margin: 8px 0 16px;">
+        Buttons and cards stay at 0-8px border radius. Inputs and tags are at 4px. Soft surfaces are 8px. Pill rounded corners (999px) are reserved purely for tags, badges, chips, and dots — never for buttons or container borders.
+      </p>
+      <div class="radius-row">
+        <div class="radius-box" style="border-radius: 4px;">4px (--radius-xs) • Inputs, close keys</div>
+        <div class="radius-box" style="border-radius: 8px;">8px (--radius-sm) • Cards, chat, buttons</div>
+        <div class="radius-box" style="border-radius: 12px; opacity: 0.5;">12px (--radius-md) • Legacy, deprecated</div>
+        <div class="radius-box" style="border-radius: 999px; background: #ffffff;">999px (--radius-pill) • Badge / Chip only</div>
+      </div>
+    </section>
+
+    <!-- Voice and Copywriting Section -->
+    <section class="section-card">
+      <h2 class="section-title">04. Copywriting & Voice</h2>
+      <p class="body">
+        The voice is a <strong>switched-on Perth mate</strong>. We write like a reliable local tradie who happens to know systems inside out. Casual, direct, short sentences, warm, zero fluff. Use "we" instead of "I".
+      </p>
+      
+      <span class="eyebrow">Forbidden Vocabulary</span>
+      <p class="body" style="color: var(--danger); font-weight: 600; margin: 8px 0 20px;">
+        "AI", "Artificial Intelligence", "machine learning", "leverage", "synergy", "optimize", "streamline", "disrupt", "hyper-scale". Say "automation", "system", or "workflow" instead.
+      </p>
+
+      <table class="voice-table">
+        <thead>
+          <tr>
+            <th>✅ Good'ai (Human Mate)</th>
+            <th>❌ Corporate AI Buzzwords</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="ok">"We'll handle the boring stuff."</td>
+            <td class="bad">"Leveraging synergistic AI-powered pipelines."</td>
+          </tr>
+          <tr>
+            <td class="ok">"Knock off early on Friday."</td>
+            <td class="bad">"Optimize productivity outcomes."</td>
+          </tr>
+          <tr>
+            <td class="ok">"Tell us your problem. We'll sort it."</td>
+            <td class="bad">"Submit your inquiries for evaluation."</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Live Component Spec Demos -->
+    <section class="section-card">
+      <h2 class="section-title">05. Component Specifications</h2>
+      
+      <span class="eyebrow">Marquee Strips</span>
+      <div class="marquee-preview">
+        <div class="marquee-track">
+          <span class="marquee-item">Email automation <span class="marquee-sep">/</span></span>
+          <span class="marquee-item">Friday invoicing <span class="marquee-sep">/</span></span>
+          <span class="marquee-item">CRM sync <span class="marquee-sep">/</span></span>
+          <span class="marquee-item">Tradie booking sheets <span class="marquee-sep">/</span></span>
+          <span class="marquee-item">Email automation <span class="marquee-sep">/</span></span>
+          <span class="marquee-item">Friday invoicing <span class="marquee-sep">/</span></span>
+          <span class="marquee-item">CRM sync <span class="marquee-sep">/</span></span>
+          <span class="marquee-item">Tradie booking sheets <span class="marquee-sep">/</span></span>
+        </div>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr; md:grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 32px;">
+        <!-- Left Column: Forms/Inputs -->
+        <div>
+          <span class="eyebrow">Buttons & Text Inputs (8px / 4px Radii)</span>
+          <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 16px;">
+            <input type="text" class="gai-input" placeholder="e.g. My Thursday scheduling eats 4 hours..." style="width: 100%;">
+            <div style="display: flex; gap: 12px;">
+              <button class="gai-btn gai-btn-primary gai-btn-md">Get a callback</button>
+              <button class="gai-btn gai-btn-md" style="background:#ffffff; border:2px solid var(--ink); box-shadow: 2px 2px 0 var(--ink);">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>
