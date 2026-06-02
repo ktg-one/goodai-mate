@@ -3,7 +3,7 @@
 **Action:** Always prefer `style.transform = "translate3d(x, y, 0)"` for cursor trackers and high-frequency DOM manipulation. It triggers hardware acceleration and prevents main-thread layout thrashing.
 
 ## 2025-02-23 - [React Performance] Isolating Form State to Prevent Re-renders
-**Learning:** In chat interfaces using the Vercel AI SDK, maintaining the text input state (`useState('input')`) at the top-level parent component forces the entire message list (and expensive child components like avatars or lead capture forms) to re-render on every single keystroke.
+**Learning:** In chat interfaces using the Vercel AI SDK, maintaining the text input state (`useState('input')`) at the level of the parent component forces the entire message list (and expensive child components like avatars or lead capture forms) to re-render on every single keystroke.
 **Action:** Always extract text inputs and their associated state into a separate, memoized child component (e.g., `ChatInputForm`) that passes the final text up via a callback (`onSubmit`) when the user hits send. This isolates the high-frequency state updates from the rest of the application tree.
 
 ## 2024-03-XX - Streaming Chat Re-renders
