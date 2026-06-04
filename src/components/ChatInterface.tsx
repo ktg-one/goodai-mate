@@ -62,8 +62,13 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
 
   const isBusy = status === 'submitted' || status === 'streaming';
   const conversationTranscript = useMemo(
-    () => messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n'),
-    [messages],
+    () => {
+      // ⚡ Bolt: Only calculate transcript when lead card is visible
+      // This prevents O(N) string concatenation on every streaming token
+      if (!showLeadCard) return '';
+      return messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n');
+    },
+    [messages, showLeadCard],
   );
   const errorMessage = error?.message?.trim() || 'Something went sideways. Try again in a moment.';
 
