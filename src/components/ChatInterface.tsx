@@ -61,9 +61,16 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   });
 
   const isBusy = status === 'submitted' || status === 'streaming';
+  // ⚡ Bolt Optimization: Lazy evaluate conversationTranscript only when needed.
+  // When AI is streaming, `messages` array updates on every token.
+  // Concatenating the entire string O(N) per token causes high CPU usage.
+  // By checking `showLeadCard && !leadDismissed`, we skip this cost entirely while streaming.
   const conversationTranscript = useMemo(
-    () => messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n'),
-    [messages],
+    () => {
+      if (!showLeadCard || leadDismissed) return '';
+      return messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n');
+    },
+    [messages, showLeadCard, leadDismissed],
   );
   const errorMessage = error?.message?.trim() || 'Something went sideways. Try again in a moment.';
 
