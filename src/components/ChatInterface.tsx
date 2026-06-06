@@ -61,9 +61,12 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   });
 
   const isBusy = status === 'submitted' || status === 'streaming';
+  // ⚡ Bolt Optimization: Lazy-evaluate transcript generation
+  // Only concatenate O(N) string if the lead card is actually going to be shown.
+  // This prevents an O(N) map and join operation on every single token during AI streaming.
   const conversationTranscript = useMemo(
-    () => messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n'),
-    [messages],
+    () => showLeadCard ? messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n') : '',
+    [messages, showLeadCard],
   );
   const errorMessage = error?.message?.trim() || 'Something went sideways. Try again in a moment.';
 
