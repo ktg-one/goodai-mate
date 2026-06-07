@@ -61,9 +61,15 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   });
 
   const isBusy = status === 'submitted' || status === 'streaming';
+  // ⚡ Bolt Performance Optimization:
+  // Lazy-evaluate this derived state. We only need the full transcript string
+  // when the LeadCaptureCard is actually visible. Computing this O(N) string
+  // concatenation on every streaming token re-render is unnecessary overhead.
+  // Impact: Eliminates O(N) operations per streaming token where N is message length.
+  const isLeadCardVisible = showLeadCard && !leadDismissed && !!firstMessage;
   const conversationTranscript = useMemo(
-    () => messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n'),
-    [messages],
+    () => isLeadCardVisible ? messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n') : '',
+    [messages, isLeadCardVisible],
   );
   const errorMessage = error?.message?.trim() || 'Something went sideways. Try again in a moment.';
 
