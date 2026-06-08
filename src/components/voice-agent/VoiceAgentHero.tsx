@@ -19,7 +19,8 @@ const STAMP_EASE = [0.23, 1, 0.32, 1] as const;
  * Uses local "Supertonic" for high-quality ASR during testing (user's setup).
  * Falls back gracefully. Wires into the existing /api/chat + Good'ai persona.
  *
- * Brand: Brutalist stamp aesthetic, one orange per surface, paper ribbons.
+ * Brand: Brutalist stamp aesthetic, one red per surface, paper ribbons.
+ * wave-ribbon.png integrated as design signal / waveform layer in the acoustic box (verbatim from design system).
  */
 
 type AgentStatus = 'idle' | 'listening' | 'thinking' | 'speaking' | 'error';
@@ -33,6 +34,7 @@ interface VoiceAgentHeroProps {
 
 export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcribe', onMailFiled }: VoiceAgentHeroProps) {
   const [status, setStatus] = useState<AgentStatus>('idle');
+  const [selectedAgent, setSelectedAgent] = useState<'darl' | 'robokev'>('darl');
   const [userTranscript, setUserTranscript] = useState('');
   const [agentResponse, setAgentResponse] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -78,52 +80,20 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
 
   // Mechanical settle values (no floaty — short, purposeful, slightly jarring settle)
   // Multi-phase for Awwwards signature filing: sink, slight compress + rotate, then deeper pile + skew settle.
-  const heroY = useTransform(
-    scrollYProgress,
-    [0, 0.35, 0.65, 1],
-    prefersReducedMotion ? [0, 0, 0, 0] : [0, 14, 29, 42]
-  );
-  const heroRotate = useTransform(
-    scrollYProgress,
-    [0, 0.4, 0.75, 1],
-    prefersReducedMotion ? [0, 0, 0, 0] : [0, -0.4, -1.1, -0.8]
-  );
-  const heroSkew = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    prefersReducedMotion ? [0, 0, 0] : [0, -0.6, -1.8]
-  );
-  const heroScale = useTransform(
-    scrollYProgress,
-    [0, 0.55, 1],
-    prefersReducedMotion ? [1, 1, 1] : [1, 0.992, 0.985]
-  );
-  // Deeper navy pile shadow as it settles into the "tray" — shadow grows + shifts down/right
-  const heroShadow = useTransform(scrollYProgress, [0, 0.45, 0.8, 1], 
-    prefersReducedMotion 
-      ? ['3px 3px 0 var(--ink)', '3px 3px 0 var(--ink)', '3px 3px 0 var(--ink)', '3px 3px 0 var(--ink)']
-      : [
-          '4px 4px 0 var(--ink)',
-          '7px 11px 0 var(--navy-deep)',
-          '11px 18px 1px rgba(11, 27, 60, 0.55)',
-          '14px 24px 2px var(--navy-deep)',
-        ]
-  );
-  // Legacy scalar for any consumers; real value lives in settleRef for Visualizer
-  const heroScrollProgress = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const heroY = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0, 18, 42, 68]);
+  const heroRotate = useTransform(scrollYProgress, [0, 0.5, 1], [0, -1.2, -3.1]);
+  const heroSkew = useTransform(scrollYProgress, [0, 0.6, 1], [0, -1.8, -4.2]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0.985, 0.96]);
+  const heroShadow = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [
+    '4px 4px 0 var(--ink)',
+    '6px 7px 0 var(--ink)',
+    '3px 9px 0 var(--navy-deep)',
+    '2px 11px 0 var(--navy-ink)',
+  ]);
 
-  // Keep refs in sync (Vercel best practice for hot animation paths)
+  // Keep refs in sync for Visualizer without causing re-renders in hot path
   useEffect(() => { sensitivityRef.current = sensitivity; }, [sensitivity]);
   useEffect(() => { visualModeRef.current = visualMode; }, [visualMode]);
-
-  const initAudio = useCallback(async () => {
-    if (!audioContextRef.current) {
-      audioContextRef.current = new AudioContext({ sampleRate: 16000 });
-    }
-    if (audioContextRef.current.state === 'suspended') {
-      await audioContextRef.current.resume();
-    }
-  }, []);
 
   const stopListening = useCallback(() => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
@@ -133,117 +103,32 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
     }
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
+    }
     setAnalyzerNode(null);
   }, []);
 
-  // Uses the dedicated Supertonic adapter (easy to swap later)
-  const handleTranscription = async (audioBlob: Blob): Promise<string> => {
-    try {
-      return await transcribeWithSupertonic(audioBlob, supertonicUrl);
-    } catch (err) {
-      console.error('Supertonic transcription error:', err);
-      // Friendly fallback so testing never feels broken
-      return "The local Supertonic didn't catch that clearly. Give it another go?";
-    }
-  };
-
-  const sendToAgent = async (transcript: string) => {
-    setStatus('thinking');
+  const startListening = useCallback(async () => {
+    setError(null);
+    setUserTranscript('');
     setAgentResponse('');
 
     try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [
-            {
-              role: 'user',
-              parts: [{ type: 'text', text: transcript }],
-            },
-          ],
-        }),
-      });
-
-      if (!res.ok) throw new Error('Chat backend error');
-
-      // The route returns a UI message stream — for simplicity we read the last text
-      const text = await res.text();
-      // Very rough extraction for the demo (the real streaming UI message handling lives in ChatInterface)
-      const clean = text
-        .replace(/0:"|data:/g, ' ')
-        .replace(/\\n/g, ' ')
-        .trim()
-        .slice(0, 420) || "We'll sort that for you. What's the main tool giving you grief right now?";
-
-      setAgentResponse(clean);
-      stampSignalRef.current = Date.now() + 7; // second clack for the filed response line (stagger feel)
-
-      // Leak transcript + outcome so it can "file" into lower sections as persistent mail-received docket
-      if (onMailFiled && transcript && clean) {
-        onMailFiled(transcript, clean);
-      }
-
-      // Speak it (browser TTS for now — Supertonic local is for input)
-      if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(clean);
-        utterance.rate = 0.96;
-        utterance.pitch = 1.0;
-
-        // Try to pick a decent Australian-ish voice if available
-        const voices = window.speechSynthesis.getVoices();
-        const aussie = voices.find(v =>
-          /australia|en-au|au/i.test(v.lang || v.name)
-        );
-        if (aussie) utterance.voice = aussie;
-
-        setStatus('speaking');
-
-        utterance.onend = () => {
-          setStatus('idle');
-        };
-
-        window.speechSynthesis.speak(utterance);
-      } else {
-        setStatus('idle');
-      }
-    } catch (err) {
-      console.error(err);
-      setAgentResponse("Something went sideways with the agent. The team will still sort it — leave your details below.");
-      setStatus('error');
-      setTimeout(() => setStatus('idle'), 2400);
-    }
-  };
-
-  const toggleListening = async () => {
-    if (status === 'listening') {
-      stopListening();
-      setStatus('idle');
-      return;
-    }
-
-    try {
-      await initAudio();
-
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          channelCount: 1,
-          sampleRate: 16000,
-          echoCancellation: true,
-          noiseSuppression: true,
-        },
-      });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
 
-      const source = audioContextRef.current!.createMediaStreamSource(stream);
-      const analyzer = audioContextRef.current!.createAnalyser();
-      analyzer.fftSize = 1024;
-      source.connect(analyzer);
-      setAnalyzerNode(analyzer);
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      audioContextRef.current = audioContext;
+      const source = audioContext.createMediaStreamSource(stream);
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 64;
+      analyser.smoothingTimeConstant = 0.7;
+      source.connect(analyser);
+      setAnalyzerNode(analyser);
 
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus',
-      });
+      const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
@@ -252,52 +137,99 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
       };
 
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
         setStatus('thinking');
+        try {
+          const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+          const transcript = await transcribeWithSupertonic(audioBlob, supertonicUrl);
+          if (transcript && transcript.trim()) {
+            setUserTranscript(transcript.trim());
+            stampSignalRef.current = (stampSignalRef.current || 0) + 1;
 
-        const transcript = await handleTranscription(audioBlob);
-        setUserTranscript(transcript);
-        stampSignalRef.current = Date.now(); // trigger stamp-pop clack in Visualizer canvas
+            // Call the real chat API (Good'ai persona)
+            const res = await fetch('/api/chat', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ message: transcript.trim() }),
+            });
+            const data = await res.json();
+            const reply = (data.reply || "We'll sort that for you. Tell us a bit more about the tools you use.").trim();
+            setAgentResponse(reply);
 
-        if (transcript && transcript.length > 3) {
-          await sendToAgent(transcript);
-        } else {
+            // Leak the mail to parent for physical in-tray + docket filing
+            if (onMailFiled) {
+              onMailFiled(transcript.trim(), reply);
+            }
+
+            // Speak the reply (brand voice, local)
+            speakReply(reply);
+          } else {
+            setError('No speech detected. Try again.');
+          }
+        } catch (e: any) {
+          setError('Could not reach the voice service. Using fallback.');
+          // Fallback reply so the flow still "files" a docket
+          const fallback = "We'll sort the boring stuff. Drop us a line and we'll set up the intake.";
+          setAgentResponse(fallback);
+          if (onMailFiled && userTranscript) onMailFiled(userTranscript, fallback);
+          speakReply(fallback);
+        } finally {
           setStatus('idle');
+          if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+            streamRef.current = null;
+          }
+          setAnalyzerNode(null);
         }
-
-        // Cleanup
-        if (streamRef.current) {
-          streamRef.current.getTracks().forEach(t => t.stop());
-          streamRef.current = null;
-        }
-        setAnalyzerNode(null);
       };
 
       mediaRecorder.start();
       setStatus('listening');
-      setUserTranscript('');
-      setAgentResponse('');
-      setError(null);
     } catch (err) {
-      console.error(err);
-      setError('Microphone access is needed for the Voice Agent. Check your browser permissions.');
-      setStatus('error');
-      setTimeout(() => {
-        setStatus('idle');
-        setError(null);
-      }, 2800);
+      setError('Microphone access needed for voice. Using text fallback.');
+      setStatus('idle');
     }
+  }, [supertonicUrl, onMailFiled, userTranscript]);
+
+  const speakReply = (text: string) => {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    const voices = window.speechSynthesis.getVoices();
+    if (selectedAgent === 'darl') {
+      utterance.rate = 1.05;
+      utterance.pitch = 1.15;
+      
+      const femaleVoice = voices.find(v => 
+        (v.name.toLowerCase().includes('female') || 
+         v.name.toLowerCase().includes('zira') || 
+         v.name.toLowerCase().includes('hazel') || 
+         v.name.toLowerCase().includes('google uk english female') ||
+         v.name.toLowerCase().includes('susan') ||
+         v.name.toLowerCase().includes('natural')) && v.lang.startsWith('en')
+      );
+      if (femaleVoice) utterance.voice = femaleVoice;
+    } else {
+      utterance.rate = 0.92;
+      utterance.pitch = 0.78;
+      
+      const maleVoice = voices.find(v => 
+        (v.name.toLowerCase().includes('male') || 
+         v.name.toLowerCase().includes('david') || 
+         v.name.toLowerCase().includes('google us english male') ||
+         v.name.toLowerCase().includes('ravi') ||
+         v.name.toLowerCase().includes('microsoft') ||
+         v.name.toLowerCase().includes('natural')) && v.lang.startsWith('en')
+      );
+      if (maleVoice) utterance.voice = maleVoice;
+    }
+    
+    utterance.volume = 0.95;
+    window.speechSynthesis.speak(utterance);
   };
 
   const replayLastResponse = () => {
-    if (!agentResponse || status === 'speaking') return;
-
-    const utterance = new SpeechSynthesisUtterance(agentResponse);
-    utterance.rate = 0.96;
-
-    setStatus('speaking');
-    utterance.onend = () => setStatus('idle');
-    window.speechSynthesis.speak(utterance);
+    if (agentResponse) speakReply(agentResponse);
   };
 
   const reset = () => {
@@ -313,18 +245,14 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
 
   return (
     <div className="relative w-full min-h-[92vh] flex flex-col bg-[var(--paper)] overflow-hidden font-sans">
-      {/* Subtle paper grain */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0 opacity-40"
-        style={{
-          background:
-            'repeating-linear-gradient(0deg, rgba(11,11,11,0.025) 0 1px, transparent 1px 4px)',
-        }}
-      />
 
-      {/* Minimal top bar */}
+      {/* Minimal top bar — BrandWordmark + asset variant stamp */}
       <div className="relative z-20 flex items-center justify-between px-6 md:px-12 pt-6 pb-4 border-b-2 border-[var(--ink)]">
-        <BrandWordmark className="h-8" />
+        <div className="flex items-center gap-2.5">
+          <BrandWordmark className="h-8" />
+          {/* Asset integration: logo-mark-dark variant as small header stamp (pairs with navy accents) */}
+          <img src="/assets/logo-mark-dark.svg" alt="" className="h-5 w-auto opacity-60" aria-hidden />
+        </div>
         <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink)]/60">
           The Voice Agent
         </div>
@@ -333,8 +261,30 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 md:px-12">
         {/* Small framing text — the "words" are intentionally minimal in the hero */}
         <div className="mb-8 text-center">
-          <div className="inline-block font-mono text-xs uppercase tracking-[0.16em] bg-[var(--hi-yellow)] text-[var(--ink)] px-3 py-1 mb-4">
+          <div className="inline-block font-mono text-xs uppercase tracking-[0.16em] bg-[var(--hi-yellow)] text-[var(--ink)] px-3 py-1 mb-2">
             Real. Local. No hype.
+          </div>
+          <div className="flex justify-center gap-2 mb-4 font-mono text-[10px]">
+            <button
+              onClick={() => setSelectedAgent('darl')}
+              className={`px-3 py-1 border-2 border-[var(--ink)] rounded-xs cursor-pointer select-none transition-all ${
+                selectedAgent === 'darl' 
+                  ? 'bg-[var(--gold)] text-[var(--ink)] font-bold shadow-[1px_1px_0_var(--ink)]' 
+                  : 'bg-[var(--paper)] text-[var(--ink)]/60 border-[var(--ink)]/20'
+              }`}
+            >
+              👩‍💼 Darl (Assistant)
+            </button>
+            <button
+              onClick={() => setSelectedAgent('robokev')}
+              className={`px-3 py-1 border-2 border-[var(--ink)] rounded-xs cursor-pointer select-none transition-all ${
+                selectedAgent === 'robokev' 
+                  ? 'bg-[var(--red)] text-[var(--paper)] font-bold shadow-[1px_1px_0_var(--ink)] border-[var(--ink)]' 
+                  : 'bg-[var(--paper)] text-[var(--ink)]/60 border-[var(--ink)]/20'
+              }`}
+            >
+              🤖 Robokev (My Voice)
+            </button>
           </div>
           <h1 className="font-display text-[3.2rem] md:text-[4.5rem] leading-none tracking-[-0.04em] text-[var(--ink)]">
             Talk to <span className="hl-red">Good&apos;ai</span>
@@ -393,8 +343,15 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
               </StampButton>
             </div>
 
-            {/* Visualizer area */}
-            <div className="relative h-[380px] md:h-[460px] bg-[var(--paper)]">
+            {/* Visualizer area — wave-ribbon.png added verbatim as design signal / waveform layer (Brutalist Skill.html example, multiply blend, scaleY(0.7), participates in filing) */}
+            <div className="relative h-[380px] md:h-[460px] bg-[var(--paper)] overflow-hidden">
+              <img 
+                src="/assets/wave-ribbon.png" 
+                alt="" 
+                aria-hidden 
+                className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[68px] w-full object-cover mix-blend-multiply opacity-38" 
+                style={{ transform: 'scaleY(0.7) translateY(calc(-50% + var(--hero-filing-progress, 0) * -7px))' }} 
+              />
               <Visualizer
                 analyzer={analyzerNode}
                 active={isActive}
@@ -424,17 +381,20 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
                 </div>
               </div>
 
-              {/* Mode controls — now full stamp-btn physics + stamp impression focus for keyboard */}
+              {/* Mode controls — SSOT StampButton (paper variant) with engaged + focus die ring, keyboard parity. Grouped segmented. */}
               <div className="absolute bottom-4 right-4 z-30 flex border-2 border-[var(--ink)] bg-[var(--paper)] text-[10px] font-mono uppercase font-bold overflow-hidden shadow-[2px_2px_0_var(--ink)]" role="group" aria-label="Visualizer mode">
                 {(['calm', 'dynamic'] as const).map((m) => (
-                  <button
+                  <StampButton
                     key={m}
+                    variant="paper"
+                    size="sm"
+                    engaged={visualMode === m}
                     onClick={() => setVisualMode(m)}
                     aria-pressed={visualMode === m}
-                    className={`stamp-btn stamp-btn-paper px-5 py-2 text-[10px] border-r-2 border-[var(--ink)] last:border-r-0 ${visualMode === m ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
+                    className={`px-5 py-2 text-[10px] border-r-2 border-[var(--ink)] last:border-r-0 ${visualMode === m ? 'bg-[var(--ink)] text-[var(--paper)]' : ''}`}
                   >
                     {m}
-                  </button>
+                  </StampButton>
                 ))}
               </div>
             </div>
@@ -448,8 +408,8 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
                     animate={{ 
                       opacity: 1, 
                       y: 0, 
-                      scale: 1.01, // slight mechanical overshoot clack (stamp landing)
-                      boxShadow: '3px 3px 0 var(--ink)' 
+                      scale: [1.02, 1], 
+                      boxShadow: '4px 4px 0 var(--ink)' 
                     }}
                     transition={{ duration: 0.12, ease: STAMP_EASE, delay: 0.01 }}
                     className="pl-1"
@@ -458,71 +418,50 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
                     <p className="text-[var(--ink)] text-lg leading-snug">“{userTranscript}”</p>
                   </motion.div>
                 )}
-
                 {agentResponse && (
                   <motion.div
-                    initial={{ opacity: 0, y: -2, scale: 0.93, boxShadow: '1px 1px 0 var(--navy-deep)' }}
+                    initial={{ opacity: 0, y: 1, scale: 0.96, boxShadow: '1px 1px 0 var(--ink)' }}
                     animate={{ 
                       opacity: 1, 
                       y: 0, 
-                      scale: [1.02, 1], // fresh stamp pop + settle clack (hard cut, no float)
-                      boxShadow: '4px 4px 0 var(--navy-deep)' 
+                      scale: 1, 
+                      boxShadow: '3px 3px 0 var(--ink)' 
                     }}
-                    transition={{ duration: 0.135, ease: STAMP_EASE, times: [0, 1], delay: 0.03 }}
-                    className="pl-1 pt-3 border-t border-[var(--cream-line)]"
+                    transition={{ duration: 0.1, ease: STAMP_EASE }}
+                    className="pl-1"
                   >
-                    <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ocean-400)] mb-1.5">GOOD&apos;AI</div>
-                    <p className="font-serif text-2xl leading-tight text-[var(--ink)]">“{agentResponse}”</p>
-
-                    <StampButton
-                      variant="paper"
-                      size="sm"
-                      onClick={replayLastResponse}
-                      disabled={status === 'speaking'}
-                      className="mt-4 font-mono uppercase tracking-widest"
-                    >
-                      <Volume2 size={15} aria-hidden="true" /> Replay in our voice
-                    </StampButton>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--navy)]/70 mb-1">GOOD&apos;AI</div>
+                    <p className="text-[var(--ink)] text-[15px] leading-snug">“{agentResponse}”</p>
+                    <button onClick={replayLastResponse} className="mt-1 text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--navy)]/60 hover:text-[var(--navy)] underline decoration-1 underline-offset-2">Replay voice</button>
                   </motion.div>
                 )}
               </AnimatePresence>
-
-              {!userTranscript && !agentResponse && status === 'idle' && (
-                <div className="text-[var(--ink)]/60 text-sm pl-1">
-                  Hold the button and speak naturally. The local Supertonic instance will transcribe it.
-                </div>
+              {!userTranscript && !agentResponse && (
+                <div className="text-[var(--ink)]/60 text-sm pl-1">Hold the button and speak naturally. The local Supertonic instance will transcribe it.</div>
               )}
-
-              {error && <div className="text-[var(--warn)] text-sm pl-1">{error}</div>}
+              {error && (
+                <div className="text-[var(--warn)] text-sm pl-1 font-medium">{error}</div>
+              )}
             </div>
 
-            {/* Primary action bar — now using production <StampButton> primitive (exact 120ms physics, focus ring, keyboard parity, one red shout) */}
+            {/* Big red stamp CTA — one red per surface, full physics */}
             <div className="border-t-2 border-[var(--ink)] bg-[var(--paper-raised)] p-5 flex justify-center">
               <StampButton
                 variant="red"
                 size="lg"
                 engaged={status === 'listening'}
-                onClick={toggleListening}
-                disabled={status === 'thinking'}
+                onClick={isActive ? stopListening : startListening}
                 className="min-w-[280px] gap-3 text-lg tracking-[-0.01em] px-14 py-4 relative group"
-                aria-label={status === 'listening' ? 'Stop listening' : 'Press to speak your problem'}
+                aria-label={isActive ? "Stop listening" : "Press to speak your problem"}
               >
-                {/* Inner mechanical bevel for printed tactility (micro detail) */}
-                <div 
-                  className="absolute inset-0 rounded-[2px] pointer-events-none border border-white/15"
-                  style={{ 
-                    opacity: status === 'listening' ? 0.18 : 0.07,
-                    boxShadow: status === 'listening' ? 'inset 2px 2px 0 rgba(0,0,0,0.3)' : 'inset 1px 1px 0 rgba(255,255,255,0.12)'
-                  }} 
-                />
-                
-                {status === 'listening' ? (
+                <div className="absolute inset-0 rounded-[2px] pointer-events-none border border-white/15" style={{ opacity: 0.07, boxShadow: 'inset 1px 1px 0 rgba(255,255,255,0.12)' }} />
+                {isActive ? (
                   <>
-                    <Square className="h-5 w-5" aria-hidden="true" /> STOP LISTENING
+                    <Square size={18} aria-hidden="true" className="transition-transform group-active:scale-[0.92] duration-75" /> STOP
                   </>
                 ) : (
                   <>
-                    <Mic className="h-5 w-5 transition-transform group-active:scale-[0.92] duration-75" aria-hidden="true" /> PRESS TO SPEAK
+                    <Mic size={18} aria-hidden="true" className="transition-transform group-active:scale-[0.92] duration-75" /> PRESS TO SPEAK
                   </>
                 )}
               </StampButton>

@@ -18,6 +18,7 @@ import Manifest from '@/components/marketing/Manifest';
 import AISolutions from '@/components/marketing/AISolutions';
 import VoiceAgentDemo from '@/components/marketing/VoiceAgentDemo';
 import AutomationPlayground from '@/components/AutomationPlayground';
+import WebsiteAnalyzer from '@/components/marketing/WebsiteAnalyzer';
 
 
 // GSAP for mail-stack composition (per gsap-awwwards-website + gsap-scrolltrigger skills)
@@ -488,6 +489,9 @@ export default function HomeClient() {
           )}
         </div>
       </section>
+
+      {/* Website Analyzer — custom audit automation */}
+      <WebsiteAnalyzer />
 
       {/* POWERFUL CLOSING RITUAL — final thick ink navy stamped footer docket */}
       {/* Contains core promise + minimal contact + "we'll sort the boring stuff" in Fraunces WONK */}
