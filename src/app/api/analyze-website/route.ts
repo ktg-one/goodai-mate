@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
 
     const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
     const logs: string[] = [`[SYSTEM] Initializing Website Analysis for: ${targetUrl}`];
+    let extractedEmail = '';
 
     // 1. Scrape Website
     let scrapedText = '';
@@ -66,6 +67,30 @@ export async function POST(req: NextRequest) {
 
       if (fetchRes.ok) {
         const html = await fetchRes.text();
+        
+        // Extract email address via regex from the original HTML (catches mailto: links)
+        const emailMatches = html.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,10}/g);
+        if (emailMatches && emailMatches.length > 0) {
+          const validEmails = emailMatches.filter(e => {
+            const lower = e.toLowerCase();
+            return !lower.endsWith('.png') && 
+                   !lower.endsWith('.jpg') && 
+                   !lower.endsWith('.jpeg') && 
+                   !lower.endsWith('.gif') && 
+                   !lower.endsWith('.svg') &&
+                   !lower.endsWith('.webp') &&
+                   !lower.endsWith('.js') &&
+                   !lower.endsWith('.css');
+          });
+          if (validEmails.length > 0) {
+            extractedEmail = validEmails[0];
+            logs.push(`[ANALYZER] Extracted contact email from website: ${extractedEmail}`);
+          }
+        }
+        if (!extractedEmail) {
+          logs.push(`[ANALYZER] No contact email found on website landing page.`);
+        }
+
         // Simple HTML text extractor
         scrapedText = html
           .replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, '')
@@ -148,7 +173,7 @@ Only output the raw JSON object. Do not wrap in markdown code blocks or add addi
 
     // 3. Log Website Lead to GWS Sheets / Gmail if CLI configured
     try {
-      const destination = email && email.trim() ? email.trim() : 'me';
+      const destination = email && email.trim() ? email.trim() : (extractedEmail || 'me');
       logs.push(`[GWS] Sending website audit report email to: ${destination}...`);
       const timestamp = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Perth' });
       
