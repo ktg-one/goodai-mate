@@ -9,6 +9,7 @@ const GWS_PATH = 'D:\\packages\\npm-global\\node_modules\\@googleworkspace\\cli\
 
 interface AnalyzePayload {
   url: string;
+  email?: string;
 }
 
 async function runGwsCommand(args: string[], jsonInput?: unknown): Promise<unknown> {
@@ -34,7 +35,7 @@ async function runGwsCommand(args: string[], jsonInput?: unknown): Promise<unkno
 
 export async function POST(req: NextRequest) {
   try {
-    const { url } = (await req.json()) as AnalyzePayload;
+    const { url, email } = (await req.json()) as AnalyzePayload;
 
     if (!url || !url.trim()) {
       return NextResponse.json(
@@ -147,22 +148,25 @@ Only output the raw JSON object. Do not wrap in markdown code blocks or add addi
 
     // 3. Log Website Lead to GWS Sheets / Gmail if CLI configured
     try {
-      logs.push(`[GWS] Logging website lead to Workspace Leads Board...`);
+      const destination = email && email.trim() ? email.trim() : 'me';
+      logs.push(`[GWS] Sending website audit report email to: ${destination}...`);
       const timestamp = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Perth' });
       
       const rawEmail = 
-        `To: me\r\n` +
-        `Subject: Good'ai Web Audit Requested - ${analysisResult.businessType}\r\n` +
+        `To: ${destination}\r\n` +
+        `Subject: Good'ai Systems Audit - ${analysisResult.businessType}\r\n` +
         `Content-Type: text/plain; charset="utf-8"\r\n` +
         `\r\n` +
-        `Website Audit Run details:\r\n` +
-        `- Target URL: ${targetUrl}\r\n` +
-        `- Business: ${analysisResult.businessType}\r\n` +
-        `- Suggested Automations:\r\n` +
-        `  1. ${analysisResult.automations[0]}\r\n` +
-        `  2. ${analysisResult.automations[1]}\r\n` +
-        `  3. ${analysisResult.automations[2]}\r\n\r\n` +
-        `Audit time: ${timestamp}\r\n`;
+        `Hi there,\r\n\r\n` +
+        `Here is your custom systems audit for ${analysisResult.businessType} requested on ${timestamp} for ${targetUrl}:\r\n\r\n` +
+        `THREE AUTOMATION OPPORTUNITIES:\r\n` +
+        `1. ${analysisResult.automations[0]}\r\n` +
+        `2. ${analysisResult.automations[1]}\r\n` +
+        `3. ${analysisResult.automations[2]}\r\n\r\n` +
+        `GOOD'AI RECOMMENDATION:\r\n` +
+        `"${analysisResult.summaryProposal}"\r\n\r\n` +
+        `Cheers,\r\n` +
+        `The Good'ai Team\r\n`;
 
       const base64UrlEmail = Buffer.from(rawEmail)
         .toString('base64')
@@ -176,7 +180,7 @@ Only output the raw JSON object. Do not wrap in markdown code blocks or add addi
       ], {
         raw: base64UrlEmail
       });
-      logs.push(`[GWS] Audit logged to Workspace Gmail.`);
+      logs.push(`[GWS] Audit successfully sent via Workspace Gmail.`);
     } catch {}
 
     logs.push(`[SYSTEM] Website Analysis pipeline finished.`);

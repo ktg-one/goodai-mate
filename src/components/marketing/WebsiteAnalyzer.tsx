@@ -6,6 +6,7 @@ import StampButton from '@/components/StampButton';
 
 export default function WebsiteAnalyzer() {
   const [url, setUrl] = useState('');
+  const [email, setEmail] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -47,7 +48,10 @@ export default function WebsiteAnalyzer() {
       const response = await fetch('/api/analyze-website', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: url.trim() })
+        body: JSON.stringify({ 
+          url: url.trim(),
+          email: email.trim()
+        })
       });
 
       const data = await response.json();
@@ -87,17 +91,17 @@ export default function WebsiteAnalyzer() {
 
       <div className="stamp-card stamp-card-paper p-6 md:p-8 rounded-sm shadow-[4px_4px_0_var(--ink)] bg-[var(--paper-raised)] border-2 border-[var(--ink)] relative">
         <form onSubmit={handleAnalyze} className="space-y-4">
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="website-url" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">
-              1. Enter Website Link
-            </label>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <div className="relative flex-1">
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="website-url" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">
+                1. Website Link
+              </label>
+              <div className="relative">
                 <input
                   id="website-url"
                   type="text"
                   className="gai-input w-full pr-10 text-sm"
-                  placeholder="e.g. www.perthplumbingservices.com.au"
+                  placeholder="e.g. www.perthplumbing.com.au"
                   required
                   value={url}
                   onChange={e => setUrl(e.target.value)}
@@ -107,20 +111,41 @@ export default function WebsiteAnalyzer() {
                   <Search size={16} />
                 </div>
               </div>
-              <StampButton
-                variant="red"
-                size="sm"
-                type="submit"
-                disabled={isAnalyzing || !url.trim()}
-                className="w-full sm:w-fit font-bold whitespace-nowrap"
-              >
-                {isAnalyzing ? 'Analyzing...' : 'Audit My Business Opportunity'}
-              </StampButton>
+              <p id="url-help" className="text-[9px] font-mono text-[var(--ink)]/50">
+                The AI will scan your landing page and extract automation suggestions.
+              </p>
             </div>
-            <p id="url-help" className="text-[9px] font-mono text-[var(--ink)]/50">
-              Paste your business URL. The AI will scan your services and extract automations.
-            </p>
+
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="website-email" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">
+                2. Your Email (Optional)
+              </label>
+              <div className="relative">
+                <input
+                  id="website-email"
+                  type="email"
+                  className="gai-input w-full text-sm"
+                  placeholder="Receive audit in your inbox"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  aria-describedby="email-help"
+                />
+              </div>
+              <p id="email-help" className="text-[9px] font-mono text-[var(--ink)]/50">
+                We will email a copy of the custom systems audit directly to this address.
+              </p>
+            </div>
           </div>
+
+          <StampButton
+            variant="red"
+            size="sm"
+            type="submit"
+            disabled={isAnalyzing || !url.trim()}
+            className="w-full font-bold"
+          >
+            {isAnalyzing ? 'Analyzing...' : 'Audit My Business Opportunity'}
+          </StampButton>
         </form>
 
         {/* Live crawling log terminal */}
