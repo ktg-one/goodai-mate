@@ -1,31 +1,38 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 
-/* ============================================================
-   Good'ai — Self-hosted Fraunces (from public/fonts, per brand book)
-   ============================================================ */
 @font-face {
   font-family: "Fraunces";
-  src: url("/fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype-variations");
+  src: url("/fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Fraunces";
-  src: url("/fonts/Fraunces-Italic-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype-variations");
+  src: url("/fonts/Fraunces-Italic-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype");
   font-weight: 100 900;
   font-style: italic;
   font-display: swap;
 }
 
-:root {
-  /* ============================================================
-     Good'ai — Canonical tokens from public/design-system-new/colors_and_type.css
-     (source of truth). Warm cream paper + high-contrast coloured cards.
-     ============================================================ */
+@theme {
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
+}
 
-  /* COLOUR — the five core brand colours */
+
+/* ============================================================
+   Good'ai — Canonical tokens from public/design-system-new/colors_and_type.css
+   (source of truth). Warm cream paper + high-contrast coloured cards.
+   Verbatim drop + site overrides for mail-board.
+   ============================================================ */
+
+/* Fonts loaded via next/font in layout.tsx (using TTFs from public/fonts/ which match the design in public/design-system-new/fonts/ verbatim).
+   Rely on --font-fraunces etc vars for optimization (subset, preload, etc). */
+
+:root {
+  /* COLOUR — the five core brand colours (verbatim from June 3 design book) */
   --gold:        #F3A62A;
   --gold-deep:   #D98E1C;
   --gold-tint:   #FBDFA6;
@@ -39,7 +46,7 @@
   --navy-tint:   #C9CEDD;
 
   /* Neutrals (WARM cream canvas + true black) */
-  --paper:        #FFF0D0;   /* page canvas — warm cream */
+  --paper:        #FFF0D0;
   --paper-deep:   #F6E2B8;
   --paper-3:      #ECD49A;
   --cream-line:   #E0C690;
@@ -49,14 +56,14 @@
   --ink-mute:     #6B6452;
   --ink-faint:    #A0967C;
 
-  /* Supporting (used sparingly) */
+  /* Supporting */
   --hi-yellow:    #F3A62A;
   --trust-blue:   #202C59;
   --ok:           #2E6E3E;
   --warn:         #D8331F;
   --danger:       #D8331F;
 
-  /* LEGACY ALIASES — keep old token names working during transition */
+  /* LEGACY ALIASES */
   --orange:       var(--red);
   --orange-deep:  var(--red-deep);
   --orange-tint:  var(--red-tint);
@@ -97,21 +104,19 @@
   --highlight:     var(--gold);
   --success:       var(--ok);
 
-  /* Stamp shadows — flat, participate on hover/press */
+  /* Stamp shadows — flat, participate on hover/press (verbatim) */
   --shadow-stamp:        3px 3px 0 var(--ink);
   --shadow-stamp-orange: 3px 3px 0 var(--red);
   --shadow-stamp-ocean:  3px 3px 0 var(--navy);
   --shadow-stamp-deep:   4px 4px 0 var(--ink);
 
   /* Navy pile for hero stamp settle (deeper filing shadows) + docket */
-  --navy: #202C59;
-  --navy-deep: #141C3A;
   --navy-ink: #0F162B;
 
-  /* TYPE — Families (Fraunces already loaded above) */
-  --font-sans:    "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  /* TYPE — Families (using global @font-face rules, pointing to design's font files) */
+  --font-sans:    var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: "Fraunces", Georgia, serif;
-  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-mono:    var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
 
   /* TYPE — Scale */
   --fs-12: 0.75rem;
@@ -146,799 +151,10 @@
   /* Hard mechanical easings (kept from prior brutalist work) */
   --ease-brutal: cubic-bezier(0, 0, 0.2, 1);
   --ease-hard-out: cubic-bezier(0.2, 0, 0, 1);
-  --ease-stamp-press: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-stamp-press: cubic-bezier(0.23, 1, 0.32, 1); /* design 90-160ms cubic */
 }
 
-@theme inline {
-  --color-background: var(--bg);
-  --color-foreground: var(--fg);
-  --color-heading: var(--fg);
-  --color-muted: var(--fg-mute);
-  --color-surface: var(--bg-raised);
-  --color-surface-raised: var(--bg-sunken);
-  --color-border: var(--border);
-  --color-border-hover: var(--border-strong);
-  --color-accent: var(--accent);
-  --color-accent-soft: var(--accent-soft);
-  --font-sans: var(--font-sans);
-  --font-serif: var(--font-display);
-  --font-mono: var(--font-mono);
-
-  /* Good'ai semantic colors — enables border-ink, bg-paper, text-ink, bg-paper-raised, etc. */
-  --color-ink: var(--ink);
-  --color-paper: var(--paper);
-  --color-paper-raised: #EFEEEC;
-  --color-orange: var(--orange);
-  --color-orange-deep: var(--orange-deep);
-  --color-hi-yellow: var(--hi-yellow);
-  --color-ocean: var(--ocean-400);
-
-  /* Override Tailwind default radii to keep shadcn components sharp and brand-compliant */
-  --radius-lg: var(--radius-sm);
-  --radius-md: 6px;
-  --radius-sm: var(--radius-xs);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  min-height: 100%;
-  /* Warm cream paper + 1px hairline grain (exact from design-system-new previews).
-     Sells the "printed & pinned 1978 direct-mail" artifact lie. No heavy SVG noise on whole page. */
-  background:
-    repeating-linear-gradient(0deg, rgba(11,11,11,0.025) 0 1px, transparent 1px 4px),
-    var(--bg);
-  color: var(--fg);
-  font-family: var(--font-sans);
-  font-size: 16px;
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-body {
-  margin: 0;
-  background-image:
-    repeating-linear-gradient(0deg, rgba(11, 11, 11, 0.025) 0 1px, transparent 1px 4px);
-}
-
-button,
-input,
-textarea {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-.wordmark {
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  font-variation-settings: "opsz" 144;
-}
-
-.wordmark .apos {
-  color: var(--orange);
-}
-
-.gai-wordmark {
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  font-variation-settings: "opsz" 144;
-  line-height: 1;
-}
-
-.gai-wordmark .apos {
-  color: var(--orange);
-  opacity: 0.72;
-}
-
-@keyframes gai-fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes gai-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes gai-typing {
-  0%,
-  60%,
-  100% {
-    opacity: 0.35;
-    transform: translateY(0);
-  }
-  30% {
-    opacity: 1;
-    transform: translateY(-4px);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-  /* Stamp physics must be instant + static for motor/sensory differences. Shadows stay at rest state. New clack/ribbon life flattened. */
-  .stamp-press,
-  .stamp-press-red,
-  .stamp-box,
-  .stamp-pop,
-  .stamp-clack,
-  .stamp-clack-red,
-  .mail-ribbon,
-  .mail-ribbon-tear,
-  .pinned-notice {
-    transition: none !important;
-    transform: none !important;
-    animation: none !important;
-    filter: none !important;
-    box-shadow: 3px 3px 0 var(--ink) !important;
-  }
-  .mail-board { --global-settle: 0; --pile-compress: 1; }
-  .mail-docket-footer { --final-clack: 0; --stamp-depth: 0.6; --tape-flutter: 0px; }
-}
-
-/* ============================================================
-   Good'ai — Additional component styles from new UI kit (public/ui_kits/web/styles.css)
-   Adapted for Next.js production use. Stamp shadows, sharp radii, one orange per surface.
-   ============================================================ */
-
-/* Legacy .gai-onepage / .gai-intake / blob styles removed for token fidelity (pre-design-system-new).
-   All surfaces now use .stamp-box / stamp-press + design-system-new tokens. */
-.gai-tool-mini {
-  font-size: 12px;
-  padding: 6px 10px;
-}
-.gai-intake-hint {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin: 14px 0 0;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  color: var(--ink-mute);
-}
-
-/* Answer panel (post-intake response surface) */
-.gai-answer {
-  width: 100%;
-  max-width: 580px;
-  margin-top: 22px;
-  background: var(--ocean-50);
-  border: 2px solid var(--ocean-400);
-  border-radius: var(--radius-sm);
-  box-shadow: 4px 4px 0 var(--ocean-600);
-  padding: 18px 20px;
-  text-align: left;
-  animation: gai-pop 500ms cubic-bezier(0.23, 1, 0.32, 1) both;
-}
-@keyframes gai-pop {
-  from {
-    opacity: 0;
-    transform: translateY(8px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-.gai-answer-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-.gai-answer-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ocean-600);
-  flex: 1;
-}
-.gai-answer-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--ocean-400);
-  box-shadow: 0 0 0 3px var(--ocean-100);
-  animation: gai-pulse 1.6s ease-in-out infinite;
-}
-@keyframes gai-pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
-}
-.gai-answer-text {
-  font-size: 16.5px;
-  line-height: 1.55;
-  color: var(--ink);
-  margin: 0 0 14px;
-  white-space: pre-wrap;
-}
-.gai-answer-cta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  padding-top: 12px;
-  border-top: 1px dashed var(--ocean-200);
-}
-.gai-answer-cta-help {
-  font-size: 13px;
-  color: var(--ink-mute);
-}
-
-/* Brand buttons (stamp style, no shadcn defaults) */
-.gai-btn {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: all 150ms cubic-bezier(0.23, 1, 0.32, 1);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  white-space: nowrap;
-}
-.gai-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.gai-btn-md {
-  font-size: 14px;
-  padding: 10px 18px;
-  border-radius: var(--radius-sm);
-}
-.gai-btn-primary {
-  background: var(--orange);
-  color: var(--paper);
-  border: 2px solid var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
-}
-.gai-btn-primary:hover:not(:disabled) {
-  background: var(--orange-deep);
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--ink);
-}
-
-/* Feature chips (match new kit) */
-.gai-features {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 36px;
-}
-.gai-feature {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: #fff;
-  border: 2px solid var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
-  padding: 10px 14px 10px 10px;
-  border-radius: 999px;
-  transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 150ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-.gai-feature:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--ink);
-}
-.gai-feature-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-/* Chat thread (new kit style - bubbles, bar) */
-.gai-chat {
-  width: 100%;
-  max-width: 580px;
-  background: var(--paper-raised);
-  border: 2px solid var(--ink);
-  border-radius: var(--radius-sm);
-  box-shadow: 4px 4px 0 var(--ink);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-.gai-chat-scroll {
-  max-height: 420px;
-  overflow-y: auto;
-  padding: 16px;
-  background: var(--paper);
-}
-.gai-chat-inner {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.gai-bubble-row {
-  display: flex;
-}
-.gai-bubble-row.is-user {
-  justify-content: flex-end;
-}
-.gai-bubble {
-  max-width: 85%;
-  padding: 10px 14px;
-  font-size: 15px;
-  line-height: 1.45;
-  border-radius: var(--radius-sm);
-  border: 2px solid var(--ink);
-  box-shadow: 2px 2px 0 var(--ink);
-}
-.gai-bubble-ai {
-  background: var(--ocean-50);
-  color: var(--ink);
-}
-.gai-bubble-user {
-  background: var(--ink);
-  color: var(--paper);
-}
-.gai-typing {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 10px 14px;
-}
-.gai-typing span {
-  width: 6px;
-  height: 6px;
-  background: var(--ink-mute);
-  border-radius: 50%;
-  animation: gai-typing 1.2s infinite;
-}
-.gai-typing span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.gai-typing span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-.gai-chat-bar {
-  border-top: 2px solid var(--ink);
-  background: var(--paper-raised);
-  padding: 12px;
-}
-.gai-chat-bar-inner {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-/* Base input for kit-style forms */
-.gai-input {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  height: 44px;
-  border: 2px solid var(--cream-line);
-  background: var(--paper);
-  border-radius: var(--radius-xs);
-  padding: 0 14px;
-  color: var(--ink);
-  outline: none;
-  transition: border-color 120ms;
-}
-.gai-input:focus {
-  border-color: var(--ocean-400);
-}
-.gai-input::placeholder {
-  color: var(--ink-faint);
-}
-
-/* Lead card (stamped, inside chat flow) */
-.gai-leadcard {
-  position: relative;
-  background: var(--paper-raised);
-  border: 2px solid var(--ink);
-  border-radius: var(--radius-sm);
-  box-shadow: 4px 4px 0 var(--ink);
-  padding: 18px 18px 16px;
-  margin: 8px 0;
-}
-.gai-leadcard-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid var(--ink);
-  background: var(--paper);
-  border-radius: 4px;
-  box-shadow: 1px 1px 0 var(--ink);
-  font-size: 12px;
-  line-height: 1;
-}
-.gai-leadcard-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ocean-600);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 6px;
-}
-.gai-leadcard-title {
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1.2;
-  margin: 0 0 6px;
-  color: var(--ink);
-}
-.gai-leadcard-help {
-  font-size: 13px;
-  color: var(--ink-mute);
-  margin: 0 0 14px;
-  line-height: 1.4;
-}
-.gai-leadcard-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.gai-leadcard-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-.gai-leadcard-success {
-  background: var(--ocean-50);
-  border-color: var(--ocean-400);
-  box-shadow: 4px 4px 0 var(--ocean-600);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-}
-.gai-leadcard-checkwrap {
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  background: #fff;
-  border: 2px solid var(--ocean-500);
-  color: var(--ocean-500);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.gai-leadcard-success-text {
-  font-size: 15px;
-  line-height: 1.35;
-}
-
-/* Icon button for send etc — now full stamp-btn-red canon (120ms, one red shout) */
-.gai-iconbtn-send {
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--red);
-  color: var(--paper);
-  border: 2px solid var(--ink);
-  border-radius: 4px;
-  flex-shrink: 0;
-  box-shadow: 3px 3px 0 var(--red-deep);
-  transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 120ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-.gai-iconbtn-send:hover:not(:disabled) {
-  background: var(--red-deep);
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--red-deep);
-}
-.gai-iconbtn-send:active:not(:disabled) {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--red-deep);
-}
-.gai-iconbtn-send:focus-visible {
-  outline: 3px solid var(--red);
-  outline-offset: -1px;
-  box-shadow: 5px 5px 0 var(--red-deep);
-}
-.gai-iconbtn-send:disabled {
-  opacity: 0.5;
-}
-
-/* Spinner */
-.gai-spinner {
-  width: 12px;
-  height: 12px;
-  border: 2px solid currentColor;
-  border-right-color: transparent;
-  border-radius: 50%;
-  animation: gai-spin 0.7s linear infinite;
-}
-@keyframes gai-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Error callout */
-.gai-error {
-  margin-top: 14px;
-  font-size: 13px;
-  color: var(--danger);
-  background: #ffe9e5;
-  border: 1px solid #f4b7b0;
-  padding: 10px 14px;
-  border-radius: var(--radius-sm);
-}
-
-/* Reduced motion for new elements */
-@media (prefers-reduced-motion: reduce) {
-  .gai-intake,
-  .gai-answer,
-  .gai-answer-dot,
-  .gai-feature,
-  .gai-bubble,
-  .gai-leadcard {
-    animation: none !important;
-  }
-}
-
-/* ============================================================
-   Exact component classes from public/hero/src/index.css
-   Added for 1:1 design consistency with the hero source in public/
-   ============================================================ */
-
-/* Grain is now inline in html/body (warm cream paper + 1px hairline only). External texture removed for perf + offline + brutalist purity. */
-
-.btn-primary {
-  @apply relative inline-flex items-center justify-center border-2 border-ink bg-ink text-paper font-sans font-bold px-6 py-3 transition-all outline-none rounded-[4px];
-  box-shadow: var(--shadow-stamp-orange);
-}
-.btn-primary:hover {
-  @apply -translate-x-[1px] -translate-y-[1px];
-  box-shadow: 4px 4px 0 #F25C2B;
-}
-.btn-primary:active {
-  @apply translate-x-[2px] translate-y-[2px];
-  box-shadow: 1px 1px 0 #F25C2B;
-}
-
-.btn-secondary {
-  @apply relative inline-flex items-center justify-center border-2 border-ink bg-paper-raised text-ink font-sans font-bold px-6 py-3 transition-all outline-none rounded-[4px];
-  box-shadow: var(--shadow-stamp);
-}
-.btn-secondary:hover {
-  @apply -translate-x-[1px] -translate-y-[1px];
-  box-shadow: 4px 4px 0 var(--ink);
-}
-.btn-secondary:active {
-  @apply translate-x-[2px] translate-y-[2px];
-  box-shadow: 1px 1px 0 var(--ink);
-}
-
-.stamp-box {
-  @apply border-2 border-ink bg-paper-raised rounded-[4px];
-  box-shadow: var(--shadow-stamp);
-}
-
-/* ============================================================
-   BRUTALIST / DIRECT-MAIL ANIMATION TOKENS
-   60fps mechanical motion. No floaty SaaS easing.
-   Stamp shadows PARTICIPATE — they compress, shift and pop with the surface.
-   Hard edges. Purposeful. Raw.
-   ============================================================ */
-
-/* ============================================================
-   HARD MECHANICAL STAMP-PRESS PHYSICS — SINGLE SOURCE OF TRUTH (awwwwards-animations + design-system-new SSOT)
-   120ms exact. No floaty cubics anywhere for presses.
-   Hover: lift + stamp shadow grow (paper lifts off tray).
-   Active/engaged/pointerdown: sink + collapse (rubber stamp clack + letterpress ink transfer).
-   .is-pressed for JS-controlled (listening, filing clack).
-   Ink transfer sim: subtle wet density overlay on hard press (1978 ink bleed on paper).
-   All stamped surfaces (btns, cards, boxes, dockets) MUST use these. No ad-hoc transitions.
-   Reduced-motion: zero transitions, static shadows only (see media query below).
-   ============================================================ */
-:root {
-  --ease-stamp-press: cubic-bezier(0.23, 1, 0.32, 1);  /* EXACT canon mechanical 120ms. No others for stamp. */
-  --ease-brutal: cubic-bezier(0, 0, 0.2, 1);
-  --ease-hard-out: cubic-bezier(0.2, 0, 0, 1);
-}
-
-/* Unified stamp press — base class + variants. Shadows fully participate. (Card uses dedicated heavier 2px block rules below.) */
-.stamp-press,
-.stamp-press-red,
-.stamp-press-gold,
-.stamp-press-navy,
-.stamp-box,
-.stamp-btn {
-  transition: transform 120ms var(--ease-stamp-press), box-shadow 120ms var(--ease-stamp-press);
-  will-change: transform, box-shadow;
-}
-.stamp-press:hover:not(:disabled),
-.stamp-box:hover,
-.stamp-btn:hover:not(:disabled) {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--ink);
-}
-.stamp-press:active:not(:disabled),
-.stamp-press.is-pressed,
-.stamp-box:active,
-.stamp-btn:active:not(:disabled),
-.stamp-btn.is-engaged {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--ink);
-}
-
-/* Red shout (one per surface). Ink transfer stronger on red. */
-.stamp-press-red,
-.stamp-btn-red {
-  box-shadow: 3px 3px 0 var(--red-deep);
-}
-.stamp-press-red:hover:not(:disabled),
-.stamp-btn-red:hover:not(:disabled) {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--red-deep);
-}
-.stamp-press-red:active:not(:disabled),
-.stamp-press-red.is-pressed,
-.stamp-btn-red:active:not(:disabled),
-.stamp-btn-red.is-engaged {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--red-deep);
-  /* Real ink transfer bleed sim — wet density on hard mechanical press */
-  filter: contrast(1.08) saturate(1.1);
-}
-
-/* Gold / navy variants for completeness (shadows participate) */
-.stamp-press-gold,
-.stamp-btn-gold { box-shadow: 3px 3px 0 var(--ink); }
-.stamp-press-gold:hover:not(:disabled),
-.stamp-btn-gold:hover:not(:disabled) { box-shadow: 4px 4px 0 var(--ink); }
-
-.stamp-press-navy,
-.stamp-btn-navy,
-.stamp-card-navy { box-shadow: 3px 3px 0 var(--navy-deep); }
-.stamp-press-navy:hover:not(:disabled),
-.stamp-btn-navy:hover:not(:disabled),
-.stamp-card-navy:hover { box-shadow: 4px 4px 0 var(--navy-deep); }
-
-/* JS-triggered hard stamp clack (for transcript arrivals, footer pin ritual, canvas sync).
-   Use via classList.add('stamp-clack'); setTimeout remove 140ms. 60fps, no re-layout. */
-.stamp-clack {
-  animation: stamp-clack-physics 135ms var(--ease-stamp-press) forwards;
-}
-@keyframes stamp-clack-physics {
-  0%   { transform: translate(0,0) scale(1); box-shadow: 3px 3px 0 var(--ink); }
-  35%  { transform: translate(3px, 3px) scale(0.985); box-shadow: 1px 2px 0 var(--ink); filter: contrast(1.12); }
-  100% { transform: translate(2px, 2px) scale(1); box-shadow: 1px 1px 0 var(--ink); filter: none; }
-}
-.stamp-clack-red {
-  animation: stamp-clack-physics-red 135ms var(--ease-stamp-press) forwards;
-}
-@keyframes stamp-clack-physics-red {
-  0%   { transform: translate(0,0) scale(1); box-shadow: 3px 3px 0 var(--red-deep); }
-  35%  { transform: translate(3px, 3px) scale(0.985); box-shadow: 1px 2px 0 var(--red-deep); filter: contrast(1.12) saturate(1.15); }
-  100% { transform: translate(2px, 2px) scale(1); box-shadow: 1px 1px 0 var(--red-deep); filter: none; }
-}
-
-/* Mechanical status relay blink — replaces soft pulse for brutalist listening indicator */
-@keyframes stamp-relay {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
-}
-.stamp-relay {
-  animation: stamp-relay 820ms steps(2, end) infinite;
-}
-
-/* Hard stamp-pop reveal for cards/sections (pair with motion whileInView) */
-.stamp-pop {
-  transition: transform 160ms var(--ease-hard-out), box-shadow 160ms var(--ease-hard-out), opacity 120ms linear;
-}
-.stamp-pop[data-visible="true"] {
-  transform: translateY(0) scale(1);
-  box-shadow: var(--shadow-stamp);
-  opacity: 1;
-}
-
-/* ============================================================
-   SCROLL-SCRUBBED RIBBON RECEIPT BRIDGES + DOCKET EDGES
-   Extends hero Visualizer paper-ribbon language into lower sections.
-   Mechanical tension/advance on scroll. Perforated direct-mail receipt strips.
-   60fps via transform only. GSAP/Framer scrub friendly (ease:none or power).
-   ============================================================ */
-.ribbon-receipt {
-  position: relative;
-  height: 11px;
-  border-top: 2px solid var(--ink);
-  border-bottom: 2px solid var(--ink);
-  background: repeating-linear-gradient(
-    90deg,
-    var(--paper-raised) 0 8px,
-    var(--ink) 8px 9px,
-    var(--paper-raised) 9px 17px
-  );
-  overflow: hidden;
-  /* Perforation edge simulation */
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 0 var(--ink);
-}
-.ribbon-receipt .ribbon-tape {
-  position: absolute;
-  top: 1px; bottom: 1px;
-  left: 0;
-  width: 38%;
-  background: linear-gradient(90deg, transparent, rgba(11,11,11,0.08), transparent);
-  border-left: 1px solid var(--ink);
-  border-right: 1px solid var(--ink);
-  /* Tension feel when scrubbed */
-  will-change: transform;
-}
-.ribbon-receipt .ribbon-perf {
-  position: absolute;
-  top: -2px; bottom: -2px;
-  width: 3px;
-  background: var(--ink);
-  box-shadow: 2px 0 0 var(--paper), -2px 0 0 var(--paper);
-}
-.docket-edge {
-  border-left: 4px solid var(--ink);
-  border-right: 1px solid var(--ink);
-  background: var(--paper-raised);
-  position: relative;
-}
-.docket-edge::after {
-  content: '';
-  position: absolute;
-  right: 0; top: 0; bottom: 0;
-  width: 6px;
-  background: repeating-linear-gradient(180deg, var(--ink) 0 2px, transparent 2px 7px);
-  opacity: 0.7;
-}
-
-/* ============================================================
-   KEYWORD HIGHLIGHT — coloured card behind a standout word.
-   From design-system-new/colors_and_type.css (SSOT).
-   Use on headlines: one or two per major surface.
-   Vary gold / red / navy. Em-based so it scales.
-   Example: <h1>We sort the <span class="hl-red">boring stuff</span>.</h1>
-   ============================================================ */
+/* HL / WONK emphasis (verbatim from design, exactly one per major surface) */
 .hl,
 .hl-red,
 .hl-navy {
@@ -954,351 +170,168 @@ button {
 .hl-red  { background: var(--red);  color: var(--paper); }
 .hl-navy { background: var(--navy); color: var(--paper); }
 
-/* ============================================================
-   Custom Wordmark Font (their own font, not Fraunces)
-   Place the font file in /assets/ and update the src below.
-   ============================================================ */
-/* ============================================================
-   Custom Wordmark Font (placed directly in public/ per branding direction)
-   Follows branding guide: Good'ai (lowercase ai), orange apostrophe.
-   The official guide prefers Fraunces for display, but this overrides
-   the wordmark treatment with the provided custom font.
-   ============================================================ */
-@font-face {
-  font-family: 'GoodaiWordmark';
-  src: url('/GoodaiWordmark.woff2') format('woff2'); /* Font is in public/ root. Update filename if different. */
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-.brand-wordmark {
-  font-family: 'GoodaiWordmark', system-ui, sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  color: var(--ink);
-}
-
-.brand-wordmark .apos {
-  color: var(--orange);
-}
-
-.brand-wordmark {
-  font-family: 'GoodaiWordmark', system-ui, sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  color: var(--ink);
-}
-
-.brand-wordmark .apos {
-  color: var(--orange);
-}
-
-/* Footer kit styles (for the ink block footer) */
-.gai-footer-h {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(248, 248, 246, 0.56);
-}
-
-/* (Duplicate .hl block removed — token drift / duplication P0 fix. SSOT lives above at .hl rules + design-system-new/colors_and_type.css) */
-
-/* ============================================================
-   BRUTALIST STAMP PRIMITIVES — production grade, awwwards-ui-skills canon
-   4px radii. 2px ink borders. 120ms mechanical transition (cubic-bezier(0.23, 1, 0.32, 1) SSOT).
-   Hover: translate(-1px,-1px) + shadow grow. Active/engaged: translate(2px,2px) + collapse (real rubber stamp on docket).
-   Focus-visible: 3px offset ring (ink/red) that stamps INTO the border — die impression, no float glow.
-   ONE RED SHOUT PER SURFACE. .hl WONK (Fraunces) on key phrases only. No generic cards.
-   Direct import only. No ad-hoc shadows/motion. Docket-pin via StampCard pin + pinned-notice.
-   ============================================================ */
-
-/* Base button — 4pt scale, exact press physics */
-.stamp-btn {
+/* Base paper grain + type (matches design previews) */
+html, body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--fg);
   font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 1;
-  padding: 11px 18px;           /* matches design-system-new specimens */
-  border: 2px solid var(--ink);
-  border-radius: 4px;           /* --radius-xs exact */
-  cursor: pointer;
-  transition: transform 120ms var(--ease-stamp-press),
-              box-shadow 120ms var(--ease-stamp-press),
-              background-color 120ms var(--ease-stamp-press);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ============================================================
+   STAMP-BTN PRIMITIVES (production, from site StampButton + design stamp physics)
+   Hover: translate(-1px,-1px) + shadow grow. Active/engaged: translate(2px,2px) + collapse.
+   One red per surface. 120ms stamp press. Flat 3px only.
+   ============================================================ */
+.stamp-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  white-space: nowrap;
-  box-shadow: var(--shadow-stamp);
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-}
-.stamp-btn:hover:not(:disabled) {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--ink);
-}
-.stamp-btn:active:not(:disabled),
-.stamp-btn.is-engaged {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--ink);
-}
-.stamp-btn:focus-visible {
-  outline: 3px solid var(--ink);
-  outline-offset: -1px; /* stamps into the existing border — real die impression, no float glow */
-  box-shadow: 5px 5px 0 var(--ink);
-}
-.stamp-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: 1px 1px 0 var(--ink-faint);
-}
-
-/* Size variants (4pt) */
-.stamp-btn-sm { font-size: 12px; padding: 8px 13px; }
-.stamp-btn-lg { font-size: 16px; padding: 14px 24px; }
-
-/* VARIANT: RED — primary CTA / shout. One per surface. */
-.stamp-btn-red {
-  background: var(--red);
-  color: var(--paper);
-  border-color: var(--ink);
-  box-shadow: 3px 3px 0 var(--red-deep);
-}
-.stamp-btn-red:hover:not(:disabled) {
-  background: var(--red-deep);
-  box-shadow: 4px 4px 0 var(--red-deep);
-}
-.stamp-btn-red:active:not(:disabled),
-.stamp-btn-red.is-engaged {
-  background: var(--red-deep);
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--red-deep);
-}
-.stamp-btn-red:focus-visible {
-  outline: 3px solid var(--red);
-  outline-offset: -1px; /* stamp die hit — red shout leaves ink impression */
-  box-shadow: 5px 5px 0 var(--red-deep);
-}
-
-/* VARIANT: GOLD — sticker / secondary accent */
-.stamp-btn-gold {
-  background: var(--gold);
-  color: var(--ink);
-  border-color: var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
-}
-.stamp-btn-gold:hover:not(:disabled) {
-  background: var(--gold-deep);
-  box-shadow: 4px 4px 0 var(--ink);
-}
-.stamp-btn-gold:focus-visible {
-  outline-color: var(--gold);
-}
-
-/* VARIANT: NAVY — brand block */
-.stamp-btn-navy {
-  background: var(--navy);
-  color: var(--paper);
-  border-color: var(--ink);
-  box-shadow: 3px 3px 0 var(--navy-deep);
-}
-.stamp-btn-navy:hover:not(:disabled) {
-  background: var(--navy-deep);
-  box-shadow: 4px 4px 0 var(--navy-deep);
-}
-.stamp-btn-navy:focus-visible {
-  outline-color: var(--navy);
-}
-
-/* VARIANT: INK — dark surface */
-.stamp-btn-ink {
-  background: var(--ink);
-  color: var(--paper);
-  border-color: var(--ink);
-  box-shadow: 3px 3px 0 var(--navy-deep);
-}
-.stamp-btn-ink:hover:not(:disabled) {
-  box-shadow: 4px 4px 0 var(--navy-deep);
-}
-.stamp-btn-ink:focus-visible {
-  outline-color: var(--paper);
-}
-
-/* VARIANT: PAPER — quiet secondary */
-.stamp-btn-paper {
-  background: var(--paper);
-  color: var(--ink);
-  border-color: var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
-}
-.stamp-btn-paper:hover:not(:disabled) {
-  background: var(--paper-deep);
-  box-shadow: 4px 4px 0 var(--ink);
-}
-
-/* ============================================================
-   STAMPCARD / COLOURED SURFACE — navy/gold/ink/red/paper blocks
-   Variant-aware stamp shadows that fully participate on hover/press.
-   Exact 22px (4pt) padding. .hl works inside (contrast preserved).
-   One accent moment per card. 120ms CANON.
-   engaged (sunk) + pin (docket-pin board variance) supported.
-   ============================================================ */
-.stamp-card {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  text-transform: none; /* sentence case */
+  padding: 10px 18px;
   border: 2px solid var(--ink);
   border-radius: 4px;
-  padding: 22px;                 /* matches design-system-new card specimens */
-  transition: transform 120ms var(--ease-stamp-press),
-              box-shadow 120ms var(--ease-stamp-press);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  will-change: transform, box-shadow;
+  cursor: pointer;
+  transition: transform 120ms var(--ease-stamp-press), box-shadow 120ms var(--ease-stamp-press), background 120ms;
+  box-shadow: var(--shadow-stamp);
+  user-select: none;
+  position: relative;
+  overflow: hidden;
 }
-.stamp-card:hover:not(.is-engaged) {
-  transform: translate(-2px, -2px);
-  box-shadow: 4px 4px 0 var(--ink);
-}
-.stamp-card:active,
-.stamp-card.is-pressed,
-.stamp-card.is-engaged {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--ink);
+.stamp-btn-lg { padding: 14px 28px; font-size: 16px; }
+.stamp-btn-sm { padding: 6px 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.stamp-btn-red { background: var(--red); color: var(--paper); border-color: var(--ink); }
+.stamp-btn-red:hover:not(:disabled) { background: var(--red-deep); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+.stamp-btn-red:active:not(:disabled), .stamp-btn-red.is-engaged { background: var(--red-deep); transform: translate(2px, 2px); box-shadow: none; }
+
+.stamp-btn-gold { background: var(--gold); color: var(--ink); border-color: var(--ink); }
+.stamp-btn-gold:hover:not(:disabled) { background: var(--gold-deep); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+.stamp-btn-gold:active:not(:disabled), .stamp-btn-gold.is-engaged { background: var(--gold-deep); transform: translate(2px, 2px); box-shadow: none; }
+
+.stamp-btn-navy { background: var(--navy); color: var(--paper); border-color: var(--ink); }
+.stamp-btn-navy:hover:not(:disabled) { background: var(--navy-deep); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+.stamp-btn-navy:active:not(:disabled), .stamp-btn-navy.is-engaged { background: var(--navy-deep); transform: translate(2px, 2px); box-shadow: none; }
+
+.stamp-btn-ink { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.stamp-btn-ink:hover:not(:disabled) { background: #000; transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+.stamp-btn-ink:active:not(:disabled), .stamp-btn-ink.is-engaged { background: #000; transform: translate(2px, 2px); box-shadow: none; }
+
+.stamp-btn-paper { background: var(--paper); color: var(--ink); border-color: var(--ink); }
+.stamp-btn-paper:hover:not(:disabled) { background: var(--paper-deep); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+.stamp-btn-paper:active:not(:disabled), .stamp-btn-paper.is-engaged { background: var(--paper-deep); transform: translate(2px, 2px); box-shadow: none; }
+
+.stamp-btn:disabled, .stamp-btn[aria-disabled="true"] { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: 1px 1px 0 var(--ink); }
+
+/* Focus ring matches stamp (ink or red for shout) */
+.stamp-btn:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--ink); }
+.stamp-btn-red:focus-visible { box-shadow: 0 0 0 2px var(--red); }
+
+/* ============================================================
+   STAMP-CARD / COLOURED SURFACE PRIMITIVES
+   Hover: translate(-1px,-1px) + shadow grow. Active/engaged: translate(2px,2px) + collapse.
+   Borders 2px solid var(--ink), border-radius 4px, default padding 22px.
+   ============================================================ */
+.stamp-card {
+  display: block;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 22px;
+  transition: transform 120ms var(--ease-stamp-press), box-shadow 120ms var(--ease-stamp-press), background 120ms;
+  position: relative;
 }
 
-/* DOCKET-PIN VARIANT — real rubber stamp on board. Use with GSAP for --rot --ox --oy variance.
-   Non-uniform like physical pinned notices. One red max inside. */
-.stamp-card.pinned-notice,
-.stamp-card[data-pin="true"] {
-  transform-origin: 46% 18%; /* pin bias top like real docket */
-  /* GSAP/parent sets --rot --ox --oy inline for each "pin" */
+/* Variant Backgrounds & Foregrounds */
+.stamp-card-paper {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
 }
-.stamp-card.pinned-notice.is-engaged {
-  box-shadow: 1px 1px 0 var(--ink);
-}
-
-/* Stamp impression focus-visible for interactive cards (keyboard users get the die hit, no glow) */
-.stamp-card[tabindex]:focus-visible,
-.stamp-card.interactive:focus-visible {
-  outline: 3px solid var(--ink);
-  outline-offset: -2px;
-  box-shadow: 5px 5px 0 var(--ink);
-}
-
-/* Variant fills + appropriate stamp colour (shadow matches surface job) */
 .stamp-card-navy {
   background: var(--navy);
   color: var(--paper);
-  box-shadow: 3px 3px 0 var(--navy-deep);
+  box-shadow: 3px 3px 0 var(--ink);
 }
-.stamp-card-navy:hover:not(.is-engaged) { box-shadow: 4px 4px 0 var(--navy-deep); }
-
+.stamp-card-navy h1, .stamp-card-navy h2, .stamp-card-navy h3, .stamp-card-navy h4, .stamp-card-navy p, .stamp-card-navy span {
+  color: var(--paper);
+}
 .stamp-card-gold {
   background: var(--gold);
   color: var(--ink);
   box-shadow: 3px 3px 0 var(--ink);
 }
-.stamp-card-gold:hover:not(.is-engaged) { box-shadow: 4px 4px 0 var(--ink); }
+.stamp-card-red {
+  background: var(--red);
+  color: var(--paper);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.stamp-card-red h1, .stamp-card-red h2, .stamp-card-red h3, .stamp-card-red h4, .stamp-card-red p, .stamp-card-red span {
+  color: var(--paper);
+}
+.stamp-card-ink {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 3px 3px 0 var(--gold);
+}
+.stamp-card-ink h1, .stamp-card-ink h2, .stamp-card-ink h3, .stamp-card-ink h4, .stamp-card-ink p, .stamp-card-ink span {
+  color: var(--paper);
+}
+
+/* Interactive States */
+.stamp-card.interactive:hover:not(.is-engaged):not(.pinned-notice) {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.stamp-card-ink.interactive:hover:not(.is-engaged):not(.pinned-notice) {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--gold);
+}
+
+.stamp-card.interactive:active:not(.pinned-notice),
+.stamp-card.is-engaged:not(.pinned-notice) {
+  transform: translate(2px, 2px);
+  box-shadow: none !important;
+}
+
+/* For pinned notices, let GSAP control transform, and only change box-shadow/filter on CSS hover */
+.pinned-notice.interactive:hover:not(.is-engaged) {
+  box-shadow: 5px 5px 0 var(--ink) !important;
+  filter: brightness(1.01);
+}
+
+/* Stamp box / clack surfaces (hero, dockets) */
+.stamp-box {
+  border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  border-radius: 4px;
+  background: var(--paper-raised);
+}
+.stamp-clack, .stamp-clack-red {
+  transition: transform 90ms var(--ease-stamp-press), box-shadow 90ms var(--ease-stamp-press);
+}
+.stamp-clack:active, .stamp-clack-red:active { transform: translate(2px, 2px); box-shadow: none; }
 
 /* ============================================================
-   MAIL-STACK COMPOSITION — GSAP Awwwards SPYLT-level direct-mail artifact
-   Warm cream canvas. Coloured pinned notices with rotation/edge variance.
-   Ribbon-receipt bridges (paper tape / perforated dockets) that scrub on scroll.
-   One red accent per surface. 60fps mechanical. Reduced-motion safe.
-   ============================================================ */
-
-/* Page-level mail board canvas reactions (amplified hero filing)
-   ONE PHYSICAL ARTIFACT: cork edge + pin holes + cumulative depth propagation.
-   Entire flow below hero reads as single 1978 notice board. */
-.mail-board {
-  position: relative;
-  background: var(--paper);
-  /* Static grain + subtle cork board texture on edges */
-  background-image: 
-    repeating-linear-gradient(0deg, rgba(11,11,11,0.022) 0 1px, transparent 1px 3px),
-    linear-gradient(180deg, rgba(139, 109, 59, 0.035) 0%, transparent 11%, transparent 89%, rgba(139,109,59,0.028) 100%);
-  transition: box-shadow 120ms linear;
-  /* Board edge bevel for physical depth */
-  box-shadow: 
-    inset 0 0 0 1px rgba(139, 109, 59, 0.08),
-    0 0 0 3px rgba(11, 11, 11, 0.02);
-  /* Physical settle propagation from hero descent: damps EVERY stamp hover lift + deepens pile grain as mail files.
-     GSAP onUpdate in HomeClient writes --global-settle (0-1). 60fps, no layout thrash.
-     ALSO receives --hero-filing-progress live from VoiceAgentHero useMotionValueEvent (Framer -> CSS var bridge).
-     Hybrid: Framer supplies the primary hero stamp descent; GSAP amplifies to board + ribbons + dockets. */
-  --global-settle: 0;
-  --hero-filing-progress: 0;
-  --pile-compress: calc(1 - var(--global-settle) * 0.72);
-}
-.mail-board[data-depth="deep"] {
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04),
-              inset 0 120px 80px -40px rgba(11,27,60,0.06),
-              0 0 0 4px rgba(11,11,11,0.03);
-}
-
-/* Scroll-scrubbed ink transfer + physical shadow delta on ALL stamp surfaces.
-   Driven by --hero-filing-progress (Framer MotionValue from hero stamp descent) + --global-settle (GSAP).
-   As the primary mail "files" into the stack, lower dockets and ribbons feel compression + faint red ink soak on accents.
-   Purely mechanical: only box-shadow, transform, filter. No layout. 1978 board being loaded. */
-.stamp-box,
-.stamp-card,
-.pinned-notice {
-  /* Cumulative shadow from both sources (hero primary + board GSAP) */
-  box-shadow: 
-    calc(3px + (var(--hero-filing-progress, 0) + var(--global-settle, 0)) * 4px)
-    calc(3px + (var(--hero-filing-progress, 0) + var(--global-settle, 0)) * 6px)
-    0 var(--ink);
-}
-.mail-board .red-accent,
-.mail-board .stamp-card-red {
-  /* One red per surface — ink bite intensifies as filing progress rises (physical stamp press deeper) */
-  border-color: color-mix(in srgb, var(--red-deep) calc(70% + var(--hero-filing-progress, 0) * 30%), var(--red));
-  color: color-mix(in srgb, var(--red-deep) calc(70% + var(--hero-filing-progress, 0) * 30%), var(--red));
-}
-
-/* Full-page physical weight: as hero files (settle rises), all stamped surfaces on the board lose lift height.
-   Real mail stack compression. Reduced-motion safe (var=0). */
-.mail-board .stamp-press:hover:not(:disabled),
-.mail-board .stamp-box:hover,
-.mail-board .stamp-card:hover,
-.mail-board .stamp-btn:hover:not(:disabled) {
-  transform: translate(calc(-1px * var(--pile-compress)), calc(-1px * var(--pile-compress)));
-  box-shadow: calc(4px * var(--pile-compress)) calc(4px * var(--pile-compress)) 0 var(--ink);
-}
-/* Visible pin holes + tape residue along board edges (physical artifact) */
-.mail-board::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: 
-    radial-gradient(circle at 4% 8%, rgba(0,0,0,0.28) 1.5px, transparent 3px),
-    radial-gradient(circle at 96% 11%, rgba(0,0,0,0.24) 1.2px, transparent 2.5px),
-    radial-gradient(circle at 3% 94%, rgba(0,0,0,0.26) 1.4px, transparent 3px),
-    radial-gradient(circle at 97% 91%, rgba(0,0,0,0.22) 1.1px, transparent 2.5px);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-  z-index: 2;
-  opacity: 0.5;
-}
-
-/* Perforated ribbon / receipt bridge — physical paper tape connecting sections
+   Perforated ribbon / receipt bridge — physical paper tape (verbatim fidelity + png)
    AGGRESSIVE SPYLT PHYSICAL: multi-layer tape + shear/tear on scrub.
-   Perforations advance with differential velocity. Slight buckle + tear distortion.
-   GSAP drives --tape-progress (0-1.2) + --tape-shear for real paper mechanics. */
+   wave-ribbon.png (public/assets/) is the definitive visual source.
+   Perforations + fiber from png + css shear/flutter on scrub. GSAP drives --tape-progress (0-1.2) + --tape-shear.
+   60fps, transforms only on pseudos. Reduced = static complete (perfs + fiber visible).
+   ============================================================ */
 .mail-ribbon {
   position: relative;
   height: 19px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--paper-deep) 0 7px,
-    var(--ink) 7px 8px,
-    var(--paper-deep) 8px 17px
-  );
+  /* Definitive ribbon asset as base visual (wavy receipt tape in brand tones). CSS provides shear + perf overlays for motion. */
+  background: url('/assets/wave-ribbon.png') repeat-x center / auto 100%;
   border-top: 1px solid var(--ink);
   border-bottom: 1px solid var(--ink);
   overflow: hidden;
@@ -1308,16 +341,15 @@ button {
   --tape-flutter: 0px;
 }
 .mail-ribbon::before {
-  /* Highlight feed layer — tape "pull" + real shear + harmonic flutter (wind on paper) */
+  /* Highlight feed layer + subtle png texture blend for ink/paper tactility on wave */
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255,255,255,0.38) 38%,
-    transparent 72%
-  );
+  background: 
+    linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.32) 38%, transparent 72%),
+    url('/assets/wave-ribbon.png') repeat-x center / auto 100%;
+  background-blend-mode: screen, multiply;
+  opacity: 0.82;
   transform: 
     translateX(calc(-100% + var(--tape-progress) * 235%)) 
     translateY(var(--tape-flutter))
@@ -1336,16 +368,16 @@ button {
     radial-gradient(circle at calc(100% - 5px) 50%, var(--ink) 1.6px, transparent 2.1px);
   background-size: 26px 100%, 26px 100%;
   background-repeat: repeat-x;
-  opacity: 0.58;
+  opacity: 0.52;
   transform: translateX(calc(var(--tape-progress) * -15.5px)) translateY(calc(var(--tape-flutter) * 0.6)) skewX(calc(var(--tape-shear) * -0.9deg));
   z-index: 2;
   transition: none;
 }
 
-/* Receipt tear line variant — real jagged docket with shear/tear physics + final clack distortion */
+/* Receipt tear line variant — real jagged docket with shear/tear physics + final clack distortion. wave-ribbon base too. */
 .mail-ribbon-tear {
   height: 23px;
-  background: var(--paper);
+  background: url('/assets/wave-ribbon.png') repeat-x center / auto 100%;
   border-top: 2px dashed var(--ink);
   border-bottom: 2px dashed var(--ink);
   position: relative;
@@ -1355,7 +387,7 @@ button {
   --tape-flutter: 0px;
 }
 .mail-ribbon-tear::before {
-  /* Tear distortion + advancing scissor/physical rip indicator — shear + flutter for real tape snap */
+  /* Tear distortion + advancing scissor/physical rip indicator — shear + flutter for real tape snap. */
   content: '';
   position: absolute;
   inset: 0;
@@ -1429,244 +461,301 @@ button {
   filter: brightness(1.01);
 }
 
-/* Edge wear / dog-ear for extra physical mail variance (applied via data attr or class) */
-.pinned-notice[data-wear="true"] {
-  clip-path: polygon(0 0, 97% 0, 100% 4%, 100% 100%, 3% 100%, 0 96%);
-}
-.pinned-notice[data-wear="true"]::after {
-  background: 
-    radial-gradient(circle at 82% 21%, rgba(17,17,17,0.08) 0 26%, transparent 32%),
-    linear-gradient(132deg, transparent 82%, rgba(0,0,0,0.04) 91%);
-}
-
-/* Strong stamped navy footer ritual block — last docket you pin
-   DEFINITIVE CLOSING RITUAL: heavy mechanical stamp settle on final scroll.
-   GSAP will drive --final-clack, --stamp-depth, wonk max + red imprint lock. */
-.mail-docket-footer {
-  background: var(--navy);
-  color: var(--paper);
-  border-top: 5px solid var(--ink);
-  box-shadow: 0 -5px 0 var(--navy-deep), inset 0 0 0 1px rgba(255,255,255,0.04);
-  position: relative;
-  overflow: hidden;
-  /* Physical final pin state driven by GSAP */
-  --final-clack: 0;
-  --stamp-depth: 0;
-}
-.mail-docket-footer::before {
-  /* Docket texture + final stamp "ink bleed" */
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px),
-    radial-gradient(circle at 48% 31%, rgba(243,166,42,0.06) 0 34%, transparent 44%);
-  background-size: 3px 3px, 3px 3px, 100% 100%;
-  pointer-events: none;
-  opacity: calc(0.6 + var(--stamp-depth) * 0.4);
-  z-index: 1;
-}
-/* Final heavy metal pin visual that "clacks" in */
-.mail-docket-footer::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: -1px;
-  transform: translateX(-50%) scale(calc(0.6 + var(--final-clack) * 0.55));
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: var(--ink);
-  box-shadow: 0 1px 0 var(--navy-deep), inset 0 0 0 1px rgba(255,255,255,0.3), 1px 2px 0 rgba(0,0,0,0.5);
-  z-index: 3;
-  opacity: calc(0.3 + var(--final-clack) * 0.85);
-  transition: none;
-}
-.mail-docket-footer .core-promise {
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 0.96;
-}
-.mail-docket-footer .wonk-line {
-  /* Fraunces WONK axis — one per surface. GSAP scrubs to full ritual wonk on end */
-  font-family: "Fraunces", Georgia, serif;
-  font-variation-settings: "opsz" 118, "wonk" var(--wonk, 0.3), "wght" 680;
-  letter-spacing: -0.01em;
-  color: var(--gold-tint);
-  text-shadow: 0 1px 0 rgba(0,0,0,0.2);
-}
-/* One red accent per surface rule enforced + ritual stamp pop + final clack ink density */
-.mail-docket-footer .red-accent {
-  color: var(--red);
-  border-color: var(--red);
-  position: relative;
-  transition: filter 60ms linear, transform 80ms var(--ease-stamp-press);
-}
-.mail-docket-footer .red-accent::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border: 1px solid var(--red);
-  opacity: calc(var(--stamp-depth, 0.6) * 0.7);
-  pointer-events: none;
-}
-/* When GSAP triggers .stamp-clack-red on final pin, hard ink transfer + shadow slam */
-.mail-docket-footer.stamp-clack-red,
-.mail-docket-footer .red-accent.stamp-clack-red {
-  filter: contrast(1.15) saturate(1.2);
-  box-shadow: 0 -6px 0 var(--navy-deep), 4px 4px 0 var(--red-deep);
-}
-
-/* REDUCED MOTION = STATIC FILED MAIL BOARD
-   All physical variance, stamps, rots, perforations, and docket imprints
-   snap to final "pre-pinned" state with full brutalist tactility visible.
-   Zero animation. One cohesive artifact, not a website. */
+/* Reduced motion: fully static but COMPLETE docket board (all stamps/pins/rots/perforations visible) */
 @media (prefers-reduced-motion: reduce) {
+  .stamp-press,
+  .stamp-press-red,
+  .stamp-box,
+  .stamp-pop,
+  .stamp-clack,
+  .stamp-clack-red,
   .mail-ribbon,
   .mail-ribbon-tear,
-  .pinned-notice,
-  .mail-docket-footer .wonk-line,
-  .mail-board::before {
+  .pinned-notice {
     transition: none !important;
     transform: none !important;
     animation: none !important;
   }
-  .mail-board { 
-    box-shadow: 
-      inset 0 0 0 1px rgba(139, 109, 59, 0.07),
-      0 0 0 3px rgba(11, 11, 11, 0.02); 
-  }
-  /* Static filed docket stamps + full rot/offset variance visible */
-  .pinned-notice {
-    opacity: 1 !important;
-    transform: rotate(var(--rot, -0.6deg)) translate(var(--ox, 1px), var(--oy, 2px)) !important;
-    box-shadow: 3.5px 4px 0 var(--ink) !important;
-    filter: none !important;
-  }
   .mail-ribbon,
   .mail-ribbon-tear {
-    --tape-progress: 0.86;
-    --tape-shear: 0.12;
+    background: url('/assets/wave-ribbon.png') repeat-x center / auto 100% !important; /* static png visible */
   }
-  .mail-docket-footer {
-    --wonk: 0.82;
-    --final-clack: 1;
-    --stamp-depth: 0.9;
-  }
-  /* In-tray becomes flat filed receipt strip */
-  .in-tray-physical,
-  .filed-docket {
-    transform: none !important;
+  .pinned-notice {
     box-shadow: 3px 3px 0 var(--ink) !important;
   }
-  /* Kill hero-driven ink/shadow propagation + all filing vars in RM */
-  .mail-board,
-  .stamp-box,
-  .stamp-card,
-  .pinned-notice {
-    --hero-filing-progress: 0 !important;
-    --global-settle: 0 !important;
-    --tape-progress: 0.86 !important;
-    --final-clack: 1 !important;
-    --stamp-depth: 0.9 !important;
+  .mail-board { --global-settle: 0; --pile-compress: 1; }
+  .mail-docket-footer { --final-clack: 0; --stamp-depth: 0.6; --tape-flutter: 0px; }
+}
+
+/* MAIL-STACK + DOCKET FOOTER RITUAL (GSAP driven) */
+.mail-board { --global-settle: 0; --hero-filing-progress: 0; --board-depth: 0; }
+.mail-docket-footer { --final-clack: 0; --stamp-depth: 0.6; --tape-flutter: 0px; }
+
+/* ... (additional footer clack, docket-edge, wonk participation rules from prior; kept surgical) */
+.wonk-line {
+  font-family: var(--font-display);
+  font-variation-settings: "WONK" var(--wonk, 0.2), "SOFT" 60, "opsz" 120;
+  transition: font-variation-settings 80ms linear;
+}
+
+/* .font-display and .brand-wordmark now resolve to Fraunces from design (loaded in layout via public/fonts/ TTFs matching design-system) */
+.font-display,
+h1, h2 {
+  font-family: var(--font-display);
+}
+
+.brand-wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+/* ============================================================
+   CHAT INTERFACE & LEAD CAPTURE CARD STYLES
+   Brutalist mechanical styling matching colors_and_type.css
+   ============================================================ */
+
+/* Chat/Bubble styles */
+.gai-chat {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper-raised);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-stamp);
+  overflow: hidden;
+}
+
+.gai-chat-scroll {
+  max-height: 380px;
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--paper);
+}
+
+.gai-chat-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gai-bubble-row {
+  display: flex;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.gai-bubble-row.is-user {
+  justify-content: flex-end;
+}
+
+.gai-bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: var(--fs-16);
+  line-height: 1.45;
+  border: 2px solid var(--ink);
+}
+
+.gai-bubble-ai {
+  background: var(--paper-raised);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.gai-bubble-user {
+  background: var(--navy);
+  color: var(--paper);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* Typing indicator */
+.gai-typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+}
+
+.gai-typing span {
+  width: 6px;
+  height: 6px;
+  background-color: var(--ink);
+  border-radius: 50%;
+  display: inline-block;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.gai-typing span:nth-child(1) { animation-delay: -0.32s; }
+.gai-typing span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1.0); }
+}
+
+.gai-error {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--paper);
+  background: var(--warn);
+  border: 2px solid var(--ink);
+  padding: 8px 12px;
+  margin: 8px 0;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.gai-chat-bar {
+  border-top: 2px solid var(--ink);
+  background: var(--paper-raised);
+  padding: 12px;
+}
+
+.gai-chat-bar-inner {
+  display: flex;
+  gap: 8px;
+}
+
+/* Lead Card Container */
+.gai-leadcard {
+  width: 100%;
+  background: var(--paper-raised);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-stamp-orange);
+  padding: 24px;
+  position: relative;
+  text-align: left;
+  margin-top: 12px;
+}
+
+.gai-leadcard-success {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--paper-raised);
+  border-color: var(--ok);
+  box-shadow: 3px 3px 0 var(--ok);
+  padding: 16px 20px;
+}
+
+.gai-leadcard-checkwrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--ok);
+  color: var(--paper);
+}
+
+.gai-leadcard-success-text {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.gai-leadcard-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 8px;
+}
+
+.gai-leadcard-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-24);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 0 0 6px 0;
+}
+
+.gai-leadcard-help {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--ink-mute);
+  margin: 0 0 16px 0;
+}
+
+.gai-leadcard-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gai-leadcard-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .gai-leadcard-row {
+    flex-direction: row;
+  }
+  .gai-leadcard-row > .gai-input {
+    flex: 1;
   }
 }
 
-.stamp-card-ink {
-  background: var(--ink);
-  color: var(--paper);
-  box-shadow: 3px 3px 0 var(--navy-deep);
+/* Brutalist text inputs */
+.gai-input {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-xs);
+  padding: 10px 14px;
+  outline: none;
+  box-shadow: inset 1px 1px 0 rgba(0,0,0,0.05);
+  transition: box-shadow 120ms var(--ease-stamp-press), transform 120ms var(--ease-stamp-press);
 }
-.stamp-card-ink:hover:not(.is-engaged) { box-shadow: 4px 4px 0 var(--navy-deep); }
 
-.stamp-card-red {
+.gai-input::placeholder {
+  color: var(--ink-faint);
+}
+
+.gai-input:focus {
+  background: var(--paper-raised);
+  box-shadow: 3px 3px 0 var(--red);
+  transform: translate(-1px, -1px);
+}
+
+.gai-iconbtn-send {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
   background: var(--red);
   color: var(--paper);
-  box-shadow: 3px 3px 0 var(--red-deep);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: transform 120ms var(--ease-stamp-press), box-shadow 120ms var(--ease-stamp-press);
 }
-.stamp-card-red:hover:not(.is-engaged) { box-shadow: 4px 4px 0 var(--red-deep); }
 
-.stamp-card-paper {
-  background: var(--paper);
-  color: var(--ink);
+.gai-iconbtn-send:hover {
+  background: var(--red-deep);
+  transform: translate(-1px, -1px);
   box-shadow: 3px 3px 0 var(--ink);
 }
-.stamp-card-paper:hover:not(.is-engaged) { box-shadow: 4px 4px 0 var(--ink); }
 
-/* Eyebrow labels inside cards (from specimens) */
-.stamp-card .eyebrow {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  font-weight: 700;
-  padding: 4px 8px;
-  align-self: flex-start;
-  border-radius: 2px;
-  margin-bottom: 4px;
-}
-.stamp-card-navy .eyebrow,
-.stamp-card-ink .eyebrow { background: var(--paper); color: var(--navy); }
-.stamp-card-gold .eyebrow,
-.stamp-card-red .eyebrow,
-.stamp-card-paper .eyebrow { background: var(--ink); color: var(--paper); }
-
-/* Ensure .hl inside coloured cards has correct contrast (already in .hl rules) */
-
-/* Legacy .stamp-box kept for containers (visualizer shells etc) — now uses canon radii/shadow */
-.stamp-box {
-  border: 2px solid var(--ink);
-  border-radius: 4px;
-  box-shadow: var(--shadow-stamp);
-}
-
-/* Enforce one red shout rule hint (dev only, remove in prod if noisy) */
-@media (min-width: 1024px) {
-  /* Visual aid during build — remove after audit */
-}
-.gai-footer-tag {
-  color: rgba(248, 248, 246, 0.76);
-}
-.gai-footer-strip {
-  font-size: 12px;
-  color: rgba(248, 248, 246, 0.56);
-}
-.gai-footer-strip-r {
-  text-align: right;
-}
-
-/* PHYSICAL IN-TRAY / FILED DOCKET STRIP — replaces modern sticky bar
-   Looks like a real paper receipt tape or pinned bottom docket that receives mail.
-   GSAP can drive new mail clacks. */
-.in-tray-physical {
-  border-top: 3px solid var(--ink);
-  background: var(--paper-raised);
-  box-shadow: 0 -3px 0 var(--ink), 2px 2px 0 var(--ink);
-  position: relative;
-}
-.in-tray-physical::before {
-  content: 'IN-TRAY — FILED';
-  position: absolute;
-  top: -9px;
-  left: 24px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.22em;
-  background: var(--paper);
-  color: var(--red);
-  padding: 0 6px;
-  border: 1px solid var(--ink);
+.gai-iconbtn-send:active {
+  transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 var(--ink);
-}
-.in-tray-physical .filed-docket {
-  background: var(--paper);
-  border: 2px solid var(--ink);
-  box-shadow: 2px 2px 0 var(--ink);
-  transition: box-shadow 90ms, transform 90ms;
-}
-.in-tray-physical .filed-docket.new-mail {
-  box-shadow: 4px 4px 0 var(--red-deep);
-  transform: translate(-1px, -1px);
 }
