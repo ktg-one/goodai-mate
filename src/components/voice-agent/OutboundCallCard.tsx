@@ -6,7 +6,7 @@ import StampButton from '@/components/StampButton';
 
 export default function OutboundCallCard() {
   const [phone, setPhone] = useState('');
-  const [selectedAgent, setSelectedAgent] = useState<'darl' | 'swan'>('darl');
+  const [selectedAgent, setSelectedAgent] = useState<'darl' | 'robokev'>('darl');
   const [isDialing, setIsDialing] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -18,18 +18,30 @@ export default function OutboundCallCard() {
     {
       id: 'darl' as const,
       name: 'Darl',
-      role: 'Perth Broker Agent',
-      desc: 'Fast, direct, and quick with invoicing. Standard no-nonsense broker voice.',
+      role: 'My Assistant',
+      desc: 'Assists with invoices, schedules, and quotes. Preset: 0877414191.',
+      defaultPhone: '0877414191',
       color: 'bg-[var(--gold-tint)] border-[var(--gold)] text-[var(--ink)]'
     },
     {
-      id: 'swan' as const,
-      name: 'Swan',
-      role: 'Swan River Tradie',
-      desc: 'Laid-back, friendly, and helpful. Guides you through scope setup with ease.',
+      id: 'robokev' as const,
+      name: 'Robokev',
+      role: 'My Voice Clone',
+      desc: 'My custom voice assistant. Enter your number to have Robokev call you.',
+      defaultPhone: '',
       color: 'bg-[var(--red-tint)] border-[var(--red)] text-[var(--ink)]'
     }
   ];
+
+  // Prefill phone input whenever the selected agent changes
+  useEffect(() => {
+    const selectedAgentObj = agents.find(a => a.id === selectedAgent);
+    if (selectedAgentObj) {
+      setPhone(selectedAgentObj.defaultPhone);
+    }
+    // Only run when selectedAgent changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedAgent]);
 
   useEffect(() => {
     if (consoleEndRef.current) {
@@ -46,7 +58,7 @@ export default function OutboundCallCard() {
     setSuccess(false);
     setLogs([
       `[DIALER] Initializing outbound sequence...`,
-      `[DIALER] Selected Voice Agent: ${selectedAgent === 'darl' ? 'Darl' : 'Swan'}`
+      `[DIALER] Selected Voice Agent: ${selectedAgent === 'darl' ? 'Darl' : 'Robokev'}`
     ]);
 
     // Dialing step 1
@@ -79,7 +91,7 @@ export default function OutboundCallCard() {
         await new Promise(resolve => setTimeout(resolve, 800));
         setLogs(prev => [...prev, `[DIALER] Call state: RINGING... Check your handset!`]);
         await new Promise(resolve => setTimeout(resolve, 1000));
-        setLogs(prev => [...prev, `[DIALER] Call state: CONNECTED. Have a chat with ${selectedAgent === 'darl' ? 'Darl' : 'Swan'}!`]);
+        setLogs(prev => [...prev, `[DIALER] Call state: CONNECTED. Have a chat with ${selectedAgent === 'darl' ? 'Darl' : 'Robokev'}!`]);
       } else {
         throw new Error(data.error || 'Outbound call connection rejected.');
       }
@@ -142,7 +154,7 @@ export default function OutboundCallCard() {
         {/* Phone Input */}
         <div className="space-y-2">
           <label htmlFor="callback-phone" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 block">
-            2. Your Phone Number
+            2. Target Phone Number
           </label>
           <div className="relative">
             <input
@@ -160,7 +172,7 @@ export default function OutboundCallCard() {
             </div>
           </div>
           <p id="phone-help" className="text-[9px] font-mono text-[var(--ink)]/50">
-            Perth local dialer. Include country code +61 for Australian numbers.
+            Perth local dialer. Defaults to preset target for Darl.
           </p>
         </div>
 
@@ -172,7 +184,7 @@ export default function OutboundCallCard() {
           disabled={isDialing || !phone.trim()}
           className="w-full flex items-center justify-center gap-2 py-3.5"
         >
-          {isDialing ? 'Dialing Handset...' : `Speak to ${selectedAgent === 'darl' ? 'Darl' : 'Swan'} on My Phone`}
+          {isDialing ? 'Dialing Handset...' : `Speak to ${selectedAgent === 'darl' ? 'Darl' : 'Robokev'} on My Phone`}
         </StampButton>
       </form>
 
