@@ -17,6 +17,8 @@ import WhyGoodAI from '@/components/marketing/WhyGoodAI';
 import Manifest from '@/components/marketing/Manifest';
 import AISolutions from '@/components/marketing/AISolutions';
 import VoiceAgentDemo from '@/components/marketing/VoiceAgentDemo';
+import AutomationPlayground from '@/components/AutomationPlayground';
+
 
 // GSAP for mail-stack composition (per gsap-awwwards-website + gsap-scrolltrigger skills)
 // useGSAP auto-cleans; mechanical 60fps ScrollTrigger timelines for ribbons + pinned notices + page reactions
@@ -40,6 +42,14 @@ gsap.registerPlugin(ScrollTrigger);
  * Design system: public/design-system-new is the source of truth.
  */
 export default function HomeClient() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
   const [showTextMode, setShowTextMode] = useState(false);
   const [leadData, setLeadData] = useState<{ problem: string; answer: string } | null>(null);
 
@@ -65,7 +75,7 @@ export default function HomeClient() {
   const docketFlowRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLElement>(null);
 
-  // === MAIL STACK GSAP TIMELINES (concrete, per gsap-awwwards-website SPYLT physical feel) ===
+  // === MAIL STACK GSAP TIMELINES (concrete, per gsap-awwwwards-website SPYLT physical feel) ===
   // Full-page rhythm: ribbons advance/tear on scrub. Non-uniform pinned cards (rot + edge offset variance).
   // Hero filing amplified to page grain + edge shadow via CSS var + data attr.
   // Reduced motion: all timelines killed + static docket imprints (pre-set physical variance).
@@ -75,6 +85,7 @@ export default function HomeClient() {
     const reduced = mm.matches;
     if (reduced || !mailBoardRef.current) {
       // Static physical imprints for pinned notices (real board variance, no motion)
+      // COMPLETE: all stamps/pins/rots/perforations + letter micro assets visible
       if (docketFlowRef.current) {
         const cards = docketFlowRef.current.querySelectorAll('.pinned-notice');
         const rots = [-2.1, 1.65, -0.95, 2.45];
@@ -85,6 +96,9 @@ export default function HomeClient() {
           el.style.transform = `rotate(${rots[idx % rots.length]}deg) translate(${oxs[idx % oxs.length]}px, ${oys[idx % oys.length]}px)`;
           el.style.opacity = '1';
           el.style.boxShadow = '3px 3px 0 var(--ink)';
+          // static letter micro for docket (anti under-use)
+          const letter = el.querySelector('.docket-letter') as HTMLElement | null;
+          if (letter) letter.style.opacity = '0.35';
         });
       }
       return;
@@ -123,6 +137,7 @@ export default function HomeClient() {
 
       // 2. AGGRESSIVE RIBBON BRIDGES — real perforated tape with shear + tear physics (SPYLT mail)
       // Each has independent lag + shear for paper buckle/tear feel on scrub. Feeds forward continuously.
+      // Enhanced flutter amp for more "wind on paper" mechanical.
       const ribbons = [
         { ref: ribbon1Ref, advance: 1.08, shear: 0.9 },
         { ref: ribbon2Ref, advance: 1.22, shear: 1.35 },
@@ -149,7 +164,7 @@ export default function HomeClient() {
           onUpdate(self) {
             // Live micro flutter (harmonic wind turbulence on the physical ribbon) — 60fps, feels alive
             const p = self.progress;
-            const flutter = Math.sin(p * 11 + i) * 1.6 + Math.cos(p * 17.3 + i * 2) * 0.9;
+            const flutter = Math.sin(p * 11 + i) * 2.8 + Math.cos(p * 17.3 + i * 2) * 1.4; // amp up for tactility
             el.style.setProperty('--tape-flutter', `${(flutter * (0.6 + p * 0.4)).toFixed(1)}px`);
           },
         });
@@ -158,6 +173,7 @@ export default function HomeClient() {
       // 3. THE DOCKET — four pinned narrative cards telling the post-conversation story.
       // REAL MAIL VARIANCE: stronger individual rots/offsets + edge wear + stamp imprint participation.
       // Hard clack settle, non-uniform micro-timing. Feels like real notices on a 1978 board.
+      // Letters integrated as micro stamped elements (anti under-use).
       if (docketFlowRef.current) {
         const cards = docketFlowRef.current.querySelectorAll('.pinned-notice');
         cards.forEach((card, idx) => {
@@ -301,6 +317,14 @@ export default function HomeClient() {
     return () => ctx.revert(); // cleanup on unmount / reduced motion change
   }, { scope: mailBoardRef, dependencies: [] });
 
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-[var(--paper)] flex items-center justify-center font-mono text-xs uppercase tracking-[0.16em]">
+        Compiling docket board...
+      </div>
+    );
+  }
+
   return (
     <div ref={mailBoardRef} className="mail-board overflow-x-hidden">
       {/* HERO - TTS feature (the Voice Agent as the product) — descent files into the stack */}
@@ -328,7 +352,7 @@ export default function HomeClient() {
       <section ref={docketFlowRef} className="py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
         <div className="mx-auto max-w-5xl px-6">
           <div className="mb-9">
-            <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">THE DOCKET</span>
+            <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">FILED · MAIL</span>
             <h2 className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-2">
               What happens after you <span className="hl">speak</span>.
             </h2>
@@ -338,28 +362,36 @@ export default function HomeClient() {
           </div>
 
           {/* Non-uniform staggered pinned notices (real mail variance: rot + offsets, individual GSAP landing) */}
+          {/* Letters integrated as micro stamped elements (anti under-use of letter-*.svg) */}
           <div className="grid md:grid-cols-2 gap-5 max-w-4xl">
-            {[
-              { num: '01', title: 'We listen once.', body: 'You speak the mess. Invoicing, follow-ups, quotes, the lot. The Voice Agent catches it locally.' },
-              { num: '02', title: 'We build the system.', body: 'Our team turns it into live automations in the tools you already use. Xero, ServiceM8, Tradify, whatever.' },
-              { num: '03', title: 'It just runs.', body: 'You get time back. We keep the boring stuff off your plate every week. Perth mate, not a dashboard.' },
-              { num: '04', title: 'You knock off early.', body: 'The docket is closed. Kids, footy, whatever matters. We sorted the systems.' },
-            ].map((item, i) => (
+            {([
+              { title: 'We listen once.', body: 'You speak the mess. Invoicing, follow-ups, quotes, the lot. The Voice Agent catches it locally.', variant: 'gold' },
+              { title: 'We build the system.', body: 'Our team turns it into live automations in the tools you already use. Xero, ServiceM8, Tradify, whatever.', variant: 'navy' },
+              { title: 'It just runs.', body: 'You get time back. We keep the boring stuff off your plate every week. Perth mate, not a dashboard.', variant: 'paper' },
+              { title: 'You knock off early.', body: 'The docket is closed. Kids, footy, whatever matters. We sorted the systems.', variant: 'navy' },
+            ] as const).map((item, i) => (
               <StampCard
                 key={i}
-                variant="navy"
+                variant={item.variant}
                 pin
-                className="p-7"
-                style={{
+                className="p-7 relative"
+                style={({
                   '--rot': `${[-2.0, 1.55, -0.85, 2.3][i % 4]}deg`,
                   '--ox': `${[-3, 4, -2, 3][i % 4]}px`,
                   '--oy': `${[2, -3, 4, -1][i % 4]}px`,
-                } as React.CSSProperties}
+                } as React.CSSProperties)}
                 data-wear={i % 2 === 1 ? 'true' : undefined}
               >
-                <div className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--gold)] mb-2">{item.num}</div>
-                <h3 className="font-bold text-2xl tracking-[-0.015em] mb-3 text-[var(--paper)]">{item.title}</h3>
-                <p className="text-[var(--paper)]/85 text-[15px] leading-snug">{item.body}</p>
+                {/* letter micro stamp in docket (verbatim asset use, one per surface) */}
+                <img 
+                  src={['/assets/letter-a.svg', '/assets/letter-good.svg', '/assets/letter-i.svg', '/assets/letter-swan.svg'][i % 4]} 
+                  alt="" 
+                  aria-hidden 
+                  className="docket-letter pointer-events-none absolute bottom-3 right-3 h-3.5 w-auto opacity-30" 
+                  style={{ transform: `rotate(${[-8, 6, -4, 9][i % 4]}deg)` }}
+                />
+                <h3 className="font-bold text-2xl tracking-[-0.015em] mb-3">{item.title}</h3>
+                <p className="opacity-85 text-[15px] leading-snug">{item.body}</p>
                 {i === 3 && <div className="mt-3 inline-block text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--red)] border-b border-[var(--red)]">LAST PIN • DOCKET CLOSED</div>}
               </StampCard>
             ))}
@@ -387,7 +419,7 @@ export default function HomeClient() {
                 return (
                   <motion.div 
                     key={mail.ts} 
-                    className="filed-docket px-4 py-2 max-w-[320px] text-[var(--ink)]/90 stamp-press"
+                    className="filed-docket px-4 py-2 max-w-[320px] text-[var(--ink)]/90 stamp-press relative"
                     initial={prefersReducedMotion ? { opacity: 1, rotate: rot, x: ox, boxShadow: '3px 3px 0 var(--ink)' } : { opacity: 0, y: 8, rotate: rot - 1.5, x: ox - 3, boxShadow: '1px 1px 0 var(--ink)' }}
                     whileInView={prefersReducedMotion ? { opacity: 1 } : { 
                       opacity: 1, 
@@ -400,6 +432,8 @@ export default function HomeClient() {
                     viewport={{ once: true, margin: '-20px' }}
                     style={{ transformOrigin: '40% 20%' }}
                   >
+                    {/* letter micro on filed docket */}
+                    <img src={['/assets/letter-a.svg','/assets/letter-good.svg','/assets/letter-i.svg','/assets/letter-swan.svg'][idx % 4]} alt="" aria-hidden className="absolute top-1 right-1 h-2.5 w-auto opacity-25" />
                     <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--ink)]/50 mb-0.5">YOU SAID</div>
                     <div className="line-clamp-1">“{mail.transcript.slice(0, 82)}”</div>
                     <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--ocean-400)] mt-1.5 mb-0.5">GOOD&apos;AI FILED</div>
@@ -416,35 +450,44 @@ export default function HomeClient() {
       {/* Voice agent demo (enhanced) + strong CTA */}
       <VoiceAgentDemo />
 
-      {/* Fallback text mode (temporary) */}
-      <div className="max-w-3xl mx-auto px-6 pb-20 pt-8 border-t border-[var(--border)]">
-        <div className="text-center mb-6">
-          <StampButton
-            variant="paper"
-            size="sm"
-            onClick={() => setShowTextMode(!showTextMode)}
-            className="font-mono uppercase tracking-[0.16em]"
-          >
-            {showTextMode ? 'HIDE TEXT MODE' : 'OR JUST TYPE IT'}
-          </StampButton>
+      {/* Live Workspace Automation Playground */}
+      <section className="py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+        <div className="mx-auto max-w-5xl px-6">
+          <AutomationPlayground />
         </div>
+      </section>
 
-        {showTextMode && (
-          <div className="space-y-6">
-            <ChatInterface
-              initialMessage="I'd like to describe my admin problem in text."
-              onFirstResponse={() => {}}
-            />
-            {leadData && (
-              <LeadCaptureCard
-                firstMessage={leadData.problem}
-                conversationTranscript={leadData.answer}
-                onDismiss={() => setLeadData(null)}
-              />
-            )}
+      {/* Fallback text mode (temporary) */}
+      <section className="py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="text-center mb-6">
+            <StampButton
+              variant="paper"
+              size="sm"
+              onClick={() => setShowTextMode(!showTextMode)}
+              className="font-mono uppercase tracking-[0.16em]"
+            >
+              {showTextMode ? 'HIDE TEXT MODE' : 'OR JUST TYPE IT'}
+            </StampButton>
           </div>
-        )}
-      </div>
+
+          {showTextMode && (
+            <div className="space-y-6 max-w-3xl mx-auto">
+              <ChatInterface
+                initialMessage="I'd like to describe my admin problem in text."
+                onFirstResponse={() => {}}
+              />
+              {leadData && (
+                <LeadCaptureCard
+                  firstMessage={leadData.problem}
+                  conversationTranscript={leadData.answer}
+                  onDismiss={() => setLeadData(null)}
+                />
+              )}
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* POWERFUL CLOSING RITUAL — final thick ink navy stamped footer docket */}
       {/* Contains core promise + minimal contact + "we'll sort the boring stuff" in Fraunces WONK */}

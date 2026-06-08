@@ -25,23 +25,47 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
     setIsSubmitting(true);
 
     try {
-      await fetch('https://api.web3forms.com/submit', {
+      // 1. Submit to Google Apps Script Webhook (if defined)
+      const gwsUrl = process.env.NEXT_PUBLIC_GWS_SCRIPT_URL;
+      if (gwsUrl) {
+        await fetch(gwsUrl, {
+          method: 'POST',
+          mode: 'no-cors', // Bypasses Google Apps Script redirect CORS issues
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({
+            name: name.trim(),
+            business: business.trim() || '(not provided)',
+            phone: phone.trim(),
+            email: email.trim() || '(not provided)',
+            problem: firstMessage,
+            conversation: conversationTranscript,
+            timestamp: new Date().toISOString(),
+          }),
+        });
+      }
+
+      // 2. Trigger the local Good'ai GWS & n8n automation pipeline
+      await fetch('/api/demo-automation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_KEY || '',
-          subject: `New lead: ${name}`,
-          from_name: "Good'ai Website",
           name: name.trim(),
-          business: business.trim() || '(not provided)',
+          business: business.trim(),
           phone: phone.trim(),
-          email: email.trim() || '(not provided)',
-          problem: firstMessage,
-          conversation: conversationTranscript,
-        }),
+          email: email.trim(),
+          problem: `Client Admin Problem from Chat:\n"${firstMessage}"\n\nFull Chat History:\n${conversationTranscript}`,
+          actions: {
+            sheet: true,
+            doc: true,
+            emailNotification: !!email.trim(),
+            calendar: false,
+            n8n: true
+          }
+        })
       });
-    } catch {
+    } catch (err) {
       // Preserve the original behavior: do not block the visitor on provider errors.
+      console.error("GWS submission error:", err);
     }
 
     setIsSuccess(true);
@@ -67,14 +91,15 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
     <div className="gai-bubble-row">
       <div className="gai-leadcard">
         {onDismiss && (
-          <button
-            type="button"
+          <StampButton
+            variant="paper"
+            size="sm"
             onClick={onDismiss}
-            className="stamp-btn stamp-btn-paper absolute top-3 right-3 w-7 h-7 p-0 flex items-center justify-center text-[10px] border-2 border-[var(--ink)]"
+            className="absolute top-3 right-3 w-7 h-7 p-0 flex items-center justify-center text-[10px] border-2 border-[var(--ink)]"
             aria-label="Close lead form"
           >
             <X size={12} aria-hidden="true" />
-          </button>
+          </StampButton>
         )}
 
         <div className="gai-leadcard-eyebrow">
@@ -90,8 +115,8 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
           <div className="gai-leadcard-row">
             <input
               className="gai-input"
-              placeholder="Name"
-              aria-label="Name"
+              placeholder="Your name"
+              aria-label="Your name"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
