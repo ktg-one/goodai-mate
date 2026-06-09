@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import StampCard from '@/components/StampCard';
+import { ScrollReveal } from '@/components/ScrollReveal';
 
 // Pure content participant in unified HomeClient mailBoard GSAP.
 // All ribbon + pinned card physical choreography owned at board level for one artifact feel.
@@ -48,17 +49,17 @@ export default function AISolutions() {
           This section participates as coloured docket layers on the single brutalist mail artifact. */}
 
       <div className="mx-auto max-w-5xl px-6">
-        <div className="mb-10">
+        <ScrollReveal className="mb-10">
           <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">THE SYSTEMS</span>
           <h2 className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-3">
             Real <span className="hl">systems</span>.<br />Not another app.
           </h2>
           <p className="mt-3 max-w-md text-xl text-[var(--ink)]/80">Speak the mess once. We turn it into the docket that actually runs.</p>
-        </div>
+        </ScrollReveal>
 
-        {/* Cards participate in mail-board pinned variance via GSAP from parent (or static RM state).
-            Using pin prop for .pinned-notice class + stamp physics. */}
-        <div className="grid md:grid-cols-2 gap-6">
+        {/* Cards fade in staggered via GSAP (opacity-only — preserves each card's
+            CSS --rot/--ox/--oy pinned board variance, which a transform would clobber). */}
+        <ScrollReveal className="grid md:grid-cols-2 gap-6" stagger={0.09} fade>
           {solutions.map((sol, index) => (
             <StampCard 
               key={index} 
@@ -79,7 +80,7 @@ export default function AISolutions() {
               <p className="opacity-90 text-lg leading-snug">{sol.desc}</p>
             </StampCard>
           ))}
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

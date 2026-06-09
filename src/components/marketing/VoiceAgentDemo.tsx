@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import StampButton from '@/components/StampButton';
 import StampCard from '@/components/StampCard';
+import { ScrollReveal } from '@/components/ScrollReveal';
 import { VoiceAgentHero } from '@/components/voice-agent/VoiceAgentHero';
 
 /**
@@ -16,7 +17,7 @@ export default function VoiceAgentDemo() {
   return (
     <section className="py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
       <div className="mx-auto max-w-5xl px-6">
-        <div className="text-center mb-9">
+        <ScrollReveal className="text-center mb-9">
           <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">
             FILE ANOTHER ON THE BOARD
           </span>
@@ -26,7 +27,7 @@ export default function VoiceAgentDemo() {
           <p className="max-w-md mx-auto text-xl text-[var(--ink)]/80">
             Speak what&apos;s eating your time. It files straight into the tray above as a real docket.
           </p>
-        </div>
+        </ScrollReveal>
 
         {!showInline ? (
           <StampCard variant="paper" className="p-9 text-center" interactive pin>
