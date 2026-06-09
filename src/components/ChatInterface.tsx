@@ -61,9 +61,15 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   });
 
   const isBusy = status === 'submitted' || status === 'streaming';
+
+  // ⚡ Bolt: Lazy-evaluate transcript only when lead card is visible.
+  // Prevents O(N) string concatenation on every token during initial streaming.
   const conversationTranscript = useMemo(
-    () => messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n'),
-    [messages],
+    () => {
+      if (!showLeadCard || leadDismissed) return '';
+      return messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n');
+    },
+    [messages, showLeadCard, leadDismissed],
   );
   const errorMessage = error?.message?.trim() || 'Something went sideways. Try again in a moment.';
 
