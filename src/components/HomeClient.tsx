@@ -70,7 +70,7 @@ export default function HomeClient() {
     // === PHYSICAL RIBBON "TEAR SNAP" ON NEW DOCKET (stamp clack impulse) ===
     // Real tape: slow pull then quick release shear + flutter decay. Not smooth.
     // Mirrors award-config "tearing forward with shear, flutter, and lag variance".
-    const snap = (ref: React.RefObject<HTMLDivElement>, baseShear: number) => {
+    const snap = (ref: React.RefObject<HTMLDivElement | null>, baseShear: number) => {
       if (!ref.current) return;
       gsap.to(ref.current, {
         '--tape-shear': baseShear * 2.6,
