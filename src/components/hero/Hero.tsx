@@ -156,9 +156,8 @@ export function Hero() {
       <header className="flex items-center justify-between relative z-20 mb-8 md:mb-16 pb-6 border-b-4 border-[var(--ink)]">
         <div className="flex items-center">
           {/* 
-            CUSTOM WORDMARK — using their own font placed directly in public/.
-            (Not Fraunces. Logo mark removed from wordmark as requested.)
-            Update the filename in @font-face in globals.css to match exactly.
+            WORDMARK — using Fraunces from the design (public/fonts/ matching public/design-system-new/fonts/ verbatim).
+            Brand treatment follows the design system.
           */}
           <span className="brand-wordmark text-[1.9rem]">
             Good<span className="apos">&apos;</span>ai
@@ -194,7 +193,7 @@ export function Hero() {
             <span className="font-mono text-xs font-bold tracking-[0.16em] uppercase bg-[var(--hi-yellow)] text-[var(--ink)] px-3 py-1">
               Bidirectional Voice
             </span>
-            <h1 className="font-serif text-5xl md:text-[5.5rem] font-bold text-[var(--ink)] leading-[0.92] mt-6 mb-6 tracking-[-0.03em]">
+            <h1 className="font-display text-5xl md:text-[5.5rem] font-bold text-[var(--ink)] leading-[0.92] mt-6 mb-6 tracking-[-0.03em]">
               Tell us your <span className="hl">problem</span>.
             </h1>
             <p className="text-xl md:text-2xl text-[var(--ink)]/80 leading-snug">
@@ -236,7 +235,7 @@ export function Hero() {
                   animate={{ opacity: 1, y: 0 }}
                   className="stamp-box p-6 bg-paper-raised"
                 >
-                  <p className="font-serif text-2xl text-[var(--ink)] leading-snug">
+                  <p className="font-display text-2xl text-[var(--ink)] leading-snug">
                     “{aiTranscript}”
                   </p>
                   <StampButton

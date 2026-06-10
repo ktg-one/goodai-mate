@@ -43,6 +43,17 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
   const [sensitivity, setSensitivity] = useState(1);
   const [visualMode, setVisualMode] = useState<'calm' | 'dynamic'>('dynamic');
 
+  // ElevenLabs voice selection — "a few to try"
+  // Set ELEVEN_API_KEY in .env.local (and in Vercel)
+  // The ones you provided + a couple common ones to start. Swap IDs as you test more.
+  const voiceOptions = [
+    { id: 'vr54y8Xovf4AEnfNrGqH', name: 'vr54 (yours)' },
+    { id: 'jvcMcno3QtjOzGtfpjoI', name: 'jvc (yours)' },
+    { id: 'pNInz6obpgDQGcFmaJgB', name: 'Adam' },
+    { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni' },
+  ];
+  const [selectedVoiceId, setSelectedVoiceId] = useState(voiceOptions[0].id);
+
   const sensitivityRef = useRef(sensitivity);
   const visualModeRef = useRef(visualMode);
 
@@ -62,7 +73,7 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
 
   const { scrollYProgress } = useScroll({
     target: heroStampRef,
-    offset: ['start 35%', 'end 65%'],
+    offset: ['start 42%', 'end 72%'],
   });
 
   // Settle ref for 60fps hot path to Visualizer (no re-renders, no effect restarts)
@@ -79,11 +90,12 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
   });
 
   // Mechanical settle values (no floaty — short, purposeful, slightly jarring settle)
-  // Multi-phase for Awwwards signature filing: sink, slight compress + rotate, then deeper pile + skew settle.
-  const heroY = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0, 18, 42, 68]);
-  const heroRotate = useTransform(scrollYProgress, [0, 0.5, 1], [0, -1.2, -3.1]);
-  const heroSkew = useTransform(scrollYProgress, [0, 0.6, 1], [0, -1.8, -4.2]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0.985, 0.96]);
+  // Multi-phase for Awwwards signature filing: sink, slight compress + rotate, then deeper pile settle.
+  // Skew removed from main content box (was distorting text/canvas/buttons inside).
+  // Tuned for taller 100vh top-aligned hero + later trigger offset.
+  const heroY = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], [0, 22, 52, 85]);
+  const heroRotate = useTransform(scrollYProgress, [0, 0.5, 1], [0, -1.0, -2.2]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0.982, 0.955]);
   const heroShadow = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [
     '4px 4px 0 var(--ink)',
     '6px 7px 0 var(--ink)',
@@ -119,6 +131,7 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       audioContextRef.current = audioContext;
       const source = audioContext.createMediaStreamSource(stream);
@@ -165,7 +178,7 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
           } else {
             setError('No speech detected. Try again.');
           }
-        } catch (e: any) {
+        } catch {
           setError('Could not reach the voice service. Using fallback.');
           // Fallback reply so the flow still "files" a docket
           const fallback = "We'll sort the boring stuff. Drop us a line and we'll set up the intake.";
@@ -190,42 +203,53 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
     }
   }, [supertonicUrl, onMailFiled, userTranscript]);
 
-  const speakReply = (text: string) => {
-    if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    
-    const voices = window.speechSynthesis.getVoices();
-    if (selectedAgent === 'darl') {
-      utterance.rate = 1.05;
-      utterance.pitch = 1.15;
-      
-      const femaleVoice = voices.find(v => 
-        (v.name.toLowerCase().includes('female') || 
-         v.name.toLowerCase().includes('zira') || 
-         v.name.toLowerCase().includes('hazel') || 
-         v.name.toLowerCase().includes('google uk english female') ||
-         v.name.toLowerCase().includes('susan') ||
-         v.name.toLowerCase().includes('natural')) && v.lang.startsWith('en')
-      );
-      if (femaleVoice) utterance.voice = femaleVoice;
-    } else {
-      utterance.rate = 0.92;
-      utterance.pitch = 0.78;
-      
-      const maleVoice = voices.find(v => 
-        (v.name.toLowerCase().includes('male') || 
-         v.name.toLowerCase().includes('david') || 
-         v.name.toLowerCase().includes('google us english male') ||
-         v.name.toLowerCase().includes('ravi') ||
-         v.name.toLowerCase().includes('microsoft') ||
-         v.name.toLowerCase().includes('natural')) && v.lang.startsWith('en')
-      );
-      if (maleVoice) utterance.voice = maleVoice;
+  // ElevenLabs TTS — replaces browser speechSynthesis for higher quality
+  // Streams audio from server route (key stays server-side)
+  const speakReply = async (text: string, overrideVoiceId?: string) => {
+    if (!text) return;
+
+    const vId = overrideVoiceId || selectedVoiceId;
+    setStatus('speaking');
+
+    try {
+      const res = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, voiceId: vId }),
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(err || 'TTS request failed');
+      }
+
+      const audioBlob = await res.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+
+      audio.onended = () => {
+        setStatus('idle');
+        URL.revokeObjectURL(audioUrl);
+      };
+
+      audio.onerror = () => {
+        setStatus('idle');
+        setError('Voice playback failed.');
+        URL.revokeObjectURL(audioUrl);
+      };
+
+      await audio.play();
+    } catch (err) {
+      setStatus('idle');
+      setError('ElevenLabs TTS failed. Falling back to browser voice.');
+      // graceful fallback to old browser speech (keeps the flow working)
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.volume = 0.95;
+        window.speechSynthesis.speak(utterance);
+      }
     }
-    
-    utterance.volume = 0.95;
-    window.speechSynthesis.speak(utterance);
   };
 
   const replayLastResponse = () => {
@@ -244,7 +268,7 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
   const isActive = status === 'listening' || status === 'speaking';
 
   return (
-    <div className="relative w-full min-h-[92vh] flex flex-col bg-[var(--paper)] overflow-hidden font-sans">
+    <div className="relative w-full min-h-screen flex flex-col bg-[var(--paper)] overflow-hidden font-sans">
 
       {/* Minimal top bar — BrandWordmark + asset variant stamp */}
       <div className="relative z-20 flex items-center justify-between px-6 md:px-12 pt-6 pb-4 border-b-2 border-[var(--ink)]">
@@ -258,33 +282,31 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
         </div>
       </div>
 
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 md:px-12">
+      <div className="relative z-10 flex-1 flex flex-col items-center pt-6 md:pt-10 px-6 md:px-12">
         {/* Small framing text — the "words" are intentionally minimal in the hero */}
-        <div className="mb-8 text-center">
+        <div className="mb-6 text-center">
           <div className="inline-block font-mono text-xs uppercase tracking-[0.16em] bg-[var(--hi-yellow)] text-[var(--ink)] px-3 py-1 mb-2">
             Real. Local. No hype.
           </div>
           <div className="flex justify-center gap-2 mb-4 font-mono text-[10px]">
-            <button
+            <StampButton
+              variant="paper"
+              size="sm"
+              engaged={selectedAgent === 'darl'}
               onClick={() => setSelectedAgent('darl')}
-              className={`px-3 py-1 border-2 border-[var(--ink)] rounded-xs cursor-pointer select-none transition-all ${
-                selectedAgent === 'darl' 
-                  ? 'bg-[var(--gold)] text-[var(--ink)] font-bold shadow-[1px_1px_0_var(--ink)]' 
-                  : 'bg-[var(--paper)] text-[var(--ink)]/60 border-[var(--ink)]/20'
-              }`}
+              aria-label="Use Darl assistant persona"
             >
-              👩‍💼 Darl (Assistant)
-            </button>
-            <button
+              Darl
+            </StampButton>
+            <StampButton
+              variant="paper"
+              size="sm"
+              engaged={selectedAgent === 'robokev'}
               onClick={() => setSelectedAgent('robokev')}
-              className={`px-3 py-1 border-2 border-[var(--ink)] rounded-xs cursor-pointer select-none transition-all ${
-                selectedAgent === 'robokev' 
-                  ? 'bg-[var(--red)] text-[var(--paper)] font-bold shadow-[1px_1px_0_var(--ink)] border-[var(--ink)]' 
-                  : 'bg-[var(--paper)] text-[var(--ink)]/60 border-[var(--ink)]/20'
-              }`}
+              aria-label="Use RoboKev voice persona"
             >
-              🤖 Robokev (My Voice)
-            </button>
+              RoboKev
+            </StampButton>
           </div>
           <h1 className="font-display text-[3.2rem] md:text-[4.5rem] leading-none tracking-[-0.04em] text-[var(--ink)]">
             Talk to <span className="hl-red">Good&apos;ai</span>
@@ -297,14 +319,14 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
         {/* The Voice Agent surface — the actual product demo */}
         {/* HIGHEST-LEVERAGE Awwwards moment: physical mail "descent & filing" on scroll.
             Stamp shadow participates, ribbons damp, slight mechanical sink + rotation settle. 100% loyal to brutalist identity. */}
-        <div className="w-full max-w-5xl" ref={heroStampRef}>
+        <div className="w-full max-w-5xl mt-4 md:mt-6" ref={heroStampRef}>
           <motion.div
             className="stamp-box relative overflow-hidden bg-[var(--paper-raised)] border-2 border-[var(--ink)]"
             style={{
-              // Physical descent + filing: sinks, compresses, rotates and skews as "mailed into stack"
+              // Physical descent + filing: sinks, compresses, rotates as "mailed into stack"
+              // (skew moved to decorative curl layer only so content stays straight/readable)
               y: heroY,
               rotate: heroRotate,
-              skew: heroSkew, // additional paper edge torque as it settles
               scale: heroScale,
               boxShadow: heroShadow,
             }}
@@ -314,8 +336,8 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
               aria-hidden
               className="pointer-events-none absolute inset-0 border-l-[3px] border-t-[1px] border-[var(--ink)]/40 rounded-[3px]"
               style={{
-                rotate: useTransform(scrollYProgress, [0, 0.6, 1], prefersReducedMotion ? [0,0,0] : [0, -1.4, -2.6]),
-                skew: useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0,0] : [0, -2.1]),
+                rotate: useTransform(scrollYProgress, [0, 0.6, 1], prefersReducedMotion ? [0,0,0] : [0, -1.2, -2.2]),
+                skew: useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0,0] : [0, -1.4]),
                 opacity: useTransform(scrollYProgress, [0, 0.25, 0.9, 1], [0.3, 0.65, 0.9, 0.75]),
                 transformOrigin: 'left top',
               }}
@@ -328,7 +350,7 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
                   <div className="w-2.5 h-2.5 border-2 border-[var(--ink)]" />
                 </div>
                 <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/70">
-                  Acoustic Feed — Supertonic Local
+                  Acoustic Feed — Supertonic + ElevenLabs
                 </span>
               </div>
 
@@ -344,7 +366,7 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
             </div>
 
             {/* Visualizer area — wave-ribbon.png added verbatim as design signal / waveform layer (Brutalist Skill.html example, multiply blend, scaleY(0.7), participates in filing) */}
-            <div className="relative h-[380px] md:h-[460px] bg-[var(--paper)] overflow-hidden">
+            <div className="relative h-[420px] md:h-[520px] bg-[var(--paper)] overflow-hidden">
               <img 
                 src="/assets/wave-ribbon.png" 
                 alt="" 
@@ -444,6 +466,30 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
               )}
             </div>
 
+            {/* Voice selector — try a few ElevenLabs voices (career layer over the base TTS skill) */}
+            <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-3 flex flex-wrap items-center gap-2">
+              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">VOICES:</span>
+              {voiceOptions.map((v) => (
+                <StampButton
+                  key={v.id}
+                  variant="paper"
+                  size="sm"
+                  engaged={selectedVoiceId === v.id}
+                  onClick={() => {
+                    setSelectedVoiceId(v.id);
+                    if (agentResponse) {
+                      // replay last response with the new voice
+                      speakReply(agentResponse, v.id);
+                    }
+                  }}
+                  className="text-[10px] px-3 py-1"
+                >
+                  {v.name}
+                </StampButton>
+              ))}
+              <span className="ml-auto text-[10px] font-mono text-[var(--ink)]/40">ElevenLabs</span>
+            </div>
+
             {/* Big red stamp CTA — one red per surface, full physics */}
             <div className="border-t-2 border-[var(--ink)] bg-[var(--paper-raised)] p-5 flex justify-center">
               <StampButton
@@ -469,7 +515,7 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
           </motion.div>
 
           <p className="text-center mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--ink)]/50">
-            Powered by your local Supertonic • Good&apos;ai persona • No data leaves your machine during testing
+            Powered by local Supertonic (ASR) • ElevenLabs (TTS) • Good&apos;ai persona
           </p>
         </div>
       </div>

@@ -44,7 +44,7 @@ export default function AISolutions() {
   ];
 
   return (
-    <section ref={sectionRef} className="py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+    <section ref={sectionRef} className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
       {/* Unified physical ribbon bridge (GSAP .mail-ribbon) + non-uniform pinned variance now controlled from HomeClient mailBoard.
           This section participates as coloured docket layers on the single brutalist mail artifact. */}
 

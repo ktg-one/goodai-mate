@@ -24,6 +24,9 @@ interface VisualizerProps {
  *
  * Uses refs for sensitivity/mode so frequent control changes don't cause re-renders
  * or effect restarts in the hot animation path (per Vercel best practices).
+ *
+ * State-driven life wired: voicePressure (live RMS during listening) + stampBurst (clack on transcript) now feed drawPaperRibbon.
+ * Multi-harmonic paper flutter + audio reactive turbulence + stamp clack ink pop. 60fps refs hot path.
  */
 export function Visualizer({
   analyzer,
@@ -89,30 +92,35 @@ export function Visualizer({
       cCtx.lineJoin = 'round';
       ribbons.forEach((r, idx) => {
         cCtx.strokeStyle = idx % 2 === 0 ? r.color : r.dark;
-        cCtx.lineWidth = idx === 3 ? 10 : 14;
+        cCtx.lineWidth = idx === 3 ? 11 : 15;
         cCtx.beginPath();
-        for (let x = 0; x <= LOGICAL_W; x += 7) {
-          const w = Math.sin(x * 0.008 + idx * 1.3) * r.amp * (1 - (idx * 0.1));
-          cCtx.lineTo(x, r.y + w);
+        for (let x = 0; x <= LOGICAL_W; x += 6) {
+          // More irregular "paper" fixed wave (sag + edge wobble + micro tear) — not clean sine.
+          const sag = (x / LOGICAL_W) * (x / LOGICAL_W) * 9; // slight catenary hang
+          const w = (Math.sin(x * 0.007 + idx * 0.9) * r.amp + Math.sin(x * 0.019 + idx * 2.1) * (r.amp * 0.35)) * (1 - (idx * 0.08)) + sag;
+          // Non-uniform perf "dips" for physical receipt
+          const perfDip = (x % 29 < 4) ? (Math.sin(x) * 1.8) : 0;
+          cCtx.lineTo(x, r.y + w + perfDip);
         }
         cCtx.stroke();
       });
       // Always-visible perforated docket receipt strip at bottom (physical paper artifact even when static / reduced)
       const docketY = LOGICAL_H - 36;
       cCtx.strokeStyle = '#111111';
-      cCtx.lineWidth = 1.5;
+      cCtx.lineWidth = 1.6;
       cCtx.beginPath();
-      cCtx.moveTo(36, docketY);
-      cCtx.lineTo(LOGICAL_W - 36, docketY);
+      cCtx.moveTo(32, docketY);
+      cCtx.lineTo(LOGICAL_W - 32, docketY);
       cCtx.stroke();
-      cCtx.lineWidth = 1;
-      for (let tx = 52; tx < LOGICAL_W - 52; tx += 16) {
+      cCtx.lineWidth = 1.1;
+      for (let tx = 48; tx < LOGICAL_W - 48; tx += 15) {
+        const j = (tx % 5) * 0.3; // non-uniform
         cCtx.beginPath();
-        cCtx.moveTo(tx, docketY - 2.5);
-        cCtx.lineTo(tx, docketY + 2.5);
+        cCtx.moveTo(tx, docketY - 2.8 - j);
+        cCtx.lineTo(tx, docketY + 2.8 + j * 0.6);
         cCtx.stroke();
-      }
-      // Hard rubber stamp imprint
+      };
+      // Hard rubber stamp imprint + slight ink soak
       cCtx.fillStyle = '#0F0F0F';
       cCtx.font = '600 10px var(--font-mono, ui-monospace, monospace)';
       cCtx.textAlign = 'right';
@@ -128,7 +136,9 @@ export function Visualizer({
       thickness: number,
       amplitude: number,
       phase: number,
-      settle: number = 0
+      settle: number = 0,
+      burstParam: number = 0,
+      voiceParam: number = 0
     ) => {
       const points: { x: number; y: number; twist: number; opacity: number }[] = [];
       const step = 4;
@@ -138,11 +148,11 @@ export function Visualizer({
 
       // === SETTLE DAMPING + STAMP BURST + VOICE PRESSURE (SAVAGE AWWARDS MECHANICAL) ===
       // Hero files the mail: ribbons lose life, high-freq flutter collapses harder, wind dies.
-      // Stubs for partial overdrive state (full stampBurstRef + voicePressure live RMS wiring lives in future enhancement).
-      // All raw math, refs, 60fps. No floaty. Brutalist 1978 press.
+      // WIRED: burst from stampSignalRef (transcript clack), voicePressure from live RMS analyzer during listening.
+      // All raw math, refs, 60fps. No floaty. Brutalist 1978 press. Non-uniform harmonics.
       const effSettle = Math.max(0, Math.min(1, settle ?? (settleRef?.current ?? 0)));
-      const burst = 0; // placeholder — wire real transient stamp clack burst from parent on new mail filed
-      const voicePressure = 0; // placeholder — live mic RMS from analyzer for speaking ribbon shake
+      const burst = burstParam;
+      const voicePressure = voiceParam;
       const settleDamp = 1 - (effSettle * 0.82);
       const dampAmp = amplitude * (1 - Math.min(0.88, effSettle * 0.88)) * (1 + burst * 0.6);
       const dampTurb = 1 - (effSettle * 0.82) + burst * 0.9;
@@ -221,14 +231,19 @@ export function Visualizer({
 
         const curFreq = freq * freqMult;
 
-        const baseWave = Math.sin(i * curFreq + time + phase);
-        const flutter1 =
-          Math.sin(i * curFreq * 2.2 - time * 1.6 + phase) *
-          (0.2 + turbulence * 0.3);
-        const flutter2 =
-          Math.cos(i * curFreq * 5.1 + time * 3.2) *
-          (0.1 + localFlurry * (isCalm && !isThinking ? 0.05 : 0.4));
-        const wave = baseWave + flutter1 + flutter2;
+        // === PHYSICAL RIBBON (not electricity) ===
+        // Slow main body sag + quick irregular *edge* flutter + tear jitters + lag impulses.
+        // Audio (voicePressure) and burst modulate *energy* only — base shape is organic paper tape.
+        // Matches award-config "perforated paper tape tearing with shear, flutter, lag variance".
+        const mainBody = Math.sin(i * 0.0032 + time * 0.48) * 19; // slow undulation / sag like hanging receipt tape
+        const edgeFlutter =
+          Math.sin(i * 0.029 + time * 2.65) *
+          (5 + turbulence * 11) *
+          (i % 180 > 120 ? 1.4 : 0.7); // quick flutter stronger on "free" edge sections
+        const microTear =
+          (Math.cos(i * 0.058 + time * 1.15) * 3.5 + Math.sin(i * 0.017 + time * 0.9) * 2) *
+          (turbulence * 0.7 + burst * 0.9) * dampFlutter; // irregular tear/rip jitters
+        const wave = mainBody + edgeFlutter + microTear;
 
         const baseTwist = Math.cos(i * curFreq * 0.5 + time * 0.7 + phase);
         // Extra harmonic twist flutter (paper edge torque under wind + stamp impact)
@@ -299,17 +314,24 @@ export function Visualizer({
             // Raw color stamp modulation — hard switch, no lerp
             let cMain = colorMain;
             let cDark = colorDark;
-            if (colorShift > 0.4) {
-              // Listening red ink stamp
-              cMain = '#F4442E';
-              cDark = '#D8331F';
-            } else if (colorShift < -0.5) {
-              // Speaking gold clarity
-              cMain = '#F3A62A';
-              cDark = '#D98E1C';
+            // Ink transfer only on events (stamp clack / voice pressure), not constant "electric" glow.
+            // Matches physical rubber stamp + paper soak. Red/gold as transient ink, not neon.
+            const inkBoost = Math.max(0, Math.min(1, (burst * 0.9 + (isListening ? 0.25 : 0) + (isSpeaking ? 0.15 : 0))));
+            if (inkBoost > 0.25) {
+              // Temporary ink bite — red on clack/listen, gold on speak. Darker for paper absorption.
+              if (isListening || burst > 0.1) {
+                cMain = '#C73A24';
+                cDark = '#9F2A1A';
+              } else {
+                cMain = '#C98A1F';
+                cDark = '#A06F18';
+              }
+              // Slight width increase for "fresh ink spread"
+              ctx.lineWidth = Math.max(2, w1 * (isThinking ? 0.92 : 1.08));
+            } else {
+              ctx.strokeStyle = isFront ? cMain : cDark;
+              ctx.lineWidth = Math.max(2, w1 * (isThinking ? 0.92 : 1));
             }
-            ctx.strokeStyle = isFront ? cMain : cDark;
-            ctx.lineWidth = Math.max(2, w1 * (isThinking ? 0.92 : 1));
           }
 
           ctx.beginPath();
@@ -317,6 +339,23 @@ export function Visualizer({
           ctx.lineTo(p2.x, p2.y);
           ctx.stroke();
         }
+      }
+
+      // === PERFORATIONS (real receipt tape holes — non-uniform, physical) ===
+      // Small jagged ticks along the ribbon length. Variance + only on "top" edge for 3D tape.
+      // Matches design system "perforated paper tape".
+      ctx.lineWidth = 1.2;
+      for (let i = 0; i < points.length; i += 6) {  // ~every 24px, slight variance
+        const p = points[i];
+        if (Math.abs(p.twist) < 0.25) continue; // mostly the free/raised edge
+        const isFront = p.twist > 0;
+        ctx.strokeStyle = isFront ? 'rgba(17,17,17,0.65)' : 'rgba(10,10,10,0.55)';
+        const perfOffset = (i % 5) * 0.6 - 1.5; // non-uniform spacing
+        const perfLen = 2.8 + (i % 3) * 0.4;
+        ctx.beginPath();
+        ctx.moveTo(p.x + perfOffset, p.y - perfLen);
+        ctx.lineTo(p.x + perfOffset, p.y + perfLen * 0.6);
+        ctx.stroke();
       }
 
       // Grainy highlight — state + settle driven (P0 choreography)
@@ -396,11 +435,15 @@ export function Visualizer({
         voicePressure = Math.min(1.8, Math.sqrt(sumSq / (dataArray.length / 3)) * 2.8);
       }
 
+      const currentBurst = stampBurstRef.current;
+      const currentVoice = voicePressure;
+
       // Layered ribbons — now using canonical design-system-new tokens (brutalist ink + gold/red accents)
       // Paper-ink base layers (mechanical, non-decorative)
       // ALL ribbons receive currentSettle for full hero descent filing physics (P0 fix: dead settleProgress activated)
       // Ribbons lose amplitude/turbulence/windGust/tension as stamp "sinks into the mail stack" — real physical, no float.
-      drawPaperRibbon('#222222', '#0A0A0A', centerY, 0.008, 0.0015, 24, 40, 0, currentSettle);
+      // Voice + burst now wired for state-driven life (audio shake on listen, clack pop on file).
+      drawPaperRibbon('#222222', '#0A0A0A', centerY, 0.008, 0.0015, 24, 40, 0, currentSettle, currentBurst, currentVoice);
       drawPaperRibbon(
         '#2A2A2A',
         '#111111',
@@ -410,10 +453,12 @@ export function Visualizer({
         18,
         30,
         Math.PI,
-        currentSettle
+        currentSettle,
+        currentBurst,
+        currentVoice
       );
       // Gold / red accent ribbons (the signature Good'ai "ink on paper" moment)
-      drawPaperRibbon('#D98E1C', '#B87415', centerY, 0.015, 0.004, 32, 60, 2, currentSettle); // gold-deep
+      drawPaperRibbon('#D98E1C', '#B87415', centerY, 0.015, 0.004, 32, 60, 2, currentSettle, currentBurst, currentVoice); // gold-deep
       drawPaperRibbon(
         '#F4442E',
         '#D8331F',
@@ -423,7 +468,9 @@ export function Visualizer({
         14,
         50,
         4,
-        currentSettle
+        currentSettle,
+        currentBurst,
+        currentVoice
       ); // red + red-deep
 
       // === FILED DOCKET / IN-TRAY STAMP (appears as ribbons damp on settle) ===

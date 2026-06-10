@@ -1,112 +1,48 @@
-# Roadmap: Good'ai
+# Roadmap: Good'ai (refactored)
 
 ## Overview
 
-Good'ai ships in five phases that deliver incrementally from config through to production. Phase 1 lays the foundation (GLSL imports, design tokens, fonts). Phase 2 builds the entire visual layer -- shader background, landing UI, and cursor effects -- in parallel streams. Phase 3 delivers the core product value: AI chat with Perth-voice persona. Phase 4 adds lead capture (the business outcome). Phase 5 hardens everything for mobile and production deployment.
+Good'ai site v1 was originally planned as 5 incremental phases (shader foundation → visual → chat → lead capture → deploy). After Phase 1 foundation, the site was **fully refactored** into its current form: a brutalist direct-mail marketing experience whose hero **is** the functional Voice Agent product (local Supertonic), with conversation state leaking as physical "filed mail" into ribbons, pinned dockets, and tray. The redesign was executed via the goodai-award-configuration (5 specialized agents: impeccable + awwwards-animations + awwwards-ui-skills + gsap-awwwards-website + gsap-framer-scroll-animation) coordinated by goodai-agent-team.
 
-## Phases
+Pre-refactor phases (01-05) have been archived to `.planning/milestones/v0.9-pre-refactor-phases/`.
 
-**Phase Numbering:**
-- Integer phases (1, 2, 3): Planned milestone work
-- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+Ongoing work uses gsd-* skills (now added locally: gsd-health, gsd-docs-update, gsd-progress, gsd-manager, gsd-do, gsd-plan-phase, etc.) + goodai skills for brand-compliant updates.
 
-Decimal phases appear between their surrounding integers in numeric order.
+## Current State (post-refactor)
 
-- [x] **Phase 1: Foundation** - Next.js config, design tokens, fonts, GLSL imports (completed 2026-04-01)
-- [ ] **Phase 2: Visual Layer** - SDF shader background, landing UI, custom cursor
-- [ ] **Phase 3: Chat Core** - AI backend route, chat interface, landing-to-chat transition
-- [ ] **Phase 4: Lead Capture** - Lead form card, Web3Forms submission, conversation transcript
-- [ ] **Phase 5: Polish + Hardening** - Responsive layout, mobile optimizations, Vercel deployment
+- **Delivered**: Voice Agent hero + full mail-board brutalist flow (ribbons, docket pins, in-tray, footer ritual). 60fps mechanical stamp physics, one-red discipline, WONK, reduced-motion static artifacts, PRODUCT.md + public/ design system as SSOT.
+- **Skills**: Local copies in .agents/skills/ and .claude/skills/ (goodai-*, gsd-*, gsap/awwwards/impeccable design skills, next best practices).
+- **Planning hygiene**: gsd-health now available in-project; docs/ + .planning/ aligned to actual shipped site (this milestone).
 
-## Phase Details
+## Phases (historical + current)
 
-### Phase 1: Foundation
-**Goal**: Developer can build components against the correct palette, fonts, and GLSL pipeline
-**Depends on**: Nothing (first phase)
-**Requirements**: FOUND-01, FOUND-02, FOUND-03, FOUND-04
-**Success Criteria** (what must be TRUE):
-  1. A `.glsl` file can be imported in a TypeScript component without build errors in both dev (Turbopack) and production (webpack)
-  2. Perth Disruptor color tokens (#0C0C0C, #D86A3D, #D7D2CB, #EDE9E3) are available as Tailwind classes and CSS custom properties
-  3. DM Sans and JetBrains Mono render on the page with zero layout shift
-  4. TypeScript provides autocomplete for `.glsl`, `.frag`, `.vert` imports without type errors
-**Plans:** 1/1 plans complete
+**Pre-refactor (archived)**:
+- Phase 1: Foundation (GLSL, tokens, fonts) — completed 2026-04-01, code artifacts may remain or have been adapted.
+- Phases 2-5: Visual Layer / Chat Core / Lead Capture / Polish — described old SDF shader + cursor + old lead card flow. Superseded by the award-refactored mail-docket site. Archived.
 
-Plans:
-- [ ] 01-01-PLAN.md — GLSL pipeline, Perth Disruptor design tokens, and brand fonts
+**Current / Live**:
+The "v1" that shipped is the refactored Voice + physical docket site. No numbered phases currently active in .planning/phases/ (empty after archive + hygiene pass).
 
-### Phase 2: Visual Layer
-**Goal**: Visitor sees a premium, cursor-reactive landing page with shader background, branded layout, and smooth animations
-**Depends on**: Phase 1
-**Requirements**: SHDR-01, SHDR-02, SHDR-03, SHDR-04, SHDR-05, SHDR-06, SHDR-07, SHDR-08, LAND-01, LAND-02, LAND-03, LAND-04, LAND-05, LAND-06, LAND-07, LAND-08, LAND-09, CURS-01, CURS-02, CURS-03, CURS-04, CURS-05, CURS-06
-**Success Criteria** (what must be TRUE):
-  1. Full-viewport copper-tinted SDF shader renders at 60fps and responds to cursor movement with damped tracking
-  2. Landing page displays "Good'ai" wordmark, subtitle, input field with submit arrow, hint text, and Perth badge -- all with staggered fade-in animations
-  3. Custom cursor follows mouse with smooth lerp, expands on hover over interactive elements, and is completely absent on touch devices
-  4. Noise texture overlay and vignette are visible, adding visual depth without obscuring content
-  5. If WebGL is unavailable, a dark gradient fallback renders instead of a broken canvas
-**Plans:** 3 plans
+Future increments (voice prod, additional surfaces, ops handoff, full gsd milestone) will be planned with gsd-new-milestone / gsd-plan-phase using the goodai brand guardrails.
 
-Plans:
-- [ ] 02-01-PLAN.md — SDF lens blur shader background (Three.js, copper color grading, WebGL fallback)
-- [ ] 02-02-PLAN.md — Landing UI (wordmark, subtitle, input, badge, noise overlay, vignette)
-- [ ] 02-03-PLAN.md — Custom cursor + ambient glow (lerp follow, hover expansion, touch detection)
+## Phase Details (Pre-refactor — for reference only)
 
-### Phase 3: Chat Core
-**Goal**: Visitor types a problem, gets a warm Perth-voice AI response, and can hold a natural conversation
-**Depends on**: Phase 2
-**Requirements**: CHAT-01, CHAT-02, CHAT-03, CHAT-04, CHAT-05, CHAT-06, CHAT-07, CHAT-08, CHAT-09, CHAT-10, AIBE-01, AIBE-02, AIBE-03, AIBE-04, AIBE-05, AIBE-06, AIBE-07, AIBE-08
-**Success Criteria** (what must be TRUE):
-  1. Submitting a message in the landing input transitions the page from centered landing mode to top-aligned conversation mode (wordmark shrinks, subtitle hides, input moves to bottom)
-  2. AI responds in Perth voice -- casual, warm, under 3 sentences, no bullet points, never says "AI"
-  3. User and AI messages are visually distinct (right-aligned copper vs left-aligned surface with "GOOD'AI" label)
-  4. Typing indicator with bouncing dots appears while waiting for AI response, and input is disabled during that time
-  5. Rate limit (429) and server errors (500) display friendly messages instead of error traces
-**Plans:** 2 plans
+See `.planning/milestones/v0.9-pre-refactor-phases/` for the old 01-01 through 05-02 PLAN.md files. They are no longer authoritative.
 
-Plans:
-- [ ] 03-01-PLAN.md — AI backend route handler via Vercel AI Gateway with Perth-voice system prompt (AIBE-01..08)
-- [ ] 03-02-PLAN.md — Chat interface UI with landing-to-conversation transition, message bubbles, typing indicator (CHAT-01..10)
+## Progress & Hygiene
 
-### Phase 4: Lead Capture
-**Goal**: Engaged visitor leaves their contact details without interrupting the conversation flow
-**Depends on**: Phase 3
-**Requirements**: LEAD-01, LEAD-02, LEAD-03, LEAD-04, LEAD-05, LEAD-06, LEAD-07, LEAD-08, LEAD-09
-**Success Criteria** (what must be TRUE):
-  1. Lead capture card slides into the conversation 600ms after the first AI response with "Want us to look into this?" heading
-  2. Visitor can submit name and phone (required) with optional business and email, then sees "Nice one. We'll be in touch within 24 hours."
-  3. Web3Forms receives the contact details plus the full conversation transcript
-  4. Card only appears once per session -- dismissed or submitted, it does not return
-  5. Visitor can continue chatting after submitting or ignoring the lead form
-**Plans:** 1 plan
+- Old planning reported ~11% (only phase 1 complete).
+- Post archive + gsd-health + docs update: .planning/phases/ is clean; PROJECT.md / ROADMAP.md / STATE.md now describe the actual refactored site and skill usage.
+- Use `/gsd-health`, `/gsd-progress`, `/gsd-docs-update --verify-only` (or --force) going forward to keep docs in sync.
+- Use goodai-award-configuration + goodai-agent-team when doing further high-craft brutalist work.
 
-Plans:
-- [ ] 04-01-PLAN.md — LeadCaptureCard component, Web3Forms submission, chat flow integration
+## Next Actions (typical)
 
-### Phase 5: Polish + Hardening
-**Goal**: Site works flawlessly on mobile, loads fast on 4G, and deploys to production on goodai.au
-**Depends on**: Phase 4
-**Requirements**: RESP-01, RESP-02, RESP-03, RESP-04, RESP-05, DEPL-01, DEPL-02, DEPL-03, DEPL-04, DEPL-05
-**Success Criteria** (what must be TRUE):
-  1. Below 640px, layout adjusts with appropriate typography, padding, stacked lead card fields, and reduced noise opacity
-  2. Custom cursor and ambient glow are completely hidden on touch devices, shader pixel ratio is reduced for mobile performance
-  3. Page loads under 2 seconds on a 4G connection with Lighthouse performance score 90+
-  4. Site is live on goodai.au via Vercel with zero console errors in production
-  5. AI_GATEWAY_API_KEY is server-side only and never exposed to the browser
-**Plans:** 2 plans
+- Run `gsd health` or `gsd progress` to get current snapshot + routing.
+- For new work: gsd-discuss-phase / gsd-plan-phase (inject PRODUCT.md + public/ design system + current live state + mechanical rules).
+- For craft upgrades: dispatch via goodai-award-configuration (optionally + planning agent).
 
-Plans:
-- [ ] 05-01-PLAN.md — Responsive layout + mobile touch/shader optimizations (RESP-01..05)
-- [ ] 05-02-PLAN.md — Production deployment, env security, Lighthouse audit (DEPL-01..05)
+---
 
-## Progress
-
-**Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
-
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Foundation | 1/1 | Complete   | 2026-04-01 |
-| 2. Visual Layer | 0/3 | Not started | - |
-| 3. Chat Core | 0/2 | Not started | - |
-| 4. Lead Capture | 0/1 | Not started | - |
-| 5. Polish + Hardening | 0/2 | Not started | - |
+*Updated 2026-06-04 after adding gsd skills (incl. gsd-health) from .claude/.agents and running gsd-health alignment on the refactored site.*
+*Pre-refactor phases archived. Current site = award swarm brutalist mail execution + ongoing gsd-managed docs.*

@@ -9,7 +9,6 @@ const GWS_PATH = 'D:\\packages\\npm-global\\node_modules\\@googleworkspace\\cli\
 
 interface AnalyzePayload {
   url: string;
-  email?: string;
 }
 
 async function runGwsCommand(args: string[], jsonInput?: unknown): Promise<unknown> {
@@ -35,7 +34,7 @@ async function runGwsCommand(args: string[], jsonInput?: unknown): Promise<unkno
 
 export async function POST(req: NextRequest) {
   try {
-    const { url, email } = (await req.json()) as AnalyzePayload;
+    const { url } = (await req.json()) as AnalyzePayload;
 
     if (!url || !url.trim()) {
       return NextResponse.json(
@@ -173,25 +172,27 @@ Only output the raw JSON object. Do not wrap in markdown code blocks or add addi
 
     // 3. Log Website Lead to GWS Sheets / Gmail if CLI configured
     try {
-      const destination = email && email.trim() ? email.trim() : (extractedEmail || 'me');
-      logs.push(`[GWS] Sending website audit report email to: ${destination}...`);
+      const destination = 'hello@goodai.au';
+      logs.push(`[GWS] Sending website audit lead details to: ${destination}...`);
       const timestamp = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Perth' });
       
       const rawEmail = 
         `To: ${destination}\r\n` +
-        `Subject: Good'ai Systems Audit - ${analysisResult.businessType}\r\n` +
+        `Subject: Good'ai Web Audit Lead - ${analysisResult.businessType}\r\n` +
         `Content-Type: text/plain; charset="utf-8"\r\n` +
         `\r\n` +
-        `Hi there,\r\n\r\n` +
-        `Here is your custom systems audit for ${analysisResult.businessType} requested on ${timestamp} for ${targetUrl}:\r\n\r\n` +
-        `THREE AUTOMATION OPPORTUNITIES:\r\n` +
+        `Good'ai Team / Darl,\r\n\r\n` +
+        `A new website audit was run for a lead:\r\n` +
+        `- Target Website: ${targetUrl}\r\n` +
+        `- Extracted Contact Email: ${extractedEmail || 'None found'}\r\n` +
+        `- Business Type: ${analysisResult.businessType}\r\n\r\n` +
+        `THREE OPPORTUNITIES IDENTIFIED:\r\n` +
         `1. ${analysisResult.automations[0]}\r\n` +
         `2. ${analysisResult.automations[1]}\r\n` +
         `3. ${analysisResult.automations[2]}\r\n\r\n` +
-        `GOOD'AI RECOMMENDATION:\r\n` +
+        `RECOMMENDATION RECOMMEND:\r\n` +
         `"${analysisResult.summaryProposal}"\r\n\r\n` +
-        `Cheers,\r\n` +
-        `The Good'ai Team\r\n`;
+        `Audit time: ${timestamp}\r\n`;
 
       const base64UrlEmail = Buffer.from(rawEmail)
         .toString('base64')

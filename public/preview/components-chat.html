@@ -5,19 +5,41 @@
 <title>Components · Chat bubbles</title>
 <link rel="stylesheet" href="../colors_and_type.css">
 <style>
-  body { margin: 0; padding: 24px; background: var(--paper); display: flex; flex-direction: column; gap: 10px; }
+  body { margin: 0; padding: 28px; background: var(--paper); display: flex; flex-direction: column; gap: 12px; }
   .row { display: flex; }
   .row.r { justify-content: flex-end; }
-  .bubble { max-width: 76%; padding: 12px 18px; font-family: var(--font-sans); font-size: 15px; line-height: 1.5; }
-  .b-user { background: var(--orange-100); color: var(--ink); border-radius: 18px 18px 4px 18px; border: 1px solid var(--orange-tint); }
-  .b-ai   { background: #fff; color: var(--ink-soft); border-radius: 18px 18px 18px 4px; border: 1px solid var(--border); }
-  .typing { display: inline-flex; gap: 5px; padding: 14px 18px; background: #fff; border: 1px solid var(--border); border-radius: 18px 18px 18px 4px; }
-  .typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--ocean-400); }
+  .bubble {
+    max-width: 76%; padding: 13px 18px;
+    font-family: var(--font-sans); font-size: 15px; line-height: 1.5;
+    border: 2px solid var(--ink); border-radius: 4px;
+  }
+  /* user — gold sticker, ink text */
+  .b-user {
+    background: var(--gold); color: var(--ink); font-weight: 500;
+    box-shadow: var(--shadow-stamp);
+  }
+  /* ai — navy block, cream text */
+  .b-ai {
+    background: var(--navy); color: var(--paper);
+    box-shadow: var(--shadow-stamp);
+  }
+  .typing {
+    display: inline-flex; gap: 6px; padding: 16px 18px;
+    background: var(--navy); border: 2px solid var(--ink); border-radius: 4px;
+    box-shadow: var(--shadow-stamp);
+  }
+  .typing span {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--gold);
+    animation: blink 1.4s infinite both;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
 </style>
 </head>
 <body>
   <div class="row r"><div class="bubble b-user">My invoicing is taking 6 hrs every Friday.</div></div>
-  <div class="row"><div class="bubble b-ai">Yeah that&rsquo;s rough — Friday Xero runs are usually where the bleeding is. What software are you using to send them out?</div></div>
+  <div class="row"><div class="bubble b-ai">Yeah that&rsquo;s rough &mdash; Friday Xero runs are usually where the bleeding is. What are you using to send them out?</div></div>
   <div class="row r"><div class="bubble b-user">Xero, mostly. Sometimes Excel.</div></div>
   <div class="row"><div class="typing"><span></span><span></span><span></span></div></div>
 </body>

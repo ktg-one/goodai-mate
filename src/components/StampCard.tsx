@@ -18,7 +18,6 @@ import React from 'react';
  *   import StampCard from '@/components/StampCard';
  *   <StampCard variant="gold" pin interactive><h3>...</h3><p>...</p></StampCard>
  */
-
 export interface StampCardProps extends React.HTMLAttributes<HTMLDivElement> {
   /** navy/gold/ink/red = coloured surfaces. paper = quiet exception. */
   variant?: 'navy' | 'gold' | 'ink' | 'red' | 'paper';
@@ -46,7 +45,7 @@ const StampCard = React.forwardRef<HTMLDivElement, StampCardProps>(
     },
     ref
   ) => {
-    const interactiveClass = interactive ? '' : 'pointer-events-none';
+    const interactiveClass = interactive ? 'interactive' : 'pointer-events-none';
     const compactClass = compact ? 'p-4' : '';
     const engagedClass = engaged ? 'is-engaged' : '';
     const pinClass = pin ? 'pinned-notice' : '';

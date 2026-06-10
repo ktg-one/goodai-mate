@@ -1,127 +1,166 @@
-# Good'AI — Design System
+# Good'ai — Design System
 
 > Using new tech and know-how to **equip the willing, educate the ignorant and aid the weak** — to raise up together as one, close the gap, reform positively and look past the violence; towards the stars. Finally breaking the damn cycle.
 
-Good'AI is a Perth-based business automation company that helps small-to-medium businesses (~$1M–$30M turnover) get the boring stuff off their plate. The promise: *knock off early, spend time with the kids — we'll sort the systems.*
+Good'ai is a Perth-based business automation company that helps small-to-medium businesses (~$1M–$30M turnover) get the boring stuff off their plate. The promise: *knock off early, spend time with the kids — we'll sort the systems.*
 
-The brand book is a 1995-direct-mail / "back-of-the-Yellow-Pages" composition system running on 2026 software. Ink black structure, brand orange as the shout, cool off-white paper, WA Ocean as the third brand surface. No gradients, no drop-blurs, no all-three-loud-at-once.
+This design system is **brutalist / direct-mail**: a warm-cream canvas carrying high-contrast **coloured cards** — navy, gold, red and black blocks with cream-on-colour type, hard edges, and flat "stamp" shadows. It reads like a confident notice pinned to a board, not a soft SaaS landing page.
 
 ---
 
-## What's in this folder
+## What's in this project
 
 | File / Folder | What it is |
 | --- | --- |
-| `good-ai-design-final.html` | **Source of truth.** The brand book (v1.0) — every token, scale, shape rule and component spec lives here. If anything else disagrees with this file, this file wins. |
-| `colors_and_type.css` | Drop-in tokens — colour, font, spacing, radii, shadow, plus semantic type classes (`.h1`, `.h2`, `.lede`, `.body`, `.eyebrow`, `.mono`, `.wordmark`). |
-| `assets/` | Current kept image asset: `assets/goodai/uploads/G.jpg`. Old logo/wordmark exports were removed during the asset cleanup. |
-| `fonts/` | Self-hosted Fraunces variable font (SOFT/WONK/opsz/wght axes). DM Sans + JetBrains Mono come from Google Fonts. |
-| `preview/` | Self-contained card files for the Design System tab (palette, type, shapes, components). |
-| `ui_kits/web/` | Marketing-site UI kit — hero, chat intake, lead-capture, services strip, footer. |
-| `voice-feature/` | Separate Vite/Gemini Live voice prototype. Reference only, not the production Next app. |
-| `SKILL.md` | Skill manifest. Lets this folder be used as a Claude Code skill. |
+| `colors_and_type.css` | **Source of truth.** All design tokens — colours, fonts, spacing, radii, stamp shadows, semantic type classes. Drop into any HTML file. |
+| `assets/` | Brand mark + wordmark SVGs. |
+| `preview/` | Self-contained card files that populate the Design System tab. |
+| `ui_kits/web/` | Marketing-site UI kit — hero, chat intake, lead-capture card, feature strip, marquee, footer. |
+| `SKILL.md` | Skill definition; lets this folder be used as a Claude Code skill. |
 | `README.md` | You are here. |
 
 ---
 
-## Brand at a glance
+## THE KEY PRINCIPLE
 
-### Palette — three colours do most of the work
+**Paper background, high-contrast COLOURED cards, white-on-colour text.**
 
-| Token | Hex | Role |
-| --- | --- | --- |
-| `--ink` | `#0B0B0B` | Text, borders, hard edges. Use without fear. |
-| `--orange` | `#F25C2B` | The Good'AI shout. **One per surface, maximum.** |
-| `--paper` | `#F8F8F6` | Page canvas — cool off-white, *not* warm cream. |
-| `--ocean-400` | `#006B8F` | WA Ocean. Third brand colour — brand surfaces, links. |
+White cards on a cream page read as "an unfinished draft you forgot to colour in." So:
 
-Supporting (used sparingly): `--orange-deep #D7591A`, `--orange-tint #FBD8C7`, `--paper-deep #EFEEEC`, `--cream-line #CCCAC6`, `--hi-yellow #FFD400` (alerts / "SALE!"), `--trust-blue #1A3FA8` (hyperlinks), `--ok #2E6E3E` (success), `--warn #B53A1F` (errors).
+- Default card/section surfaces **carry colour** — navy, gold, red, or black fills with cream/white (or black-on-gold) text.
+- Cream / paper-raised is the **rare quiet exception**, never the default.
+- Keep brand restraint per block: **one accent moment** inside each coloured surface (usually the red CTA).
+- The page background stays **warm cream** — don't colour the whole background; colour the **cards and blocks**.
 
-### Type
+---
 
-- **Display:** Fraunces soft wonk (variable, opsz 144, weight 500–700). Self-hosted from `fonts/`. Slightly slabby, soft, optical. Used for hero, page H1/H2.
-- **Sans:** DM Sans (300–800). Body, UI, buttons, labels.
-- **Mono:** JetBrains Mono. Eyebrows, code, the service marquee, the Perth/WA tag.
+## CONTENT FUNDAMENTALS
+
+How Good'ai talks. This is canon.
 
 ### Voice
+- **A switched-on mate who gets business.** Not a salesperson, not a robot. Casual, warm, direct — like a tradie who happens to understand systems.
+- **"We" and "us"** — never "I". The reader is talking to the team, not a person.
+- **Australian, Perth-flavoured.** "No worries", "sort it", "knock off early", "the boring stuff".
+- **Match their energy.** If they're frustrated, acknowledge it before solving.
+- **The vibe:** *"Knock off early, spend time with the kids — we'll sort the boring stuff."*
 
-A **switched-on Aussie mate.** Casual, warm, direct — like a tradie who happens to understand systems. "We" not "I". Short sentences. No waffle.
+### Tone
+- **Short sentences. No waffle. Get to the point.**
+- Sentence-case everywhere except the wordmark. Headlines are not Title Case.
+- Contractions on (we'll, you've, can't, that's). Commas, em-dashes, the occasional period mid-sentence for rhythm.
+- One question at a time. Never bombard.
 
-**Forbidden vocab:** "AI", "artificial intelligence", "machine learning", "neural network", "leverage", "synergy", "optimize", "utilize", "streamline", "disrupt", "hyper-scale". Say **automation**, **system**, **workflow** instead.
+### Forbidden
+- ❌ "AI", "artificial intelligence", "machine learning", "neural network" — say **automation**, **system**, **workflow**, **process** instead. (Audience is suspicious of tech hype.)
+- ❌ Corporate speak: "leverage", "synergy", "optimize", "utilize", "streamline".
+- ❌ Bullet points or numbered lists in conversational copy. Talk in sentences like a human.
+- ❌ Specific savings claims or timelines without scoping first.
+- ❌ Over-promising; over-selling.
 
-| ✅ Good'AI | ❌ Not Good'AI |
+### Examples (good → bad)
+
+| ✅ Good'ai | ❌ Not Good'ai |
 | --- | --- |
-| *"We'll handle the boring stuff."* | *"Leveraging synergistic ML pipelines."* |
-| *"Built in Perth, runs everywhere."* | *"AI-powered hyper-scale solutions."* |
-| *"Knock off early on Friday."* | *"Disrupt the future of work."* |
 | *"Tell us your problem."* | *"Submit your inquiry below."* |
+| *"Business automations, sorted."* | *"AI-powered workflow optimization."* |
+| *"We'll figure out how to fix it."* | *"Our team will leverage cutting-edge AI to streamline your processes."* |
+| *"Drop your details and we'll scope it out — no obligation, no runaround."* | *"Schedule a discovery call with one of our experts."* |
+| *"Nice one. We'll be in touch within 24 hours."* | *"Thank you for your submission. A representative will follow up shortly."* |
 
-### Shapes
-
-From the logo: circles, half-circles, triangles, bars. One ink shape + one orange shape per composition. Flat fills only — no gradients, no 3D, no bevel, no drop-glow.
-
-### Stamp shadow — the brand's visual signature
-
-Flat offset shadow, never a blur:
-
-- `--shadow-stamp: 3px 3px 0 var(--ink)` — ink behind paper. Default.
-- `--shadow-stamp-orange: 3px 3px 0 var(--orange)` — orange behind ink (CTAs).
-- `--shadow-stamp-deep: 4px 4px 0 var(--ink)` — heavier (hero, ad surfaces).
-
-Ink behind paper. Orange behind ink. **Never both.**
-
-### Spacing & radii
-
-- **8-pt base:** `4 / 8 / 12 / 16 / 24 / 40 / 64 / 96`.
-- **Sharp by default.** Buttons & cards: `0–8px`. Inputs & tags: `4px`. Soft surfaces: `8px`. **Pill `999px` only for chips and dots — never buttons.**
-
-### Backgrounds
-
-- **Paper with a 1px horizontal grain** (`repeating-linear-gradient(0deg, rgba(11,11,11,0.025) 0 1px, transparent 1px 4px)`) is the default page surface.
-- **Ink block** for hero/footer.
-- **Ocean block** for the "third brand surface" treatment.
-- **No WebGL shaders.** No animated noise overlays. No `cursor: none`. No full-page mouse-tracking RAF loops. The original site lagged — keep things fast.
-
-### Animation
-
-- Easing: `cubic-bezier(0.23, 1, 0.32, 1)`.
-- Durations: `120ms` hover/press, `300ms` state change, `600ms` entrance fade.
-- Fades and slide-ups only. No bounces, no spin, no parallax. Marquee scroll on services strip is fine (slow, 30s loop).
-- **Reduced-motion respected** — static fallbacks for marquee and any animated hero.
+### Emoji
+**No emoji in product surfaces.** The wordmark's red apostrophe, the gold sticker chips, and the logo do the friendliness lifting. Emoji feel cheap next to Fraunces and break the calm.
 
 ### Casing
+- **Wordmark:** `Good'ai` — lowercase `ai`, **red apostrophe**. Never `GoodAI`, never `Good AI`, never `goodai`.
+- **Headlines:** sentence case.
+- **Buttons:** sentence case ("Get a callback", not "GET A CALLBACK").
+- **Eyebrows / mono labels:** UPPERCASE with `0.16em` tracking. *Only* place all-caps appears.
 
-- **Wordmark:** `Good'ai` — lowercase `ai`, orange apostrophe. Never `GoodAI`, never `Good AI`, never `goodai`.
-- **Headlines & buttons:** sentence case. ("Get started", not "GET STARTED" or "Get Started".)
-- **Eyebrows / mono labels:** UPPERCASE with `0.16em` tracking. The **only** place all-caps appears.
+---
 
-### Iconography
+## VISUAL FOUNDATIONS
 
-- **UI icons → Lucide.** 2px stroke, 24×24 viewBox, `currentColor`. Stroke-based, no fills.
-- **Brand mark → bespoke SVGs in `assets/`.**
-- **No icon fonts, no emoji-as-icon, no unicode-glyph-as-icon, no PNG icons.** SVG only.
+### Colour — the five core colours
+| Token | Hex | Job |
+| --- | --- | --- |
+| `--navy` | `#202C59` | Dark surfaces, headlines, dark card fills, links |
+| `--ink` | `#111111` | Text, borders, hard edges |
+| `--paper` | `#FFF0D0` | Page canvas — **warm cream** |
+| `--gold` | `#F3A62A` | Coloured panels / blocks / sticker labels |
+| `--red` | `#F4442E` | Primary CTA / shout accent |
 
-### Imagery
+Deeper steps: `--gold-deep #D98E1C`, `--red-deep #D8331F`, `--navy-deep #161E3D`, `--paper-deep #F6E2B8`. Success `#2E6E3E`, Error `#D8331F`.
 
-Warm, sunlit, real. Perth tradies, Perth shopfronts, hands on tools, old laptops on a shop counter. **No stock-photo glass towers, no purple-gradient AI-art.** B&W with a warm duotone (ink shadows + paper highlights) is the house treatment; full-colour photography is fine when it's earned. Slight grain (4% noise) on photo blocks.
+Colour the **cards**, not the whole page. One accent (usually the red CTA) per surface — never all five loud at once.
+
+**Legacy aliases** (kept so older files don't break): `--orange*` → reds, `--ocean*` → navies, `--hi-yellow` → gold. Prefer the new `--gold / --red / --navy` names in new work.
+
+### Type
+- **Display:** Fraunces (variable — opsz, weight, plus SOFT + WONK axes). Hero, H1/H2. Italic + WONK = the emphasis lift — **one phrase per surface**.
+- **Sans:** DM Sans (300–800). Body, UI, buttons, labels.
+- **Mono:** JetBrains Mono. Eyebrows, code, the feature marquee, the Perth/WA tag.
+
+### Spacing
+4-pt grid: `4 / 8 / 12 / 16 / 20 / 24 / 32 / 40 / 48 / 64 / 80 / 96`. Default page padding `clamp(24px, 5vw, 64px)`. Cards breathe — minimum `18–24px` interior padding.
+
+### Radii — sharp is the default
+`xs:4 / sm:8 / md:12 / lg:18 / pill:999`. **Cards and buttons stay sharp (0–8px).** Pills (`999px`) are the labelled exception — **chips, status dots, counters only. No pill buttons.** The logo container is square: the mark is the radius.
+
+### Shadow — flat "stamp" only
+A solid offset, **never a blur**. Match the stamp colour to the surface job:
+- `--shadow-stamp` — `3px 3px 0 var(--ink)` (default)
+- `--shadow-stamp-orange` — red stamp, for the CTA
+- `--shadow-stamp-ocean` — navy stamp, for blocks
+- `--shadow-stamp-deep` — `4px 4px 0 var(--ink)`
+
+No drop-blur glows, no soft elevation ramps. The stamp **is** the signature.
+
+### Backgrounds
+- **Plain warm-cream paper** is the default. No gradient, no shader (an optional 1px static hairline texture at ~2.5% is fine; nothing animated).
+- **Navy / gold / red / black blocks** carry the content as coloured cards.
+- **Paper-deep tint** (`--bg-sunken`) for the occasional quiet sectioned strip.
+
+### Animation
+- Easing: `cubic-bezier(0.23, 1, 0.32, 1)`.
+- Durations: `120ms` hover/press, `300ms` state changes, `600ms` entrance fades.
+- **Fades and slide-ups** only. No bounces, no spin, no parallax. Marquee scroll is fine (slow loop).
+- **Reduced-motion respected** — static fallbacks for the marquee and hero.
+
+### Hover / press states
+- **Buttons:** background one step darker (`--red → --red-deep`), `translate(-1px, -1px)`, stamp grows by 1px. On press, `translate(2px, 2px)` and the stamp drops to none — like pressing a real stamp down.
+- **Cards / chips:** lift `translate(-2px, -2px)`, stamp grows.
+- **Links:** colour is navy; deepens to `--navy-deep`, underline thickens to 2px.
+
+### Borders
+**2px ink** is the house border on every stamped surface. Hairlines use `--cream-line #E0C690` on cream. Never coloured borders mid-elevation; coloured edges only on focus rings.
+
+### Imagery vibe
+Warm, sunlit, real. Perth tradies, shopfronts, hands on tools, a laptop on a shop counter. **No stock-photo glass towers, no purple-gradient AI-art.** Where photography isn't supplied, UI kits use placeholder cards.
+
+---
+
+## ICONOGRAPHY
+
+- **UI icons → Lucide-style.** Stroke-based, ~2px stroke, 24×24 viewBox, `currentColor`. No filled icons, no icon font, no emoji-as-icon, no unicode glyphs (`›` `✓`), no PNG icons. SVG only.
+- **Brand mark & shape primitives → bespoke SVGs in `assets/`.** Geometric, slightly playful, never cute.
+- Icon colour **matches its surface**: cream/white on navy/red/black, ink on gold/cream.
+- When something Lucide doesn't cover comes up, draw it: 2px stroke, rounded caps, `--ink` outlines, an occasional **flat `--gold` / `--navy` fill**. No gradients in icons.
 
 ---
 
 ## INDEX
 
-- **`good-ai-design-final.html`** — the brand book (source of truth).
-- **`colors_and_type.css`** — drop-in tokens + semantic type classes.
-- **`assets/`** — current kept image asset: `goodai/uploads/G.jpg`.
-- **`fonts/`** — self-hosted Fraunces variable.
-- **`preview/`** — design-system cards (palette, type specimens, components).
-- **`ui_kits/web/`** — full marketing-site recreation.
-  - `index.html` — integrated demo.
-  - `Hero.jsx`, `ChatThread.jsx`, `LeadCard.jsx`, `ServicesMarquee.jsx`, `Footer.jsx`, `primitives.jsx`.
-- **`voice-feature/`** — separate Vite/Gemini Live voice prototype; reference only.
+- **`colors_and_type.css`** — drop-in tokens + semantic classes (`.h1`, `.h2`, `.h3`, `.lede`, `.body`, `.eyebrow`, `.mono`, `.wordmark`).
+- **`assets/`** — brand mark + wordmark SVGs.
+- **`preview/`** — design-system cards (palette, type specimens, components, brand, spacing).
+- **`ui_kits/web/`** — full marketing-site recreation: `index.html` (landing → chat → lead capture), `Hero.jsx`, `ChatThread.jsx`, `LeadCard.jsx`, `Footer.jsx`, `primitives.jsx`.
 - **`SKILL.md`** — skill manifest for Claude Code.
 
 ---
 
-## Brand pivot — what changed
+## Caveats & open questions
 
-The original `globals.css` defined a "Perth Disruptor" palette: near-black surfaces, hidden cursor, animated lensblur shader, single orange accent. That site lagged. The brand book pivots to a paper-feeling, performant system anchored on **Ink + Orange + cool Paper**, with **WA Ocean** as the third surface. The orange survives — sharper, used once per surface. No teal, no warm cream, no tomato, no sunshine. Just the three.
+- **Fonts:** DM Sans + JetBrains Mono (Google Fonts) + **Fraunces** (local variable file with SOFT + WONK axes) for display. If there's a real wordmark font, drop it into `fonts/` and replace the `@font-face` in `colors_and_type.css`.
+- **Logo:** the real `good'ai` wordmark (`assets/logo-wordmark.svg`) sits in the landing top bar and footer; the standalone **`g` mark** (`assets/logo-g.svg`) is the icon. Both are black + brand red (`#F4442E`). Swap the `<img src>` to rebrand.
+- **Imagery** is described but not provided — UI kits use placeholder cards where photography would go.

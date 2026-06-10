@@ -1,0 +1,50 @@
+diff --git a/src/app/globals.css b/src/app/globals.css
+index 8e0f0e0..c0ffee1 100644
+--- a/src/app/globals.css
++++ b/src/app/globals.css
+@@ -1308,12 +1308,20 @@ body {
+ .mail-ribbon::before {
+-  /* Highlight feed layer — tape "pull" + real shear + harmonic flutter (wind on paper) */
++  /* Highlight feed layer + wave-ribbon.png paper texture (real ink-on-tape fiber from public/assets/).
++     Transforms in sync with GSAP tape for physical unity. Low opacity multiply for scanned receipt tactility. */
+   content: '';
+   position: absolute;
+   inset: 0;
+   background: linear-gradient(
+     90deg,
+     transparent 0%,
+     rgba(255,255,255,0.38) 38%,
+     transparent 72%
+-  );
++  ),
++    url('/assets/wave-ribbon.png') repeat-x center / auto 140%;
++  background-blend-mode: normal, multiply;
++  opacity: 0.88;
++  );
+   transform: 
+     translateX(calc(-100% + var(--tape-progress) * 235%)) 
+     translateY(var(--tape-flutter))
+@@ -1357,12 +1365,18 @@ body {
+ .mail-ribbon-tear::before {
+-  /* Tear distortion + advancing scissor/physical rip indicator — shear + flutter for real tape snap */
++  /* Tear distortion + advancing scissor/physical rip indicator — shear + flutter for real tape snap.
++     + wave-ribbon.png fiber texture (public/assets/) for extra tactility on the perforated edge. */
+   content: '';
+   position: absolute;
+   inset: 0;
+   background: 
+     linear-gradient(90deg, transparent 0 18%, rgba(17,17,17,0.12) 22% 29%, transparent 34% 100%),
+-    repeating-linear-gradient(90deg, var(--ink) 0 1px, transparent 1px 5px);
++    repeating-linear-gradient(90deg, var(--ink) 0 1px, transparent 1px 5px),
++    url('/assets/wave-ribbon.png') repeat-x center / auto 110%;
++  background-blend-mode: normal, normal, multiply;
++  opacity: 0.48;
++  );
+   transform: 
+     translateX(calc(var(--tape-progress) * -38%)) 
+     translateY(calc(var(--tape-flutter) * 0.4))
+     skewX(calc(var(--tape-shear) * 4.2deg));
+   opacity: 0.5;
+   z-index: 1;
+   transition: none;
+ }

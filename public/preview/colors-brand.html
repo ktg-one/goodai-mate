@@ -6,77 +6,88 @@
 <link rel="stylesheet" href="../colors_and_type.css">
 <style>
   body { margin: 0; padding: 24px; background: var(--paper); }
-  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 14px; }
   .swatch {
-    border-radius: var(--radius-md); padding: 16px; min-height: 110px;
+    border-radius: var(--radius-sm); padding: 16px; min-height: 120px;
     display: flex; flex-direction: column; justify-content: space-between;
-    border: 1.5px solid var(--ink); box-shadow: var(--shadow-stamp);
+    border: 2px solid var(--ink); box-shadow: var(--shadow-stamp);
   }
-  .name  { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .name  { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; }
   .label { font-family: var(--font-display); font-weight: 600; font-size: 15px; letter-spacing: -0.01em; }
   .hex   { font-family: var(--font-mono); font-size: 10.5px; opacity: 0.85; }
 
   .rule {
-    border-top: 1px solid var(--cream-line); padding-top: 10px; margin-top: 4px;
+    border-top: 2px solid var(--ink); padding-top: 12px; margin-top: 6px;
     font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em;
     text-transform: uppercase; color: var(--ink-mute);
-    display: flex; gap: 18px;
+    display: flex; gap: 22px; flex-wrap: wrap;
   }
   .rule b { color: var(--ink); font-family: var(--font-sans); font-weight: 600; letter-spacing: 0; text-transform: none; }
 </style>
 </head>
 <body>
 
+  <!-- Five core brand colours -->
   <div class="grid">
+    <div class="swatch" style="background: var(--navy); color: var(--paper);">
+      <span class="name">navy</span>
+      <span class="label">Navy · blocks</span>
+      <span class="hex">#202C59</span>
+    </div>
     <div class="swatch" style="background: var(--ink); color: var(--paper);">
       <span class="name">ink</span>
-      <span class="label">Black · primary</span>
-      <span class="hex">#0B0B0B</span>
+      <span class="label">Black · edges</span>
+      <span class="hex">#111111</span>
     </div>
-    <div class="swatch" style="background: var(--orange); color: var(--ink);">
-      <span class="name">orange</span>
-      <span class="label">Orange · CTA</span>
-      <span class="hex">#F25C2B</span>
-    </div>
-    <div class="swatch" style="background: var(--ocean-400); color: #fff;">
-      <span class="name">ocean-400</span>
-      <span class="label">WA Ocean · third</span>
-      <span class="hex">#006B8F</span>
-    </div>
-    <div class="swatch" style="background: var(--paper); color: var(--ink); border-color: var(--cream-line); box-shadow: none;">
+    <div class="swatch" style="background: var(--paper); color: var(--ink); border-color: var(--ink); box-shadow: var(--shadow-stamp);">
       <span class="name">paper</span>
-      <span class="label">Canvas · cool white</span>
-      <span class="hex">#F8F8F6</span>
+      <span class="label">Warm cream · canvas</span>
+      <span class="hex">#FFF0D0</span>
+    </div>
+    <div class="swatch" style="background: var(--gold); color: var(--ink);">
+      <span class="name">gold</span>
+      <span class="label">Mustard · panels</span>
+      <span class="hex">#F3A62A</span>
+    </div>
+    <div class="swatch" style="background: var(--red); color: var(--paper);">
+      <span class="name">red</span>
+      <span class="label">Coral · CTA</span>
+      <span class="hex">#F4442E</span>
     </div>
   </div>
 
+  <!-- Deeper steps -->
   <div class="grid">
-    <div class="swatch" style="background: var(--orange-deep); color: var(--ink);">
-      <span class="name">orange-deep</span>
-      <span class="label">Orange shadow</span>
-      <span class="hex">#D7591A</span>
+    <div class="swatch" style="background: var(--navy-deep); color: var(--paper);">
+      <span class="name">navy-deep</span>
+      <span class="label">Navy depth</span>
+      <span class="hex">#161E3D</span>
     </div>
-    <div class="swatch" style="background: var(--ocean-600); color: #fff;">
-      <span class="name">ocean-600</span>
-      <span class="label">Ocean deep</span>
-      <span class="hex">#003D56</span>
+    <div class="swatch" style="background: var(--gold-deep); color: var(--paper);">
+      <span class="name">gold-deep</span>
+      <span class="label">Gold depth</span>
+      <span class="hex">#D98E1C</span>
     </div>
-    <div class="swatch" style="background: var(--ocean-50); color: var(--ink); border-color: var(--ocean-200); box-shadow: none;">
-      <span class="name">ocean-50</span>
-      <span class="label">Ocean tint</span>
-      <span class="hex">#E6F3F7</span>
+    <div class="swatch" style="background: var(--red-deep); color: var(--paper);">
+      <span class="name">red-deep</span>
+      <span class="label">Red depth</span>
+      <span class="hex">#D8331F</span>
     </div>
-    <div class="swatch" style="background: var(--hi-yellow); color: var(--ink);">
-      <span class="name">hi-yellow</span>
-      <span class="label">Sticker / alert</span>
-      <span class="hex">#FFD400</span>
+    <div class="swatch" style="background: var(--gold-tint); color: var(--gold-deep); box-shadow: none;">
+      <span class="name">gold-tint</span>
+      <span class="label">Soft gold</span>
+      <span class="hex">#FBDFA6</span>
+    </div>
+    <div class="swatch" style="background: var(--red-tint); color: var(--red-deep); box-shadow: none;">
+      <span class="name">red-tint</span>
+      <span class="label">Soft red</span>
+      <span class="hex">#FBC9C1</span>
     </div>
   </div>
 
   <div class="rule">
-    <span><b>Logo palette</b> — black + orange. These are fixed by the mark.</span>
-    <span><b>WA Ocean</b> — the Indian Ocean. Third brand colour, brand surfaces, links.</span>
-    <span><b>Never</b> all three loud at once. One orange per surface, max.</span>
+    <span><b>Colour the cards.</b> Navy / gold / red / black fills carry cream or white text — paper stays the canvas.</span>
+    <span><b>One accent per surface.</b> Usually the red CTA. Never all five loud at once.</span>
   </div>
 
 </body>

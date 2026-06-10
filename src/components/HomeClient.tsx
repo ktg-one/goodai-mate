@@ -66,6 +66,29 @@ export default function HomeClient() {
       const next = [...prev, { transcript, response, ts: Date.now() }].slice(-3); // keep last 3 physical "in tray"
       return next;
     });
+
+    // === PHYSICAL RIBBON "TEAR SNAP" ON NEW DOCKET (stamp clack impulse) ===
+    // Real tape: slow pull then quick release shear + flutter decay. Not smooth.
+    // Mirrors award-config "tearing forward with shear, flutter, and lag variance".
+    const snap = (ref: React.RefObject<HTMLDivElement>, baseShear: number) => {
+      if (!ref.current) return;
+      gsap.to(ref.current, {
+        '--tape-shear': baseShear * 2.6,
+        '--tape-flutter': `${(baseShear > 0 ? 4.2 : -3.8)}px`,
+        duration: 0.07,
+        ease: 'power2.out',
+      });
+      gsap.to(ref.current, {
+        '--tape-shear': baseShear,
+        '--tape-flutter': '0px',
+        duration: 0.38,
+        ease: 'power3.out',
+        delay: 0.05,
+      });
+    };
+    snap(ribbon1Ref, 0.9);
+    snap(ribbon2Ref, 1.35);
+    snap(ribbon3Ref, -0.6);
   };
 
   // Refs for mail-stack GSAP orchestration (ribbons, board depth, pinned notices)
@@ -163,10 +186,12 @@ export default function HomeClient() {
           animation: tl,
           invalidateOnRefresh: true,
           onUpdate(self) {
-            // Live micro flutter (harmonic wind turbulence on the physical ribbon) — 60fps, feels alive
+            // Live micro flutter — physical paper in breeze + lag, NOT regular electric sine.
+            // Lower freqs + incommensurate for organic tear/flutter. Matches award-config "shear, flutter, lag variance".
             const p = self.progress;
-            const flutter = Math.sin(p * 11 + i) * 2.8 + Math.cos(p * 17.3 + i * 2) * 1.4; // amp up for tactility
-            el.style.setProperty('--tape-flutter', `${(flutter * (0.6 + p * 0.4)).toFixed(1)}px`);
+            const lag = i * 0.7; // each ribbon has slight phase lag for real tape weight
+            const flutter = (Math.sin(p * 4.8 + lag) * 3.1 + Math.cos(p * 7.1 + lag * 1.3) * 1.9) * (0.55 + p * 0.55);
+            el.style.setProperty('--tape-flutter', `${(flutter * (0.5 + p * 0.45)).toFixed(1)}px`);
           },
         });
       });
@@ -350,7 +375,7 @@ export default function HomeClient() {
       <div ref={ribbon3Ref} className="mail-ribbon-tear w-full" aria-hidden="true" />
 
       {/* Voice Agents Tiers — REPLACED: strong narrative "Docket Flow" (pinned mail rhythm, non-uniform) */}
-      <section ref={docketFlowRef} className="py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+      <section ref={docketFlowRef} className="min-h-screen flex items-center py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
         <div className="mx-auto max-w-5xl px-6">
           <div className="mb-9">
             <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">FILED · MAIL</span>
@@ -452,14 +477,14 @@ export default function HomeClient() {
       <VoiceAgentDemo />
 
       {/* Live Workspace Automation Playground */}
-      <section className="py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+      <section className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
         <div className="mx-auto max-w-5xl px-6">
           <AutomationPlayground />
         </div>
       </section>
 
       {/* Fallback text mode (temporary) */}
-      <section className="py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+      <section className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-6">
             <StampButton
@@ -491,7 +516,9 @@ export default function HomeClient() {
       </section>
 
       {/* Website Analyzer — custom audit automation */}
-      <WebsiteAnalyzer />
+      <section className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+        <WebsiteAnalyzer />
+      </section>
 
       {/* POWERFUL CLOSING RITUAL — final thick ink navy stamped footer docket */}
       {/* Contains core promise + minimal contact + "we'll sort the boring stuff" in Fraunces WONK */}

@@ -7,37 +7,70 @@
 <style>
   body { margin: 0; padding: 22px 28px; background: var(--paper); }
   .row {
-    display: grid; grid-template-columns: 130px 1fr; gap: 16px;
+    display: grid; grid-template-columns: 150px 1fr; gap: 16px;
     align-items: baseline; padding: 14px 0;
     border-bottom: 1px solid var(--cream-line);
   }
   .row:last-child { border-bottom: none; }
-  .meta { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mute); line-height: 1.5; }
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-mute); line-height: 1.5;
+  }
+  .meta b { color: var(--ink); font-weight: 700; }
+  /* Italic + WONK lift */
+  .italic-lift {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-style: italic;
+    color: var(--ink);
+    font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+  }
+  .italic-lift em {
+    color: var(--orange);
+    font-style: italic;
+    font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+  }
+  .rule-row {
+    background: var(--paper-deep);
+    margin: 0 -28px;
+    padding-left: 28px; padding-right: 28px;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+  .rule-row .meta b { color: var(--orange); }
 </style>
 </head>
 <body>
   <div class="row">
-    <div class="meta">H1 · Fraunces 700 · 64px</div>
+    <div class="meta"><b>H1</b><br>Fraunces 700 · 64px<br>opsz 144 · SOFT 50</div>
     <div class="h1">We'll sort it.</div>
   </div>
   <div class="row">
-    <div class="meta">H2 · Fraunces 600 · 36px</div>
+    <div class="meta"><b>H2</b><br>Fraunces 600 · 36px<br>opsz 72</div>
     <div class="h2">Tell us your problem.</div>
   </div>
+  <div class="row rule-row">
+    <div class="meta"><b>Italic + WONK</b><br>Fraunces italic 600 · 36px<br>SOFT 100 · WONK 1<br><b>One phrase per surface.</b></div>
+    <div class="italic-lift">on <em>Monday morning</em>.</div>
+  </div>
   <div class="row">
-    <div class="meta">H3 · DM Sans 700 · 24px</div>
+    <div class="meta"><b>H3</b><br>DM Sans 700 · 24px</div>
     <div class="h3">Want us to look into this?</div>
   </div>
   <div class="row">
-    <div class="meta">Lede · DM Sans 400 · 20px</div>
+    <div class="meta"><b>Lede</b><br>DM Sans 400 · 20px</div>
     <div class="lede">Drop your details and we'll scope it out — no obligation.</div>
   </div>
   <div class="row">
-    <div class="meta">Body · DM Sans 400 · 16px</div>
+    <div class="meta"><b>Body</b><br>DM Sans 400 · 16px</div>
     <div class="body">Talk like a switched-on mate who gets business.</div>
   </div>
   <div class="row">
-    <div class="meta">Eyebrow · Mono · 12px</div>
+    <div class="meta"><b>Eyebrow</b><br>JetBrains Mono · 12px</div>
     <div class="eyebrow">Perth / WA</div>
   </div>
 </body>

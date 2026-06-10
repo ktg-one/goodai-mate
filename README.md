@@ -1,50 +1,67 @@
-This is the Good'ai Next.js site. Production app work happens under `src/`.
+# Good'ai (goodai.au)
 
-`public/voice-feature/` is a separate Vite/Gemini Live voice prototype kept as reference material, not the production Next app.
+Perth business automations for SMEs. The site hero **is** the product: a working local Voice Agent (Supertonic) whose conversations file as physical mail into a 1978 direct-mail corkboard (GSAP ribbons, stamped dockets, in-tray, footer ritual).
 
-This project was bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Brutalist mechanical execution at award-craft level, powered by local agent skills.
 
-## Getting Started
+## Development
 
-### Configure yourself to .mcp and add to your settings
-
-### /inbox will have items the user wants to translate to a next.js site
-
-### Copy the skills, commands and agents from .claude
-
-
-First, run the development server:
+This is a Next.js 16 (App Router) site.
 
 ```bash
-nvm use 20
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Use **Node 20** for local development. Vercel will use the `package.json` `engines.node` setting during deploys.
+Open http://localhost:3000 .
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Use **Node 20+**.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Skills (local .agents + .claude)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The project maintains curated copies of skills in:
 
-## Learn More
+- `.agents/skills/` (goodai-agent-team, goodai-award-configuration, awwwards-*, gsap-*, ui-ux-pro-max, find-skills, ...)
+- `.claude/skills/` (gsap-*, next-*, design, gsd-*, openpets, ...)
 
-To learn more about Next.js, take a look at the following resources:
+**gsd family** (health, docs-update, progress, manager, do, plan-phase, verify-work, cleanup, etc.) was added from global `.claude`/`.agents` so that `/gsd-health`, `/gsd-progress`, `/gsd-docs-update` etc. are always available when working inside the project.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To (re)add or update:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Copy desired SKILL.md trees from `~/ .agents/skills/<name>` / `~/.claude/skills/<name>` into both local trees.
+- Or use global skills CLI (`npx skills ...`) then sync the dirs.
 
-## Deploy on Vercel
+Key project skills:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `goodai-award-configuration` — the 5-agent swarm (impeccable + awwwards-animations + awwwards-ui-skills + gsap-awwwards-website + gsap-framer-scroll-animation) that delivered the current mail-board site.
+- `goodai-agent-team` — coordinator for dispatching on Voice / brutalist work.
+- `gsd-health` (and siblings) — planning dir health, progress, docs sync, phase mgmt.
+- Design/animation: awwwards-*, gsap-*, impeccable for mechanical 60fps stamp/ribbon work.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Always inject `PRODUCT.md` + `public/` + current live state + mechanical rules (hard 90-160ms clacks, one red, WONK once, reduced-motion static fidelity) when using the award config.
+
+## gsd (Get Shit Done) + docs hygiene
+
+- `gsd health` (or gsd-sdk query validate.health) — run at session start / before ship.
+- `gsd progress` — situational awareness + routing.
+- `gsd docs-update` (or --verify-only) — keep .planning/ and docs/ honest against code.
+- Old pre-refactor phases (shader/cursor/lead v1) archived to `.planning/milestones/v0.9-pre-refactor-phases/`.
+- Current .planning/PROJECT.md, ROADMAP.md, STATE.md, REQUIREMENTS.md, docs/agents/* describe the refactored Voice + mail-docket site.
+
+## Brand / Product
+
+See `PRODUCT.md` (the SSOT) and `public/`.
+
+Core: "we'll sort the boring stuff." Practical. Warm. Direct. Switched-on Perth mate. One orange/red per surface. Ink and paper do the heavy lifting.
+
+## Deploy
+
+Vercel (see vercel.json). Domain goodai.au.
+
+## Notes
+
+- `public/voice-feature/` is a separate Vite/Gemini Live prototype kept as reference.
+- `feature_list.json` is historical (old 251-test pre-refactor spec); current verification is manual + gsd + browser checks + award-craft rules.
+- `skills-lock.json` tracks some installed design/animation skills.
+
+This project was bootstrapped with create-next-app + heavy agent skill augmentation.

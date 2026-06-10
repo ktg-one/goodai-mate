@@ -1,75 +1,77 @@
-# Good'ai — Business Automations Platform
+# Good'ai — Business Automations, Sorted (goodai.au)
 
 ## What This Is
 
-Good'ai (goodai.au) is a Perth-based business automations company targeting SMEs ($1M–$30M turnover). The site serves as both a lead generation tool and a product demo platform. v1 is a single hero page with an SDF lens blur shader background, AI chatbot intake assistant, and lead capture — designed to qualify leads through consultative conversation. Future versions add interactive demos for voice agents, automation workflows, and text-to-speech. Built with Next.js 16, shadcn/ui, and Tailwind CSS v4.
+Good'ai (goodai.au) is a Perth-based business automations service for SMEs (tradies, service businesses, $1M–$30M turnover). The site is the primary brand experience and lead generator. v1 is a single-page brutalist marketing site whose hero **is** the product: a functional local-first Voice Agent (Supertonic ASR + Good'ai persona + spoken replies during dev). Conversations "file" as physical mail dockets into an in-tray and drive the marketing narrative below (the "Docket Flow").
+
+The entire site below the hero is one cohesive 1978 direct-mail corkboard being rifled as you scroll: perforated paper-tape ribbons (shear/tear), non-uniform pinned stamp dockets, heavy final clack ritual in the footer. Built with Next.js 16 (App Router), React 19, Tailwind, GSAP + Framer Motion hybrid, custom stamp primitives.
+
+Development and craft heavily leverage local agent skills from `.agents/skills` and `.claude/skills` (goodai-award-configuration + awwwards/gsap/impeccable swarm for the mechanical brutalist execution).
 
 ## Core Value
 
-A business owner lands on the page, tells us their problem, gets a useful conversation with an AI that sounds like a switched-on Perth mate — and leaves their details so the team can follow up. If the chat doesn't convert visitors into warm leads, nothing else matters.
+A switched-on Perth tradie/business owner lands, speaks their admin mess (invoicing, follow-ups, quotes, the lot) into the Voice Agent, feels understood by a local mate who "gets it", and knows the boring stuff will be sorted so they can knock off early. No portals, no logins, no dashboards. Just relief.
+
+If the voice + the physical docket story doesn't make them drop a line, nothing else matters.
 
 ## Requirements
 
-### Validated
+### Validated / Shipped (refactor delivery)
 
-(None yet — ship to validate)
+- [x] Voice Agent hero is the product (local Supertonic endpoint, push-to-talk + transcript, onMailFiled leaks state into in-tray)
+- [x] Brutalist mail-board metaphor: ribbons (perforated tape with GSAP shear/flutter), docket flow (non-uniform pinned StampCards with rot/offset/wear), filed mail tray (last-3 physical dockets)
+- [x] One orange (red-accent) per surface discipline, Fraunces WONK exactly once per major block for emphasis, stamp shadows that participate in motion
+- [x] Reduced-motion: fully static filed-paper layouts with all stamps, rots, perforations, imprints visible and tactile (no lost meaning)
+- [x] PRODUCT.md + public/ as the single source of truth for brand (ink/paper, stamp physics 90-160ms hard springs, one red, etc.)
+- [x] Local agent skills: goodai-agent-team, goodai-award-configuration (5-skill swarm: impeccable + awwwards-animations + awwwards-ui-skills + gsap-awwwards-website + gsap-framer-scroll-animation), plus gsd-* (health, docs-update, progress, etc.) for planning/docs
+- [x] Direct imports only (no barrels per AGENTS.md), production-grade Vercel/Next patterns
+- [x] Footer ritual: heavy stamped docket clack, wonk line, minimal contact
 
-### Active
+### Active / Ongoing
 
-- [ ] SDF lens blur shader background renders at 60fps with cursor-reactive interactivity (Three.js client component)
-- [ ] Landing state: wordmark "Good'ai" + subtitle + shadcn Input "Tell us your problem." + Perth badge
-- [ ] Chat interface activates on first message submission with smooth transition
-- [ ] AI chatbot responds via Vercel AI Gateway using Perth-voice persona (no "AI" jargon)
-- [ ] Lead capture card (shadcn Card + Input + Button) slides in after first AI response
-- [ ] Lead data submitted via Web3Forms to owner's email with conversation transcript
-- [ ] Custom cursor with smooth lerp follow and hover expansion on interactive elements
-- [ ] Ambient glow radial gradient follows cursor
-- [ ] Noise texture overlay + vignette for depth
-- [ ] Responsive layout (640px breakpoint), custom cursor disabled on touch devices
-- [ ] Perth Disruptor color palette: Deep Tech Onyx bg, Silicon Copper accent, Cottesloe Sand text
-- [ ] Typography: DM Sans (body) + JetBrains Mono (mono/utility) via next/font
-- [ ] Deploy to Vercel on goodai.au domain
+- [ ] Voice quality / Supertonic prod endpoint + latency tuning
+- [ ] Lead capture via real contact (mailto + form) + conversation context handoff to ops
+- [ ] Additional surfaces (services, about, case studies) in same brutalist mail language
+- [ ] gsd health + docs alignment after refactor (this work)
+- [ ] Production deploy / domain + analytics
 
-### Out of Scope
+### Out of Scope (v1)
 
-- Voice agent demo — v2+ feature
-- Automation workflow demo — v2+ feature
-- Text-to-speech integration — v2+ feature
-- Multi-page navigation — v1 is single page only
-- User authentication — no user accounts needed
-- Database — stateless, chat is client-side, leads go to Web3Forms
-- Mobile app — web only
+- Old v1 shader + custom cursor + old shadcn lead card flow (superseded by the award-refactored mail board)
+- Multi-page app chrome or dashboards
+- User accounts / auth
+- Full automation execution demos (voice + docket is the demo)
 
 ## Context
 
-- **Pivot**: Company pivoted from AI voice agents to n8n automations. Perth customers reject "AI" as a word — position as "automations specialist"
-- **Brand**: "Good'ai" with copper apostrophe — buries AI inside Australian phrase "good eye mate". Campaign line: "Good'AI mate" (not displayed in v1)
-- **Wordmark rules**: Always "Good'ai" — never "GoodAI", "GOODAI", "Good AI", or "Good.ai"
-- **Target audience**: Perth SME owners, often 50s-60s, practical, suspicious of tech hype. Tradies, professional services, small retail/hospitality
-- **Inbox assets**: Complete landing page HTML, brand board, brand audit, UI spec, app spec, shader reference (codrops-sdf-lensblur), API routes (chat.js, lead.js)
-- **Shader reference**: codrops-sdf-lensblur (MIT license) in inbox/HERO PAGE EFFECT/ — Three.js SDF shapes with cursor-driven edge parameter modulation
-- **Existing Vercel project**: goodai_site (team: ktg88, project ID: prj_Bznq9r5slcMCAvtcj7AeUhAebr0n)
-- **Design system**: Perth Disruptor palette — #0C0C0C bg, #D86A3D accent, #D7D2CB text, #EDE9E3 headings
+- **Refactor**: Original planning (phase 1 foundation + planned visual/chat/lead phases with SDF shader, custom cursor, old lead capture) was superseded by a full mechanical brutalist redesign of the marketing site. The Voice Agent + mail-docket aesthetic (1978 corkboard + rubber stamps + perforated tape) was executed via the goodai-award-configuration 5-agent swarm + goodai-agent-team coordination. Old .planning/phases/ archived to milestones/v0.9-pre-refactor-phases/.
+- **Brand**: "Good'ai" (good eye, mate). "we'll sort the boring stuff." Practical. Warm. Direct. Switched-on Aussie mate who happens to be unusually good at systems. Short sentences. "We", never "I". No hype, no "AI-powered", no corporate.
+- **Design SSOT**: PRODUCT.md + public/ (paper canvas #FFF0D0, navy/gold/red, flat 3px participating stamp shadows, Fraunces var + WONK, 4px grid, mechanical motion only, ribbon-receipt, one red per surface).
+- **Skills in use**: See skills-lock.json + local .agents/skills/goodai-* + .claude/skills/ (gsap, awwwards, design, next-best-practices, gsd-*) and global equivalents. gsd-health, gsd-docs-update, gsd-progress etc. now present locally for ongoing work.
+- **Tech**: Next.js 16, Tailwind v4, GSAP/ScrollTrigger + @gsap/react + motion/react (hybrid, no fighting timelines), direct component imports.
+- **Voice dev**: Supertonic local (http://localhost:8000/transcribe) for ASR during development; prod voice path TBD.
 
 ## Constraints
 
-- **Tech stack**: Next.js 16 (App Router, React 19), shadcn/ui components, Tailwind CSS v4
-- **Shader integration**: Three.js GLSL shader as React client component (raw .glsl import via next.config.ts)
-- **AI backend**: Vercel AI Gateway via @ai-sdk/openai-compatible (not direct Anthropic SDK)
-- **Lead capture**: Web3Forms (client-side POST)
-- **Brand compliance**: AI persona must never say "AI", use bullet points, or use corporate speak
-- **Performance**: 60fps shader, page load under 2s on 4G, Lighthouse 90+
-- **Design tokens**: Perth Disruptor palette mapped to Tailwind theme + CSS custom properties
+- 60fps hot paths (refs only, transform/opacity/filter, canvas DPR capped)
+- Stamp clack timing: hard 90-160ms cubic-bezier(0.23,1,0.32,1) — no floaty easings
+- One red accent max per surface/block
+- Exactly one Fraunces WONK phrase per major surface
+- Reduced motion must not lose the 1978 docket artifact
+- Zero "AI" hype language in UI or persona
+- Voice Agent remains pure functional product moment at top; everything else receives leaked convos as filed mail
 
-## Key Decisions
+## Key Decisions (post-refactor)
 
-| Decision | Rationale | Outcome |
-|----------|-----------|---------|
-| Next.js over vanilla | Future demos (voice agent, automation, TTS) need routing, API routes, server components | — Pending |
-| shadcn/ui for components | Consistent, accessible UI primitives — Input, Card, Button for chat + lead form | — Pending |
-| Vercel AI Gateway over direct Anthropic | Rate limiting, analytics, provider flexibility | — Pending |
-| Web3Forms over Resend | Client-side, no backend needed for lead capture | — Pending |
-| Shader as React client component | Must integrate with Next.js, not separate Vite build | — Pending |
+| Decision | Rationale | Status |
+|----------|-----------|--------|
+| Award Configuration swarm for the redesign | Battle-tested pattern that delivered coordinated 60fps mechanical brutalist mail-board execution | Shipped (May 2026) |
+| Local .agents/.claude skills copies (goodai-*, gsd-*, awwwards/gsap) | Project-specific context + gsd planning tools always available when working in-repo | Added gsd-health + core set |
+| Archive pre-refactor phases | Old 01-05 plans described shader/cursor/old-lead v1 that was pivoted away in the refactor | Archived to milestones/v0.9-pre-refactor-phases/ |
+| gsd for health/docs/progress | Use /gsd-health, /gsd-docs-update, /gsd-progress etc. to keep .planning and docs/ in sync with actual shipped site | In progress (this task) |
+| PRODUCT.md + public/ design system as SSOT | Brand guardrails must be injected into every creative agent run | Enforced |
 
 ---
-*Last updated: 2026-04-01 after initialization*
+
+*Last updated: 2026-06-04 after gsd-health + skills add + docs alignment for refactored site*
+*Pre-refactor planning archived; current reality is the Voice + mail-docket brutalist site delivered via award skills + gsd oversight.*

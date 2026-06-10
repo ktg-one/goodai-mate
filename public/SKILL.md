@@ -1,28 +1,21 @@
 ---
 name: goodai-design
-description: Use this skill to generate well-branded interfaces and assets for Good'AI, either for production or throwaway prototypes/mocks. Contains the canonical brand book (palette, type, shapes, voice), assets, and UI primitives. Good'AI is a Perth-based SME automation business with a 1995-direct-mail brand book vibe — ink black, brand orange, cool off-white paper, with WA Ocean blue as a third brand surface. Voice is "switched-on Aussie mate."
+description: Use this skill to generate well-branded interfaces and assets for Good'ai, either for production or throwaway prototypes/mocks/etc. Contains essential design guidelines, colours, type, fonts, assets, and UI kit components for prototyping. Good'ai is a Perth-based SME automation business with a brutalist / direct-mail identity (warm cream paper, high-contrast coloured cards in navy / gold / red / black) and a casual "switched-on mate" voice.
 user-invocable: true
 ---
 
-The canonical source of truth for this brand is `good-ai-design-final.html` (Brand Book v1.0). Read that first — every preview card, token and UI primitive in this folder is derived from it.
+Read the README.md file within this skill, and explore the other available files.
 
-Then read `README.md` for the index and `colors_and_type.css` for the drop-in tokens.
+If creating visual artifacts (slides, mocks, throwaway prototypes, etc), copy assets out and create static HTML files for the user to view. If working on production code, you can copy assets and read the rules here to become an expert in designing with this brand.
 
-If creating visual artifacts (slides, mocks, throwaway prototypes), copy assets out and create static HTML files for the user to view. If working on production code, you can copy assets in and use the tokens as-is.
+If the user invokes this skill without any other guidance, ask them what they want to build or design, ask some questions, and act as an expert designer who outputs HTML artifacts _or_ production code, depending on the need.
 
-If the user invokes this skill without other guidance, ask what they want to build, ask one or two questions, and act as an expert designer who outputs HTML artifacts _or_ production code, depending on the need.
-
-## Key things to remember
-
-- **Palette is three colours, no negotiation:** **Ink** (`#0B0B0B`), **Brand Orange** (`#F25C2B`), and **Paper** (`#F8F8F6` — cool off-white, *not* warm cream, *not* Anthropic beige). **WA Ocean** (`#006B8F`) is the third brand colour — used for brand surfaces and links, never as a CTA.
-- **One orange per surface, max.** Two oranges in close range cancel each other out.
-- **Supporting accents** (sparingly): Sticker Yellow `#FFD400` (alerts / "SALE!"), Trust Blue `#1A3FA8` (hyperlinks), OK Green `#2E6E3E` (success), Warn Red `#B53A1F` (errors).
-- **Voice = switched-on Aussie mate.** Short sentences, "we" not "I", no jargon. Never use "AI", "machine learning", "leverage", "synergy", "streamline", "optimize".
-- **Casing:** wordmark is `Good'ai` (lowercase `ai`, orange apostrophe). Headlines and buttons are sentence case. Eyebrows / mono labels are UPPERCASE with `0.16em` tracking — the only place all-caps is allowed.
-- **No emoji in UI.** No animated WebGL backgrounds. No drop-shadow blurs. Performance is non-negotiable.
-- **Fonts:** Fraunces soft wonk (display, opsz 144), DM Sans (body/UI), JetBrains Mono (eyebrows/code).
-- **Stamp shadow is the visual signature:** flat `3px 3px 0 var(--ink)` (or `4px 4px 0` on hero surfaces). Ink behind paper. Orange behind ink. Never both at once. **No blurred shadows ever.**
-- **Sharp corners by default.** Buttons & cards: `0–8px`. Pill (`999px`) is for chips & dots only, never buttons.
-- **Shapes come from the logo:** circles, half-circles, triangles, bars. Pair one ink shape with one orange shape per composition. Never recreate the swan from pieces.
-- **Backgrounds:** plain paper with a 1px horizontal grain (`repeating-linear-gradient(0deg, rgba(11,11,11,0.025) 0 1px, transparent 1px 4px)`) is the default. Ink block for hero/footer. Ocean block for the "third brand surface" treatment.
-- **Imagery vibe:** Perth tradies, shopfronts, hands on tools — warm, sunlit, real. No glass towers, no purple-gradient AI art.
+Key things to remember about Good'ai:
+- **Warm cream paper** (`#FFF0D0`) background, never pure white. **Colour the cards, not the page** — navy / gold / red / black blocks carry the content with cream-on-colour text. A white card on cream reads as unfinished.
+- **The five core colours:** Navy `#202C59` (blocks, links), Black `#111111` (text, edges), Cream `#FFF0D0` (canvas), Mustard-gold `#F3A62A` (panels, sticker labels), Coral-red `#F4442E` (CTA / shout). One accent moment per surface — usually the red CTA. Never all loud at once.
+- **Voice = switched-on Aussie mate.** Short sentences, "we" not "I", no jargon, no "AI"/"machine learning"/"leverage"/"synergy". Say automation / system / workflow.
+- **Wordmark:** `Good'ai` — lowercase `ai`, red apostrophe. Never GoodAI / Good AI / goodai.
+- **Sharp corners** (0–8px) on cards and buttons; pills (999px) only for chips / status dots / counters. No pill buttons.
+- **Stamp shadow** — flat offset only (`3px 3px 0` ink; red stamp for CTAs, navy for blocks). Never blurred shadows.
+- **No emoji in UI.** No animated WebGL backgrounds. No drop-shadow glows. No purple/teal pivots, no gradients.
+- **Fonts:** Fraunces (display) + DM Sans (body) + JetBrains Mono (eyebrows/code). Italic + WONK on Fraunces = emphasis lift, one phrase per surface.

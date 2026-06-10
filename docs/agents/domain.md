@@ -4,49 +4,63 @@ How engineering skills should consume this repo's domain documentation when expl
 
 ## Project posture
 
-Good'ai Mate is a production-targeted Next.js app intended for Vercel. It is not launched yet, so prefer production-quality implementation and verification without assuming live-user migration or live-traffic rollout constraints.
+Good'ai Mate is a production-targeted Next.js marketing site (goodai.au) for a Perth business automations service. The hero **is** the Voice Agent product. The rest of the site is one physical 1978 direct-mail corkboard (ribbons, pinned stamp dockets, in-tray, footer ritual) executed at Awwwards mechanical level via the goodai-award-configuration skill swarm.
+
+Prefer production-quality implementation, brand guardrails from PRODUCT.md + public/, 60fps mechanical motion rules, and gsd hygiene for planning/docs.
 
 ## Brand guardrail
 
-Claude-generated mockups tend to drift toward Anthropic-coded cream, charcoal, muted orange, and editorial spacing when unconstrained. Do not treat that drift as brand intent.
+Never drift to generic cream/charcoal/Anthropic editorial. The site is ink-on-paper brutalist direct mail:
 
-Use the Good'ai mark as the palette source:
+- Strong ink, paper canvas (#FFF0D0), navy/gold/red accents.
+- Stamp shadows `3px 3px 0`, hard edges, one red per surface, Fraunces WONK once per block.
+- Mechanical timing only (90-160ms hard stamp clacks). Reduced motion = static filed paper that still sells the artifact.
+- "We", short sentences, practical/warm/direct Perth mate voice. Zero hype, zero "AI" jargon in UI or persona.
 
-- **Blue-black dark mode** for the main product surface.
-- **Black / ink** for strong structure and stamped edges.
-- **Orange** for brand accents, CTAs, highlights, and logo-derived moments, not every surface.
-- **Off-white / cream** only as contrast panels or logo staging, not as the default whole-site mood unless explicitly requested.
-
-The feel should be bold, practical, a bit cheeky, and production-grade for a Vercel launch.
+Inject PRODUCT.md + public/ + live hero/mail state into any creative or UI agent.
 
 ## Before exploring, read these
 
-- **`CONTEXT.md`** at the repo root, if present.
-- **`CONTEXT-MAP.md`** at the repo root, if present.
-- **`docs/adr/`**, if present, for architectural decisions related to the area being changed.
-- **`.planning/PROJECT.md`**, `.planning/REQUIREMENTS.md`, and `.planning/ROADMAP.md` when product scope or phase intent matters.
+- `PRODUCT.md` at the repo root (brand, voice, anti-references, design principles — the primary SSOT).
+- `public/` (or good-ai-design-final.html) — visual tokens, stamp rules, ribbon, motion specs.
+- `.planning/PROJECT.md`, `.planning/ROADMAP.md`, `.planning/STATE.md` (current state post-refactor; old phases archived to milestones/v0.9-pre-refactor-phases/).
+- Local skills in `.agents/skills/` and `.claude/skills/` (goodai-agent-team, goodai-award-configuration, gsd-health, gsd-docs-update, gsd-progress, gsap-*, awwwards-*, impeccable, etc.).
+- `docs/agents/` (this dir) for triage/issue conventions.
 
-If these files do not exist, proceed silently. Do not suggest creating them upfront; producer skills create them when terms or decisions need to be formalized.
+If a file does not exist, proceed but note the gap.
 
-## File structure
+## File structure (post-refactor)
 
-This repo uses a single-context layout by default:
-
-```text
-/
-├── CONTEXT.md
-├── docs/adr/
-└── src/
 ```
-
-If `CONTEXT-MAP.md` is added later, treat the repo as multi-context and follow the map before making domain-level claims.
+/goodai-mate
+├── PRODUCT.md
+├── .planning/
+│   ├── PROJECT.md / ROADMAP.md / STATE.md / REQUIREMENTS.md
+│   ├── phases/               (currently empty; use gsd-plan-phase for new)
+│   ├── milestones/v0.9-pre-refactor-phases/  (archived old 01-05)
+│   └── codebase/ (ARCHITECTURE.md etc for reference)
+├── docs/agents/              (domain, issue-tracker, triage-labels)
+├── .agents/skills/ + .claude/skills/   (project-curated: goodai-*, gsd-*, design, gsap...)
+├── src/
+│   └── app/ (layout, page), components/ (VoiceAgentHero, HomeClient mail GSAP, Stamp*, marketing/*)
+└── public/                      (design system SSOT: tokens, skill, previews, assets)
+    ├── colors_and_type.css       (SSOT tokens)
+    ├── SKILL.md / README.md      (brutalist design skill)
+    ├── Good'ai Brutalist Skill.html / good-ai-design-final.html
+    ├── ui_kits/ · preview/ · export/ · assets/ · fonts/
+    └── voice-feature/            (separate Vite/Gemini Live prototype, reference)
+```
 
 ## Use the glossary's vocabulary
 
-When output names a domain concept in an issue title, refactor proposal, hypothesis, or test name, use the term as defined in `CONTEXT.md`.
+Use terms from PRODUCT.md (e.g. "Voice Agent hero", "mail board", "docket flow", "filed mail", "stamp clack", "ribbon", "one red", "WONK", "brutalist direct-mail", "we'll sort the boring stuff").
 
-If the concept is not in the glossary yet, either avoid inventing new language or note the gap for a future docs pass.
+## Flag ADR / skill conflicts
 
-## Flag ADR conflicts
+If output contradicts PRODUCT.md, public/ design system, or the goodai-award-configuration rules (stamp physics, one-red, WONK, reduced-motion static fidelity, agent context injection), surface explicitly.
 
-If output contradicts an existing ADR, surface it explicitly rather than silently overriding it.
+## GSD + Skills expectations
+
+- Use gsd-health, gsd-progress, gsd-docs-update (now local) before/after work to keep .planning + docs honest.
+- For ambitious UI/animation: dispatch via goodai-award-configuration (or goodai-agent-team) with full context bundle.
+- Always verify 60fps, mechanical timing, brand voice, and reduced-motion behavior.

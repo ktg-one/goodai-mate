@@ -1,40 +1,35 @@
 'use client';
 
 import { useRef } from 'react';
-import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 
 /**
  * Manifest
- * The Good'ai belief / mission section (from new design system)
  * Hard stamp-in reveal for the core promise — brutalist, no easing softness.
+ * From design-system-new specimens. One .hl + one .hl-red per surface max.
+ * Participates in mail board via parent ribbons (no local motion competing).
  */
 export default function Manifest() {
   const sectionRef = useRef<HTMLElement>(null);
-  const prefersReducedMotion = useReducedMotion();
 
-  // NOTE: All ribbon bridges unified under HomeClient GSAP mailBoard.
-  // This component is a pure content layer in the single physical mail board.
-
-  // Single hard stamp for the statement block
   const manifestVariants = {
-    hidden: { opacity: 0, y: 14 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { type: 'spring' as const, stiffness: 380, damping: 30, mass: 1 },
+    hidden: { opacity: 0, y: 10 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.12, ease: [0.23, 1, 0.32, 1] } // exact stamp clack
     },
   } as const;
 
   return (
-    <section ref={sectionRef} className="py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
-      {/* Unified physical ribbon bridge (GSAP mail-ribbon) owned by parent board — no local ribbon motion */}
-      <div className="mx-auto max-w-4xl px-6 text-center">
-        <div className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)] mb-4">
-          THE MANIFEST
-        </div>
+    <section ref={sectionRef} className="min-h-screen flex items-center py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+      {/* Ribbon bridge above owned by HomeClient GSAP mailBoard */}
+
+      <div className="mx-auto max-w-5xl px-6 text-center">
+        <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">THE PROMISE</span>
 
         <motion.h2
-          className="font-display text-4xl md:text-5xl tracking-[-0.03em] leading-none mb-8"
+          className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-3 mb-8"
           variants={manifestVariants}
           initial="hidden"
           whileInView="visible"
@@ -59,7 +54,7 @@ export default function Manifest() {
             We listen. We sort the <span className="hl-red">boring stuff</span>. You run the business you actually wanted.
           </p>
           <p className="font-medium text-[var(--ink)]">
-            <span className="hl">Knock off early</span>. Spend time with the kids.<br />We&apos;ll handle the systems.
+            Knock off early. Spend time with the kids.<br />We&apos;ll handle the systems.
           </p>
         </motion.div>
       </div>

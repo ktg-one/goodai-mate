@@ -11,10 +11,12 @@ import React from 'react';
  * - 4px radii, 2px ink borders, 4pt scale paddings
  * - Focus-visible: 2px ring (ink or red for shout) matching stamp logic. Keyboard parity guaranteed.
  * - One red shout per surface: use variant="red" sparingly (primary CTA only).
+ * - Polymorphic: href renders <a> for mailto/external links while preserving stamp physics + focus die.
  *
  * Usage (direct import — no barrels):
  *   import StampButton from '@/components/StampButton';
  *   <StampButton variant="red" size="lg" onClick={...}>Tell us your problem</StampButton>
+ *   <StampButton variant="red" href="mailto:hello@goodai.au">DROP US A LINE</StampButton>
  *
  * engaged: persistent sunk state (e.g. mic listening). Applies active physics + red treatment.
  */
@@ -27,9 +29,11 @@ export interface StampButtonProps extends React.ButtonHTMLAttributes<HTMLButtonE
   engaged?: boolean;
   /** Optional: force full-width */
   fullWidth?: boolean;
+  /** If present, renders as <a> (for mailto etc) while keeping full stamp-btn physics, focus ring, classes. */
+  href?: string;
 }
 
-const StampButton = React.forwardRef<HTMLButtonElement, StampButtonProps>(
+const StampButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, StampButtonProps>(
   (
     {
       className = '',
@@ -39,6 +43,7 @@ const StampButton = React.forwardRef<HTMLButtonElement, StampButtonProps>(
       fullWidth = false,
       disabled,
       children,
+      href,
       ...rest
     },
     ref
@@ -61,14 +66,31 @@ const StampButton = React.forwardRef<HTMLButtonElement, StampButtonProps>(
       .filter(Boolean)
       .join(' ');
 
+    const isLink = !!href;
+
+    if (isLink) {
+      return (
+        <a
+          ref={ref as React.Ref<HTMLAnchorElement>}
+          href={href}
+          className={classes}
+          data-variant={variant}
+          aria-disabled={disabled ? 'true' : undefined}
+          {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+        >
+          {children}
+        </a>
+      );
+    }
+
     return (
       <button
-        ref={ref}
+        ref={ref as React.Ref<HTMLButtonElement>}
         type={rest.type || 'button'}
         className={classes}
+        data-variant={variant}
         disabled={disabled}
         aria-pressed={engaged || undefined}
-        data-variant={variant}
         {...rest}
       >
         {children}

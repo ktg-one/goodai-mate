@@ -1,6 +1,8 @@
 # Triage Labels
 
-The skills speak in terms of five canonical triage roles. This file maps those roles to the actual label strings used in this repo's issue tracker.
+The skills (including gsd-*, triage, goodai-*) speak in terms of five canonical triage roles. This file maps those roles to the actual label strings used in this repo's issue tracker (ktg-one/goodai-mate).
+
+When adding gsd phases or award swarm output as issues, apply the appropriate label.
 
 | Label in mattpocock/skills | Label in our tracker | Meaning                                  |
 | -------------------------- | -------------------- | ---------------------------------------- |

@@ -17,17 +17,19 @@ export default function WhyGoodAI() {
   // (aggressive .mail-ribbon + shear/tear). This section is pure content participant
   // in the single physical direct-mail board artifact.
 
+  // Hard mechanical stamp clack entry (canon 120ms cubic 0.23,1,0.32,1 exact per skill/brutalist. No floaty springs.)
+  const STAMP_EASE = [0.23, 1, 0.32, 1] as const;
   const left = {
     hidden: { opacity: 0, y: 16 },
-    visible: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 360, damping: 28 } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.125, ease: STAMP_EASE } },
   } as const;
   const right = {
     hidden: { opacity: 0, y: 12 },
-    visible: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 300, damping: 26, delay: 0.08 } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.135, ease: STAMP_EASE, delay: 0.03 } },
   } as const;
 
   return (
-    <section ref={sectionRef} className="py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+    <section ref={sectionRef} className="min-h-screen flex items-center py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
       {/* Unified physical ribbon bridge handled by parent mailBoard GSAP — no competing motion here */}
 
       <div className="mx-auto max-w-5xl px-6">

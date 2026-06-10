@@ -5,234 +5,339 @@
 <title>Brand · Voice samples</title>
 <link rel="stylesheet" href="../colors_and_type.css">
 <style>
-  body { margin: 0; padding: 26px 30px 32px; background: var(--paper); }
+  body {
+    margin: 0;
+    padding: 28px 32px 36px;
+    background:
+      repeating-linear-gradient(0deg, rgba(11,11,11,0.025) 0 1px, transparent 1px 4px),
+      var(--paper);
+    color: var(--ink);
+  }
 
-  .head { display: flex; justify-content: space-between; align-items: end; margin-bottom: 14px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
-  .head h1 { font-family: var(--font-display); font-weight: 600; font-size: 22px; margin: 0; letter-spacing: -0.02em; }
-  .head .meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
+  .head {
+    display: flex; justify-content: space-between; align-items: end;
+    margin-bottom: 16px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 10px;
+  }
+  .head h1 {
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 28px;
+    margin: 0; letter-spacing: -0.025em;
+    color: var(--ink);
+    font-variation-settings: "opsz" 144, "SOFT" 40;
+  }
+  .head h1 em {
+    font-style: italic; color: var(--orange);
+    font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+  }
+  .head .meta {
+    font-family: var(--font-mono);
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--ink-mute); font-weight: 600;
+  }
 
-  /* Tagline strap */
+  /* The promise — orange bar */
   .strap {
-    background: var(--ink); color: var(--paper);
-    border-radius: var(--radius-md);
-    padding: 18px 22px; margin-bottom: 14px;
-    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-    box-shadow: var(--shadow-stamp-sun);
-    border: 1.5px solid var(--ink);
+    background: var(--orange); color: var(--ink);
+    padding: 22px 26px;
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--hi-yellow);
   }
   .strap .tag {
-    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.16em;
-    text-transform: uppercase; color: var(--hi-yellow);
+    font-family: var(--font-mono);
+    font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--ink); font-weight: 700;
+    background: var(--ink); color: var(--orange);
+    padding: 4px 10px;
   }
   .strap .line {
-    font-family: var(--font-display); font-weight: 700;
-    font-size: 30px; line-height: 1.05; letter-spacing: -0.02em;
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 28px;
+    line-height: 1.05; letter-spacing: -0.025em;
     flex: 1;
+    color: var(--ink);
+    font-variation-settings: "opsz" 144, "SOFT" 50;
   }
-  .strap .line .a { color: var(--orange-tint); }
+  .strap .line em {
+    color: var(--paper);
+    font-style: italic;
+    font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+  }
+  .strap .line .apos { color: var(--ink); }
 
-  /* Pillar quotes */
-  .pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
-  .pillar {
-    background: var(--bg-raised); border: 1.5px solid var(--ink);
-    border-radius: var(--radius-md); padding: 18px 18px 16px;
-    position: relative; box-shadow: var(--shadow-stamp);
-  }
-  .pillar .num {
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em;
-    text-transform: uppercase; color: var(--ink-mute);
-  }
-  .pillar .quote {
-    font-family: var(--font-display); font-weight: 600; font-size: 20px;
-    line-height: 1.1; letter-spacing: -0.015em; color: var(--ink);
-    margin: 8px 0 8px;
-  }
-  .pillar .gloss { font-size: 12px; color: var(--ink-mute); line-height: 1.45; }
-  .pillar .dot {
-    position: absolute; top: 14px; right: 14px;
-    width: 12px; height: 12px; border-radius: 999px;
-    border: 1.5px solid var(--ink);
-  }
-  .pillar.p1 .dot { background: var(--ocean-400); }
-  .pillar.p2 .dot { background: var(--orange); }
-  .pillar.p3 .dot { background: var(--hi-yellow); }
-  .pillar.p4 .dot { background: var(--paper); }
-
-  .section-title { display: flex; align-items: baseline; gap: 12px; margin: 14px 0 10px; }
-  .section-title h2 { font-family: var(--font-display); font-weight: 600; font-size: 16px; margin: 0; letter-spacing: -0.01em; }
-  .section-title .kicker { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
-  .section-title .rule { flex: 1; height: 1px; background: var(--line); }
-
-  /* Situation rows */
-  .rows { display: grid; gap: 8px; }
-  .row { display: grid; grid-template-columns: 120px 1fr 1fr; gap: 10px; align-items: stretch; }
-  .row .ctx {
-    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--ink-mute);
-    display: flex; align-items: center; padding: 0 4px;
-  }
-  .card {
-    padding: 12px 14px; border-radius: var(--radius-sm);
-    border: 1.5px solid var(--ink);
-    display: flex; flex-direction: column; gap: 4px;
-    box-shadow: 2px 2px 0 var(--ink);
-  }
-  .good { background: var(--ocean-50); }
-  .bad  { background: #fdecec; }
-  .tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
-  .good .tag { color: var(--ocean-600); }
-  .bad  .tag { color: var(--danger); }
-  .line { font-family: var(--font-sans); font-size: 14px; color: var(--ink); line-height: 1.45; }
-  .bad .line { text-decoration: line-through; text-decoration-color: rgba(209,69,69,0.45); }
-
-  /* Special success / error / pricing mocks */
-  .specials { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 14px; }
-  .mock {
-    border: 1.5px solid var(--ink); border-radius: var(--radius-md);
-    padding: 18px 18px 16px; min-height: 130px;
-    position: relative; box-shadow: var(--shadow-stamp);
-    overflow: hidden;
-  }
-  .mock .kind {
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--ink-mute);
-    margin-bottom: 8px;
-  }
-  .mock .msg {
-    font-family: var(--font-display); font-weight: 600; font-size: 22px;
-    line-height: 1.1; letter-spacing: -0.015em; color: var(--ink);
-  }
-  .mock .sub { font-size: 12.5px; color: var(--ink-mute); line-height: 1.5; margin-top: 6px; }
-
-  .mock.success { background: var(--ocean-50); }
-  .mock.success .kind { color: var(--ocean-600); }
-  .mock.success::before {
-    content: ""; position: absolute; right: -10px; top: -10px;
-    width: 60px; height: 60px;
-    background:
-      radial-gradient(circle at 30% 30%, var(--orange) 0 4px, transparent 5px),
-      radial-gradient(circle at 70% 50%, var(--hi-yellow) 0 5px, transparent 6px),
-      radial-gradient(circle at 40% 70%, var(--ocean-400) 0 3.5px, transparent 4.5px),
-      radial-gradient(circle at 80% 80%, var(--orange) 0 3px, transparent 4px),
-      radial-gradient(circle at 20% 80%, var(--ocean-400) 0 3px, transparent 4px);
-  }
-  .mock.error { background: #fff7f2; }
-  .mock.error .kind { color: var(--orange-deep); }
-  .mock.error::before {
-    content: "smoko"; position: absolute; right: 14px; top: 14px;
-    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em;
-    text-transform: uppercase; padding: 3px 7px;
-    background: var(--ink); color: var(--paper); border-radius: var(--radius-pill);
-  }
-  .mock.pricing { background: var(--ink); color: var(--paper); }
-  .mock.pricing .kind { color: var(--hi-yellow); }
-  .mock.pricing .msg { color: var(--paper); }
-  .mock.pricing .sub { color: rgba(255,251,242,0.7); }
-  .mock.pricing .alt {
-    font-family: var(--font-mono); font-size: 11px;
-    color: var(--hi-yellow); margin-top: 8px; line-height: 1.5;
-  }
-  .mock.pricing .alt b { color: var(--paper); font-family: var(--font-sans); font-weight: 600; }
-
-  /* Newsletter signoff strip */
-  .signoff {
-    margin-top: 14px;
-    background: var(--hi-yellow);
-    border: 1.5px solid var(--ink);
-    border-radius: var(--radius-md);
-    padding: 16px 22px;
-    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  /* Pillars — yellow / paper / orange / ocean-deep on the ocean field */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-bottom: 22px;
+    border: 2px solid var(--ink);
     box-shadow: var(--shadow-stamp);
   }
-  .signoff .kind { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); }
-  .signoff .msg { font-family: var(--font-display); font-weight: 700; font-size: 26px; letter-spacing: -0.02em; color: var(--ink); flex: 1; }
-  .signoff .em { font-style: italic; }
+  .pillar {
+    padding: 18px 18px 16px;
+    position: relative;
+    border-right: 2px solid var(--ink);
+    display: flex; flex-direction: column;
+    background: var(--paper);
+  }
+  .pillar:last-child { border-right: 0; }
+
+  .pillar.p1 { background: var(--hi-yellow); color: var(--ink); }
+  .pillar.p2 { background: var(--paper); color: var(--ink); }
+  .pillar.p3 { background: var(--orange); color: var(--ink); }
+  .pillar.p4 { background: var(--ocean-600); color: var(--paper); }
+
+  .pillar .num {
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .pillar.p4 .num { color: var(--hi-yellow); }
+
+  .pillar .quote {
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 20px;
+    line-height: 1.05; letter-spacing: -0.02em;
+    margin: 0 0 8px;
+    font-variation-settings: "opsz" 96, "SOFT" 50;
+  }
+  .pillar .gloss {
+    font-family: var(--font-sans);
+    font-size: 13px; line-height: 1.45;
+    color: var(--ink-soft);
+  }
+  .pillar.p4 .gloss { color: var(--paper); opacity: 0.9; }
+  .pillar.p3 .gloss { color: var(--ink); }
+
+  .section-title {
+    display: flex; align-items: baseline; gap: 12px;
+    margin: 22px 0 12px;
+  }
+  .section-title h2 {
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 18px;
+    margin: 0; letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .section-title .kicker {
+    font-family: var(--font-mono);
+    font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .section-title .rule { flex: 1; height: 2px; background: var(--ink); }
+
+  /* UI moments — three tiles on ocean field */
+  .specials {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0;
+    border: 2px solid var(--ink);
+    margin-top: 8px;
+    box-shadow: var(--shadow-stamp);
+  }
+  .mock {
+    padding: 22px;
+    min-height: 150px;
+    position: relative;
+    display: flex; flex-direction: column; gap: 8px;
+    border-right: 2px solid var(--ink);
+  }
+  .mock:last-child { border-right: 0; }
+  .mock .kind {
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    font-weight: 700;
+  }
+  .mock .msg {
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 22px;
+    line-height: 1.05; letter-spacing: -0.02em;
+    font-variation-settings: "opsz" 96, "SOFT" 50;
+  }
+  .mock .sub { font-family: var(--font-sans); font-size: 13px; line-height: 1.5; }
+
+  .mock.success { background: var(--paper); color: var(--ink); }
+  .mock.success .kind { color: var(--ok); }
+  .mock.success .sub { color: var(--ink-soft); }
+
+  .mock.error { background: var(--paper); color: var(--ink); }
+  .mock.error .kind { color: var(--warn); }
+  .mock.error .sub { color: var(--ink-soft); }
+
+  .mock.pricing { background: var(--paper); color: var(--ink); }
+  .mock.pricing .kind { color: var(--ink-mute); }
+  .mock.pricing .sub { color: var(--ink-mute); }
+  .mock.pricing .alt {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--ink-soft); margin-top: 6px; line-height: 1.5;
+  }
+  .mock.pricing .alt b { color: var(--ink); font-family: var(--font-sans); font-weight: 600; }
+
+  /* Newsletter signoff */
+  .signoff {
+    margin-top: 18px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow-stamp);
+    padding: 18px 22px;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .signoff .kind {
+    font-family: var(--font-mono);
+    font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-mute); font-weight: 700;
+    background: transparent; color: var(--ink-mute);
+    padding: 0;
+  }
+  .signoff .msg {
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 26px; letter-spacing: -0.025em;
+    color: var(--ink); flex: 1;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+  }
+  .signoff .em {
+    font-style: italic;
+    font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+    color: var(--orange);
+  }
+
+  /* Good vs bad */
+  .rows {
+    margin-top: 8px;
+    border: 2px solid var(--ink);
+    border-top: 0;
+    background: var(--paper);
+    box-shadow: var(--shadow-stamp);
+  }
+  .row {
+    display: grid; grid-template-columns: 140px 1fr 1fr; gap: 0;
+    border-top: 2px solid var(--ink);
+  }
+  .row .ctx {
+    font-family: var(--font-mono);
+    font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink); font-weight: 700;
+    background: var(--paper-deep);
+    display: flex; align-items: center;
+    padding: 0 14px;
+    border-right: 2px solid var(--ink);
+  }
+  .row .card { padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+  .row .good { background: var(--paper); border-right: 2px solid var(--ink); }
+  .row .bad  { background: var(--paper-deep); color: var(--ink-mute); }
+  .row .tag {
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.18em;
+    font-weight: 700;
+  }
+  .row .good .tag { color: var(--ok); }
+  .row .bad  .tag { color: var(--warn); }
+  .row .line {
+    font-family: var(--font-display);
+    font-size: 18px;
+    line-height: 1.2; letter-spacing: -0.01em;
+    color: var(--ink);
+    font-variation-settings: "opsz" 96, "SOFT" 40;
+  }
+  .row .bad .line { color: var(--ink-mute); text-decoration: line-through; text-decoration-color: var(--warn); }
 
   /* Vocab chips */
   .words {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-    margin-top: 14px;
-  }
-  .words .col {
-    background: var(--bg-raised); border: 1.5px solid var(--ink);
-    border-radius: var(--radius-md); padding: 14px 18px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    margin-top: 18px;
+    border: 2px solid var(--ink);
     box-shadow: var(--shadow-stamp);
   }
-  .words h3 {
-    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em;
-    text-transform: uppercase; margin: 0 0 8px;
+  .words .col {
+    padding: 18px 20px;
+    border-right: 2px solid var(--ink);
   }
-  .words .use   h3 { color: var(--ocean-600); }
-  .words .avoid h3 { color: var(--danger); }
+  .words .col:last-child { border-right: 0; }
+  .words .use   { background: var(--paper); color: var(--ink); }
+  .words .avoid { background: var(--paper-deep); color: var(--ink); }
+  .words h3 {
+    font-family: var(--font-mono);
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    margin: 0 0 10px; font-weight: 700;
+  }
+  .words .use   h3 { color: var(--ok); }
+  .words .avoid h3 { color: var(--warn); }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chip {
-    font-family: var(--font-mono); font-size: 11px;
-    padding: 4px 8px; border-radius: var(--radius-pill);
-    border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 11px; padding: 4px 9px;
+    border-radius: 999px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper); color: var(--ink);
+    font-weight: 500;
   }
-  .avoid .chip { color: var(--danger); background: #fff7f7; text-decoration: line-through; text-decoration-color: rgba(209,69,69,0.4); }
-  .use .chip   { color: var(--ocean-600); background: var(--ocean-50); }
+  .avoid .chip {
+    color: var(--ink-mute);
+    text-decoration: line-through;
+    text-decoration-color: var(--warn);
+    text-decoration-thickness: 2px;
+  }
 </style>
 </head>
 <body>
 
   <div class="head">
-    <h1>Voice samples</h1>
-    <span class="meta">Switched-on mate · written like you'd say it at the pub</span>
+    <h1>Voice samples.</h1>
+    <span class="meta">Switched-on mate · written like you'd say it</span>
   </div>
 
-  <!-- Brand strap line -->
+  <!-- Strap line -->
   <div class="strap">
     <span class="tag">The promise</span>
-    <span class="line">Good<span class="a">&apos;</span>ai mate &mdash; how can we make your life easier?</span>
+    <span class="line">Good<span class="apos">&rsquo;</span>ai mate — how can we make your life <em>easier</em>?</span>
   </div>
 
   <!-- Pillar phrases -->
   <div class="pillars">
     <div class="pillar p1">
-      <span class="dot"></span>
       <div class="num">Pillar 01 · Promise</div>
-      <div class="quote">&ldquo;Knock off early, hit the pub.&rdquo;</div>
-      <div class="gloss">Why we exist. Headers, sign-offs, the line you put on a t-shirt.</div>
+      <p class="quote">&ldquo;Knock off early, hit the pub.&rdquo;</p>
+      <p class="gloss">Why we exist. Headers, sign-offs, the line you put on a t-shirt.</p>
     </div>
     <div class="pillar p2">
-      <span class="dot"></span>
       <div class="num">Pillar 02 · Permission</div>
-      <div class="quote">&ldquo;Slack off &mdash; you deserve it.&rdquo;</div>
-      <div class="gloss">Tells the customer it's actually OK to step away. Use on success states.</div>
+      <p class="quote">&ldquo;Slack off — you deserve it.&rdquo;</p>
+      <p class="gloss">Tells the customer it's actually OK to step away. Use on success states.</p>
     </div>
     <div class="pillar p3">
-      <span class="dot"></span>
       <div class="num">Pillar 03 · Offer</div>
-      <div class="quote">&ldquo;Give us the crappy jobs.&rdquo;</div>
-      <div class="gloss">Our pitch in five words. The boring stuff is our favourite stuff.</div>
+      <p class="quote">&ldquo;Give us the crappy jobs.&rdquo;</p>
+      <p class="gloss">Our pitch in five words. The boring stuff is our favourite stuff.</p>
     </div>
     <div class="pillar p4">
-      <span class="dot"></span>
       <div class="num">Pillar 04 · Hand-off</div>
-      <div class="quote">&ldquo;Go home mate, it&rsquo;s already 3pm.&rdquo;</div>
-      <div class="gloss">The end-of-project line. Replaces &ldquo;deployment complete&rdquo; forever.</div>
+      <p class="quote">&ldquo;Go home mate, it&rsquo;s already 3pm.&rdquo;</p>
+      <p class="gloss">The end-of-project line. Replaces &ldquo;deployment complete&rdquo; forever.</p>
     </div>
   </div>
 
-  <!-- Special UI moments -->
+  <!-- UI moments -->
   <div class="section-title">
     <h2>UI moments</h2>
-    <span class="kicker">Success · error · pricing · newsletter</span>
+    <span class="kicker">Success · error · pricing</span>
     <div class="rule"></div>
   </div>
 
   <div class="specials">
     <div class="mock success">
       <div class="kind">Success state</div>
-      <div class="msg">Sorted. You just upgraded to first class.</div>
-      <div class="sub">Use on confirmations, payment success, project go-live. Confetti optional &mdash; one tomato burst is enough.</div>
+      <div class="msg">Sorted.</div>
+      <div class="sub">You just upgraded to first class. Use on confirmations, payment success, project go-live.</div>
     </div>
 
     <div class="mock error">
       <div class="kind">Error state</div>
       <div class="msg">Smoko, brb.</div>
-      <div class="sub">Something on our end's gone walkabout. Hang tight &mdash; we&rsquo;re onto it. Refresh in a minute.</div>
+      <div class="sub">Something on our end's gone walkabout. Hang tight — we&rsquo;re onto it.</div>
     </div>
 
     <div class="mock pricing">
@@ -245,15 +350,15 @@
     </div>
   </div>
 
-  <!-- Newsletter sign-off -->
+  <!-- Newsletter -->
   <div class="signoff">
     <span class="kind">Newsletter sign-off</span>
-    <span class="msg">Catchaz. <span class="em">&mdash; the Good&rsquo;ai team (one bloke and an LLM)</span></span>
+    <span class="msg">Catchaz. <span class="em">— the Good&rsquo;ai team (one bloke and a workflow)</span></span>
   </div>
 
   <!-- Comparison rows -->
   <div class="section-title">
-    <h2>Same moment, two ways to say it</h2>
+    <h2>Same moment, two ways</h2>
     <span class="kicker">Pick the one that sounds like the bloke at the counter</span>
     <div class="rule"></div>
   </div>
@@ -261,35 +366,35 @@
   <div class="rows">
     <div class="row">
       <span class="ctx">Hero CTA</span>
-      <div class="card good"><span class="tag">✓ Good&rsquo;ai</span><span class="line">&ldquo;Give us the crappy jobs.&rdquo;</span></div>
-      <div class="card bad"><span class="tag">✗ Not us</span><span class="line">&ldquo;Submit your inquiry below.&rdquo;</span></div>
+      <div class="card good"><span class="tag">✓ GOOD'AI</span><span class="line">&ldquo;Give us the crappy jobs.&rdquo;</span></div>
+      <div class="card bad"><span class="tag">✗ NOT US</span><span class="line">&ldquo;Submit your inquiry below.&rdquo;</span></div>
     </div>
     <div class="row">
       <span class="ctx">Pitch line</span>
-      <div class="card good"><span class="tag">✓ Good&rsquo;ai</span><span class="line">&ldquo;We&rsquo;ll sort the boring stuff so you can knock off early.&rdquo;</span></div>
-      <div class="card bad"><span class="tag">✗ Not us</span><span class="line">&ldquo;We leverage AI to streamline your workflows.&rdquo;</span></div>
+      <div class="card good"><span class="tag">✓ GOOD'AI</span><span class="line">&ldquo;We&rsquo;ll sort the boring stuff so you can knock off early.&rdquo;</span></div>
+      <div class="card bad"><span class="tag">✗ NOT US</span><span class="line">&ldquo;We leverage automation to streamline your workflows.&rdquo;</span></div>
     </div>
     <div class="row">
       <span class="ctx">Form success</span>
-      <div class="card good"><span class="tag">✓ Good&rsquo;ai</span><span class="line">&ldquo;Nice one. We&rsquo;ll be in touch &mdash; have a good arvo.&rdquo;</span></div>
-      <div class="card bad"><span class="tag">✗ Not us</span><span class="line">&ldquo;Thank you for your submission.&rdquo;</span></div>
+      <div class="card good"><span class="tag">✓ GOOD'AI</span><span class="line">&ldquo;Nice one. We&rsquo;ll be in touch — have a good arvo.&rdquo;</span></div>
+      <div class="card bad"><span class="tag">✗ NOT US</span><span class="line">&ldquo;Thank you for your submission.&rdquo;</span></div>
     </div>
     <div class="row">
       <span class="ctx">Project handoff</span>
-      <div class="card good"><span class="tag">✓ Good&rsquo;ai</span><span class="line">&ldquo;You&rsquo;re live. Go home mate, it&rsquo;s already 3pm.&rdquo;</span></div>
-      <div class="card bad"><span class="tag">✗ Not us</span><span class="line">&ldquo;Deployment complete. Monitoring is now active.&rdquo;</span></div>
+      <div class="card good"><span class="tag">✓ GOOD'AI</span><span class="line">&ldquo;You&rsquo;re live. Go home mate, it&rsquo;s already 3pm.&rdquo;</span></div>
+      <div class="card bad"><span class="tag">✗ NOT US</span><span class="line">&ldquo;Deployment complete. Monitoring is now active.&rdquo;</span></div>
     </div>
     <div class="row">
       <span class="ctx">Cold outreach</span>
-      <div class="card good"><span class="tag">✓ Good&rsquo;ai</span><span class="line">&ldquo;G&rsquo;day &mdash; saw your quoting takes half a day. Reckon we can knock an hour off it. Worth a chat?&rdquo;</span></div>
-      <div class="card bad"><span class="tag">✗ Not us</span><span class="line">&ldquo;I&rsquo;d love to schedule a quick sync to discuss synergies.&rdquo;</span></div>
+      <div class="card good"><span class="tag">✓ GOOD'AI</span><span class="line">&ldquo;G&rsquo;day — saw your quoting takes half a day. Reckon we can knock an hour off it. Worth a chat?&rdquo;</span></div>
+      <div class="card bad"><span class="tag">✗ NOT US</span><span class="line">&ldquo;I&rsquo;d love to schedule a quick sync to discuss synergies.&rdquo;</span></div>
     </div>
   </div>
 
   <!-- Vocab -->
   <div class="words">
     <div class="col use">
-      <h3>Words we use</h3>
+      <h3>✓ Words we use</h3>
       <div class="chips">
         <span class="chip">knock off</span>
         <span class="chip">hit the pub</span>
@@ -308,7 +413,7 @@
       </div>
     </div>
     <div class="col avoid">
-      <h3>Words we don&rsquo;t</h3>
+      <h3>✗ Words we don&rsquo;t</h3>
       <div class="chips">
         <span class="chip">leverage</span>
         <span class="chip">synergy</span>

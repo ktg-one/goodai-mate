@@ -1,6 +1,8 @@
 # Issue tracker: GitHub
 
-Issues and PRDs for this repo live as GitHub issues in `ktg-one/goodai-mate`. Use the `gh` CLI for issue operations.
+Issues, PRDs, and gsd phase work for this repo live as GitHub issues in `ktg-one/goodai-mate`. Use the `gh` CLI for issue operations.
+
+When using gsd-* skills (gsd-inbox, gsd-plan-phase, gsd-ship etc.) they publish here.
 
 ## Conventions
 

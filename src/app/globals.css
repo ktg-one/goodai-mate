@@ -1,23 +1,8 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Fraunces";
-  src: url("/fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Fraunces";
-  src: url("/fonts/Fraunces-Italic-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: swap;
-}
-
 @theme {
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Fraunces", Georgia, serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
 }
 
@@ -28,8 +13,8 @@
    Verbatim drop + site overrides for mail-board.
    ============================================================ */
 
-/* Fonts loaded via next/font in layout.tsx (using TTFs from public/fonts/ which match the design in public/design-system-new/fonts/ verbatim).
-   Rely on --font-fraunces etc vars for optimization (subset, preload, etc). */
+/* Fonts loaded via next/font in layout.tsx (DM Sans + JetBrains Mono from Google; Fraunces variable TTF from public/fonts/ matching the design in public/design-system-new/fonts/ verbatim, with SOFT + WONK axes).
+   --font-display resolves to the Fraunces variable for proper variation-settings support on .wonk-line, .font-display, h1/h2, .brand-wordmark. */
 
 :root {
   /* COLOUR — the five core brand colours (verbatim from June 3 design book) */
@@ -113,9 +98,9 @@
   /* Navy pile for hero stamp settle (deeper filing shadows) + docket */
   --navy-ink: #0F162B;
 
-  /* TYPE — Families (using global @font-face rules, pointing to design's font files) */
+  /* TYPE — Families (verbatim from design in public/README.md and colors_and_type.css: Fraunces variable for display with SOFT + WONK + opsz + wght; DM Sans for sans; JetBrains for mono) */
   --font-sans:    var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Fraunces", Georgia, serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
   --font-mono:    var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
 
   /* TYPE — Scale */
@@ -498,16 +483,12 @@ html, body {
   transition: font-variation-settings 80ms linear;
 }
 
-/* .font-display and .brand-wordmark now resolve to Fraunces from design (loaded in layout via public/fonts/ TTFs matching design-system) */
+/* .font-display, .brand-wordmark, h1/h2, .wonk-line now resolve to Fraunces variable per design in public/README.md (SOFT + WONK + opsz + wght axes; one phrase per surface for Italic + WONK emphasis). Loaded via next/font/local in layout using the TTFs from public/fonts/ matching the design verbatim. */
 .font-display,
-h1, h2 {
-  font-family: var(--font-display);
-}
-
+h1, h2,
 .brand-wordmark {
   font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.04em;
+  font-variation-settings: "WONK" var(--wonk, 0.2), "SOFT" 60, "opsz" 120;
 }
 
 /* ============================================================
