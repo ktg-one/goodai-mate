@@ -62,8 +62,9 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
 
   const isBusy = status === 'submitted' || status === 'streaming';
   const conversationTranscript = useMemo(
-    () => messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n'),
-    [messages],
+    // ⚡ Bolt Optimization: Lazy-evaluate derived state based on component visibility to prevent O(N) operations per token
+    () => showLeadCard ? messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n') : '',
+    [messages, showLeadCard],
   );
   const errorMessage = error?.message?.trim() || 'Something went sideways. Try again in a moment.';
 
