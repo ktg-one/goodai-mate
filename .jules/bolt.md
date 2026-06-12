@@ -21,3 +21,7 @@
 ## 2025-05-14 - [Optimize Array Reversal in Streaming Context]
 **Learning:** In Next.js / React apps using Vercel AI SDK, array spreading and reversing `[...messages].reverse()` on every render or effect during text streaming creates unnecessary object allocations and GC overhead.
 **Action:** Use a backwards `for` loop to search the array backwards instead of making a reversed copy.
+
+## 2025-05-18 - [React Performance] Lazy-Evaluating Derived State in Streaming Contexts
+**Learning:** In chat interfaces using the Vercel AI SDK, `useMemo` hooks that iterate over the entire `messages` array (e.g., to build a transcript string) will execute on *every single token* streamed if their dependencies only check `messages`. This causes O(N) string concatenations per token.
+**Action:** Always lazy-evaluate derived state (like full transcripts) in `useMemo` by adding a visibility check (e.g., `if (!showLeadCard) return ''`). This prevents O(N*M) operations per stream and only runs the O(N) mapping when the string is actually needed by the UI.

@@ -61,10 +61,17 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   });
 
   const isBusy = status === 'submitted' || status === 'streaming';
-  const conversationTranscript = useMemo(
-    () => messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n'),
-    [messages],
-  );
+
+  // ⚡ Bolt Optimization: Lazy-evaluate derived transcript string.
+  // The Vercel AI SDK streams updates to the `messages` array character-by-character.
+  // Instead of re-computing this string concatenation map on every single token
+  // (which is O(N*M) where N is token updates and M is messages),
+  // we only evaluate it once the lead card is actually visible.
+  const conversationTranscript = useMemo(() => {
+    if (!showLeadCard) return '';
+    return messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n');
+  }, [messages, showLeadCard]);
+
   const errorMessage = error?.message?.trim() || 'Something went sideways. Try again in a moment.';
 
   useEffect(() => {
