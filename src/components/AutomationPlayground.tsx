@@ -155,7 +155,7 @@ export default function AutomationPlayground() {
           <div className="flex flex-col gap-2">
             <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">3. SELECT GOOGLE SERVICES</span>
             <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer focus-within:ring-2 focus-within:ring-[var(--red)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--paper)] select-none">
                 <input
                   type="checkbox"
                   checked={actions.sheet}
@@ -165,7 +165,7 @@ export default function AutomationPlayground() {
                 <span>Append Sheet</span>
               </label>
               
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer focus-within:ring-2 focus-within:ring-[var(--red)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--paper)] select-none">
                 <input
                   type="checkbox"
                   checked={actions.doc}
@@ -175,7 +175,7 @@ export default function AutomationPlayground() {
                 <span>Generate Doc</span>
               </label>
               
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer focus-within:ring-2 focus-within:ring-[var(--red)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--paper)] select-none">
                 <input
                   type="checkbox"
                   checked={actions.emailNotification}
@@ -186,7 +186,7 @@ export default function AutomationPlayground() {
                 <span className={!email ? 'opacity-40' : ''}>Gmail Send</span>
               </label>
               
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer focus-within:ring-2 focus-within:ring-[var(--red)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--paper)] select-none">
                 <input
                   type="checkbox"
                   checked={actions.calendar}
@@ -196,7 +196,7 @@ export default function AutomationPlayground() {
                 <span>Schedule Call</span>
               </label>
 
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer focus-within:ring-2 focus-within:ring-[var(--red)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--paper)] select-none">
                 <input
                   type="checkbox"
                   checked={actions.n8n}
