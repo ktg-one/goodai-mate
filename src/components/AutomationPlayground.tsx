@@ -4,6 +4,8 @@ import { useState, useRef } from 'react';
 import { Sparkles, Terminal, FileText, Calendar, Mail, FileSpreadsheet, Check, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
 
+const CHECKBOX_LABEL_CLASS = "flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer focus-within:ring-2 focus-within:ring-[var(--red)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--paper)] select-none";
+
 export default function AutomationPlayground() {
   const [name, setName] = useState('');
   const [business, setBusiness] = useState('');
@@ -155,53 +157,53 @@ export default function AutomationPlayground() {
           <div className="flex flex-col gap-2">
             <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">3. SELECT GOOGLE SERVICES</span>
             <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer focus-within:ring-2 focus-within:ring-[var(--red)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--paper)] select-none">
+              <label className={CHECKBOX_LABEL_CLASS}>
                 <input
                   type="checkbox"
                   checked={actions.sheet}
                   onChange={() => toggleAction('sheet')}
-                  className="accent-[var(--red)]"
+                  className="accent-[var(--red)] outline-none focus-visible:outline-none"
                 />
                 <span>Append Sheet</span>
               </label>
               
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer focus-within:ring-2 focus-within:ring-[var(--red)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--paper)] select-none">
+              <label className={CHECKBOX_LABEL_CLASS}>
                 <input
                   type="checkbox"
                   checked={actions.doc}
                   onChange={() => toggleAction('doc')}
-                  className="accent-[var(--red)]"
+                  className="accent-[var(--red)] outline-none focus-visible:outline-none"
                 />
                 <span>Generate Doc</span>
               </label>
               
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer focus-within:ring-2 focus-within:ring-[var(--red)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--paper)] select-none">
+              <label className={CHECKBOX_LABEL_CLASS}>
                 <input
                   type="checkbox"
                   checked={actions.emailNotification}
                   onChange={() => toggleAction('emailNotification')}
                   disabled={!email}
-                  className="accent-[var(--red)]"
+                  className="accent-[var(--red)] outline-none focus-visible:outline-none"
                 />
                 <span className={!email ? 'opacity-40' : ''}>Gmail Send</span>
               </label>
               
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer focus-within:ring-2 focus-within:ring-[var(--red)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--paper)] select-none">
+              <label className={CHECKBOX_LABEL_CLASS}>
                 <input
                   type="checkbox"
                   checked={actions.calendar}
                   onChange={() => toggleAction('calendar')}
-                  className="accent-[var(--red)]"
+                  className="accent-[var(--red)] outline-none focus-visible:outline-none"
                 />
                 <span>Schedule Call</span>
               </label>
 
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer focus-within:ring-2 focus-within:ring-[var(--red)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--paper)] select-none">
+              <label className={CHECKBOX_LABEL_CLASS}>
                 <input
                   type="checkbox"
                   checked={actions.n8n}
                   onChange={() => toggleAction('n8n')}
-                  className="accent-[var(--red)]"
+                  className="accent-[var(--red)] outline-none focus-visible:outline-none"
                 />
                 <span>n8n Webhook</span>
               </label>
