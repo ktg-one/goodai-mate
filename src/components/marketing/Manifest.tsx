@@ -6,7 +6,7 @@ import { motion } from 'motion/react';
 /**
  * Manifest
  * Hard stamp-in reveal for the core promise — brutalist, no easing softness.
- * From design-system-new specimens. One .hl + one .hl-red per surface max.
+ * From design system specimens. One .hl + one .hl-red per surface max.
  * Participates in mail board via parent ribbons (no local motion competing).
  */
 export default function Manifest() {

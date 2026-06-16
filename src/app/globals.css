@@ -8,12 +8,12 @@
 
 
 /* ============================================================
-   Good'ai — Canonical tokens from public/design-system-new/colors_and_type.css
+   Good'ai — Canonical tokens from public/colors_and_type.css
    (source of truth). Warm cream paper + high-contrast coloured cards.
    Verbatim drop + site overrides for mail-board.
    ============================================================ */
 
-/* Fonts loaded via next/font in layout.tsx (DM Sans + JetBrains Mono from Google; Fraunces variable TTF from public/fonts/ matching the design in public/design-system-new/fonts/ verbatim, with SOFT + WONK axes).
+/* Fonts loaded via next/font in layout.tsx (DM Sans + JetBrains Mono from Google; Fraunces variable TTF from public/fonts/ matching the design in public/fonts/ verbatim, with SOFT + WONK axes).
    --font-display resolves to the Fraunces variable for proper variation-settings support on .wonk-line, .font-display, h1/h2, .brand-wordmark. */
 
 :root {

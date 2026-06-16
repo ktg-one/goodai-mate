@@ -38,13 +38,13 @@ export const metadata: Metadata = {
 
 // Force dynamic to bypass prerender crashes on _global-error / _not-found during build
 // (useContext null from client context in error boundary static gen with motion/GSAP tree).
-// The design implementation (mail board, assets, fonts from public/design-system-new) is static-friendly;
+// The design implementation (mail board, assets, fonts from public/) is static-friendly;
 // revert to 'force-static' or remove once prerender fixed (e.g. by updating motion or Next).
 export const dynamic = 'force-dynamic';
 
 // Fraunces loaded here via next/font/local (variable TTF with SOFT + WONK + opsz + wght axes)
 // so --font-display (and .wonk-line, h1/h2, .brand-wordmark, .font-display) get proper optimization + axis support.
-// Matches design spec in public/README.md + design-system-new/colors_and_type.css verbatim.
+// Matches design spec in public/README.md + public/colors_and_type.css verbatim.
 
 
 

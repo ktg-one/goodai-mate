@@ -8,7 +8,7 @@ import { transcribeWithSupertonic } from '@/lib/voice/supertonic';
 import { BrandWordmark } from '@/components/brand/BrandWordmark';
 import StampButton from '@/components/StampButton';
 
-// Mechanical stamp easing (design-system-new canon)
+// Mechanical stamp easing (canon design system)
 const STAMP_EASE = [0.23, 1, 0.32, 1] as const;
 
 /**

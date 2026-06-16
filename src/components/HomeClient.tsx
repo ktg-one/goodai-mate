@@ -12,7 +12,7 @@ import StampCard from '@/components/StampCard';
 // Pure entry variance + light scroll-linked life. Does not fight GSAP mailBoard timelines.
 import { motion, useReducedMotion } from 'motion/react';
 
-// Marketing sections (sourced from design-system-new as the single source of truth)
+// Marketing sections (sourced from public/ design system as the single source of truth)
 import WhyGoodAI from '@/components/marketing/WhyGoodAI';
 import Manifest from '@/components/marketing/Manifest';
 import AISolutions from '@/components/marketing/AISolutions';
@@ -40,7 +40,7 @@ gsap.registerPlugin(ScrollTrigger);
  * - AI solutions
  * - Voice agent demo + CTA
  *
- * Design system: public/design-system-new is the source of truth.
+ * Design system: public/ is the source of truth.
  */
 export default function HomeClient() {
   const [mounted, setMounted] = useState(false);
