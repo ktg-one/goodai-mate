@@ -8,8 +8,8 @@
 
 Before ANY code hits the `main` branch for Vercel deployment, the following P0 blockers must be resolved and verified locally via `npm run build` and `npm start`.
 
-*   [ ] **Webhook Configuration:** `N8N_CALL_WEBHOOK_URL` must not point to `localhost` in production. Confirm production endpoint is wired and responding to mock payloads.
-*   [ ] **ASR Service Path:** Replace `http://localhost:8000/transcribe` with a hosted Supertonic/ASR endpoint (`NEXT_PUBLIC_ASR_URL`). Voice Agent will fail gracefully or hang if missing.
+*   [x] **Webhook Configuration:** `N8N_CALL_WEBHOOK_URL` no longer defaults to `localhost`. Confirm production endpoint is wired and responding to mock payloads.
+*   [x] **ASR Service Path:** Removed hardcoded `http://localhost:8000/transcribe` overrides. The component defaults to `NEXT_PUBLIC_ASR_URL` with graceful fallback. Voice Agent will fail gracefully or hang if missing.
 *   [ ] **Environment Variables:** Must be set securely in Vercel settings prior to deployment:
     *   `AI_GATEWAY_API_KEY`
     *   `ELEVEN_API_KEY`

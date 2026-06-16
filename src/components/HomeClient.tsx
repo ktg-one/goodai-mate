@@ -363,7 +363,7 @@ export default function HomeClient() {
     <div ref={mailBoardRef} className="mail-board overflow-x-hidden">
       {/* HERO - TTS feature (the Voice Agent as the product) — descent files into the stack */}
       <VoiceAgentHero 
-        supertonicUrl="http://localhost:8000/transcribe" 
+        supertonicUrl={undefined}
         onMailFiled={handleMailFiled}
       />
 

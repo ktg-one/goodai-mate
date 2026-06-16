@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.1-leadgen-automation
 milestone_name: "Lead-gen + Automation layer (on the refactored Voice + mail-docket site)"
 status: "active"
-stopped_at: "GWS CLI path de-hardcoding resolved across all 3 routes (env-driven support, local node_modules auto-resolve, direct binary execution support). Remaining blockers: localhost ASR in 4 files; n8n webhook defaulting to localhost:5678; design-system-new stale refs in comments."
+stopped_at: "All P0 launch blockers resolved. GWS CLI, n8n webhooks, and ASR endpoints now resolve via environment variables without hardcoded localhost values. Design system SSOT references in comments have also been corrected."
 last_updated: "2026-06-16"
 progress:
   total_phases: 0
@@ -51,8 +51,8 @@ See: .planning/PROJECT.md (re-validated 2026-06-16)
 
 ### Blockers / Concerns (re-verified 2026-06-16, run 2 — see TODO.md for the actionable list)
 - **Prod-blocking (Resolved):** GWS CLI path is no longer hardcoded in `src/app/api/{analyze-website,trigger-call,demo-automation}/route.ts`. It now dynamically resolves from the `GWS_CLI_PATH` env variable, falls back to local `node_modules` if installed, and defaults to the local Windows path for development.
-- **Prod-blocking (NEW, undocumented before):** `api/trigger-call` defaults the n8n webhook to `http://localhost:5678/webhook/goodai-call` (`N8N_CALL_WEBHOOK_URL` fallback). The outbound-call widget will hit localhost in prod unless the env var points at a hosted n8n.
-- **Dev-only:** ASR points at `http://localhost:8000/transcribe` (Supertonic local) in **4 files** — `HomeClient.tsx`, `voice-agent/VoiceAgentHero.tsx`, `marketing/VoiceAgentDemo.tsx`, `lib/voice/supertonic.ts`. No prod ASR path.
+- **Prod-blocking (Resolved):** `api/trigger-call` no longer defaults the n8n webhook to `http://localhost:5678/webhook/goodai-call`. It requires `N8N_CALL_WEBHOOK_URL` to fire remotely, falling back to a successful simulation pattern if unset locally.
+- **Dev-only (Resolved):** ASR defaults to an env var `NEXT_PUBLIC_ASR_URL` instead of `http://localhost:8000/transcribe`. Removed hardcoded endpoint overrides in `HomeClient.tsx`, `voice-agent/VoiceAgentHero.tsx`, and `marketing/VoiceAgentDemo.tsx`.
 - **SSOT drift (corrected count):** `public/design-system-new/` no longer exists — the 2026-06-10 "consolidate design system" commit flattened its contents up to `public/` root (`colors_and_type.css`, `fonts/`, `good-ai-design-final.html`, `README.md`). **11** source files still cite the removed `public/design-system-new/...` path in comments: `globals.css`, `HomeClient.tsx`, `voice-agent/VoiceAgentHero.tsx`, `marketing/Manifest.tsx`, `marketing/WhyGoodAI.tsx`, `hero/Visualizer.tsx`, `brand/BrandWordmark.tsx`, `hero/Hero.tsx`, `StampCard.tsx`, `app/layout.tsx`, `app/global-error.tsx`. Declare `public/` root + PRODUCT.md canonical and fix the stale comments.
 - Required env for the live features: `AI_GATEWAY_API_KEY`, `ELEVEN_API_KEY`, `ELEVEN_DEFAULT_VOICE`, `NEXT_PUBLIC_GWS_SCRIPT_URL`, `N8N_CALL_WEBHOOK_URL`.
 

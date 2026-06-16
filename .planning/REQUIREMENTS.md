@@ -25,8 +25,8 @@
 ## Open requirements / gaps (from 2026-06-16 validation)
 
 - [ ] **[prod blocker]** GWS CLI path hardcoded to `D:\packages\…\@googleworkspace\cli\run.js` in `api/analyze-website`, `api/trigger-call`, `api/demo-automation` — must be env-driven or hosted before any non-local deploy. *(User fixing now.)*
-- [ ] **[prod blocker]** n8n webhook defaults to `http://localhost:5678/webhook/goodai-call` in `api/trigger-call` — set `N8N_CALL_WEBHOOK_URL` to a hosted n8n or the outbound-call widget fails in prod.
-- [ ] Production ASR endpoint (replace `localhost:8000` Supertonic dev path — present in 4 files: `HomeClient`, `VoiceAgentHero`, `VoiceAgentDemo`, `lib/voice/supertonic.ts`).
+- [x] **[prod blocker]** n8n webhook defaults to `http://localhost:5678/webhook/goodai-call` in `api/trigger-call` — set `N8N_CALL_WEBHOOK_URL` to a hosted n8n or the outbound-call widget fails in prod.
+- [x] Production ASR endpoint (replace `localhost:8000` Supertonic dev path — present in 4 files: `HomeClient`, `VoiceAgentHero`, `VoiceAgentDemo`, `lib/voice/supertonic.ts`).
 - [ ] Canonical design SSOT — `public/design-system-new/` flattened to `public/` root (2026-06-10); **11** source files still cite the removed subpath in comments. Declare `public/` root + PRODUCT.md canonical and fix the stale references.
 - [ ] Commit in-flight changes (remove `public/voice-feature/*`, `globals.css` + `HomeClient.tsx` edits, new `public/assets/` audit images).
 - [ ] Lighthouse / perf / a11y on the GSAP-heavy flow + new sections.

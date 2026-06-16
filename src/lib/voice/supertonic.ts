@@ -12,13 +12,14 @@
 
 export async function transcribeWithSupertonic(
   audioBlob: Blob,
-  endpoint: string = 'http://localhost:8000/transcribe'
+  endpoint?: string
 ): Promise<string> {
+  const actualEndpoint = endpoint || process.env.NEXT_PUBLIC_ASR_URL || 'http://localhost:8000/transcribe';
   const formData = new FormData();
   formData.append('file', audioBlob, 'input.webm');
   formData.append('language', 'en');
 
-  const res = await fetch(endpoint, {
+  const res = await fetch(actualEndpoint, {
     method: 'POST',
     body: formData,
   });

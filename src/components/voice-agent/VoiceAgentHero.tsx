@@ -32,7 +32,7 @@ interface VoiceAgentHeroProps {
   onMailFiled?: (transcript: string, response: string) => void;
 }
 
-export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcribe', onMailFiled }: VoiceAgentHeroProps) {
+export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroProps) {
   const [status, setStatus] = useState<AgentStatus>('idle');
   const [selectedAgent, setSelectedAgent] = useState<'darl' | 'robokev'>('darl');
   const [userTranscript, setUserTranscript] = useState('');

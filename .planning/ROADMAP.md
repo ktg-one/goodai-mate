@@ -35,8 +35,8 @@ Verified present in `src/` on 2026-06-16:
 Prioritised by the 2026-06-16 validation:
 
 1. **[RESOLVED] De-hardcode the GWS CLI path.** `api/analyze-website`, `api/trigger-call`, `api/demo-automation` now support dynamic path resolution from `GWS_CLI_PATH`, with fallback to local `node_modules` or developer's Windows path. Works with direct binary execution if not a JS script.
-2. **[BLOCKER for prod] Hosted n8n webhook.** `api/trigger-call` defaults `N8N_CALL_WEBHOOK_URL` to `http://localhost:5678/webhook/goodai-call` — outbound-call widget hits localhost in prod unless pointed at a hosted n8n.
-3. **Prod ASR path** for the Voice Agent (`localhost:8000` Supertonic dev-only in 4 files: `HomeClient`, `VoiceAgentHero`, `VoiceAgentDemo`, `lib/voice/supertonic.ts`).
+2. **[RESOLVED] Hosted n8n webhook.** `api/trigger-call` no longer defaults to localhost:5678, throwing a graceful simulation error if `N8N_CALL_WEBHOOK_URL` is omitted.
+3. **[RESOLVED] Prod ASR path.** The voice agent ASR points to `NEXT_PUBLIC_ASR_URL` with graceful fallback handling.
 4. **Resolve design SSOT drift** — `public/design-system-new/` was flattened to `public/` root (2026-06-10 consolidate commit) but **11** source files still cite the removed `design-system-new/` path in comments. Declare `public/` root + PRODUCT.md canonical and fix the stale references.
 5. Commit / finalise the in-flight changes (voice-feature removal, css/HomeClient, audit assets).
 6. Perf / a11y pass (Lighthouse) on the GSAP-heavy flow + new sections.

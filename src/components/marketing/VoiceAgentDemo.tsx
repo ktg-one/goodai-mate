@@ -91,7 +91,7 @@ export default function VoiceAgentDemo() {
 
             {/* Tab Panels */}
             {activeTab === 'mic' ? (
-              <VoiceAgentHero supertonicUrl="http://localhost:8000/transcribe" />
+              <VoiceAgentHero supertonicUrl={undefined} />
             ) : (
               <OutboundCallCard />
             )}

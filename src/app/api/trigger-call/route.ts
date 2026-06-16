@@ -72,9 +72,13 @@ export async function POST(req: NextRequest) {
 
     // 1. n8n Outbound Dialer Webhook
     logs.push(`[SYSTEM] Dispatching callback trigger to n8n webhook...`);
-    const n8nCallUrl = process.env.N8N_CALL_WEBHOOK_URL || 'http://localhost:5678/webhook/goodai-call';
+    const n8nCallUrl = process.env.N8N_CALL_WEBHOOK_URL;
     
     try {
+      if (!n8nCallUrl) {
+        throw new Error('N8N_CALL_WEBHOOK_URL is not configured (running in mock mode)');
+      }
+
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3500); // 3.5s timeout
       
