@@ -44,15 +44,18 @@ export function Visualizer({
   const lastStampRef = useRef(0);
   const stampBurstRef = useRef(0); // 0-1 decay for visual clack burst (hot path)
 
-  // Hot-path refs for canvas without effect restarts (Vercel perf rule + scroll scrub)
-  statusRef.current = status;
-  // Live sync from hero's scroll-driven settleRef (MotionValue change -> ref -> here every RAF)
-  if (settlePropRef) settleRef.current = settlePropRef.current;
-  // Stamp signal sync (new docket line = hard mechanical pop in the ribbons)
-  if (stampSignalRef && stampSignalRef.current !== lastStampRef.current) {
-    lastStampRef.current = stampSignalRef.current;
-    stampBurstRef.current = 1.0; // trigger full clack burst
-  }
+  useEffect(() => {
+    // Hot-path refs for canvas without effect restarts (Vercel perf rule + scroll scrub)
+    statusRef.current = status;
+    // Live sync from hero's scroll-driven settleRef (MotionValue change -> ref -> here every RAF)
+    if (settlePropRef) settleRef.current = settlePropRef.current;
+
+    // Stamp signal sync (new docket line = hard mechanical pop in the ribbons)
+    if (stampSignalRef && stampSignalRef.current !== lastStampRef.current) {
+      lastStampRef.current = stampSignalRef.current;
+      stampBurstRef.current = 1.0; // trigger full clack burst
+    }
+  }, [status, settlePropRef, stampSignalRef]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

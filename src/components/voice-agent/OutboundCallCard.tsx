@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Phone, Terminal, UserCheck, CheckCircle2, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
 
 export default function OutboundCallCard() {
-  const [phone, setPhone] = useState('');
   const [selectedAgent, setSelectedAgent] = useState<'darl' | 'robokev'>('darl');
+  const [phone, setPhone] = useState('+61 400 000 000'); // matches darl's default
   const [isDialing, setIsDialing] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -33,15 +33,22 @@ export default function OutboundCallCard() {
     }
   ];
 
-  // Prefill phone input whenever the selected agent changes
-  useEffect(() => {
-    const selectedAgentObj = agents.find(a => a.id === selectedAgent);
-    if (selectedAgentObj) {
-      setPhone(selectedAgentObj.defaultPhone);
-    }
-    // Only run when selectedAgent changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedAgent]);
+  // ⚡ Bolt Performance Optimization: Memoize rendered logs
+  // Prevents O(N) array iteration and element recreation on every keystroke
+  // in the controlled form inputs (e.g., phone).
+  const renderedLogs = useMemo(() => {
+    return logs.map((log, index) => {
+      let color = 'text-[var(--paper)]/80';
+      if (log.startsWith('[ERROR]')) color = 'text-[var(--red-tint)] font-bold';
+      if (log.startsWith('[SERVER]')) color = 'text-[var(--gold-tint)]';
+      if (log.includes('RINGING') || log.includes('CONNECTED')) color = 'text-[var(--gold)] font-bold';
+      return (
+        <div key={index} className={color}>
+          {log}
+        </div>
+      );
+    });
+  }, [logs]);
 
   useEffect(() => {
     if (consoleEndRef.current) {
@@ -130,7 +137,10 @@ export default function OutboundCallCard() {
                 <button
                   key={agent.id}
                   type="button"
-                  onClick={() => setSelectedAgent(agent.id)}
+                  onClick={() => {
+                    setSelectedAgent(agent.id as 'darl' | 'robokev');
+                    setPhone(agent.defaultPhone);
+                  }}
                   className={`border-2 p-3 text-left rounded-xs cursor-pointer select-none transition-all flex flex-col justify-between h-28 relative focus-visible:outline-2 focus-visible:outline-[var(--ink)] ${
                     isSelected
                       ? `${agent.color} border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] scale-[0.99] translate-y-[1px]`
@@ -197,17 +207,7 @@ export default function OutboundCallCard() {
 
           <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-[11px] h-[130px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
             <div className="space-y-1">
-              {logs.map((log, index) => {
-                let color = 'text-[var(--paper)]/80';
-                if (log.startsWith('[ERROR]')) color = 'text-[var(--red-tint)] font-bold';
-                if (log.startsWith('[SERVER]')) color = 'text-[var(--gold-tint)]';
-                if (log.includes('RINGING') || log.includes('CONNECTED')) color = 'text-[var(--gold)] font-bold';
-                return (
-                  <div key={index} className={color}>
-                    {log}
-                  </div>
-                );
-              })}
+              {renderedLogs}
               {isDialing && (
                 <div className="text-[var(--paper)]/40 animate-pulse">● Dialing gateway...</div>
               )}
