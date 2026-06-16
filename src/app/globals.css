@@ -479,7 +479,7 @@ html, body {
 /* ... (additional footer clack, docket-edge, wonk participation rules from prior; kept surgical) */
 .wonk-line {
   font-family: var(--font-display);
-  font-variation-settings: "WONK" var(--wonk, 0.2), "SOFT" 60, "opsz" 120;
+  font-variation-settings: "WONK" var(--wonk, 1), "SOFT" 50, "opsz" 144;
   transition: font-variation-settings 80ms linear;
 }
 
@@ -488,7 +488,7 @@ html, body {
 h1, h2,
 .brand-wordmark {
   font-family: var(--font-display);
-  font-variation-settings: "WONK" var(--wonk, 0.2), "SOFT" 60, "opsz" 120;
+  font-variation-settings: "WONK" var(--wonk, 1), "SOFT" 50, "opsz" 144;
 }
 
 /* ============================================================

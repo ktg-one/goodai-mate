@@ -1,9 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
+import path from 'path';
+import fs from 'fs';
 
 const execFileAsync = promisify(execFile);
-const GWS_PATH = 'D:\\packages\\npm-global\\node_modules\\@googleworkspace\\cli\\run.js';
+
+// Helper to resolve GWS CLI path dynamically
+function getGwsCliPath(): string {
+  if (process.env.GWS_CLI_PATH) {
+    return process.env.GWS_CLI_PATH;
+  }
+  const localPath = path.join(process.cwd(), 'node_modules', '@googleworkspace', 'cli', 'run.js');
+  if (fs.existsSync(localPath)) {
+    return localPath;
+  }
+  return 'D:\\packages\\npm-global\\node_modules\\@googleworkspace\\cli\\run.js';
+}
+
+const GWS_PATH = getGwsCliPath();
 
 interface AutomationPayload {
   name: string;
@@ -22,22 +37,21 @@ interface AutomationPayload {
 }
 
 async function runGwsCommand(args: string[], jsonInput?: unknown): Promise<unknown> {
-  const fullArgs = [
-    GWS_PATH,
-    ...args,
-    '--format', 'json'
-  ];
+  const isJs = GWS_PATH.endsWith('.js');
+  const command = isJs ? 'node' : GWS_PATH;
+  const fullArgs = isJs ? [GWS_PATH, ...args] : [...args];
+  fullArgs.push('--format', 'json');
   
   if (jsonInput) {
     fullArgs.push('--json', JSON.stringify(jsonInput));
   }
   
   try {
-    const { stdout } = await execFileAsync('node', fullArgs);
+    const { stdout } = await execFileAsync(command, fullArgs);
     return JSON.parse(stdout.trim());
   } catch (error: unknown) {
     const err = error as { stdout?: string; stderr?: string; message?: string };
-    console.error(`GWS execution failed: node ${fullArgs.map(a => `"${a}"`).join(' ')}`, err);
+    console.error(`GWS execution failed: ${command} ${fullArgs.map(a => `"${a}"`).join(' ')}`, err);
     let errMsg = err.stdout || err.stderr || err.message || '';
     try {
       if (err.stdout) {

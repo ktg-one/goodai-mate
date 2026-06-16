@@ -70,7 +70,7 @@ export default function HomeClient() {
     // === PHYSICAL RIBBON "TEAR SNAP" ON NEW DOCKET (stamp clack impulse) ===
     // Real tape: slow pull then quick release shear + flutter decay. Not smooth.
     // Mirrors award-config "tearing forward with shear, flutter, and lag variance".
-    const snap = (ref: React.RefObject<HTMLDivElement>, baseShear: number) => {
+    const snap = (ref: React.RefObject<HTMLDivElement | null>, baseShear: number) => {
       if (!ref.current) return;
       gsap.to(ref.current, {
         '--tape-shear': baseShear * 2.6,
@@ -105,9 +105,11 @@ export default function HomeClient() {
   // Reduced motion: all timelines killed + static docket imprints (pre-set physical variance).
   // Listener for live OS pref change (a11y). No layout thrash — transforms/shadows only.
   useGSAP(() => {
+    if (!mounted || !mailBoardRef.current) return;
+
     const mm = window.matchMedia('(prefers-reduced-motion: reduce)');
     const reduced = mm.matches;
-    if (reduced || !mailBoardRef.current) {
+    if (reduced) {
       // Static physical imprints for pinned notices (real board variance, no motion)
       // COMPLETE: all stamps/pins/rots/perforations + letter micro assets visible
       if (docketFlowRef.current) {
@@ -133,7 +135,10 @@ export default function HomeClient() {
       ScrollTrigger.getAll().forEach(t => t.kill());
       gsap.globalTimeline.clear();
     };
-    mm.addEventListener?.('change', (e) => { if (e.matches) killAll(); });
+    const handleMotionPreferenceChange = (e: MediaQueryListEvent) => {
+      if (e.matches) killAll();
+    };
+    mm.addEventListener?.('change', handleMotionPreferenceChange);
 
     const ctx = gsap.context(() => {
       // 1. HERO FILING AMPLIFIED — secondary page reactions (grain shift + edge shadow on whole canvas)
@@ -340,8 +345,11 @@ export default function HomeClient() {
       }
     }, mailBoardRef);
 
-    return () => ctx.revert(); // cleanup on unmount / reduced motion change
-  }, { scope: mailBoardRef, dependencies: [] });
+    return () => {
+      mm.removeEventListener?.('change', handleMotionPreferenceChange);
+      ctx.revert();
+    }; // cleanup on unmount / reduced motion change
+  }, { scope: mailBoardRef, dependencies: [mounted] });
 
   if (!mounted) {
     return (
