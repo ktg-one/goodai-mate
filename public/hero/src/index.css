@@ -1,15 +1,51 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,200..900;1,9..144,200..900&family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 @import "tailwindcss";
 
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/DM_Sans/DMSans-VariableFont_opsz,wght.ttf") format("truetype-variations"),
+       url("/fonts/DM_Sans/DMSans-VariableFont_opsz,wght.ttf") format("truetype");
+  font-weight: 100 1000;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf") format("truetype-variations"),
+       url("/fonts/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf") format("truetype");
+  font-weight: 100 1000;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fraunces";
+  src: url("/fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf") format("truetype-variations"),
+       url("/fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fraunces";
+  src: url("/fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf") format("truetype-variations"),
+       url("/fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 @theme {
-  --color-ink: #0B0B0B;
-  --color-orange: #F25C2B;
-  --color-orange-deep: #D7591A;
-  --color-paper: #F8F8F6;
-  --color-paper-raised: #EFEEEC;
-  --color-border: #CCCAC6;
-  --color-ocean: #006B8F;
-  --color-hi-yellow: #FFD400;
+  --color-ink: #141414;
+  --color-orange: #F4442E;
+  --color-orange-deep: #D8331F;
+  --color-paper: #FFF0D0;
+  --color-paper-raised: #FFFAEC;
+  --color-border: #202C59;
+  --color-ocean: #202C59;
+  --color-hi-yellow: #F3A62A;
 
   --font-sans: "DM Sans", sans-serif;
   --font-serif: "Fraunces", serif;
@@ -18,8 +54,8 @@
 
 @layer base {
   :root {
-    --shadow-stamp: 3px 3px 0 #0B0B0B;
-    --shadow-stamp-orange: 3px 3px 0 #F25C2B;
+    --shadow-stamp: 3px 3px 0 #202C59;
+    --shadow-stamp-orange: 3px 3px 0 #F4442E;
   }
   body {
     @apply bg-paper text-ink font-sans antialiased overflow-x-hidden;
@@ -44,16 +80,16 @@
 }
 .btn-primary:hover {
   @apply -translate-x-[1px] -translate-y-[1px];
-  box-shadow: 4px 4px 0 #F25C2B;
+  box-shadow: 4px 4px 0 #F4442E;
 }
 .btn-primary:active {
   @apply translate-x-[2px] translate-y-[2px];
-  box-shadow: 1px 1px 0 #F25C2B;
+  box-shadow: 1px 1px 0 #F4442E;
 }
 
 .btn-secondary {
   @apply relative inline-flex items-center justify-center border-2 border-border bg-paper text-ink font-sans font-bold px-6 py-3 transition-all outline-none rounded-[4px];
-  box-shadow: 3px 3px 0 #CCCAC6;
+  box-shadow: 3px 3px 0 #202C59;
 }
 .btn-secondary:hover {
   @apply -translate-x-[1px] -translate-y-[1px] border-ink;
@@ -61,7 +97,7 @@
 }
 .btn-secondary:active {
   @apply translate-x-[2px] translate-y-[2px] border-ink;
-  box-shadow: 1px 1px 0 #0B0B0B;
+  box-shadow: 1px 1px 0 #202C59;
 }
 
 .stamp-box {
