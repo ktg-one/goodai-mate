@@ -1,7 +1,7 @@
 'use client';
 
 import { Check, Sparkles, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, memo, useCallback } from 'react';
 import StampButton from '@/components/StampButton';
 
 interface LeadCaptureCardProps {
@@ -10,18 +10,79 @@ interface LeadCaptureCardProps {
   onDismiss?: () => void;
 }
 
-export default function LeadCaptureCard({ firstMessage, conversationTranscript, onDismiss }: LeadCaptureCardProps) {
+const LeadCaptureForm = memo(function LeadCaptureForm({
+  onSubmit,
+  isSubmitting,
+}: {
+  onSubmit: (name: string, business: string, phone: string, email: string) => void;
+  isSubmitting: boolean;
+}) {
   const [name, setName] = useState('');
   const [business, setBusiness] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!name.trim() || !phone.trim() || isSubmitting) return;
+    onSubmit(name, business, phone, email);
+  }
+
+  return (
+    <form className="gai-leadcard-form" onSubmit={handleSubmit}>
+      <div className="gai-leadcard-row">
+        <input
+          className="gai-input"
+          placeholder="Your name"
+          aria-label="Your name"
+          required
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input
+          className="gai-input"
+          placeholder="Business name"
+          aria-label="Business name"
+          value={business}
+          onChange={(e) => setBusiness(e.target.value)}
+        />
+      </div>
+      <div className="gai-leadcard-row">
+        <input
+          className="gai-input"
+          placeholder="Phone"
+          aria-label="Phone"
+          required
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+        <input
+          className="gai-input"
+          placeholder="Email"
+          aria-label="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+
+      <StampButton
+        variant="red"
+        size="sm"
+        type="submit"
+        disabled={isSubmitting}
+        className="w-fit"
+      >
+        {isSubmitting ? 'Sending…' : 'Get a callback'}
+      </StampButton>
+    </form>
+  );
+});
+
+export default function LeadCaptureCard({ firstMessage, conversationTranscript, onDismiss }: LeadCaptureCardProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!name.trim() || !phone.trim() || isSubmitting) return;
-
+  const handleFormSubmit = useCallback(async (name: string, business: string, phone: string, email: string) => {
     setIsSubmitting(true);
 
     try {
@@ -70,7 +131,7 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
 
     setIsSuccess(true);
     setIsSubmitting(false);
-  }
+  }, [firstMessage, conversationTranscript]);
 
   if (isSuccess) {
     return (
@@ -111,52 +172,7 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
           No obligation, no runaround. We&apos;ll come back with what it&apos;d take to fix.
         </p>
 
-        <form className="gai-leadcard-form" onSubmit={handleSubmit}>
-          <div className="gai-leadcard-row">
-            <input
-              className="gai-input"
-              placeholder="Your name"
-              aria-label="Your name"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <input
-              className="gai-input"
-              placeholder="Business name"
-              aria-label="Business name"
-              value={business}
-              onChange={(e) => setBusiness(e.target.value)}
-            />
-          </div>
-          <div className="gai-leadcard-row">
-            <input
-              className="gai-input"
-              placeholder="Phone"
-              aria-label="Phone"
-              required
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-            <input
-              className="gai-input"
-              placeholder="Email"
-              aria-label="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-
-          <StampButton
-            variant="red"
-            size="sm"
-            type="submit"
-            disabled={isSubmitting}
-            className="w-fit"
-          >
-            {isSubmitting ? 'Sending…' : 'Get a callback'}
-          </StampButton>
-        </form>
+        <LeadCaptureForm onSubmit={handleFormSubmit} isSubmitting={isSubmitting} />
       </div>
     </div>
   );
