@@ -503,6 +503,400 @@ h1, h2,
 }
 
 /* ============================================================
+   PUBLIC UI KIT HERO — ported from public/ui_kits/web/styles.css
+   ============================================================ */
+.gai-onepage {
+  position: relative;
+  min-height: 100vh;
+  background:
+    repeating-linear-gradient(0deg, rgba(17, 17, 17, 0.025) 0 1px, transparent 1px 4px),
+    var(--paper);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.gai-onepage-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px clamp(20px, 5vw, 64px);
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
+}
+
+.gai-perth-chip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--gold);
+  border: 2px solid var(--ink);
+  box-shadow: var(--shadow-stamp);
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+}
+
+.gai-perth-chip span {
+  padding: 0 4px;
+  opacity: 0.6;
+}
+
+.gai-onepage-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 72px) clamp(20px, 5vw, 64px) 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.gai-eyebrow {
+  display: inline-block;
+  margin-bottom: 18px;
+  padding: 4px 10px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.gai-hero-h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.6rem, 7vw, 5.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  margin: 4px 0 16px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 50, "WONK" 0.25;
+}
+
+.gai-hero-h1 em {
+  font-style: italic;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+}
+
+.gai-hero-lede {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  line-height: 1.3;
+  color: var(--ink-soft);
+  margin: 0 0 30px;
+  max-width: 40ch;
+  font-variation-settings: "opsz" 96, "SOFT" 60, "WONK" 0.15;
+}
+
+.gai-intake {
+  width: 100%;
+  max-width: 640px;
+}
+
+.gai-intake-field {
+  background: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-stamp-orange);
+  padding: 18px 18px 12px;
+  text-align: left;
+  transition: box-shadow 120ms var(--ease-stamp-press), transform 120ms var(--ease-stamp-press);
+}
+
+.gai-intake-field:focus-within {
+  box-shadow: 5px 5px 0 var(--red);
+  transform: translate(-1px, -1px);
+}
+
+.gai-intake-input {
+  width: 100%;
+  min-height: 80px;
+  padding: 4px;
+  resize: none;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--paper);
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.gai-intake-input::placeholder {
+  color: rgba(255, 240, 208, 0.52);
+}
+
+.gai-intake-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(255, 240, 208, 0.32);
+}
+
+.gai-intake-spacer {
+  flex: 1;
+}
+
+.gai-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+  padding: 8px 13px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 120ms var(--ease-stamp-press), box-shadow 120ms var(--ease-stamp-press), background 120ms var(--ease-stamp-press);
+}
+
+.gai-tool:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.gai-tool:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.gai-tool.is-on,
+.gai-tool-send {
+  background: var(--red);
+  color: var(--ink);
+}
+
+.gai-tool-send {
+  border-radius: var(--radius-xs);
+  box-shadow: 3px 3px 0 var(--paper);
+  padding: 10px 18px;
+}
+
+.gai-tool-send:hover:not(:disabled) {
+  background: var(--red-deep);
+  box-shadow: 4px 4px 0 var(--paper);
+}
+
+.gai-tool-mini {
+  font-size: 12px;
+  padding: 6px 10px;
+}
+
+.gai-intake-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 14px 0 0;
+  color: var(--ink-mute);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.gai-answer {
+  width: 100%;
+  max-width: 640px;
+  margin-top: 24px;
+  background: var(--navy);
+  color: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-stamp);
+  padding: 22px;
+  text-align: left;
+}
+
+.gai-answer-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(255, 240, 208, 0.32);
+}
+
+.gai-answer-tag {
+  flex: 1;
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.gai-answer-text {
+  color: var(--paper);
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.gai-features {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  margin-top: 56px;
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+
+.gai-feature {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 104px;
+  padding: 22px 20px;
+  border-right: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  text-align: left;
+}
+
+.gai-feature:last-child {
+  border-right: 0;
+}
+
+.gai-feature:nth-child(2) {
+  background: var(--gold);
+}
+
+.gai-feature:nth-child(3) {
+  background: var(--red);
+}
+
+.gai-feature:nth-child(4) {
+  background: var(--navy);
+  color: var(--paper);
+}
+
+.gai-feature:nth-child(5) {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.gai-feature-icon {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.gai-feature:nth-child(4) .gai-feature-icon,
+.gai-feature:nth-child(5) .gai-feature-icon {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.gai-feature-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.gai-feature-text strong {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 96, "SOFT" 40, "WONK" 0.2;
+}
+
+.gai-feature-text span {
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.gai-marquee {
+  overflow: hidden;
+  border-bottom: 2px solid var(--ink);
+  padding: 14px 0;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.gai-marquee-track {
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+  animation: gai-scroll 36s linear infinite;
+}
+
+.gai-marquee-item {
+  flex-shrink: 0;
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.gai-marquee-sep {
+  color: var(--red);
+  padding: 0 22px;
+  font-weight: 700;
+}
+
+@keyframes gai-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (max-width: 1000px) {
+  .gai-features {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gai-feature {
+    border-right: 0;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .gai-feature:nth-child(2),
+  .gai-feature:nth-child(4) {
+    border-right: 1px solid var(--ink);
+  }
+}
+
+@media (max-width: 520px) {
+  .gai-features {
+    grid-template-columns: 1fr;
+  }
+
+  .gai-feature,
+  .gai-feature:nth-child(2),
+  .gai-feature:nth-child(4) {
+    border-right: 0;
+  }
+}
+
+/* ============================================================
    CHAT INTERFACE & LEAD CAPTURE CARD STYLES
    Brutalist mechanical styling matching colors_and_type.css
    ============================================================ */
