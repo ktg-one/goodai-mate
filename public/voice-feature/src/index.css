@@ -2,14 +2,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #0B0B0B;
-  --color-orange: #F25C2B;
-  --color-orange-deep: #D7591A;
-  --color-paper: #F8F8F6;
-  --color-paper-raised: #EFEEEC;
-  --color-border: #CCCAC6;
-  --color-ocean: #006B8F;
-  --color-hi-yellow: #FFD400;
+  --color-ink: #141414;
+  --color-orange: #F4442E;
+  --color-orange-deep: #D8331F;
+  --color-paper: #FFF0D0;
+  --color-paper-raised: #FFFAEC;
+  --color-border: #202C59;
+  --color-ocean: #202C59;
+  --color-hi-yellow: #F3A62A;
 
   --font-sans: "Manrope", sans-serif;
   --font-serif: "Bricolage Grotesque", sans-serif;
@@ -18,8 +18,8 @@
 
 @layer base {
   :root {
-    --shadow-stamp: 3px 3px 0 #0B0B0B;
-    --shadow-stamp-orange: 3px 3px 0 #F25C2B;
+    --shadow-stamp: 3px 3px 0 #202C59;
+    --shadow-stamp-orange: 3px 3px 0 #F4442E;
   }
   body {
     @apply bg-paper text-ink font-sans antialiased overflow-x-hidden;
@@ -44,16 +44,16 @@
 }
 .btn-primary:hover {
   @apply -translate-x-[1px] -translate-y-[1px];
-  box-shadow: 4px 4px 0 #F25C2B;
+  box-shadow: 4px 4px 0 #F4442E;
 }
 .btn-primary:active {
   @apply translate-x-[2px] translate-y-[2px];
-  box-shadow: 1px 1px 0 #F25C2B;
+  box-shadow: 1px 1px 0 #F4442E;
 }
 
 .btn-secondary {
   @apply relative inline-flex items-center justify-center border-2 border-border bg-paper text-ink font-sans font-bold px-6 py-3 transition-all outline-none rounded-[4px];
-  box-shadow: 3px 3px 0 #CCCAC6;
+  box-shadow: 3px 3px 0 #202C59;
 }
 .btn-secondary:hover {
   @apply -translate-x-[1px] -translate-y-[1px] border-ink;
@@ -61,7 +61,7 @@
 }
 .btn-secondary:active {
   @apply translate-x-[2px] translate-y-[2px] border-ink;
-  box-shadow: 1px 1px 0 #0B0B0B;
+  box-shadow: 1px 1px 0 #202C59;
 }
 
 .stamp-box {

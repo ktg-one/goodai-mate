@@ -1,8 +1,12 @@
 /* ============================================================
    Good'AI — Colors & Type  (source of truth)
    ------------------------------------------------------------
-   Palette: Mustard-gold + Coral-red + Navy + Warm cream + Black.
-   #F3A62A  #F4442E  #202C59  #FFF0D0  #111111
+   Palette: Warm cream bg + Navy/Red/Gold elements + Navy/near-black text.
+   bg #FFF0D0
+   elements #202C59 #F4442E #F3A62A
+   text #202C59 #141414
+   support #F4442E
+   detail #202C59
    Brutalist / direct-mail composition. Warm cream canvas,
    high-contrast COLOURED cards, white-on-colour text.
    ============================================================ */
@@ -12,38 +16,50 @@
 
 :root {
   /* ---------------------------------------------------------
+     COLOUR COMBINATIONS — requested brand map
+     --------------------------------------------------------- */
+  --combo-bg:           #FFF0D0;
+  --combo-element-navy: #202C59;
+  --combo-element-red:  #F4442E;
+  --combo-element-gold: #F3A62A;
+  --combo-text-primary: #202C59;
+  --combo-text-body:    #141414;
+  --combo-support:      #F4442E;
+  --combo-detail:       #202C59;
+
+  /* ---------------------------------------------------------
      COLOUR — the five core brand colours
      --------------------------------------------------------- */
-  --gold:        #F3A62A;   /* mustard-gold — coloured panels / blocks */
+  --gold:        var(--combo-element-gold);   /* mustard-gold — coloured panels / blocks */
   --gold-deep:   #D98E1C;   /* gold hover / depth */
   --gold-tint:   #FBDFA6;   /* soft gold surface */
 
-  --red:         #F4442E;   /* coral-red — primary CTA / shout accent */
+  --red:         var(--combo-element-red);   /* coral-red — primary CTA / shout accent */
   --red-deep:    #D8331F;   /* red hover / depth */
   --red-tint:    #FBC9C1;   /* soft red surface */
 
-  --navy:        #202C59;   /* deep navy — dark surfaces / headlines / dark cards */
+  --navy:        var(--combo-element-navy);   /* deep navy — dark surfaces / headlines / dark cards */
   --navy-deep:   #161E3D;   /* navy depth / stamp shadow */
   --navy-tint:   #C9CEDD;   /* soft navy surface */
 
   /* ---------------------------------------------------------
-     COLOUR — Neutrals (WARM cream canvas + true black)
+     COLOUR — Neutrals (WARM cream canvas + near-black body text)
      --------------------------------------------------------- */
-  --paper:        #FFF0D0;   /* page canvas — warm cream */
+  --paper:        var(--combo-bg);   /* page canvas — warm cream */
   --paper-deep:   #F6E2B8;   /* raised / sunken cream surface */
   --paper-3:      #ECD49A;   /* deeper cream divider tone */
   --cream-line:   #E0C690;   /* cream hairline border */
 
-  --ink:          #111111;   /* near-black — text, borders, hard edges */
-  --ink-soft:     #1C1C1C;   /* body text */
+  --ink:          var(--combo-text-body);   /* near-black — body text, borders, hard edges */
+  --ink-soft:     var(--combo-text-body);   /* body text */
   --ink-mute:     #6B6452;   /* secondary / labels (warm grey) */
   --ink-faint:    #A0967C;   /* placeholder / disabled (warm) */
 
   /* ---------------------------------------------------------
      COLOUR — Supporting (used sparingly)
      --------------------------------------------------------- */
-  --hi-yellow:    #F3A62A;   /* sticker label = gold */
-  --trust-blue:   #202C59;   /* links = navy */
+  --hi-yellow:    var(--combo-element-gold);   /* sticker label = gold */
+  --trust-blue:   var(--combo-detail);   /* links / details = navy */
   --ok:           #2E6E3E;   /* success */
   --warn:         #D8331F;   /* error = deep red */
   --danger:       #D8331F;
@@ -77,22 +93,24 @@
   --bg-gold:       var(--gold);
   --bg-ocean:      var(--navy);
 
-  --fg:            var(--ink);
+  --fg:            var(--combo-text-primary);
   --fg-soft:       var(--ink-soft);
   --fg-mute:       var(--ink-mute);
   --fg-faint:      var(--ink-faint);
   --fg-on-brand:   var(--paper);
   --fg-on-ocean:   var(--paper);
 
-  --border:        var(--cream-line);
-  --border-strong: #C9A961;
+  --border:        var(--combo-detail);
+  --border-strong: var(--combo-detail);
 
-  --accent:        var(--red);
+  --accent:        var(--combo-support);
   --accent-hover:  var(--red-deep);
   --accent-soft:   var(--red-tint);
 
   --highlight:     var(--gold);
   --success:       var(--ok);
+  --support:       var(--combo-support);
+  --detail:        var(--combo-detail);
 
   /* stamp shadows */
   --shadow-stamp:        3px 3px 0 var(--ink);

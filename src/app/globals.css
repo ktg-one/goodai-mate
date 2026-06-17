@@ -16,33 +16,43 @@
 /* Fonts loaded via next/font in layout.tsx: Manrope for body/UI, Bricolage Grotesque for display, IBM Plex Mono for system labels. */
 
 :root {
-  /* COLOUR — the five core brand colours (verbatim from June 3 design book) */
-  --gold:        #F3A62A;
+  /* COLOUR COMBINATIONS — requested brand map */
+  --combo-bg:           #FFF0D0;
+  --combo-element-navy: #202C59;
+  --combo-element-red:  #F4442E;
+  --combo-element-gold: #F3A62A;
+  --combo-text-primary: #202C59;
+  --combo-text-body:    #141414;
+  --combo-support:      #F4442E;
+  --combo-detail:       #202C59;
+
+  /* COLOUR — the five core brand colours */
+  --gold:        var(--combo-element-gold);
   --gold-deep:   #D98E1C;
   --gold-tint:   #FBDFA6;
 
-  --red:         #F4442E;
+  --red:         var(--combo-element-red);
   --red-deep:    #D8331F;
   --red-tint:    #FBC9C1;
 
-  --navy:        #202C59;
+  --navy:        var(--combo-element-navy);
   --navy-deep:   #161E3D;
   --navy-tint:   #C9CEDD;
 
-  /* Neutrals (WARM cream canvas + true black) */
-  --paper:        #FFF0D0;
+  /* Neutrals (WARM cream canvas + near-black body text) */
+  --paper:        var(--combo-bg);
   --paper-deep:   #F6E2B8;
   --paper-3:      #ECD49A;
   --cream-line:   #E0C690;
 
-  --ink:          #111111;
-  --ink-soft:     #1C1C1C;
+  --ink:          var(--combo-text-body);
+  --ink-soft:     var(--combo-text-body);
   --ink-mute:     #6B6452;
   --ink-faint:    #A0967C;
 
   /* Supporting */
-  --hi-yellow:    #F3A62A;
-  --trust-blue:   #202C59;
+  --hi-yellow:    var(--combo-element-gold);
+  --trust-blue:   var(--combo-detail);
   --ok:           #2E6E3E;
   --warn:         #D8331F;
   --danger:       #D8331F;
@@ -71,22 +81,24 @@
   --bg-gold:       var(--gold);
   --bg-ocean:      var(--navy);
 
-  --fg:            var(--ink);
+  --fg:            var(--combo-text-primary);
   --fg-soft:       var(--ink-soft);
   --fg-mute:       var(--ink-mute);
   --fg-faint:      var(--ink-faint);
   --fg-on-brand:   var(--paper);
   --fg-on-ocean:   var(--paper);
 
-  --border:        var(--cream-line);
-  --border-strong: #C9A961;
+  --border:        var(--combo-detail);
+  --border-strong: var(--combo-detail);
 
-  --accent:        var(--red);
+  --accent:        var(--combo-support);
   --accent-hover:  var(--red-deep);
   --accent-soft:   var(--red-tint);
 
   --highlight:     var(--gold);
   --success:       var(--ok);
+  --support:       var(--combo-support);
+  --detail:        var(--combo-detail);
 
   /* Stamp shadows — flat, participate on hover/press (verbatim) */
   --shadow-stamp:        3px 3px 0 var(--ink);
