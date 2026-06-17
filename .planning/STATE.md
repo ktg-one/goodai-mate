@@ -30,8 +30,8 @@ See: .planning/PROJECT.md (re-validated 2026-06-16)
 - **Website Analyzer** (`src/components/marketing/WebsiteAnalyzer.tsx` + `src/app/api/analyze-website/route.ts`): scrapes a URL, runs an AI Gateway audit, auto-extracts the business email, and dispatches the audit by email via the GWS CLI.
 - **Outbound callback widget** (`src/components/voice-agent/OutboundCallCard.tsx` + `src/app/api/trigger-call/route.ts`): Darl / Robokev personas, phone-number prefill.
 - **n8n + Google Workspace lead-automation pipeline** (`src/app/api/demo-automation/route.ts`, `LeadCaptureCard.tsx`, `VoiceAgentDemo.tsx`, `AutomationPlayground.tsx`).
-- **Chat** via AI Gateway (`src/app/api/chat/route.ts`, `@ai-sdk/openai-compatible`) + text fallback mode.
-- **TTS** via ElevenLabs (`src/app/api/tts/route.ts`).
+- **Chat** via AI Gateway (`src/app/api/chat/route.ts`, `@ai-sdk/openai-compatible`) supporting dynamic model backends (Gemini, Groq, Claude) and custom agents (Darl/Robokev).
+- **TTS** via ElevenLabs (`src/app/api/tts/route.ts`) supporting interchangeable voices and custom voice IDs.
 - **Automation Playground** live demo section.
 - GSAP scroll reveals on VoiceAgentDemo + AISolutions; Fraunces font-loading fix; Vercel deploy fixes (symlinks → physical font files); "paper-brand yellow pages" design pivot.
 

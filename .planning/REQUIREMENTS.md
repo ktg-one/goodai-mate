@@ -15,7 +15,7 @@
 - Website Analyzer: scrape URL → AI Gateway audit → auto-extract business email → email audit via GWS CLI.
 - Outbound callback widget: Darl / Robokev personas, number prefill (`/api/trigger-call`).
 - n8n + GWS lead-automation pipeline (`/api/demo-automation`, LeadCaptureCard, AutomationPlayground).
-- Chat via AI Gateway + text fallback (`/api/chat`); TTS via ElevenLabs (`/api/tts`).
+- Chat via AI Gateway + text fallback (`/api/chat`) supporting dynamic model backends (Gemini, Groq, Claude) and custom agents (Darl/Robokev); TTS via ElevenLabs (`/api/tts`) with interchangeable voices and custom voice IDs.
 
 ### Engineering
 - Next.js 16 / React 19 / Tailwind v4; GSAP/ScrollTrigger + motion/react hybrid; direct imports (no barrels).

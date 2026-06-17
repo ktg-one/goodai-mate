@@ -44,15 +44,34 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
   const [visualMode, setVisualMode] = useState<'calm' | 'dynamic'>('dynamic');
 
   // ElevenLabs voice selection — "a few to try"
-  // Set ELEVEN_API_KEY in .env.local (and in Vercel)
-  // The ones you provided + a couple common ones to start. Swap IDs as you test more.
   const voiceOptions = [
-    { id: 'vr54y8Xovf4AEnfNrGqH', name: 'vr54 (yours)' },
-    { id: 'jvcMcno3QtjOzGtfpjoI', name: 'jvc (yours)' },
+    { id: 'vr54y8Xovf4AEnfNrGqH', name: 'vr54 (Darl)' },
+    { id: 'jvcMcno3QtjOzGtfpjoI', name: 'jvc (RoboKev)' },
     { id: 'pNInz6obpgDQGcFmaJgB', name: 'Adam' },
     { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni' },
   ];
   const [selectedVoiceId, setSelectedVoiceId] = useState(voiceOptions[0].id);
+  const [customVoiceId, setCustomVoiceId] = useState('');
+  const [isCustomVoiceActive, setIsCustomVoiceActive] = useState(false);
+
+  // Vercel AI Gateway model selection
+  const modelOptions = [
+    { id: 'google/gemini-1.5-pro', name: 'Gemini 1.5 Pro (Google)' },
+    { id: 'groq/llama3-70b-8192', name: 'Llama 3 70B (Groq)' },
+    { id: 'anthropic/claude-sonnet-4-20250514', name: 'Claude 3.5 Sonnet' },
+  ];
+  const [selectedModelId, setSelectedModelId] = useState(modelOptions[0].id);
+
+  // Sync default voice ID when selected agent changes
+  useEffect(() => {
+    if (selectedAgent === 'darl') {
+      setIsCustomVoiceActive(false);
+      setSelectedVoiceId('vr54y8Xovf4AEnfNrGqH');
+    } else if (selectedAgent === 'robokev') {
+      setIsCustomVoiceActive(false);
+      setSelectedVoiceId('jvcMcno3QtjOzGtfpjoI');
+    }
+  }, [selectedAgent]);
 
   const sensitivityRef = useRef(sensitivity);
   const visualModeRef = useRef(visualMode);
@@ -162,7 +181,11 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
             const res = await fetch('/api/chat', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ message: transcript.trim() }),
+              body: JSON.stringify({ 
+                message: transcript.trim(),
+                model: selectedModelId,
+                agent: selectedAgent
+              }),
             });
             const data = await res.json();
             const reply = (data.reply || "We'll sort that for you. Tell us a bit more about the tools you use.").trim();
@@ -466,16 +489,37 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
               )}
             </div>
 
+            {/* Backend model selector */}
+            <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-3 flex flex-wrap items-center gap-2">
+              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">BACKEND:</span>
+              {modelOptions.map((m) => (
+                <StampButton
+                  key={m.id}
+                  variant="paper"
+                  size="sm"
+                  engaged={selectedModelId === m.id}
+                  onClick={() => {
+                    setSelectedModelId(m.id);
+                  }}
+                  className="text-[10px] px-3 py-1"
+                >
+                  {m.name}
+                </StampButton>
+              ))}
+              <span className="ml-auto text-[10px] font-mono text-[var(--ink)]/40">Vercel AI Gateway</span>
+            </div>
+
             {/* Voice selector — try a few ElevenLabs voices (career layer over the base TTS skill) */}
             <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-3 flex flex-wrap items-center gap-2">
-              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">VOICES:</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">VOICE:</span>
               {voiceOptions.map((v) => (
                 <StampButton
                   key={v.id}
                   variant="paper"
                   size="sm"
-                  engaged={selectedVoiceId === v.id}
+                  engaged={selectedVoiceId === v.id && !isCustomVoiceActive}
                   onClick={() => {
+                    setIsCustomVoiceActive(false);
                     setSelectedVoiceId(v.id);
                     if (agentResponse) {
                       // replay last response with the new voice
@@ -487,6 +531,39 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
                   {v.name}
                 </StampButton>
               ))}
+
+              <StampButton
+                variant="paper"
+                size="sm"
+                engaged={isCustomVoiceActive}
+                onClick={() => {
+                  setIsCustomVoiceActive(true);
+                  if (customVoiceId) {
+                    setSelectedVoiceId(customVoiceId);
+                    if (agentResponse) {
+                      speakReply(agentResponse, customVoiceId);
+                    }
+                  }
+                }}
+                className="text-[10px] px-3 py-1"
+              >
+                Custom ID
+              </StampButton>
+
+              {isCustomVoiceActive && (
+                <input
+                  type="text"
+                  placeholder="Paste ElevenLabs Voice ID..."
+                  value={customVoiceId}
+                  onChange={(e) => {
+                    const val = e.target.value.trim();
+                    setCustomVoiceId(val);
+                    setSelectedVoiceId(val);
+                  }}
+                  className="font-mono text-[10px] bg-[var(--paper-deep)] border-2 border-[var(--ink)] px-2 py-1 max-w-[200px] text-[var(--ink)] focus:outline-none"
+                />
+              )}
+              
               <span className="ml-auto text-[10px] font-mono text-[var(--ink)]/40">ElevenLabs</span>
             </div>
 

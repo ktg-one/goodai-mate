@@ -25,7 +25,7 @@ A switched-on Perth tradie/owner lands, speaks (or types) their admin mess into 
 - [x] **Website Analyzer**: scrape URL → AI Gateway audit → auto-extract business email → dispatch audit by email via GWS CLI
 - [x] **Outbound callback widget**: Darl / Robokev personas, phone-number prefill (`/api/trigger-call`)
 - [x] **n8n + Google Workspace lead-automation pipeline** (`/api/demo-automation`, LeadCaptureCard, VoiceAgentDemo, AutomationPlayground)
-- [x] **Chat** via AI Gateway + text fallback mode (`/api/chat`); **TTS** via ElevenLabs (`/api/tts`)
+- [x] **Chat** via AI Gateway + text fallback mode (`/api/chat`); **TTS** via ElevenLabs (`/api/tts`); **Interchangeable voices + backend models** (Gemini/Groq/Claude) in the VoiceAgentHero
 - [x] GSAP scroll reveals on VoiceAgentDemo + AISolutions; Fraunces font-loading fix; Vercel deploy fixes (physical font files, no symlinks)
 
 ### Active / Ongoing (open — see ROADMAP §Open Workstreams)
