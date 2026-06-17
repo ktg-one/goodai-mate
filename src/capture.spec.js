@@ -23,8 +23,8 @@ test('capture screenshots', async ({ page }) => {
       bodyBg: bodyStyle.backgroundColor,
       bodyFontFamily: bodyStyle.fontFamily,
       displayFontFamily: headingStyle ? headingStyle.fontFamily : 'not found',
-      bricolageLoaded: document.fonts.check('1em Bricolage Grotesque'),
-      manropeLoaded: document.fonts.check('1em Manrope')
+      frauncesLoaded: document.fonts.check('1em Fraunces'),
+      dmSansLoaded: document.fonts.check('1em DM Sans')
     };
   });
 

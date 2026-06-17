@@ -1,23 +1,44 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, IBM_Plex_Mono, Manrope } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+const dmSans = localFont({
+  src: [
+    {
+      path: "../../public/fonts/DM_Sans/DMSans-VariableFont_opsz,wght.ttf",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf",
+      style: "italic",
+    },
+  ],
+  variable: "--font-dm-sans",
+  weight: "100 1000",
+  display: "swap",
 });
 
-const bricolageGrotesque = Bricolage_Grotesque({
-  variable: "--font-bricolage-grotesque",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
-  variable: "--font-ibm-plex-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   weight: ["400", "500", "700"],
+});
+
+const fraunces = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf",
+      style: "italic",
+    },
+  ],
+  variable: "--font-fraunces",
+  weight: "100 900",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -31,7 +52,7 @@ export const metadata: Metadata = {
 // revert to 'force-static' or remove once prerender fixed (e.g. by updating motion or Next).
 export const dynamic = 'force-dynamic';
 
-// Fonts load through next/font so global tokens and Tailwind theme variables render the same stack.
+// DM Sans + Fraunces load from public/fonts; Fraunces keeps SOFT/WONK/opsz/wght axes for the design spec.
 
 
 
@@ -44,7 +65,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${manrope.variable} ${bricolageGrotesque.variable} ${ibmPlexMono.variable} h-full antialiased`}
+      className={`${dmSans.variable} ${jetbrainsMono.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

@@ -12,7 +12,43 @@
    ============================================================ */
 
 /* -------- Fonts -------- */
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;700&family=Manrope:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+/* DM Sans — local variable file from public/fonts */
+@font-face {
+  font-family: "DM Sans";
+  src: url("fonts/DM_Sans/DMSans-VariableFont_opsz,wght.ttf") format("truetype-variations"),
+       url("fonts/DM_Sans/DMSans-VariableFont_opsz,wght.ttf") format("truetype");
+  font-weight: 100 1000;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("fonts/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf") format("truetype-variations"),
+       url("fonts/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf") format("truetype");
+  font-weight: 100 1000;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Fraunces — local variable file with SOFT + WONK axes (in addition to opsz + wght) */
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf") format("truetype-variations"),
+       url("fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf") format("truetype-variations"),
+       url("fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
 
 :root {
   /* ---------------------------------------------------------
@@ -121,9 +157,9 @@
   /* ---------------------------------------------------------
      TYPE — Families
      --------------------------------------------------------- */
-  --font-sans:    "Manrope", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --font-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-sans:    "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* ---------------------------------------------------------
      TYPE — Scale
@@ -193,7 +229,7 @@ html, body {
   font-size: var(--fs-64);
   line-height: 0.95;
   letter-spacing: -0.025em;
-  font-variation-settings: normal;
+  font-variation-settings: "opsz" 144, "SOFT" 60, "WONK" 0.35;
   color: var(--fg);
 }
 
@@ -203,7 +239,7 @@ html, body {
   font-size: var(--fs-36);
   line-height: 1.05;
   letter-spacing: -0.015em;
-  font-variation-settings: normal;
+  font-variation-settings: "opsz" 72, "SOFT" 55, "WONK" 0.2;
   color: var(--fg);
 }
 
@@ -251,7 +287,7 @@ html, body {
   font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: -0.04em;
-  font-variation-settings: normal;
+  font-variation-settings: "opsz" 144, "SOFT" 60, "WONK" 0.35;
 }
 .wordmark .apos { color: var(--orange); }
 

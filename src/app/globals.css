@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-bricolage-grotesque), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-ibm-plex-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 
@@ -13,7 +13,7 @@
    Verbatim drop + site overrides for mail-board.
    ============================================================ */
 
-/* Fonts loaded via next/font in layout.tsx: Manrope for body/UI, Bricolage Grotesque for display, IBM Plex Mono for system labels. */
+/* Fonts loaded via next/font in layout.tsx: local DM Sans for body/UI, local Fraunces for display with SOFT + WONK axes, JetBrains Mono for system labels. */
 
 :root {
   /* COLOUR COMBINATIONS — requested brand map */
@@ -110,9 +110,9 @@
   --navy-ink: #0F162B;
 
   /* TYPE — Families */
-  --font-sans:    var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-bricolage-grotesque), ui-sans-serif, system-ui, sans-serif;
-  --font-mono:    var(--font-ibm-plex-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-sans:    var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-mono:    var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
 
   /* TYPE — Scale */
   --fs-12: 0.75rem;
@@ -150,7 +150,7 @@
   --ease-stamp-press: cubic-bezier(0.23, 1, 0.32, 1); /* design 90-160ms cubic */
 }
 
-/* HL / display emphasis (exactly one per major surface) */
+/* HL / WONK emphasis (exactly one per major surface) */
 .hl,
 .hl-red,
 .hl-navy {
@@ -487,19 +487,19 @@ html, body {
 .mail-board { --global-settle: 0; --hero-filing-progress: 0; --board-depth: 0; }
 .mail-docket-footer { --final-clack: 0; --stamp-depth: 0.6; --tape-flutter: 0px; }
 
-/* ... (additional footer clack, docket-edge, display participation rules from prior; kept surgical) */
+/* ... (additional footer clack, docket-edge, WONK participation rules from prior; kept surgical) */
 .wonk-line {
   font-family: var(--font-display);
-  font-variation-settings: normal;
+  font-variation-settings: "WONK" var(--wonk, 0.2), "SOFT" 60, "opsz" 120;
   transition: font-variation-settings 80ms linear;
 }
 
-/* .font-display, .brand-wordmark, h1/h2, .wonk-line resolve to Bricolage Grotesque via next/font in layout. */
+/* .font-display, .brand-wordmark, h1/h2, .wonk-line resolve to local Fraunces with SOFT + WONK axes. */
 .font-display,
 h1, h2,
 .brand-wordmark {
   font-family: var(--font-display);
-  font-variation-settings: normal;
+  font-variation-settings: "WONK" var(--wonk, 0.2), "SOFT" 60, "opsz" 120;
 }
 
 /* ============================================================
