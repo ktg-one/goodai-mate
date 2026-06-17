@@ -25,3 +25,6 @@
 ## 2025-06-13 - [React Performance] Lazy-Evaluating Derived State in Streaming Contexts
 **Learning:** In chat interfaces using the Vercel AI SDK, maintaining derived state like a concatenated `conversationTranscript` string via `useMemo` that only depends on `[messages]` causes an O(N) operation on every single token streamed.
 **Action:** Always lazy-evaluate derived state (like string concatenation) in `useMemo` by also checking a component visibility flag (e.g. `showLeadCard`) so it only executes when actually needed, preventing O(N) DOM reconciliation complexity per token.
+## 2025-06-25 - [React Performance] Memoize Rendered Lists Along Controlled Inputs
+**Learning:** When a component houses both a controlled form input (e.g. `const [input, setInput] = useState("")`) and an `Array.prototype.map()` that renders a list (e.g. a `logs` array), *every single keystroke* forces the entire array to be remapped and its DOM elements recreated. This leads to input lag, especially as the list grows.
+**Action:** Always wrap the list rendering logic in a `useMemo` hook with the source array (e.g., `[logs]`) as its only dependency, isolating the expensive O(N) rendering path from the high-frequency O(1) state updates of the text input.

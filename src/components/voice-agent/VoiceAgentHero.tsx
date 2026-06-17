@@ -122,6 +122,54 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
     setAnalyzerNode(null);
   }, []);
 
+  // ElevenLabs TTS — replaces browser speechSynthesis for higher quality
+  // Streams audio from server route (key stays server-side)
+  const speakReply = useCallback(async (text: string, overrideVoiceId?: string) => {
+    if (!text) return;
+
+    const vId = overrideVoiceId || selectedVoiceId;
+    setStatus('speaking');
+
+    try {
+      const res = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, voiceId: vId }),
+      });
+
+      if (!res.ok) {
+        throw new Error('TTS request failed');
+      }
+
+      const audioBlob = await res.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+
+      audio.onended = () => {
+        setStatus('idle');
+        URL.revokeObjectURL(audioUrl);
+      };
+
+      audio.onerror = () => {
+        setStatus('idle');
+        setError('Voice playback failed.');
+        URL.revokeObjectURL(audioUrl);
+      };
+
+      await audio.play();
+    } catch {
+      setStatus('idle');
+      setError('ElevenLabs TTS failed. Falling back to browser voice.');
+      // graceful fallback to old browser speech (keeps the flow working)
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.volume = 0.95;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+  }, [selectedVoiceId]);
+
   const startListening = useCallback(async () => {
     setError(null);
     setUserTranscript('');
@@ -197,60 +245,11 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
 
       mediaRecorder.start();
       setStatus('listening');
-    } catch (err) {
+    } catch {
       setError('Microphone access needed for voice. Using text fallback.');
       setStatus('idle');
     }
-  }, [supertonicUrl, onMailFiled, userTranscript]);
-
-  // ElevenLabs TTS — replaces browser speechSynthesis for higher quality
-  // Streams audio from server route (key stays server-side)
-  const speakReply = async (text: string, overrideVoiceId?: string) => {
-    if (!text) return;
-
-    const vId = overrideVoiceId || selectedVoiceId;
-    setStatus('speaking');
-
-    try {
-      const res = await fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, voiceId: vId }),
-      });
-
-      if (!res.ok) {
-        const err = await res.text();
-        throw new Error(err || 'TTS request failed');
-      }
-
-      const audioBlob = await res.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio(audioUrl);
-
-      audio.onended = () => {
-        setStatus('idle');
-        URL.revokeObjectURL(audioUrl);
-      };
-
-      audio.onerror = () => {
-        setStatus('idle');
-        setError('Voice playback failed.');
-        URL.revokeObjectURL(audioUrl);
-      };
-
-      await audio.play();
-    } catch (err) {
-      setStatus('idle');
-      setError('ElevenLabs TTS failed. Falling back to browser voice.');
-      // graceful fallback to old browser speech (keeps the flow working)
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.volume = 0.95;
-        window.speechSynthesis.speak(utterance);
-      }
-    }
-  };
+  }, [supertonicUrl, onMailFiled, userTranscript, speakReply]);
 
   const replayLastResponse = () => {
     if (agentResponse) speakReply(agentResponse);
