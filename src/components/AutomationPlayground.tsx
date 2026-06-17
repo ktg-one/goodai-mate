@@ -1,12 +1,34 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, memo, useCallback } from 'react';
 import { Sparkles, Terminal, FileText, Calendar, Mail, FileSpreadsheet, Check, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
 
 const CHECKBOX_LABEL_CLASS = "flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer focus-within:ring-2 focus-within:ring-[var(--red)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--paper)] select-none";
 
-export default function AutomationPlayground() {
+export interface AutomationFormData {
+  name: string;
+  business: string;
+  phone: string;
+  email: string;
+  problem: string;
+  n8nUrl: string;
+  actions: {
+    sheet: boolean;
+    doc: boolean;
+    emailNotification: boolean;
+    calendar: boolean;
+    n8n: boolean;
+  };
+}
+
+const AutomationForm = memo(function AutomationForm({
+  onSubmit,
+  isRunning,
+}: {
+  onSubmit: (data: AutomationFormData) => void;
+  isRunning: boolean;
+}) {
   const [name, setName] = useState('');
   const [business, setBusiness] = useState('');
   const [phone, setPhone] = useState('');
@@ -23,6 +45,143 @@ export default function AutomationPlayground() {
 
   const [n8nUrl, setN8nUrl] = useState('');
 
+  const toggleAction = (key: keyof typeof actions) => {
+    setActions(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim() || !phone.trim() || isRunning) return;
+    onSubmit({ name, business, phone, email, problem, n8nUrl, actions });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="lg:col-span-5 flex flex-col gap-5">
+      <div className="flex flex-col gap-2">
+        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">1. ENTER DEMO DETAILS</span>
+        <input
+          className="gai-input w-full"
+          placeholder="Demo Contact Name"
+          aria-label="Demo Contact Name"
+          required
+          value={name}
+          onChange={e => setName(e.target.value)}
+        />
+        <input
+          className="gai-input w-full"
+          placeholder="Business Name (Optional)"
+          aria-label="Business Name (Optional)"
+          value={business}
+          onChange={e => setBusiness(e.target.value)}
+        />
+        <input
+          className="gai-input w-full"
+          placeholder="Phone Number"
+          aria-label="Phone Number"
+          required
+          value={phone}
+          onChange={e => setPhone(e.target.value)}
+        />
+        <input
+          className="gai-input w-full"
+          placeholder="Email (Required for Gmail demo)"
+          aria-label="Email (Required for Gmail demo)"
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        <input
+          className="gai-input w-full"
+          placeholder="n8n Webhook URL (Optional)"
+          aria-label="n8n Webhook URL (Optional)"
+          value={n8nUrl}
+          onChange={e => setN8nUrl(e.target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">2. DESCRIBE AUTOMATION JOB</span>
+        <textarea
+          className="gai-input w-full min-h-[70px] text-sm resize-y"
+          placeholder="Define a chore or task..."
+          aria-label="Define a chore or task..."
+          value={problem}
+          onChange={e => setProblem(e.target.value)}
+          required
+        />
+      </div>
+
+      {/* Checklist of actions */}
+      <div className="flex flex-col gap-2">
+        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">3. SELECT GOOGLE SERVICES</span>
+        <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+          <label className={CHECKBOX_LABEL_CLASS}>
+            <input
+              type="checkbox"
+              checked={actions.sheet}
+              onChange={() => toggleAction('sheet')}
+              className="accent-[var(--red)] outline-none focus-visible:outline-none"
+            />
+            <span>Append Sheet</span>
+          </label>
+
+          <label className={CHECKBOX_LABEL_CLASS}>
+            <input
+              type="checkbox"
+              checked={actions.doc}
+              onChange={() => toggleAction('doc')}
+              className="accent-[var(--red)] outline-none focus-visible:outline-none"
+            />
+            <span>Generate Doc</span>
+          </label>
+
+          <label className={CHECKBOX_LABEL_CLASS}>
+            <input
+              type="checkbox"
+              checked={actions.emailNotification}
+              onChange={() => toggleAction('emailNotification')}
+              disabled={!email}
+              className="accent-[var(--red)] outline-none focus-visible:outline-none"
+            />
+            <span className={!email ? 'opacity-40' : ''}>Gmail Send</span>
+          </label>
+
+          <label className={CHECKBOX_LABEL_CLASS}>
+            <input
+              type="checkbox"
+              checked={actions.calendar}
+              onChange={() => toggleAction('calendar')}
+              className="accent-[var(--red)] outline-none focus-visible:outline-none"
+            />
+            <span>Schedule Call</span>
+          </label>
+
+          <label className={CHECKBOX_LABEL_CLASS}>
+            <input
+              type="checkbox"
+              checked={actions.n8n}
+              onChange={() => toggleAction('n8n')}
+              className="accent-[var(--red)] outline-none focus-visible:outline-none"
+            />
+            <span>n8n Webhook</span>
+          </label>
+        </div>
+      </div>
+
+      <StampButton
+        variant="red"
+        size="lg"
+        type="submit"
+        disabled={isRunning || (!actions.sheet && !actions.doc && !actions.emailNotification && !actions.calendar && !actions.n8n)}
+        className="w-full mt-2"
+      >
+        {isRunning ? 'Running Pipeline...' : 'Trigger Workspace Pipeline'}
+      </StampButton>
+    </form>
+  );
+});
+
+export default function AutomationPlayground() {
   const [isRunning, setIsRunning] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -36,14 +195,7 @@ export default function AutomationPlayground() {
 
   const consoleEndRef = useRef<HTMLDivElement>(null);
 
-  const toggleAction = (key: keyof typeof actions) => {
-    setActions(prev => ({ ...prev, [key]: !prev[key] }));
-  };
-
-  const runAutomation = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim() || !phone.trim() || isRunning) return;
-
+  const runAutomation = useCallback(async (formData: AutomationFormData) => {
     setIsRunning(true);
     setError(null);
     setResults(null);
@@ -54,13 +206,13 @@ export default function AutomationPlayground() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: name.trim(),
-          business: business.trim(),
-          phone: phone.trim(),
-          email: email.trim(),
-          problem: problem.trim(),
-          actions,
-          n8nUrl: n8nUrl.trim()
+          name: formData.name.trim(),
+          business: formData.business.trim(),
+          phone: formData.phone.trim(),
+          email: formData.email.trim(),
+          problem: formData.problem.trim(),
+          actions: formData.actions,
+          n8nUrl: formData.n8nUrl.trim()
         })
       });
 
@@ -87,7 +239,7 @@ export default function AutomationPlayground() {
         consoleEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
     }
-  };
+  }, []);
 
   return (
     <div className="gai-leadcard border-2 border-[var(--ink)] bg-[var(--paper-raised)] p-6 md:p-8 rounded-sm shadow-[4px_4px_0_var(--ink)] w-full">
@@ -104,128 +256,7 @@ export default function AutomationPlayground() {
 
       <div className="grid lg:grid-cols-12 gap-8">
         {/* Form Column */}
-        <form onSubmit={runAutomation} className="lg:col-span-5 flex flex-col gap-5">
-          <div className="flex flex-col gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">1. ENTER DEMO DETAILS</span>
-            <input
-              className="gai-input w-full"
-              placeholder="Demo Contact Name"
-              aria-label="Demo Contact Name"
-              required
-              value={name}
-              onChange={e => setName(e.target.value)}
-            />
-            <input
-              className="gai-input w-full"
-              placeholder="Business Name (Optional)"
-              aria-label="Business Name (Optional)"
-              value={business}
-              onChange={e => setBusiness(e.target.value)}
-            />
-            <input
-              className="gai-input w-full"
-              placeholder="Phone Number"
-              aria-label="Phone Number"
-              required
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
-            />
-            <input
-              className="gai-input w-full"
-              placeholder="Email (Required for Gmail demo)"
-              aria-label="Email (Required for Gmail demo)"
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-            />
-            <input
-              className="gai-input w-full"
-              placeholder="n8n Webhook URL (Optional)"
-              aria-label="n8n Webhook URL (Optional)"
-              value={n8nUrl}
-              onChange={e => setN8nUrl(e.target.value)}
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">2. DESCRIBE AUTOMATION JOB</span>
-            <textarea
-              className="gai-input w-full min-h-[70px] text-sm resize-y"
-              placeholder="Define a chore or task..."
-              aria-label="Define a chore or task..."
-              value={problem}
-              onChange={e => setProblem(e.target.value)}
-              required
-            />
-          </div>
-
-          {/* Checklist of actions */}
-          <div className="flex flex-col gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">3. SELECT GOOGLE SERVICES</span>
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-              <label className={CHECKBOX_LABEL_CLASS}>
-                <input
-                  type="checkbox"
-                  checked={actions.sheet}
-                  onChange={() => toggleAction('sheet')}
-                  className="accent-[var(--red)] outline-none focus-visible:outline-none"
-                />
-                <span>Append Sheet</span>
-              </label>
-              
-              <label className={CHECKBOX_LABEL_CLASS}>
-                <input
-                  type="checkbox"
-                  checked={actions.doc}
-                  onChange={() => toggleAction('doc')}
-                  className="accent-[var(--red)] outline-none focus-visible:outline-none"
-                />
-                <span>Generate Doc</span>
-              </label>
-              
-              <label className={CHECKBOX_LABEL_CLASS}>
-                <input
-                  type="checkbox"
-                  checked={actions.emailNotification}
-                  onChange={() => toggleAction('emailNotification')}
-                  disabled={!email}
-                  className="accent-[var(--red)] outline-none focus-visible:outline-none"
-                />
-                <span className={!email ? 'opacity-40' : ''}>Gmail Send</span>
-              </label>
-              
-              <label className={CHECKBOX_LABEL_CLASS}>
-                <input
-                  type="checkbox"
-                  checked={actions.calendar}
-                  onChange={() => toggleAction('calendar')}
-                  className="accent-[var(--red)] outline-none focus-visible:outline-none"
-                />
-                <span>Schedule Call</span>
-              </label>
-
-              <label className={CHECKBOX_LABEL_CLASS}>
-                <input
-                  type="checkbox"
-                  checked={actions.n8n}
-                  onChange={() => toggleAction('n8n')}
-                  className="accent-[var(--red)] outline-none focus-visible:outline-none"
-                />
-                <span>n8n Webhook</span>
-              </label>
-            </div>
-          </div>
-
-          <StampButton
-            variant="red"
-            size="lg"
-            type="submit"
-            disabled={isRunning || (!actions.sheet && !actions.doc && !actions.emailNotification && !actions.calendar && !actions.n8n)}
-            className="w-full mt-2"
-          >
-            {isRunning ? 'Running Pipeline...' : 'Trigger Workspace Pipeline'}
-          </StampButton>
-        </form>
+        <AutomationForm onSubmit={runAutomation} isRunning={isRunning} />
 
         {/* Terminal logs column */}
         <div className="lg:col-span-7 flex flex-col gap-3">
