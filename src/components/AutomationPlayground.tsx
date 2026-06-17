@@ -110,6 +110,7 @@ export default function AutomationPlayground() {
             <input
               className="gai-input w-full"
               placeholder="Demo Contact Name"
+              aria-label="Demo Contact Name"
               required
               value={name}
               onChange={e => setName(e.target.value)}
@@ -117,12 +118,14 @@ export default function AutomationPlayground() {
             <input
               className="gai-input w-full"
               placeholder="Business Name (Optional)"
+              aria-label="Business Name (Optional)"
               value={business}
               onChange={e => setBusiness(e.target.value)}
             />
             <input
               className="gai-input w-full"
               placeholder="Phone Number"
+              aria-label="Phone Number"
               required
               value={phone}
               onChange={e => setPhone(e.target.value)}
@@ -130,6 +133,7 @@ export default function AutomationPlayground() {
             <input
               className="gai-input w-full"
               placeholder="Email (Required for Gmail demo)"
+              aria-label="Email (Required for Gmail demo)"
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
@@ -137,6 +141,7 @@ export default function AutomationPlayground() {
             <input
               className="gai-input w-full"
               placeholder="n8n Webhook URL (Optional)"
+              aria-label="n8n Webhook URL (Optional)"
               value={n8nUrl}
               onChange={e => setN8nUrl(e.target.value)}
             />
@@ -147,6 +152,7 @@ export default function AutomationPlayground() {
             <textarea
               className="gai-input w-full min-h-[70px] text-sm resize-y"
               placeholder="Define a chore or task..."
+              aria-label="Define a chore or task..."
               value={problem}
               onChange={e => setProblem(e.target.value)}
               required
