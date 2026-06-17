@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), Georgia, serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage-grotesque), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 
@@ -13,8 +13,7 @@
    Verbatim drop + site overrides for mail-board.
    ============================================================ */
 
-/* Fonts loaded via next/font in layout.tsx (DM Sans + JetBrains Mono from Google; Fraunces variable TTF from public/fonts/ matching the design in public/design-system-new/fonts/ verbatim, with SOFT + WONK axes).
-   --font-display resolves to the Fraunces variable for proper variation-settings support on .wonk-line, .font-display, h1/h2, .brand-wordmark. */
+/* Fonts loaded via next/font in layout.tsx: Manrope for body/UI, Bricolage Grotesque for display, IBM Plex Mono for system labels. */
 
 :root {
   /* COLOUR — the five core brand colours (verbatim from June 3 design book) */
@@ -98,10 +97,10 @@
   /* Navy pile for hero stamp settle (deeper filing shadows) + docket */
   --navy-ink: #0F162B;
 
-  /* TYPE — Families (verbatim from design in public/README.md and colors_and_type.css: Fraunces variable for display with SOFT + WONK + opsz + wght; DM Sans for sans; JetBrains for mono) */
-  --font-sans:    var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), Georgia, serif;
-  --font-mono:    var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  /* TYPE — Families */
+  --font-sans:    var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage-grotesque), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-ibm-plex-mono), ui-monospace, "SF Mono", Menlo, monospace;
 
   /* TYPE — Scale */
   --fs-12: 0.75rem;
@@ -139,7 +138,7 @@
   --ease-stamp-press: cubic-bezier(0.23, 1, 0.32, 1); /* design 90-160ms cubic */
 }
 
-/* HL / WONK emphasis (verbatim from design, exactly one per major surface) */
+/* HL / display emphasis (exactly one per major surface) */
 .hl,
 .hl-red,
 .hl-navy {
@@ -476,19 +475,19 @@ html, body {
 .mail-board { --global-settle: 0; --hero-filing-progress: 0; --board-depth: 0; }
 .mail-docket-footer { --final-clack: 0; --stamp-depth: 0.6; --tape-flutter: 0px; }
 
-/* ... (additional footer clack, docket-edge, wonk participation rules from prior; kept surgical) */
+/* ... (additional footer clack, docket-edge, display participation rules from prior; kept surgical) */
 .wonk-line {
   font-family: var(--font-display);
-  font-variation-settings: "WONK" var(--wonk, 0.2), "SOFT" 60, "opsz" 120;
+  font-variation-settings: normal;
   transition: font-variation-settings 80ms linear;
 }
 
-/* .font-display, .brand-wordmark, h1/h2, .wonk-line now resolve to Fraunces variable per design in public/README.md (SOFT + WONK + opsz + wght axes; one phrase per surface for Italic + WONK emphasis). Loaded via next/font/local in layout using the TTFs from public/fonts/ matching the design verbatim. */
+/* .font-display, .brand-wordmark, h1/h2, .wonk-line resolve to Bricolage Grotesque via next/font in layout. */
 .font-display,
 h1, h2,
 .brand-wordmark {
   font-family: var(--font-display);
-  font-variation-settings: "WONK" var(--wonk, 0.2), "SOFT" 60, "opsz" 120;
+  font-variation-settings: normal;
 }
 
 /* ============================================================

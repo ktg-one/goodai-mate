@@ -521,7 +521,7 @@ export default function HomeClient() {
       </section>
 
       {/* POWERFUL CLOSING RITUAL — final thick ink navy stamped footer docket */}
-      {/* Contains core promise + minimal contact + "we'll sort the boring stuff" in Fraunces WONK */}
+      {/* Contains core promise + minimal contact + "we'll sort the boring stuff" in display type */}
       <footer
         ref={footerRef}
         className="mail-docket-footer border-t-4 border-[var(--ink)] py-14 px-6 text-[var(--paper)]"
@@ -535,7 +535,7 @@ export default function HomeClient() {
             You didn&apos;t start this to do admin.<br />We&apos;ll sort the boring stuff.
           </div>
 
-          {/* The ritual line — Fraunces WONK axis, gold-tint, thick ink stamp feel */}
+          {/* The ritual line — display type, gold-tint, thick ink stamp feel */}
           <div className="wonk-line text-3xl md:text-[42px] tracking-[-0.01em] mb-8">
             we&apos;ll sort the boring stuff
           </div>

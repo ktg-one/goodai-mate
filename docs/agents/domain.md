@@ -13,7 +13,7 @@ Prefer production-quality implementation, brand guardrails from PRODUCT.md + pub
 Never drift to generic cream/charcoal/Anthropic editorial. The site is ink-on-paper brutalist direct mail:
 
 - Strong ink, paper canvas (#FFF0D0), navy/gold/red accents.
-- Stamp shadows `3px 3px 0`, hard edges, one red per surface, Fraunces WONK once per block.
+- Stamp shadows `3px 3px 0`, hard edges, one red per surface, Bricolage Grotesque display emphasis once per block.
 - Mechanical timing only (90-160ms hard stamp clacks). Reduced motion = static filed paper that still sells the artifact.
 - "We", short sentences, practical/warm/direct Perth mate voice. Zero hype, zero "AI" jargon in UI or persona.
 
@@ -53,11 +53,11 @@ If a file does not exist, proceed but note the gap.
 
 ## Use the glossary's vocabulary
 
-Use terms from PRODUCT.md (e.g. "Voice Agent hero", "mail board", "docket flow", "filed mail", "stamp clack", "ribbon", "one red", "WONK", "brutalist direct-mail", "we'll sort the boring stuff").
+Use terms from PRODUCT.md (e.g. "Voice Agent hero", "mail board", "docket flow", "filed mail", "stamp clack", "ribbon", "one red", "display emphasis", "brutalist direct-mail", "we'll sort the boring stuff").
 
 ## Flag ADR / skill conflicts
 
-If output contradicts PRODUCT.md, public/ design system, or the goodai-award-configuration rules (stamp physics, one-red, WONK, reduced-motion static fidelity, agent context injection), surface explicitly.
+If output contradicts PRODUCT.md, public/ design system, or the goodai-award-configuration rules (stamp physics, one-red, display emphasis, reduced-motion static fidelity, agent context injection), surface explicitly.
 
 ## GSD + Skills expectations
 
