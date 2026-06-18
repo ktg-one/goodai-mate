@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { Sparkles, Terminal, FileText, Calendar, Mail, FileSpreadsheet, Check, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
 
@@ -26,6 +26,19 @@ export default function AutomationPlayground() {
   const [isRunning, setIsRunning] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  // ⚡ Bolt Performance Optimization: Memoize logs rendering to prevent O(N) array mapping on every keystroke in the form inputs
+  const renderedLogs = useMemo(() => logs.map((log, index) => {
+    let colorClass = 'text-[var(--paper)]/90';
+    if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--red)] font-bold';
+    if (log.startsWith('[SYSTEM]')) colorClass = 'text-[var(--gold)] font-bold';
+    return (
+      <div key={index} className={colorClass}>
+        {log}
+      </div>
+    );
+  }), [logs]);
+
   const [results, setResults] = useState<{
     sheetUrl?: string;
     docUrl?: string;
@@ -238,16 +251,7 @@ export default function AutomationPlayground() {
               {logs.length === 0 && (
                 <div className="text-[var(--paper)]/40 italic">Waiting to trigger pipeline... Details will compile here in real time.</div>
               )}
-              {logs.map((log, index) => {
-                let colorClass = 'text-[var(--paper)]/90';
-                if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--red)] font-bold';
-                if (log.startsWith('[SYSTEM]')) colorClass = 'text-[var(--gold)] font-bold';
-                return (
-                  <div key={index} className={colorClass}>
-                    {log}
-                  </div>
-                );
-              })}
+              {renderedLogs}
               {isRunning && (
                 <div className="flex items-center gap-1.5 text-[var(--paper)]/50 animate-pulse mt-1">
                   <span>●</span><span>Executing GWS scripts...</span>

@@ -25,3 +25,7 @@
 ## 2025-06-13 - [React Performance] Lazy-Evaluating Derived State in Streaming Contexts
 **Learning:** In chat interfaces using the Vercel AI SDK, maintaining derived state like a concatenated `conversationTranscript` string via `useMemo` that only depends on `[messages]` causes an O(N) operation on every single token streamed.
 **Action:** Always lazy-evaluate derived state (like string concatenation) in `useMemo` by also checking a component visibility flag (e.g. `showLeadCard`) so it only executes when actually needed, preventing O(N) DOM reconciliation complexity per token.
+
+## 2025-06-21 - [React Performance] Never call useMemo inline within JSX
+**Learning:** Calling hooks like `useMemo` inline within the JSX return block violates the Rules of Hooks and creates extremely brittle code. If the JSX block is ever conditionally rendered (e.g., `{showLogs && (<>{useMemo(...)}</>)}`), it will cause a runtime crash.
+**Action:** Always call hooks unconditionally at the top level of the functional component before returning JSX.
