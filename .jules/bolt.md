@@ -25,3 +25,6 @@
 ## 2025-06-13 - [React Performance] Lazy-Evaluating Derived State in Streaming Contexts
 **Learning:** In chat interfaces using the Vercel AI SDK, maintaining derived state like a concatenated `conversationTranscript` string via `useMemo` that only depends on `[messages]` causes an O(N) operation on every single token streamed.
 **Action:** Always lazy-evaluate derived state (like string concatenation) in `useMemo` by also checking a component visibility flag (e.g. `showLeadCard`) so it only executes when actually needed, preventing O(N) DOM reconciliation complexity per token.
+## 2025-06-15 - React Performance: setState in useEffect
+**Learning:** In `src/components/voice-agent/OutboundCallCard.tsx`, calling `setPhone(selectedAgentObj.defaultPhone)` synchronously inside a `useEffect` that depends on `selectedAgent` caused cascading renders and triggered an ESLint error. This pattern is often unneeded and hurts performance by forcing a double-render when props or state change.
+**Action:** Instead of storing derived state in `useState` and syncing it with `useEffect`, compute derived values during render. In `OutboundCallCard`, calculate the `defaultPhone` from the agents array during render, and only maintain an override `phoneState` if the user explicitly types a custom number.

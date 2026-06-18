@@ -5,15 +5,7 @@ import { Phone, Terminal, UserCheck, CheckCircle2, AlertCircle } from 'lucide-re
 import StampButton from '@/components/StampButton';
 
 export default function OutboundCallCard() {
-  const [phone, setPhone] = useState('');
   const [selectedAgent, setSelectedAgent] = useState<'darl' | 'robokev'>('darl');
-  const [isDialing, setIsDialing] = useState(false);
-  const [logs, setLogs] = useState<string[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-
-  const consoleEndRef = useRef<HTMLDivElement>(null);
-
   const agents = [
     {
       id: 'darl' as const,
@@ -33,15 +25,16 @@ export default function OutboundCallCard() {
     }
   ];
 
-  // Prefill phone input whenever the selected agent changes
-  useEffect(() => {
-    const selectedAgentObj = agents.find(a => a.id === selectedAgent);
-    if (selectedAgentObj) {
-      setPhone(selectedAgentObj.defaultPhone);
-    }
-    // Only run when selectedAgent changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedAgent]);
+  const defaultPhone = agents.find(a => a.id === selectedAgent)?.defaultPhone || '';
+  const [phoneState, setPhone] = useState<string | null>(null);
+  const phone = phoneState !== null ? phoneState : defaultPhone;
+  const [isDialing, setIsDialing] = useState(false);
+  const [logs, setLogs] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const consoleEndRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     if (consoleEndRef.current) {
@@ -130,7 +123,10 @@ export default function OutboundCallCard() {
                 <button
                   key={agent.id}
                   type="button"
-                  onClick={() => setSelectedAgent(agent.id)}
+                  onClick={() => {
+                    setSelectedAgent(agent.id);
+                    setPhone(null);
+                  }}
                   className={`border-2 p-3 text-left rounded-xs cursor-pointer select-none transition-all flex flex-col justify-between h-28 relative focus-visible:outline-2 focus-visible:outline-[var(--ink)] ${
                     isSelected
                       ? `${agent.color} border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] scale-[0.99] translate-y-[1px]`
