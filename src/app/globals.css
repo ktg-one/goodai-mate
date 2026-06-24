@@ -1,8 +1,10 @@
-@import "tailwindcss";
-
 /* Fonts load HERE so they never depend on next/font being wired in layout.tsx.
-   DM Sans + JetBrains Mono from Google; Fraunces variable TTF from /public/fonts. */
+   DM Sans + JetBrains Mono from Google; Fraunces variable TTF from /public/fonts.
+   MUST precede `@import "tailwindcss"` — Tailwind v4 inlines its rules in place,
+   and CSS requires every @import to sit before all other rules. */
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+@import "tailwindcss";
 
 @font-face {
   font-family: "Fraunces";
