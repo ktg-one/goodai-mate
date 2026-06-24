@@ -66,7 +66,7 @@ export default function VoiceAgentDemo() {
         ) : (
           <div className="space-y-6 max-w-3xl mx-auto">
             {/* Tabs Controller */}
-            <div className="flex border-2 border-[var(--ink)] rounded-xs bg-[var(--paper-deep)] p-1.5 shadow-[2px_2px_0_var(--ink)]">
+            <div className="flex border-2 border-[var(--ink)] rounded-xs bg-[var(--paper-deep)] p-1.5 shadow-[2px_2px_0_var(--ink)]" role="group" aria-label="Demo Mode">
               <button
                 onClick={() => setActiveTab('mic')}
                 className={`flex-1 py-2 font-mono text-xs font-bold uppercase tracking-[0.12em] transition-all cursor-pointer rounded-xs ${
@@ -74,6 +74,7 @@ export default function VoiceAgentDemo() {
                     ? 'bg-[var(--ink)] text-[var(--paper)] shadow-[inset_1px_1px_2px_rgba(0,0,0,0.5)]'
                     : 'text-[var(--ink)]/70 hover:bg-[var(--paper)]/50 hover:text-[var(--ink)]'
                 }`}
+                aria-pressed={activeTab === 'mic'}
               >
                 🎙️ Speak In Browser
               </button>
@@ -84,6 +85,7 @@ export default function VoiceAgentDemo() {
                     ? 'bg-[var(--ink)] text-[var(--paper)] shadow-[inset_1px_1px_2px_rgba(0,0,0,0.5)]'
                     : 'text-[var(--ink)]/70 hover:bg-[var(--paper)]/50 hover:text-[var(--ink)]'
                 }`}
+                aria-pressed={activeTab === 'phone'}
               >
                 📞 Have Agent Call You
               </button>
