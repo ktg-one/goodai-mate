@@ -1,0 +1,9 @@
+ WARN  Unsupported engine: wanted: {"node":">=20.9.0 <21"} (current: {"node":"v22.22.1","pnpm":"10.30.3"})
+
+> nextjs@0.1.0 start /app
+> next start
+
+▲ Next.js 16.2.9
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+✓ Ready in 223ms

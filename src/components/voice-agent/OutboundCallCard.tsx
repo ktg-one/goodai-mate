@@ -123,13 +123,15 @@ export default function OutboundCallCard() {
           <label className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 block">
             1. Select Agent Persona
           </label>
-          <div className="grid sm:grid-cols-2 gap-3">
+          <div className="grid sm:grid-cols-2 gap-3" role="radiogroup" aria-label="Agent Persona">
             {agents.map(agent => {
               const isSelected = selectedAgent === agent.id;
               return (
                 <button
                   key={agent.id}
                   type="button"
+                  role="radio"
+                  aria-checked={isSelected}
                   onClick={() => setSelectedAgent(agent.id)}
                   className={`border-2 p-3 text-left rounded-xs cursor-pointer select-none transition-all flex flex-col justify-between h-28 relative focus-visible:outline-2 focus-visible:outline-[var(--ink)] ${
                     isSelected
