@@ -108,13 +108,10 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
     }
   });
 
-  // Mechanical settle values (no floaty — short, purposeful, slightly jarring settle)
-  // Multi-phase for Awwwards signature filing: sink, slight compress + rotate, then deeper pile settle.
-  // Skew removed from main content box (was distorting text/canvas/buttons inside).
-  // Tuned for taller 100vh top-aligned hero + later trigger offset.
-  const heroY = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], [0, 22, 52, 85]);
-  const heroRotate = useTransform(scrollYProgress, [0, 0.5, 1], [0, -1.0, -2.2]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0.982, 0.955]);
+  // Subtle "filing" sink + shadow depth only. Rotate/scale/skew were removed — they
+  // tilted and compressed the whole card on scroll, which read as the card "warping".
+  // Reduced-motion users get a fully static card (no sink).
+  const heroY = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], prefersReducedMotion ? [0, 0, 0, 0] : [0, 22, 52, 85]);
   const heroShadow = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [
     '4px 4px 0 var(--ink)',
     '6px 7px 0 var(--ink)',
@@ -150,7 +147,7 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       audioContextRef.current = audioContext;
       const source = audioContext.createMediaStreamSource(stream);
@@ -346,23 +343,19 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
           <motion.div
             className="stamp-box relative overflow-hidden bg-[var(--paper-raised)] border-2 border-[var(--ink)]"
             style={{
-              // Physical descent + filing: sinks, compresses, rotates as "mailed into stack"
-              // (skew moved to decorative curl layer only so content stays straight/readable)
+              // Physical descent + filing: gentle sink + deepening shadow as "mailed into stack".
+              // Rotate/scale removed — they warped the card (and its canvas/text) on scroll.
               y: heroY,
-              rotate: heroRotate,
-              scale: heroScale,
               boxShadow: heroShadow,
             }}
           >
-            {/* Physical paper edge / docket curl layer — amplifies the filing metaphor with extra mechanical skew/rotation independent of main shell */}
+            {/* Physical paper edge / docket curl layer — static border overlay that fades in
+                as the card files down. Rotate/skew removed (they warped the frame on scroll). */}
             <motion.div
               aria-hidden
               className="pointer-events-none absolute inset-0 border-l-[3px] border-t-[1px] border-[var(--ink)]/40 rounded-[3px]"
               style={{
-                rotate: useTransform(scrollYProgress, [0, 0.6, 1], prefersReducedMotion ? [0,0,0] : [0, -1.2, -2.2]),
-                skew: useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0,0] : [0, -1.4]),
                 opacity: useTransform(scrollYProgress, [0, 0.25, 0.9, 1], [0.3, 0.65, 0.9, 0.75]),
-                transformOrigin: 'left top',
               }}
             />
             {/* Visualizer header bar */}
