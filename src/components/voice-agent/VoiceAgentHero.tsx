@@ -35,6 +35,7 @@ interface VoiceAgentHeroProps {
 export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroProps) {
   const [status, setStatus] = useState<AgentStatus>('idle');
   const [selectedAgent, setSelectedAgent] = useState<'darl' | 'robokev'>('darl');
+  const [problemText, setProblemText] = useState('');
   const [userTranscript, setUserTranscript] = useState('');
   const [agentResponse, setAgentResponse] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -279,15 +280,152 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
   const reset = () => {
     stopListening();
     setStatus('idle');
+    setProblemText('');
     setUserTranscript('');
     setAgentResponse('');
     setError(null);
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   };
 
+  const submitTypedProblem = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const problem = problemText.trim();
+    if (!problem || status === 'thinking') return;
+
+    setError(null);
+    setUserTranscript(problem);
+    setAgentResponse('');
+    setStatus('thinking');
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: problem }),
+      });
+      const data = await res.json();
+      const reply = (data.reply || "We'll sort that. Tell us what tools it touches and we'll scope the system.").trim();
+      setAgentResponse(reply);
+      onMailFiled?.(problem, reply);
+      await speakReply(reply);
+    } catch {
+      setStatus('idle');
+      setError('Could not reach the intake. Try again in a moment.');
+    }
+  };
+
   const isActive = status === 'listening' || status === 'speaking';
 
   return (
+    <>
+    <section className="gai-onepage">
+      <div className="gai-onepage-top">
+        <BrandWordmark className="h-8" />
+        <span className="gai-perth-chip">PERTH <span>/</span> WA</span>
+      </div>
+
+      <div className="gai-onepage-inner">
+        <div className="w-full">
+          <span className="gai-eyebrow">Business automations · Perth · WA</span>
+
+          <h1 className="gai-hero-h1">
+            Knock off early.<br />
+            <em>We&apos;ll sort the <span className="hl">boring stuff</span>.</em>
+          </h1>
+
+          <p className="gai-hero-lede">
+            Tell us your problem. We&apos;ll figure out how to fix it.
+          </p>
+
+          <form className="gai-intake" onSubmit={submitTypedProblem}>
+            <div className="gai-intake-field">
+              <textarea
+                className="gai-intake-input"
+                value={problemText}
+                onChange={(event) => setProblemText(event.target.value)}
+                placeholder="My Friday invoicing eats 6 hours..."
+                aria-label="Describe your problem"
+                rows={3}
+                disabled={status === 'thinking'}
+              />
+              <div className="gai-intake-toolbar">
+                <button
+                  type="button"
+                  className={`gai-tool ${status === 'listening' ? 'is-on' : ''}`}
+                  onClick={isActive ? stopListening : startListening}
+                  aria-label={isActive ? 'Stop voice intake' : 'Speak instead of typing'}
+                >
+                  {isActive ? <Square size={14} aria-hidden="true" /> : <Mic size={14} aria-hidden="true" />}
+                  <span>{status === 'listening' ? 'Listening' : 'Speak'}</span>
+                </button>
+                <div className="gai-intake-spacer" />
+                <button type="submit" className="gai-tool gai-tool-send" disabled={status === 'thinking' || !problemText.trim()}>
+                  <span>{status === 'thinking' ? 'Sorting' : 'Sort it'}</span>
+                </button>
+              </div>
+            </div>
+            <p className="gai-intake-hint">One conversation. No sales call until you say so.</p>
+          </form>
+
+          {error && <div className="gai-error">{error}</div>}
+
+          {agentResponse && (
+            <div className="gai-answer">
+              <div className="gai-answer-head">
+                <span className="gai-answer-tag">Good&apos;ai says</span>
+                <button type="button" className="gai-tool gai-tool-mini" onClick={replayLastResponse}>
+                  <Volume2 size={14} aria-hidden="true" />
+                  <span>Hear it</span>
+                </button>
+                <button type="button" className="gai-tool gai-tool-mini" onClick={reset}>
+                  <RotateCcw size={14} aria-hidden="true" />
+                  <span>Reset</span>
+                </button>
+              </div>
+              <p className="gai-answer-text">{agentResponse}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="gai-features">
+        {[
+          ['Voice intake', 'Speak your problem'],
+          ['Read it back', 'Hear our reply'],
+          ['Real reasoning', 'Fired by Claude'],
+          ['Sub-second', 'No waiting room'],
+          ['Yours alone', 'No data resold'],
+        ].map(([label, detail], index) => (
+          <div className="gai-feature" key={label}>
+            <span className="gai-feature-icon">{String(index + 1).padStart(2, '0')}</span>
+            <div className="gai-feature-text">
+              <strong>{label}</strong>
+              <span>{detail}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="gai-marquee">
+        <div className="gai-marquee-track">
+          {[0, 1].flatMap((loop) => [
+            'Quote builders',
+            'Booking flows',
+            'Voice agents',
+            'Lead capture',
+            'Report generation',
+            'Onboarding',
+            'Data entry',
+            'Email drafting',
+          ].map((item) => (
+            <span key={`${loop}-${item}`} className="gai-marquee-item">
+              {item}<span className="gai-marquee-sep">/</span>
+            </span>
+          )))}
+        </div>
+      </div>
+    </section>
+
     <div className="relative w-full min-h-screen flex flex-col bg-[var(--paper)] overflow-hidden font-sans">
 
       {/* Minimal top bar — BrandWordmark + asset variant stamp */}
@@ -590,5 +728,6 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
         </div>
       </div>
     </div>
+    </>
   );
 }
