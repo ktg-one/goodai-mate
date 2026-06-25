@@ -8,7 +8,7 @@ import { transcribeWithSupertonic } from '@/lib/voice/supertonic';
 import { BrandWordmark } from '@/components/brand/BrandWordmark';
 import StampButton from '@/components/StampButton';
 
-// Mechanical stamp easing (design-system-new canon)
+// Mechanical stamp easing (canon design system)
 const STAMP_EASE = [0.23, 1, 0.32, 1] as const;
 
 /**
@@ -32,9 +32,10 @@ interface VoiceAgentHeroProps {
   onMailFiled?: (transcript: string, response: string) => void;
 }
 
-export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcribe', onMailFiled }: VoiceAgentHeroProps) {
+export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroProps) {
   const [status, setStatus] = useState<AgentStatus>('idle');
   const [selectedAgent, setSelectedAgent] = useState<'darl' | 'robokev'>('darl');
+  const [problemText, setProblemText] = useState('');
   const [userTranscript, setUserTranscript] = useState('');
   const [agentResponse, setAgentResponse] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -44,15 +45,34 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
   const [visualMode, setVisualMode] = useState<'calm' | 'dynamic'>('dynamic');
 
   // ElevenLabs voice selection — "a few to try"
-  // Set ELEVEN_API_KEY in .env.local (and in Vercel)
-  // The ones you provided + a couple common ones to start. Swap IDs as you test more.
   const voiceOptions = [
-    { id: 'vr54y8Xovf4AEnfNrGqH', name: 'vr54 (yours)' },
-    { id: 'jvcMcno3QtjOzGtfpjoI', name: 'jvc (yours)' },
+    { id: 'vr54y8Xovf4AEnfNrGqH', name: 'vr54 (Darl)' },
+    { id: 'jvcMcno3QtjOzGtfpjoI', name: 'jvc (RoboKev)' },
     { id: 'pNInz6obpgDQGcFmaJgB', name: 'Adam' },
     { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni' },
   ];
   const [selectedVoiceId, setSelectedVoiceId] = useState(voiceOptions[0].id);
+  const [customVoiceId, setCustomVoiceId] = useState('');
+  const [isCustomVoiceActive, setIsCustomVoiceActive] = useState(false);
+
+  // Vercel AI Gateway model selection
+  const modelOptions = [
+    { id: 'google/gemini-1.5-pro', name: 'Gemini 1.5 Pro (Google)' },
+    { id: 'groq/llama3-70b-8192', name: 'Llama 3 70B (Groq)' },
+    { id: 'anthropic/claude-sonnet-4-20250514', name: 'Claude 3.5 Sonnet' },
+  ];
+  const [selectedModelId, setSelectedModelId] = useState(modelOptions[0].id);
+
+  // Sync default voice ID when selected agent changes
+  useEffect(() => {
+    if (selectedAgent === 'darl') {
+      setIsCustomVoiceActive(false);
+      setSelectedVoiceId('vr54y8Xovf4AEnfNrGqH');
+    } else if (selectedAgent === 'robokev') {
+      setIsCustomVoiceActive(false);
+      setSelectedVoiceId('jvcMcno3QtjOzGtfpjoI');
+    }
+  }, [selectedAgent]);
 
   const sensitivityRef = useRef(sensitivity);
   const visualModeRef = useRef(visualMode);
@@ -89,13 +109,10 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
     }
   });
 
-  // Mechanical settle values (no floaty — short, purposeful, slightly jarring settle)
-  // Multi-phase for Awwwards signature filing: sink, slight compress + rotate, then deeper pile settle.
-  // Skew removed from main content box (was distorting text/canvas/buttons inside).
-  // Tuned for taller 100vh top-aligned hero + later trigger offset.
-  const heroY = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], [0, 22, 52, 85]);
-  const heroRotate = useTransform(scrollYProgress, [0, 0.5, 1], [0, -1.0, -2.2]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0.982, 0.955]);
+  // Subtle "filing" sink + shadow depth only. Rotate/scale/skew were removed — they
+  // tilted and compressed the whole card on scroll, which read as the card "warping".
+  // Reduced-motion users get a fully static card (no sink).
+  const heroY = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], prefersReducedMotion ? [0, 0, 0, 0] : [0, 22, 52, 85]);
   const heroShadow = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [
     '4px 4px 0 var(--ink)',
     '6px 7px 0 var(--ink)',
@@ -131,7 +148,7 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       audioContextRef.current = audioContext;
       const source = audioContext.createMediaStreamSource(stream);
@@ -162,7 +179,11 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
             const res = await fetch('/api/chat', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ message: transcript.trim() }),
+              body: JSON.stringify({ 
+                message: transcript.trim(),
+                model: selectedModelId,
+                agent: selectedAgent
+              }),
             });
             const data = await res.json();
             const reply = (data.reply || "We'll sort that for you. Tell us a bit more about the tools you use.").trim();
@@ -259,15 +280,152 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
   const reset = () => {
     stopListening();
     setStatus('idle');
+    setProblemText('');
     setUserTranscript('');
     setAgentResponse('');
     setError(null);
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   };
 
+  const submitTypedProblem = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const problem = problemText.trim();
+    if (!problem || status === 'thinking') return;
+
+    setError(null);
+    setUserTranscript(problem);
+    setAgentResponse('');
+    setStatus('thinking');
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: problem }),
+      });
+      const data = await res.json();
+      const reply = (data.reply || "We'll sort that. Tell us what tools it touches and we'll scope the system.").trim();
+      setAgentResponse(reply);
+      onMailFiled?.(problem, reply);
+      await speakReply(reply);
+    } catch {
+      setStatus('idle');
+      setError('Could not reach the intake. Try again in a moment.');
+    }
+  };
+
   const isActive = status === 'listening' || status === 'speaking';
 
   return (
+    <>
+    <section className="gai-onepage">
+      <div className="gai-onepage-top">
+        <BrandWordmark className="h-8" />
+        <span className="gai-perth-chip">PERTH <span>/</span> WA</span>
+      </div>
+
+      <div className="gai-onepage-inner">
+        <div className="w-full">
+          <span className="gai-eyebrow">Business automations · Perth · WA</span>
+
+          <h1 className="gai-hero-h1">
+            Knock off early.<br />
+            <em>We&apos;ll sort the <span className="hl">boring stuff</span>.</em>
+          </h1>
+
+          <p className="gai-hero-lede">
+            Tell us your problem. We&apos;ll figure out how to fix it.
+          </p>
+
+          <form className="gai-intake" onSubmit={submitTypedProblem}>
+            <div className="gai-intake-field">
+              <textarea
+                className="gai-intake-input"
+                value={problemText}
+                onChange={(event) => setProblemText(event.target.value)}
+                placeholder="My Friday invoicing eats 6 hours..."
+                aria-label="Describe your problem"
+                rows={3}
+                disabled={status === 'thinking'}
+              />
+              <div className="gai-intake-toolbar">
+                <button
+                  type="button"
+                  className={`gai-tool ${status === 'listening' ? 'is-on' : ''}`}
+                  onClick={isActive ? stopListening : startListening}
+                  aria-label={isActive ? 'Stop voice intake' : 'Speak instead of typing'}
+                >
+                  {isActive ? <Square size={14} aria-hidden="true" /> : <Mic size={14} aria-hidden="true" />}
+                  <span>{status === 'listening' ? 'Listening' : 'Speak'}</span>
+                </button>
+                <div className="gai-intake-spacer" />
+                <button type="submit" className="gai-tool gai-tool-send" disabled={status === 'thinking' || !problemText.trim()}>
+                  <span>{status === 'thinking' ? 'Sorting' : 'Sort it'}</span>
+                </button>
+              </div>
+            </div>
+            <p className="gai-intake-hint">One conversation. No sales call until you say so.</p>
+          </form>
+
+          {error && <div className="gai-error">{error}</div>}
+
+          {agentResponse && (
+            <div className="gai-answer">
+              <div className="gai-answer-head">
+                <span className="gai-answer-tag">Good&apos;ai says</span>
+                <button type="button" className="gai-tool gai-tool-mini" onClick={replayLastResponse}>
+                  <Volume2 size={14} aria-hidden="true" />
+                  <span>Hear it</span>
+                </button>
+                <button type="button" className="gai-tool gai-tool-mini" onClick={reset}>
+                  <RotateCcw size={14} aria-hidden="true" />
+                  <span>Reset</span>
+                </button>
+              </div>
+              <p className="gai-answer-text">{agentResponse}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="gai-features">
+        {[
+          ['Voice intake', 'Speak your problem'],
+          ['Read it back', 'Hear our reply'],
+          ['Real reasoning', 'Fired by Claude'],
+          ['Sub-second', 'No waiting room'],
+          ['Yours alone', 'No data resold'],
+        ].map(([label, detail], index) => (
+          <div className="gai-feature" key={label}>
+            <span className="gai-feature-icon">{String(index + 1).padStart(2, '0')}</span>
+            <div className="gai-feature-text">
+              <strong>{label}</strong>
+              <span>{detail}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="gai-marquee">
+        <div className="gai-marquee-track">
+          {[0, 1].flatMap((loop) => [
+            'Quote builders',
+            'Booking flows',
+            'Voice agents',
+            'Lead capture',
+            'Report generation',
+            'Onboarding',
+            'Data entry',
+            'Email drafting',
+          ].map((item) => (
+            <span key={`${loop}-${item}`} className="gai-marquee-item">
+              {item}<span className="gai-marquee-sep">/</span>
+            </span>
+          )))}
+        </div>
+      </div>
+    </section>
+
     <div className="relative w-full min-h-screen flex flex-col bg-[var(--paper)] overflow-hidden font-sans">
 
       {/* Minimal top bar — BrandWordmark + asset variant stamp */}
@@ -323,23 +481,19 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
           <motion.div
             className="stamp-box relative overflow-hidden bg-[var(--paper-raised)] border-2 border-[var(--ink)]"
             style={{
-              // Physical descent + filing: sinks, compresses, rotates as "mailed into stack"
-              // (skew moved to decorative curl layer only so content stays straight/readable)
+              // Physical descent + filing: gentle sink + deepening shadow as "mailed into stack".
+              // Rotate/scale removed — they warped the card (and its canvas/text) on scroll.
               y: heroY,
-              rotate: heroRotate,
-              scale: heroScale,
               boxShadow: heroShadow,
             }}
           >
-            {/* Physical paper edge / docket curl layer — amplifies the filing metaphor with extra mechanical skew/rotation independent of main shell */}
+            {/* Physical paper edge / docket curl layer — static border overlay that fades in
+                as the card files down. Rotate/skew removed (they warped the frame on scroll). */}
             <motion.div
               aria-hidden
               className="pointer-events-none absolute inset-0 border-l-[3px] border-t-[1px] border-[var(--ink)]/40 rounded-[3px]"
               style={{
-                rotate: useTransform(scrollYProgress, [0, 0.6, 1], prefersReducedMotion ? [0,0,0] : [0, -1.2, -2.2]),
-                skew: useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0,0] : [0, -1.4]),
                 opacity: useTransform(scrollYProgress, [0, 0.25, 0.9, 1], [0.3, 0.65, 0.9, 0.75]),
-                transformOrigin: 'left top',
               }}
             />
             {/* Visualizer header bar */}
@@ -466,16 +620,37 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
               )}
             </div>
 
+            {/* Backend model selector */}
+            <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-3 flex flex-wrap items-center gap-2">
+              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">BACKEND:</span>
+              {modelOptions.map((m) => (
+                <StampButton
+                  key={m.id}
+                  variant="paper"
+                  size="sm"
+                  engaged={selectedModelId === m.id}
+                  onClick={() => {
+                    setSelectedModelId(m.id);
+                  }}
+                  className="text-[10px] px-3 py-1"
+                >
+                  {m.name}
+                </StampButton>
+              ))}
+              <span className="ml-auto text-[10px] font-mono text-[var(--ink)]/40">Vercel AI Gateway</span>
+            </div>
+
             {/* Voice selector — try a few ElevenLabs voices (career layer over the base TTS skill) */}
             <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-3 flex flex-wrap items-center gap-2">
-              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">VOICES:</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">VOICE:</span>
               {voiceOptions.map((v) => (
                 <StampButton
                   key={v.id}
                   variant="paper"
                   size="sm"
-                  engaged={selectedVoiceId === v.id}
+                  engaged={selectedVoiceId === v.id && !isCustomVoiceActive}
                   onClick={() => {
+                    setIsCustomVoiceActive(false);
                     setSelectedVoiceId(v.id);
                     if (agentResponse) {
                       // replay last response with the new voice
@@ -487,6 +662,39 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
                   {v.name}
                 </StampButton>
               ))}
+
+              <StampButton
+                variant="paper"
+                size="sm"
+                engaged={isCustomVoiceActive}
+                onClick={() => {
+                  setIsCustomVoiceActive(true);
+                  if (customVoiceId) {
+                    setSelectedVoiceId(customVoiceId);
+                    if (agentResponse) {
+                      speakReply(agentResponse, customVoiceId);
+                    }
+                  }
+                }}
+                className="text-[10px] px-3 py-1"
+              >
+                Custom ID
+              </StampButton>
+
+              {isCustomVoiceActive && (
+                <input
+                  type="text"
+                  placeholder="Paste ElevenLabs Voice ID..."
+                  value={customVoiceId}
+                  onChange={(e) => {
+                    const val = e.target.value.trim();
+                    setCustomVoiceId(val);
+                    setSelectedVoiceId(val);
+                  }}
+                  className="font-mono text-[10px] bg-[var(--paper-deep)] border-2 border-[var(--ink)] px-2 py-1 max-w-[200px] text-[var(--ink)] focus:outline-none"
+                />
+              )}
+              
               <span className="ml-auto text-[10px] font-mono text-[var(--ink)]/40">ElevenLabs</span>
             </div>
 
@@ -520,5 +728,6 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
         </div>
       </div>
     </div>
+    </>
   );
 }

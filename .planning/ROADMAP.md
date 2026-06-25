@@ -1,48 +1,54 @@
-# Roadmap: Good'ai (refactored)
+# Roadmap: Good'ai
 
 ## Overview
 
-Good'ai site v1 was originally planned as 5 incremental phases (shader foundation → visual → chat → lead capture → deploy). After Phase 1 foundation, the site was **fully refactored** into its current form: a brutalist direct-mail marketing experience whose hero **is** the functional Voice Agent product (local Supertonic), with conversation state leaking as physical "filed mail" into ribbons, pinned dockets, and tray. The redesign was executed via the goodai-award-configuration (5 specialized agents: impeccable + awwwards-animations + awwwards-ui-skills + gsap-awwwards-website + gsap-framer-scroll-animation) coordinated by goodai-agent-team.
+Good'ai (goodai.au) started as a 5-phase plan (shader foundation → visual → chat → lead capture → deploy). After Phase 1, the site was **fully refactored** (milestone v1) into a brutalist 1978 direct-mail experience whose hero **is** the functional Voice Agent, with conversation state leaking as physical filed mail (ribbons, pinned dockets, in-tray, footer clack). That redesign shipped via the goodai-award-configuration 5-agent swarm + goodai-agent-team.
 
-Pre-refactor phases (01-05) have been archived to `.planning/milestones/v0.9-pre-refactor-phases/`.
+Since 2026-06-04 the site has advanced again (milestone **v1.1**): a lead-generation + automation layer was added on top of the mail-docket aesthetic. This was built ad-hoc (direct commits + bolt/ultracode branches), not through formal gsd phases — this roadmap now records it so .planning matches reality.
 
-Ongoing work uses gsd-* skills (now added locally: gsd-health, gsd-docs-update, gsd-progress, gsd-manager, gsd-do, gsd-plan-phase, etc.) + goodai skills for brand-compliant updates.
+Pre-refactor phases (01–05) remain archived in `.planning/milestones/v0.9-pre-refactor-phases/`.
 
-## Current State (post-refactor)
+## Milestones
 
-- **Delivered**: Voice Agent hero + full mail-board brutalist flow (ribbons, docket pins, in-tray, footer ritual). 60fps mechanical stamp physics, one-red discipline, WONK, reduced-motion static artifacts, PRODUCT.md + public/ design system as SSOT.
-- **Skills**: Local copies in .agents/skills/ and .claude/skills/ (goodai-*, gsd-*, gsap/awwwards/impeccable design skills, next best practices).
-- **Planning hygiene**: gsd-health now available in-project; docs/ + .planning/ aligned to actual shipped site (this milestone).
+### v0.9 — Pre-refactor (archived)
+- Phase 1: Foundation (GLSL, tokens, fonts) — completed 2026-04-01.
+- Phases 2–5: Visual / Chat / Lead Capture / Polish — described the old SDF shader + cursor + old lead card. Superseded by the v1 refactor. Archived.
 
-## Phases (historical + current)
+### v1 — Voice + mail-docket refactor (shipped, May 2026)
+- VoiceAgentHero (Supertonic local ASR), full mail-board GSAP flow: ribbons (shear/tear/flutter), pinned Docket Flow with per-card rot/offset/wear, sticky in-tray (last-3 filed dockets), pinned footer clack ritual.
+- One-red discipline, Fraunces WONK once per major block, 60fps mechanical stamp physics (90–160ms hard springs), reduced-motion static fallback that keeps all physical artifacts.
+- Design SSOT: PRODUCT.md + public/ (see SSOT-drift note below).
 
-**Pre-refactor (archived)**:
-- Phase 1: Foundation (GLSL, tokens, fonts) — completed 2026-04-01, code artifacts may remain or have been adapted.
-- Phases 2-5: Visual Layer / Chat Core / Lead Capture / Polish — described old SDF shader + cursor + old lead card flow. Superseded by the award-refactored mail-docket site. Archived.
+### v1.1 — Lead-gen + Automation layer (shipped 2026-06-09/10, work still in flight)
+Verified present in `src/` on 2026-06-16:
+- **Website Analyzer** — scrape URL → AI Gateway audit → auto-extract business email → email the audit via GWS CLI (`WebsiteAnalyzer.tsx`, `api/analyze-website`).
+- **Outbound callback widget** — Darl / Robokev personas, number prefill (`OutboundCallCard.tsx`, `api/trigger-call`).
+- **n8n + GWS lead-automation pipeline** (`api/demo-automation`, `LeadCaptureCard`, `VoiceAgentDemo`, `AutomationPlayground`).
+- **Chat** (AI Gateway, `api/chat`) + text fallback; **TTS** (ElevenLabs, `api/tts`).
+- **Automation Playground** live demo section.
+- GSAP scroll reveals (VoiceAgentDemo + AISolutions); Fraunces font fix; Vercel symlink→physical-file font fix; "yellow pages" design pivot.
 
-**Current / Live**:
-The "v1" that shipped is the refactored Voice + physical docket site. No numbered phases currently active in .planning/phases/ (empty after archive + hygiene pass).
+**In flight (uncommitted):** removing old `public/voice-feature/*` Vite scaffold; `globals.css` + `HomeClient.tsx` edits; new `public/assets/` audit images.
 
-Future increments (voice prod, additional surfaces, ops handoff, full gsd milestone) will be planned with gsd-new-milestone / gsd-plan-phase using the goodai brand guardrails.
+## Open Workstreams / Next Actions
 
-## Phase Details (Pre-refactor — for reference only)
+Prioritised by the 2026-06-16 validation:
 
-See `.planning/milestones/v0.9-pre-refactor-phases/` for the old 01-01 through 05-02 PLAN.md files. They are no longer authoritative.
+1. **[RESOLVED] De-hardcode the GWS CLI path.** `api/analyze-website`, `api/trigger-call`, `api/demo-automation` now support dynamic path resolution from `GWS_CLI_PATH`, with fallback to local `node_modules` or developer's Windows path. Works with direct binary execution if not a JS script.
+2. **[RESOLVED] Hosted n8n webhook.** `api/trigger-call` no longer defaults to localhost:5678, throwing a graceful simulation error if `N8N_CALL_WEBHOOK_URL` is omitted.
+3. **[RESOLVED] Prod ASR path.** The voice agent ASR points to `NEXT_PUBLIC_ASR_URL` with graceful fallback handling.
+4. **Resolve design SSOT drift** — `public/design-system-new/` was flattened to `public/` root (2026-06-10 consolidate commit) but **11** source files still cite the removed `design-system-new/` path in comments. Declare `public/` root + PRODUCT.md canonical and fix the stale references.
+5. Commit / finalise the in-flight changes (voice-feature removal, css/HomeClient, audit assets).
+6. Perf / a11y pass (Lighthouse) on the GSAP-heavy flow + new sections.
+7. Capture v1.1 retroactively as a proper gsd milestone if continued (gsd-new-milestone / gsd-plan-phase) so future work is tracked.
 
-## Progress & Hygiene
+See `.planning/TODO.md` for the same list as an actionable, file-level functional checklist, and `.planning/LAUNCH.md` for the production release and rollback playbook.
 
-- Old planning reported ~11% (only phase 1 complete).
-- Post archive + gsd-health + docs update: .planning/phases/ is clean; PROJECT.md / ROADMAP.md / STATE.md now describe the actual refactored site and skill usage.
-- Use `/gsd-health`, `/gsd-progress`, `/gsd-docs-update --verify-only` (or --force) going forward to keep docs in sync.
-- Use goodai-award-configuration + goodai-agent-team when doing further high-craft brutalist work.
+## Hygiene
 
-## Next Actions (typical)
-
-- Run `gsd health` or `gsd progress` to get current snapshot + routing.
-- For new work: gsd-discuss-phase / gsd-plan-phase (inject PRODUCT.md + public/ design system + current live state + mechanical rules).
-- For craft upgrades: dispatch via goodai-award-configuration (optionally + planning agent).
+- Use `/gsd-health`, `/gsd-progress`, `/gsd-docs-update` to keep .planning in sync — last drift was ~6 weeks (2026-06-04 → 2026-06-16) because features shipped outside gsd phases.
+- Use goodai-award-configuration + goodai-agent-team for further high-craft brutalist surfaces (inject the canonical design SSOT + PRODUCT.md + live state + mechanical motion rules).
 
 ---
 
-*Updated 2026-06-04 after adding gsd skills (incl. gsd-health) from .claude/.agents and running gsd-health alignment on the refactored site.*
-*Pre-refactor phases archived. Current site = award swarm brutalist mail execution + ongoing gsd-managed docs.*
+*Updated 2026-06-16 after re-validating .planning against the live codebase, then re-verifying all three concerns directly in source. v1.1 lead-gen/automation wave recorded; prod-blocking/SSOT concerns confirmed.*

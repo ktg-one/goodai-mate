@@ -438,7 +438,7 @@ export function Visualizer({
       const currentBurst = stampBurstRef.current;
       const currentVoice = voicePressure;
 
-      // Layered ribbons — now using canonical design-system-new tokens (brutalist ink + gold/red accents)
+      // Layered ribbons — now using canonical design system tokens (brutalist ink + gold/red accents)
       // Paper-ink base layers (mechanical, non-decorative)
       // ALL ribbons receive currentSettle for full hero descent filing physics (P0 fix: dead settleProgress activated)
       // Ribbons lose amplitude/turbulence/windGust/tension as stamp "sinks into the mail stack" — real physical, no float.

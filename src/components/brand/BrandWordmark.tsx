@@ -4,7 +4,7 @@ import React from 'react';
 
 /**
  * BrandWordmark
- * Uses the new brand assets from /public/assets/ (SSOT: public/design-system-new + good-ai-design-final.html)
+ * Uses the new brand assets from /public/assets/ (SSOT: public/ + good-ai-design-final.html)
  * Prefers vector for sharpness and correct apostrophe treatment.
  * One of the core "ink on paper" artifacts. Used in hero bar + Why section.
  */

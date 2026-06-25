@@ -156,7 +156,7 @@ export function Hero() {
       <header className="flex items-center justify-between relative z-20 mb-8 md:mb-16 pb-6 border-b-4 border-[var(--ink)]">
         <div className="flex items-center">
           {/* 
-            WORDMARK — using the current display token from the design system.
+            WORDMARK — using Fraunces from the design (public/fonts/ matching public/fonts/ verbatim).
             Brand treatment follows the design system.
           */}
           <span className="brand-wordmark text-[1.9rem]">

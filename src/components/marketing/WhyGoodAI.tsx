@@ -6,7 +6,7 @@ import { BrandWordmark } from '@/components/brand/BrandWordmark';
 
 /**
  * Why GoodAI?
- * Section from the new design system (design-system-new)
+ * Section from the new design system (public/ directory)
  * Purposeful hard reveal on the core pain + promise.
  */
 export default function WhyGoodAI() {
