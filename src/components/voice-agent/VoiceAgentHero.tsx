@@ -324,6 +324,7 @@ export function VoiceAgentHero({ supertonicUrl = 'http://localhost:8000/transcri
                 value={problemText}
                 onChange={(event) => setProblemText(event.target.value)}
                 placeholder="My Friday invoicing eats 6 hours..."
+                aria-label="Describe your problem"
                 rows={3}
                 disabled={status === 'thinking'}
               />
