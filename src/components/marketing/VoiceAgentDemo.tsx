@@ -31,7 +31,7 @@ export default function VoiceAgentDemo() {
         </ScrollReveal>
 
         {!showInline ? (
-          <StampCard variant="paper" className="p-9 text-center flex flex-col items-center justify-center" interactive pin>
+          <StampCard variant="navy" className="p-9 text-center flex flex-col items-center justify-center" interactive pin>
             <p className="text-2xl mb-7">
               Ready to knock off early?
             </p>
@@ -59,7 +59,7 @@ export default function VoiceAgentDemo() {
                 Have Agent call your phone →
               </StampButton>
             </div>
-            <p className="mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--ink)]/50">
+            <p className="mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--paper)]/70">
               Perth local test dialer. Instant callback via n8n automation.
             </p>
           </StampCard>

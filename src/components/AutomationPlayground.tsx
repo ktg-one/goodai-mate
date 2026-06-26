@@ -263,7 +263,7 @@ export default function AutomationPlayground() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 border border-[var(--ink)]/20 hover:border-[var(--ink)] bg-[var(--paper-raised)] p-2 hover:bg-[var(--gold-tint)] hover:translate-y-[-1px] transition-all"
                   >
-                    <FileSpreadsheet size={16} className="text-emerald-700" />
+                    <FileSpreadsheet size={16} className="text-[var(--ok)]" />
                     <span className="underline truncate">Google Sheet Lead Board</span>
                   </a>
                 )}
@@ -274,7 +274,7 @@ export default function AutomationPlayground() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 border border-[var(--ink)]/20 hover:border-[var(--ink)] bg-[var(--paper-raised)] p-2 hover:bg-[var(--gold-tint)] hover:translate-y-[-1px] transition-all"
                   >
-                    <FileText size={16} className="text-blue-700" />
+                    <FileText size={16} className="text-[var(--navy)]" />
                     <span className="underline truncate">Google Doc Proposal</span>
                   </a>
                 )}
@@ -291,13 +291,13 @@ export default function AutomationPlayground() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 border border-[var(--ink)]/20 hover:border-[var(--ink)] bg-[var(--paper-raised)] p-2 hover:bg-[var(--gold-tint)] hover:translate-y-[-1px] transition-all"
                   >
-                    <Calendar size={16} className="text-amber-700" />
+                    <Calendar size={16} className="text-[var(--gold-deep)]" />
                     <span className="underline truncate">Scheduled Calendar Call</span>
                   </a>
                 )}
                 {results.n8nStatus && (
                   <div className="flex items-center gap-2 border border-[var(--ink)]/20 bg-[var(--paper-raised)] p-2">
-                    <Sparkles size={16} className="text-purple-700" />
+                    <Sparkles size={16} className="text-[var(--navy)]" />
                     <span className="truncate">n8n Webhook: {results.n8nStatus}</span>
                   </div>
                 )}

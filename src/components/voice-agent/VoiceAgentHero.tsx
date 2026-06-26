@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Mic, Square, Volume2, RotateCcw } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'motion/react';
-import { Visualizer } from '@/components/hero/Visualizer';
+import { AudioVisualizer } from '@/components/voice-agent/AudioVisualizer';
 import { transcribeWithSupertonic } from '@/lib/voice/supertonic';
 import { BrandWordmark } from '@/components/brand/BrandWordmark';
 import StampButton from '@/components/StampButton';
@@ -40,7 +40,6 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
   const [error, setError] = useState<string | null>(null);
 
   const [analyzerNode, setAnalyzerNode] = useState<AnalyserNode | null>(null);
-  const [sensitivity, setSensitivity] = useState(1);
   const [visualMode, setVisualMode] = useState<'calm' | 'dynamic'>('dynamic');
 
   // ElevenLabs voice selection — "a few to try"
@@ -74,16 +73,26 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
     }
   }, [selectedAgent]);
 
-  const sensitivityRef = useRef(sensitivity);
-  const visualModeRef = useRef(visualMode);
-
-  // Stamp clack signal for Visualizer (bump on every new transcript line = hard mechanical pop in ribbons)
-  const stampSignalRef = useRef(0);
-
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  // Single persistent AudioContext shared by mic (listening) AND TTS (speaking).
+  // Created once, resumed if suspended; disconnected (never closed) so it survives reuse.
   const audioContextRef = useRef<AudioContext | null>(null);
+  // Mic MediaStreamSource — disconnected on stop without tearing down the context.
+  const micSourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+
+  // Lazily create-once the shared AudioContext; resume if suspended. Returns the live ctx.
+  const getAudioContext = useCallback((): AudioContext => {
+    if (!audioContextRef.current) {
+      const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      audioContextRef.current = new Ctx();
+    }
+    if (audioContextRef.current.state === 'suspended') {
+      void audioContextRef.current.resume();
+    }
+    return audioContextRef.current;
+  }, []);
 
   // === HERO DESCENT SCROLL PHYSICS (signature Awwwards move) ===
   // The stamp-box "files itself" into the mail stack as you scroll. Shadows + ribbons react.
@@ -100,9 +109,7 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
   // ALSO publishes --hero-filing-progress CSS var (0-1) so the entire mail-board (ribbons, dockets, stamps)
   // can participate in physical "ink soak / shadow depth / paper settle" as the stamp-box descends.
   // One source of truth. 60fps. No additional scroll listeners.
-  const settleRef = useRef(0);
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    settleRef.current = latest;
     // Global participation in the filing ritual (brand: every docket feels the weight of the hero mail dropping)
     if (typeof document !== 'undefined') {
       document.documentElement.style.setProperty('--hero-filing-progress', latest.toFixed(3));
@@ -120,10 +127,6 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
     '2px 11px 0 var(--navy-ink)',
   ]);
 
-  // Keep refs in sync for Visualizer without causing re-renders in hot path
-  useEffect(() => { sensitivityRef.current = sensitivity; }, [sensitivity]);
-  useEffect(() => { visualModeRef.current = visualMode; }, [visualMode]);
-
   const stopListening = useCallback(() => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop();
@@ -132,10 +135,9 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
     }
-    if (audioContextRef.current) {
-      audioContextRef.current.close();
-      audioContextRef.current = null;
-    }
+    // Disconnect the mic source but KEEP the shared AudioContext alive for TTS reuse.
+    micSourceRef.current?.disconnect();
+    micSourceRef.current = null;
     setAnalyzerNode(null);
   }, []);
 
@@ -148,10 +150,9 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
 
-       
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      audioContextRef.current = audioContext;
+      const audioContext = getAudioContext();
       const source = audioContext.createMediaStreamSource(stream);
+      micSourceRef.current = source;
       const analyser = audioContext.createAnalyser();
       analyser.fftSize = 64;
       analyser.smoothingTimeConstant = 0.7;
@@ -173,7 +174,6 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
           const transcript = await transcribeWithSupertonic(audioBlob, supertonicUrl);
           if (transcript && transcript.trim()) {
             setUserTranscript(transcript.trim());
-            stampSignalRef.current = (stampSignalRef.current || 0) + 1;
 
             // Call the real chat API (Good'ai persona)
             const res = await fetch('/api/chat', {
@@ -212,6 +212,9 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
             streamRef.current.getTracks().forEach(track => track.stop());
             streamRef.current = null;
           }
+          // Disconnect mic source but KEEP the shared context alive for TTS reuse.
+          micSourceRef.current?.disconnect();
+          micSourceRef.current = null;
           setAnalyzerNode(null);
         }
       };
@@ -222,7 +225,7 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
       setError('Microphone access needed for voice. Using text fallback.');
       setStatus('idle');
     }
-  }, [supertonicUrl, onMailFiled, userTranscript]);
+  }, [supertonicUrl, onMailFiled, userTranscript, getAudioContext]);
 
   // ElevenLabs TTS — replaces browser speechSynthesis for higher quality
   // Streams audio from server route (key stays server-side)
@@ -248,17 +251,39 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
 
+      // Route TTS playback through the shared AudioContext so the visualizer can read it.
+      // Same-origin blob => frequency data is readable. MUST connect to destination or audio is silent.
+      const ctx = getAudioContext();
+      const src = ctx.createMediaElementSource(audio);
+      const ttsAnalyser = ctx.createAnalyser();
+      ttsAnalyser.fftSize = 128;
+      ttsAnalyser.smoothingTimeConstant = 0.75;
+      src.connect(ttsAnalyser);
+      ttsAnalyser.connect(ctx.destination);
+
+      const cleanup = () => {
+        src.disconnect();
+        ttsAnalyser.disconnect();
+        setAnalyzerNode(null);
+      };
+
       audio.onended = () => {
+        cleanup();
         setStatus('idle');
         URL.revokeObjectURL(audioUrl);
       };
 
       audio.onerror = () => {
+        cleanup();
         setStatus('idle');
         setError('Voice playback failed.');
         URL.revokeObjectURL(audioUrl);
       };
 
+      // Re-assert AFTER the awaits so these win over any batched onstop-finally reset
+      // (the mic flow's finally runs setStatus('idle') in the same tick as the top setStatus).
+      setAnalyzerNode(ttsAnalyser);
+      setStatus('speaking');
       await audio.play();
     } catch (err) {
       setStatus('idle');
@@ -391,14 +416,10 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
                 className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[68px] w-full object-cover mix-blend-multiply opacity-38" 
                 style={{ transform: 'scaleY(0.7) translateY(calc(-50% + var(--hero-filing-progress, 0) * -7px))' }} 
               />
-              <Visualizer
-                analyzer={analyzerNode}
+              <AudioVisualizer
+                analyser={analyzerNode}
                 active={isActive}
                 status={status}
-                sensitivityRef={sensitivityRef}
-                modeRef={visualModeRef}
-                settleRef={settleRef}
-                stampSignalRef={stampSignalRef}
               />
 
               {/* Live status overlay — mechanical relay stamp */}
@@ -469,7 +490,7 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
                     transition={{ duration: 0.1, ease: STAMP_EASE }}
                     className="pl-1"
                   >
-                    <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--navy)]/70 mb-1">GOOD&apos;AI</div>
+                    <div className="font-mono text-[10px] tracking-[0.16em] text-[var(--navy)]/70 mb-1">Good<span className="text-[var(--red)]">&rsquo;</span>ai</div>
                     <p className="text-[var(--ink)] text-[15px] leading-snug">“{agentResponse}”</p>
                     <button onClick={replayLastResponse} className="mt-1 text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--navy)]/60 hover:text-[var(--navy)] underline decoration-1 underline-offset-2">Replay voice</button>
                   </motion.div>

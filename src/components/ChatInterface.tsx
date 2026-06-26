@@ -98,7 +98,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
     <div className="gai-chat">
       {/* Header bar */}
       <div className="border-b border-[var(--ink)] bg-[var(--paper)] px-4 py-3">
-        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--ocean-600)]">
+        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--navy-deep)]">
           Good&apos;ai intake
         </p>
         <h2 className="mt-1 text-[17px] font-bold leading-tight text-[var(--ink)]">

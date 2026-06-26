@@ -87,7 +87,7 @@ export default function WebsiteAnalyzer() {
         </p>
       </div>
 
-      <div className="stamp-card stamp-card-paper p-6 md:p-8 rounded-sm shadow-[4px_4px_0_var(--ink)] bg-[var(--paper-raised)] border-2 border-[var(--ink)] relative">
+      <div className="stamp-card stamp-card-navy p-6 md:p-8 relative">
         <form onSubmit={handleAnalyze} className="space-y-4">
           <div className="flex flex-col gap-1.5">
             <label htmlFor="website-url" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">
@@ -120,7 +120,7 @@ export default function WebsiteAnalyzer() {
               </StampButton>
             </div>
             <p id="url-help" className="text-[9px] font-mono text-[var(--ink)]/50">
-              Paste your business URL. The AI will scan your landing page, find your contact email, and send the audit report.
+              Paste your business URL. The system will scan your landing page, find your contact email, and send the audit report.
             </p>
           </div>
         </form>

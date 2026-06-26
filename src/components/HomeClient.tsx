@@ -401,7 +401,7 @@ export default function HomeClient() {
             {([
               { title: 'We listen once.', body: 'You speak the mess. Invoicing, follow-ups, quotes, the lot. The Voice Agent catches it locally.', variant: 'gold' },
               { title: 'We build the system.', body: 'Our team turns it into live automations in the tools you already use. Xero, ServiceM8, Tradify, whatever.', variant: 'navy' },
-              { title: 'It just runs.', body: 'You get time back. We keep the boring stuff off your plate every week. Perth mate, not a dashboard.', variant: 'paper' },
+              { title: 'It just runs.', body: 'You get time back. We keep the boring stuff off your plate every week. Perth mate, not a dashboard.', variant: 'gold' },
               { title: 'You knock off early.', body: 'The docket is closed. Kids, footy, whatever matters. We sorted the systems.', variant: 'navy' },
             ] as const).map((item, i) => (
               <StampCard
@@ -470,7 +470,7 @@ export default function HomeClient() {
                     <img src={['/assets/letter-a.svg','/assets/letter-good.svg','/assets/letter-i.svg','/assets/letter-swan.svg'][idx % 4]} alt="" aria-hidden className="absolute top-1 right-1 h-2.5 w-auto opacity-25" />
                     <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--ink)]/50 mb-0.5">YOU SAID</div>
                     <div className="line-clamp-1">“{mail.transcript.slice(0, 82)}”</div>
-                    <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--ocean-400)] mt-1.5 mb-0.5">GOOD&apos;AI FILED</div>
+                    <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--navy)] mt-1.5 mb-0.5"><span className="normal-case">Good<span style={{ color: 'var(--red)' }}>&apos;</span>ai</span> FILED</div>
                     <div className="line-clamp-1 text-[var(--ink)]">“{mail.response.slice(0, 78)}”</div>
                   </motion.div>
                 );
@@ -532,11 +532,11 @@ export default function HomeClient() {
       {/* Contains core promise + minimal contact + "we'll sort the boring stuff" in Fraunces WONK */}
       <footer
         ref={footerRef}
-        className="mail-docket-footer border-t-4 border-[var(--ink)] py-14 px-6 text-[var(--paper)]"
+        className="mail-docket-footer bg-[var(--navy)] border-t-4 border-[var(--ink)] py-14 px-6 text-[var(--paper)]"
       >
         <div className="mx-auto max-w-4xl text-center">
           <div className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--gold)] mb-4">
-            GOOD&apos;AI — PERTH
+            <span className="normal-case">Good<span style={{ color: 'var(--red)' }}>&apos;</span>ai</span> — PERTH
           </div>
 
           <div className="core-promise text-4xl md:text-5xl tracking-[-0.025em] leading-none mb-6">
