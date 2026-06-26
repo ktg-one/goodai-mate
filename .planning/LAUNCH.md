@@ -1,13 +1,14 @@
 # Launch Plan & Verification Review
 
-**Document Version:** 1.0  
+**Document Version:** 1.1 (re-verified 2026-06-24)  
 **Target Environment:** Vercel (Production)  
 **Author:** Content Review Publish Lead  
 
 ## 1. Non-Bypassable Review Gate (Pre-Flight)
 
-Before ANY code hits the `main` branch for Vercel deployment, the following P0 blockers must be resolved and verified locally via `npm run build` and `npm start`.
+Before ANY code hits the `main` branch for Vercel deployment, the following P0 blockers must be resolved and verified locally via `npm run build` and `npm start`. **As of 2026-06-24 all code-side blockers are resolved & committed (`7c47a55`); the only open gate is the env-var/hosting step below.**
 
+*   [x] **GWS CLI Path:** De-hardcoded (`7c47a55`) — env-driven via `GWS_CLI_PATH` with node_modules / dev fallback. 0 `D:\packages` refs remain.
 *   [x] **Webhook Configuration:** `N8N_CALL_WEBHOOK_URL` no longer defaults to `localhost`. Confirm production endpoint is wired and responding to mock payloads.
 *   [x] **ASR Service Path:** Removed hardcoded `http://localhost:8000/transcribe` overrides. The component defaults to `NEXT_PUBLIC_ASR_URL` with graceful fallback. Voice Agent will fail gracefully or hang if missing.
 *   [ ] **Environment Variables:** Must be set securely in Vercel settings prior to deployment:
@@ -16,6 +17,7 @@ Before ANY code hits the `main` branch for Vercel deployment, the following P0 b
     *   `ELEVEN_DEFAULT_VOICE`
     *   `NEXT_PUBLIC_GWS_SCRIPT_URL`
     *   `N8N_CALL_WEBHOOK_URL`
+    *   `NEXT_PUBLIC_ASR_URL` (hosted Supertonic / STT endpoint)
     *   `GWS_CLI_PATH` (Set to the executable path in the Vercel environment, or ensure the fallback logic operates safely).
 
 ## 2. Dry Run & Verification

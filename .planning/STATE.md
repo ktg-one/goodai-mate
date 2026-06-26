@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.1-leadgen-automation
 milestone_name: "Lead-gen + Automation layer (on the refactored Voice + mail-docket site)"
 status: "active"
-stopped_at: "All P0 launch blockers resolved. GWS CLI, n8n webhooks, and ASR endpoints now resolve via environment variables without hardcoded localhost values. Design system SSOT references in comments have also been corrected."
-last_updated: "2026-06-16"
+stopped_at: "All P0 code-side launch blockers resolved AND committed (4 commits on 2026-06-17). GWS CLI path, n8n trigger-call webhook, and ASR endpoint are env-driven — no hardcoded localhost / D:\\packages values remain. Design-system-new SSOT comment drift is fully cleared (0 refs in src/). Working tree clean. Remaining work is deploy-side only: set Vercel env vars + host ASR/n8n. The .planning folder is the self-sufficient source of truth — continuing dev does NOT require the Multica platform."
+last_updated: "2026-06-24"
 progress:
   total_phases: 0
   completed_phases: 0
@@ -18,13 +18,13 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (re-validated 2026-06-16)
+See: .planning/PROJECT.md (re-validated 2026-06-24)
 
 **Core value:** Give Perth SMEs / tradies their time back. The Voice Agent hero demonstrates the product; the brutalist 1978 mail-docket flow tells the "we'll sort the boring stuff" story. v1.1 adds the lead-generation + automation machinery behind it (website audit tool, outbound callback, n8n/GWS pipeline).
 
-**Current focus:** Pre-launch verification. The `LAUNCH.md` document has been created to track the non-bypassable pre-flight checks, dry run procedures, and recovery playbook. The primary focus is resolving the P0 prod blockers and migrating off localhost resources.
+**Current focus:** Deploy-side launch prep. All P0 *code* blockers are resolved and committed; the remaining gate is wiring the hosted services + Vercel env vars per `LAUNCH.md`. The `.planning` folder + repo are now self-contained: development can continue without the Multica platform.
 
-## Current Position (verified 2026-06-16 against src/)
+## Current Position (verified 2026-06-24 against src/ + git)
 
 **Shipped on top of the refactored mail-docket site:**
 - **Website Analyzer** (`src/components/marketing/WebsiteAnalyzer.tsx` + `src/app/api/analyze-website/route.ts`): scrapes a URL, runs an AI Gateway audit, auto-extracts the business email, and dispatches the audit by email via the GWS CLI.
@@ -37,10 +37,9 @@ See: .planning/PROJECT.md (re-validated 2026-06-16)
 
 **Still present from the v1 refactor:** VoiceAgentHero (Supertonic local ASR), full mail-board GSAP flow (ribbons shear/tear, pinned Docket Flow, sticky in-tray of last-3 filed dockets, pinned footer clack ritual), reduced-motion static fallback.
 
-**In flight (uncommitted — `git status`):**
-- Deleting the old standalone Vite voice scaffold `public/voice-feature/*`.
-- Edits to `src/app/globals.css` and `src/components/HomeClient.tsx`.
-- New audit assets under `public/assets/` (11.jpg, 12.jpg, G.jpg, "G (2).jpg").
+**Newest (committed 2026-06-17, `423628e`):** dynamic model selection + voice-agent selectors, brand CSS theme, eslint fix.
+
+**Working tree (2026-06-24):** clean. The 2026-06-16 "in-flight" set (Vite `public/voice-feature/*` removal, `globals.css` + `HomeClient.tsx` edits, new `public/assets/` audit images) is all committed. Only untracked items are local tooling dirs `.agent_context/`, `.multica/`, `.serena/` — not part of the app; gitignore them (the `.multica/` dir is local agent-runtime scratch, NOT a build/runtime dependency).
 
 ## Accumulated Context
 
@@ -49,15 +48,20 @@ See: .planning/PROJECT.md (re-validated 2026-06-16)
 - Route AI through an AI Gateway (`AI_GATEWAY_API_KEY`) rather than a direct provider SDK.
 - Use the Google Workspace CLI as the automation/email-dispatch backend.
 
-### Blockers / Concerns (re-verified 2026-06-16, run 2 — see TODO.md for the actionable list)
-- **Prod-blocking (Resolved):** GWS CLI path is no longer hardcoded in `src/app/api/{analyze-website,trigger-call,demo-automation}/route.ts`. It now dynamically resolves from the `GWS_CLI_PATH` env variable, falls back to local `node_modules` if installed, and defaults to the local Windows path for development.
-- **Prod-blocking (Resolved):** `api/trigger-call` no longer defaults the n8n webhook to `http://localhost:5678/webhook/goodai-call`. It requires `N8N_CALL_WEBHOOK_URL` to fire remotely, falling back to a successful simulation pattern if unset locally.
-- **Dev-only (Resolved):** ASR defaults to an env var `NEXT_PUBLIC_ASR_URL` instead of `http://localhost:8000/transcribe`. Removed hardcoded endpoint overrides in `HomeClient.tsx`, `voice-agent/VoiceAgentHero.tsx`, and `marketing/VoiceAgentDemo.tsx`.
-- **SSOT drift (corrected count):** `public/design-system-new/` no longer exists — the 2026-06-10 "consolidate design system" commit flattened its contents up to `public/` root (`colors_and_type.css`, `fonts/`, `good-ai-design-final.html`, `README.md`). **11** source files still cite the removed `public/design-system-new/...` path in comments: `globals.css`, `HomeClient.tsx`, `voice-agent/VoiceAgentHero.tsx`, `marketing/Manifest.tsx`, `marketing/WhyGoodAI.tsx`, `hero/Visualizer.tsx`, `brand/BrandWordmark.tsx`, `hero/Hero.tsx`, `StampCard.tsx`, `app/layout.tsx`, `app/global-error.tsx`. Declare `public/` root + PRODUCT.md canonical and fix the stale comments.
-- Required env for the live features: `AI_GATEWAY_API_KEY`, `ELEVEN_API_KEY`, `ELEVEN_DEFAULT_VOICE`, `NEXT_PUBLIC_GWS_SCRIPT_URL`, `N8N_CALL_WEBHOOK_URL`.
+### Blockers / Concerns (re-verified 2026-06-24, run 3 — see TODO.md for the actionable list)
+- **Prod-blocking (Resolved + committed `7c47a55`):** GWS CLI path is no longer hardcoded. 0 refs to `D:\packages` remain in `src/`. It resolves from `GWS_CLI_PATH`, falls back to local `node_modules`, then a dev path.
+- **Prod-blocking (Resolved + committed `7c47a55`):** `api/trigger-call` no longer defaults the n8n webhook to localhost. It reads `process.env.N8N_CALL_WEBHOOK_URL` and throws/mocks gracefully when unset (verified `trigger-call/route.ts:75-79`).
+- **Dev-only (Resolved + committed `7c47a55`):** ASR resolves from `NEXT_PUBLIC_ASR_URL` (verified `lib/voice/supertonic.ts:17`); the only remaining `localhost:8000` strings are a doc-comment example and a dev fallback default.
+- **SSOT drift (Resolved + committed `3b92089`):** `public/design-system-new/` stale comment refs are gone — **0** matches across `src/`. Canonical design source is `public/` root + PRODUCT.md.
+- **Residual (P1, non-fatal):** `api/demo-automation/route.ts:254` still defaults the *demo* webhook to `http://localhost:5678/webhook/goodai-demo` when the request body omits a URL. Wrapped in try/catch so it degrades (no 500), but should read an env var for consistency with `trigger-call`.
+- **Remaining = deploy-side only:** set the required env vars in Vercel and host ASR + n8n. Required env: `AI_GATEWAY_API_KEY`, `ELEVEN_API_KEY`, `ELEVEN_DEFAULT_VOICE`, `NEXT_PUBLIC_GWS_SCRIPT_URL`, `N8N_CALL_WEBHOOK_URL`, `GWS_CLI_PATH`, `NEXT_PUBLIC_ASR_URL`.
+
+## Continuity Without Multica
+
+Per the 2026-06-24 owner note ("ensure Multica isn't required to continue the dev"): the repo + `.planning/` folder are the authoritative, self-contained source of truth. The GSD docs (PROJECT/ROADMAP/REQUIREMENTS/STATE/TODO/LAUNCH) describe every shipped feature, open item, and the launch playbook with no Multica dependency. The local `.multica/` directory is agent-runtime scratch only and is safe to gitignore; nothing in `src/` imports or requires it. Any agent/CLI (Claude, Gemini, Qwen, Kimi) can pick up work from `.planning/TODO.md` alone.
 
 ## Session Continuity
 
-Last validation: 2026-06-16 (run 2) — re-ran progress validation against `src/`. Confirmed `D:\packages` hardcode in exactly the 3 routes (user fixing now), `localhost:8000` ASR in 4 files, `public/design-system-new` absent/flattened with 11 (not ~14) stale comment refs, and surfaced a NEW prod blocker: `api/trigger-call` n8n webhook defaults to `localhost:5678`. Authored `.planning/TODO.md` with the prioritised functional checklist. Pre-refactor phases remain archived under `.planning/milestones/v0.9-pre-refactor-phases/`.
+Last validation: 2026-06-24 (run 3) — re-verified against `src/` + git on branch `goo-47-verify`. Confirmed all three prior P0 fixes are committed (`7c47a55`) and the SSOT comment drift cleared (`3b92089`): 0 `D:\packages` refs, 0 `design-system-new` refs, ASR + n8n trigger-call env-driven. Working tree clean. New residual logged: `demo-automation` localhost demo-webhook default (P1). Pre-refactor phases remain archived under `.planning/milestones/v0.9-pre-refactor-phases/`.
 
-*Run `gsd health` / `gsd progress` at session start. **See `.planning/TODO.md`** for the get-to-production checklist; resolve the P0 blockers before any prod deploy.*
+*Run `gsd health` / `gsd progress` at session start. **See `.planning/TODO.md`** for the get-to-production checklist; the remaining gate is deploy-side env wiring, not code.*

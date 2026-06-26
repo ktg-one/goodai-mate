@@ -1,6 +1,6 @@
 # Requirements: Good'ai (current — v1.1 lead-gen + automation)
 
-**Last validated:** 2026-06-16 (re-read against `src/`)
+**Last validated:** 2026-06-24 (re-read against `src/` + git)
 **Note:** Original v1 phase requirements (shader, old lead capture, cursor) are superseded — see `.planning/milestones/v0.9-pre-refactor-phases/`. PRODUCT.md holds the full brand/product spec.
 
 ## Shipped & verified in code
@@ -22,13 +22,15 @@
 - 60fps hot paths (refs + transform/opacity/filter only); hard 90–160ms stamp clacks.
 - Brand voice: "we", short sentences, practical/warm/direct, zero hype/AI jargon.
 
-## Open requirements / gaps (from 2026-06-16 validation)
+## Open requirements / gaps (from 2026-06-24 validation)
 
-- [ ] **[prod blocker]** GWS CLI path hardcoded to `D:\packages\…\@googleworkspace\cli\run.js` in `api/analyze-website`, `api/trigger-call`, `api/demo-automation` — must be env-driven or hosted before any non-local deploy. *(User fixing now.)*
-- [x] **[prod blocker]** n8n webhook defaults to `http://localhost:5678/webhook/goodai-call` in `api/trigger-call` — set `N8N_CALL_WEBHOOK_URL` to a hosted n8n or the outbound-call widget fails in prod.
-- [x] Production ASR endpoint (replace `localhost:8000` Supertonic dev path — present in 4 files: `HomeClient`, `VoiceAgentHero`, `VoiceAgentDemo`, `lib/voice/supertonic.ts`).
-- [ ] Canonical design SSOT — `public/design-system-new/` flattened to `public/` root (2026-06-10); **11** source files still cite the removed subpath in comments. Declare `public/` root + PRODUCT.md canonical and fix the stale references.
-- [ ] Commit in-flight changes (remove `public/voice-feature/*`, `globals.css` + `HomeClient.tsx` edits, new `public/assets/` audit images).
+- [x] **[prod blocker — DONE `7c47a55`]** GWS CLI path de-hardcoded — env-driven via `GWS_CLI_PATH` + node_modules fallback across the 3 routes; 0 `D:\packages` refs remain.
+- [x] **[prod blocker — DONE `7c47a55`]** n8n trigger-call webhook reads `N8N_CALL_WEBHOOK_URL`, no localhost default (throws/mocks if unset).
+- [x] **[DONE `7c47a55`]** ASR endpoint reads `NEXT_PUBLIC_ASR_URL`; localhost:8000 only as dev fallback/comment.
+- [x] **[DONE `3b92089`]** Canonical design SSOT — `public/design-system-new/` comment refs cleared (0 in src/); canonical = `public/` root + PRODUCT.md.
+- [x] **[DONE 2026-06-17]** In-flight changes committed (Vite `public/voice-feature/*` removal, `globals.css` + `HomeClient.tsx` edits, new `public/assets/` audit images); working tree clean.
+- [ ] **[deploy gate]** Set required env vars in Vercel + host ASR/n8n (see LAUNCH.md).
+- [ ] **[P1]** `api/demo-automation:254` demo webhook still defaults to `localhost:5678` — make env-driven.
 - [ ] Lighthouse / perf / a11y on the GSAP-heavy flow + new sections.
 - [ ] Additional pages/sections in the same brutalist language.
 
@@ -39,7 +41,9 @@
 | `AI_GATEWAY_API_KEY` | chat + website-analyzer audit |
 | `ELEVEN_API_KEY`, `ELEVEN_DEFAULT_VOICE` | TTS |
 | `NEXT_PUBLIC_GWS_SCRIPT_URL` | lead capture (`LeadCaptureCard`) |
-| `N8N_CALL_WEBHOOK_URL` | trigger-call (defaults to `localhost:5678` — must be hosted for prod) |
+| `N8N_CALL_WEBHOOK_URL` | trigger-call (env-driven, no localhost default; set to hosted n8n for prod) |
+| `GWS_CLI_PATH` | the 3 GWS routes (falls back to node_modules / dev path) |
+| `NEXT_PUBLIC_ASR_URL` | Voice Agent transcription endpoint |
 
 ## Verification (gsd-verify-work / manual)
 
@@ -49,7 +53,7 @@
 - Outbound widget: select Darl/Robokev, enter number → call triggered.
 - Reduced motion (OS/devtools): everything static, all physical artifacts present and legible.
 - Brand: verify one-red, single WONK per surface, copy tone vs PRODUCT.md.
-- Local backends reachable: AI Gateway key set, Supertonic on `:8000`, GWS CLI present at its path (local only — see prod blocker).
+- Backends reachable: AI Gateway key set; ASR via `NEXT_PUBLIC_ASR_URL` (Supertonic `:8000` in dev); GWS CLI resolvable via `GWS_CLI_PATH` / node_modules; n8n via `N8N_CALL_WEBHOOK_URL`.
 
 ---
 

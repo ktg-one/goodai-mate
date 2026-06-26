@@ -34,21 +34,28 @@ Verified present in `src/` on 2026-06-16:
 
 Prioritised by the 2026-06-16 validation:
 
-1. **[RESOLVED] De-hardcode the GWS CLI path.** `api/analyze-website`, `api/trigger-call`, `api/demo-automation` now support dynamic path resolution from `GWS_CLI_PATH`, with fallback to local `node_modules` or developer's Windows path. Works with direct binary execution if not a JS script.
-2. **[RESOLVED] Hosted n8n webhook.** `api/trigger-call` no longer defaults to localhost:5678, throwing a graceful simulation error if `N8N_CALL_WEBHOOK_URL` is omitted.
-3. **[RESOLVED] Prod ASR path.** The voice agent ASR points to `NEXT_PUBLIC_ASR_URL` with graceful fallback handling.
-4. **Resolve design SSOT drift** — `public/design-system-new/` was flattened to `public/` root (2026-06-10 consolidate commit) but **11** source files still cite the removed `design-system-new/` path in comments. Declare `public/` root + PRODUCT.md canonical and fix the stale references.
-5. Commit / finalise the in-flight changes (voice-feature removal, css/HomeClient, audit assets).
-6. Perf / a11y pass (Lighthouse) on the GSAP-heavy flow + new sections.
-7. Capture v1.1 retroactively as a proper gsd milestone if continued (gsd-new-milestone / gsd-plan-phase) so future work is tracked.
+**Code-side blockers — all RESOLVED & committed 2026-06-17 (verified in src/ 2026-06-24):**
+1. **[DONE `7c47a55`] GWS CLI path de-hardcoded.** Resolves from `GWS_CLI_PATH`, falls back to local `node_modules`, then a dev path. 0 `D:\packages` refs remain.
+2. **[DONE `7c47a55`] n8n trigger-call webhook env-driven.** Reads `N8N_CALL_WEBHOOK_URL`, no localhost default; throws/mocks gracefully if unset.
+3. **[DONE `7c47a55`] ASR path env-driven.** Reads `NEXT_PUBLIC_ASR_URL`; localhost:8000 only as dev fallback/comment example.
+4. **[DONE `3b92089`] Design SSOT drift cleared.** 0 `design-system-new/` refs in src/. Canonical = `public/` root + PRODUCT.md.
+5. **[DONE 2026-06-17] In-flight changes committed.** Vite `public/voice-feature/*` removed, css/HomeClient edits + audit assets landed; working tree clean.
+
+**Remaining (deploy-side + polish):**
+6. **[deploy gate] Wire hosted services + Vercel env vars** (`AI_GATEWAY_API_KEY`, `ELEVEN_*`, `NEXT_PUBLIC_GWS_SCRIPT_URL`, `N8N_CALL_WEBHOOK_URL`, `GWS_CLI_PATH`, `NEXT_PUBLIC_ASR_URL`) — see LAUNCH.md.
+7. **[P1] `api/demo-automation:254`** still defaults the demo webhook to `localhost:5678` — make env-driven for consistency with `trigger-call`.
+8. Perf / a11y pass (Lighthouse) on the GSAP-heavy flow + new sections.
+9. Additional brutalist surfaces (services / about / case studies).
+10. Capture v1.1 retroactively as a proper gsd milestone if continued (gsd-new-milestone / gsd-plan-phase) so future work is tracked.
 
 See `.planning/TODO.md` for the same list as an actionable, file-level functional checklist, and `.planning/LAUNCH.md` for the production release and rollback playbook.
 
 ## Hygiene
 
 - Use `/gsd-health`, `/gsd-progress`, `/gsd-docs-update` to keep .planning in sync — last drift was ~6 weeks (2026-06-04 → 2026-06-16) because features shipped outside gsd phases.
+- **No Multica dependency:** the repo + `.planning/` are the authoritative source of truth; any AI CLI (Claude/Gemini/Qwen/Kimi) can continue from `.planning/TODO.md` alone. The local `.multica/` dir is agent-runtime scratch only — gitignore it.
 - Use goodai-award-configuration + goodai-agent-team for further high-craft brutalist surfaces (inject the canonical design SSOT + PRODUCT.md + live state + mechanical motion rules).
 
 ---
 
-*Updated 2026-06-16 after re-validating .planning against the live codebase, then re-verifying all three concerns directly in source. v1.1 lead-gen/automation wave recorded; prod-blocking/SSOT concerns confirmed.*
+*Updated 2026-06-24 after re-validating .planning against the live codebase + git (branch `goo-47-verify`). All five code-side blockers confirmed resolved & committed; remaining work is deploy-side env wiring + polish. Repo confirmed self-sufficient (no Multica dependency).*
