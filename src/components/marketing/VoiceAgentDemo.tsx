@@ -16,7 +16,7 @@ export default function VoiceAgentDemo() {
   const [activeTab, setActiveTab] = useState<'mic' | 'phone'>('mic');
 
   return (
-    <section className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+    <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
       <div className="mx-auto max-w-5xl px-6">
         <ScrollReveal className="text-center mb-9">
           <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">
@@ -91,7 +91,7 @@ export default function VoiceAgentDemo() {
             </div>
 
             {activeTab === 'mic' ? (
-              <VoiceAgentHero supertonicUrl={undefined} embedded />
+              <VoiceAgentHero embedded />
             ) : (
               <OutboundCallCard />
             )}

@@ -3,7 +3,7 @@ pid: 52816
 cwd: "C:\Users\kevin\projects2026\06-projects-code\goodai-mate"
 command: "taskkill /PID 18976 /F 2>$null; taskkill /PID 52436 /F 2>$null; Start-Sleep -Seconds 1; Set-Location \"C:\\Users\\kevin\\projects2026\\06-projects-code\\goodai-mate\"; npm run dev"
 started_at: 2026-06-26T02:27:43.851Z
-running_for_ms: 2194992  
+running_for_ms: 4740001  
 ---
 SUCCESS: The process with PID 18976 has been terminated.
 
@@ -26,3 +26,18 @@ SUCCESS: The process with PID 18976 has been terminated.
  GET / 200 in 227ms (next.js: 100ms, application-code: 128ms)
  GET / 200 in 204ms (next.js: 52ms, application-code: 152ms)
  GET / 200 in 141ms (next.js: 42ms, application-code: 99ms)
+ GET / 200 in 146ms (next.js: 45ms, application-code: 102ms)
+✓ Compiled in 88ms
+ GET / 200 in 61ms (next.js: 36ms, application-code: 25ms)
+✓ Compiled in 71ms
+ GET / 200 in 201ms (next.js: 55ms, application-code: 146ms)
+ GET / 200 in 44ms (next.js: 4ms, application-code: 40ms)
+ GET / 200 in 143ms (next.js: 44ms, application-code: 100ms)
+[browser] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled (src/components/HomeClient.tsx:64:48)
+✓ Compiled in 105ms
+ GET / 200 in 129ms (next.js: 62ms, application-code: 67ms)
+ GET / 200 in 50ms (next.js: 4ms, application-code: 46ms)
+ GET / 200 in 26ms (next.js: 3ms, application-code: 24ms)
+ GET / 200 in 26ms (next.js: 15ms, application-code: 12ms)
+ GET / 200 in 138ms (next.js: 4ms, application-code: 134ms)
+[browser] You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled (src/components/HomeClient.tsx:64:48)

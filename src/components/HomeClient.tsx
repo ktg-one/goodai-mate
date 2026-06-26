@@ -19,6 +19,7 @@ import AISolutions from '@/components/marketing/AISolutions';
 import VoiceAgentDemo from '@/components/marketing/VoiceAgentDemo';
 import AutomationPlayground from '@/components/AutomationPlayground';
 import WebsiteAnalyzer from '@/components/marketing/WebsiteAnalyzer';
+import BuzzCTA from '@/components/marketing/BuzzCTA';
 import { BrandShapesStamp } from '@/components/brand/BrandWordmark';
 
 
@@ -364,7 +365,6 @@ export default function HomeClient() {
     <div ref={mailBoardRef} className="mail-board overflow-x-hidden">
       {/* HERO - TTS feature (the Voice Agent as the product) — descent files into the stack */}
       <GemVoice 
-        supertonicUrl={undefined}
         onMailFiled={handleMailFiled}
       />
 
@@ -384,7 +384,7 @@ export default function HomeClient() {
       <div ref={ribbon3Ref} className="mail-ribbon-tear w-full" aria-hidden="true" />
 
       {/* Voice Agents Tiers — REPLACED: strong narrative "Docket Flow" (pinned mail rhythm, non-uniform) */}
-      <section ref={docketFlowRef} className="min-h-screen flex items-center py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+      <section ref={docketFlowRef} className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
         <div className="mx-auto max-w-5xl px-6">
           <div className="mb-9">
             <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">FILED · MAIL</span>
@@ -482,14 +482,14 @@ export default function HomeClient() {
       <VoiceAgentDemo />
 
       {/* Live Workspace Automation Playground */}
-      <section className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+      <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
         <div className="mx-auto max-w-5xl px-6">
           <AutomationPlayground />
         </div>
       </section>
 
       {/* Fallback text mode (temporary) */}
-      <section className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+      <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-6">
             <StampButton
@@ -521,8 +521,18 @@ export default function HomeClient() {
       </section>
 
       {/* Website Analyzer — custom audit automation */}
-      <section className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+      <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
         <WebsiteAnalyzer />
+      </section>
+
+      {/* Single buzz CTA — frontend only; wire onSubmit when backend is ready */}
+      <section
+        id="buzz-cta"
+        className="py-16 md:py-20 border-t-2 border-[var(--ink)] bg-[var(--paper)]"
+      >
+        <div className="mx-auto max-w-3xl px-6">
+          <BuzzCTA />
+        </div>
       </section>
 
       {/* POWERFUL CLOSING RITUAL — final thick ink navy stamped footer docket */}

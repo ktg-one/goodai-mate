@@ -1,20 +1,18 @@
-/* Fonts: DM Sans + Fraunces from public/fonts/ via next/font/local in layout.tsx.
-   Logos: public/company-assets/. Character sprites: public/assets/ (keep). */
+/* Canon: public/SKILL.md — cream canvas, coloured cards only.
+   DM Sans + Fraunces via next/font/local in layout.tsx; JetBrains Mono below. */
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
 @import "tailwindcss";
 
 @theme {
-  /* Font stacks: next/font var FIRST (if layout wires it), then the real family
-     name as a hard fallback so it works even if next/font is missing/broken. */
   --font-sans:    var(--font-dm-sans, "DM Sans"), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fraunces, "Fraunces"), Georgia, serif;
-  --font-mono:    ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  /* Brand palette exposed to Tailwind so `bg-paper`, `bg-navy`, `text-ink`,
-     `bg-gold`, `bg-red`, `border-ink` etc. are real utilities — components
-     stop reaching for default white/slate/blue. */
   --color-paper:        #FFF0D0;
-  --color-paper-raised: #FFFAEC;
   --color-paper-deep:   #F6E2B8;
+  --color-gold-tint:    #FBDFA6;
+  --color-red-tint:     #FBC9C1;
+  --color-navy-tint:    #C9CEDD;
   --color-cream-line:   #E0C690;
   --color-ink:          #111111;
   --color-ink-soft:     #1C1C1C;
@@ -29,25 +27,19 @@
   --color-ok:           #2E6E3E;
   --color-warn:         #D8331F;
 
-  /* Re-point Tailwind's defaults at the brand so stray bg-white / text-black
-     in existing components render on-brand instead of pure white/black. */
-  --color-white:        #FFFAEC;
+  /* Canvas = cream. No near-white card utility on cream. */
+  --color-white:        #FFF0D0;
   --color-black:        #111111;
   --color-background:   #FFF0D0;
   --color-foreground:   #111111;
 }
 
-
 /* ============================================================
-   Good'ai — Canonical tokens from public/colors_and_type.css
-   (source of truth). Warm cream paper + high-contrast coloured cards.
-   Verbatim drop + site overrides for mail-board.
+   Good'ai — Canonical tokens from public/SKILL.md (SSOT)
+   Warm cream canvas + high-contrast COLOURED cards.
    ============================================================ */
 
-/* Fonts loaded via next/font/local in layout.tsx from public/fonts/. */
-
 :root {
-  /* COLOUR — the five core brand colours (verbatim from June 3 design book) */
   --gold:        #F3A62A;
   --gold-deep:   #D98E1C;
   --gold-tint:   #FBDFA6;
@@ -60,9 +52,7 @@
   --navy-deep:   #161E3D;
   --navy-tint:   #C9CEDD;
 
-  /* Neutrals (WARM cream canvas + true black) */
   --paper:        #FFF0D0;
-  --paper-raised: #FFFAEC;   /* raised cream surface — chat, bubbles, lead card, stamp-box */
   --paper-deep:   #F6E2B8;
   --paper-3:      #ECD49A;
   --cream-line:   #E0C690;
@@ -72,20 +62,17 @@
   --ink-mute:     #6B6452;
   --ink-faint:    #A0967C;
 
-  /* Supporting */
   --hi-yellow:    #F3A62A;
   --trust-blue:   #202C59;
   --ok:           #2E6E3E;
   --warn:         #D8331F;
   --danger:       #D8331F;
 
-  /* LEGACY ALIASES */
   --orange:       var(--red);
   --orange-deep:  var(--red-deep);
   --orange-tint:  var(--red-tint);
-  --orange-50:    #FDE9E5;
   --orange-100:   #FBC9C1;
-
+  --orange-50:    #FDE9E5;
   --ocean-50:    #E8EAF1;
   --ocean-100:   #C9CEDD;
   --ocean-200:   #8A93B4;
@@ -94,9 +81,8 @@
   --ocean-500:   #1A2349;
   --ocean-600:   var(--navy-deep);
 
-  /* Semantic tokens */
   --bg:            var(--paper);
-  --bg-raised:     var(--paper-raised);
+  --bg-raised:     #FFFAEC;
   --bg-sunken:     var(--paper-deep);
   --bg-brand:      var(--navy);
   --bg-accent:     var(--red);
@@ -120,20 +106,16 @@
   --highlight:     var(--gold);
   --success:       var(--ok);
 
-  /* Stamp shadows — flat, participate on hover/press (verbatim) */
   --shadow-stamp:        3px 3px 0 var(--ink);
   --shadow-stamp-orange: 3px 3px 0 var(--red);
   --shadow-stamp-ocean:  3px 3px 0 var(--navy);
   --shadow-stamp-deep:   4px 4px 0 var(--ink);
 
-  /* Navy pile for hero stamp settle (deeper filing shadows) + docket */
   --navy-ink: #0F162B;
 
-  /* TYPE — Families. next/font var first, real family name as hard fallback so
-     the correct typeface loads even if next/font isn't wired in layout.tsx. */
   --font-sans:    var(--font-dm-sans, "DM Sans"), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fraunces, "Fraunces"), Georgia, serif;
-  --font-mono:    ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* TYPE — Scale */
   --fs-12: 0.75rem;
@@ -187,7 +169,69 @@
 .hl-red  { background: var(--red);  color: var(--paper); }
 .hl-navy { background: var(--navy); color: var(--paper); }
 
-/* Base paper grain + type (matches design previews / colors_and_type.css SSOT) */
+/* TYPE CLASSES — public/SKILL.md */
+.h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-64);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  font-variation-settings: "opsz" 144;
+  color: var(--fg);
+}
+.h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-36);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 72;
+  color: var(--fg);
+}
+.h3 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: var(--fs-24);
+  line-height: 1.2;
+  color: var(--fg);
+}
+.lede {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--fs-20);
+  line-height: 1.5;
+  color: var(--fg-soft);
+}
+.body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--fs-16);
+  line-height: 1.55;
+  color: var(--fg-soft);
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+}
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+  color: var(--fg-soft);
+}
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  font-variation-settings: "opsz" 144;
+}
+.wordmark .apos { color: var(--orange); }
+
+/* Base — cream canvas only; cards use gold / red / navy */
 html, body {
   min-height: 100%;
   background:
@@ -308,8 +352,9 @@ html, body {
 }
 
 /* Variant Backgrounds & Foregrounds */
+/* Cream-on-cream forbidden — gold tint only, nested inside coloured shells */
 .stamp-card-paper {
-  background: var(--paper);
+  background: var(--gold-tint);
   color: var(--ink);
   box-shadow: 3px 3px 0 var(--ink);
 }
@@ -370,7 +415,8 @@ html, body {
   border: 2px solid var(--ink);
   box-shadow: 4px 4px 0 var(--ink);
   border-radius: 4px;
-  background: var(--paper-raised);
+  background: var(--gold);
+  color: var(--ink);
 }
 .stamp-clack, .stamp-clack-red {
   transition: transform 90ms var(--ease-stamp-press), box-shadow 90ms var(--ease-stamp-press);
@@ -565,7 +611,7 @@ h1, h2,
 
 /* ============================================================
    CHAT INTERFACE & LEAD CAPTURE CARD STYLES
-   Brutalist mechanical styling matching colors_and_type.css
+   Brutalist mechanical styling — public/SKILL.md
    ============================================================ */
 
 /* Chat/Bubble styles */
@@ -585,7 +631,7 @@ h1, h2,
   max-height: 380px;
   overflow-y: auto;
   padding: 16px;
-  background: var(--paper);
+  background: var(--gold-tint);
 }
 
 .gai-chat-inner {
@@ -783,7 +829,7 @@ h1, h2,
 }
 
 .gai-input:focus {
-  background: var(--paper-raised);
+  background: var(--paper-deep);
   box-shadow: 3px 3px 0 var(--red);
   transform: translate(-1px, -1px);
 }
