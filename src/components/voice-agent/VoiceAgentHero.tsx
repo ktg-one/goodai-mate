@@ -57,6 +57,7 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
 
   // Vercel AI Gateway model selection
   const modelOptions = [
+    { id: 'deepseek/deepseek-v4-flash', name: 'DeepSeek V4 Flash' },
     { id: 'google/gemini-1.5-pro', name: 'Gemini 1.5 Pro (Google)' },
     { id: 'groq/llama3-70b-8192', name: 'Llama 3 70B (Groq)' },
     { id: 'anthropic/claude-sonnet-4-20250514', name: 'Claude 3.5 Sonnet' },

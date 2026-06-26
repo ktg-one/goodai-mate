@@ -8,10 +8,10 @@ export async function POST(req: NextRequest) {
       return new Response(JSON.stringify({ error: 'Text is required' }), { status: 400 });
     }
 
-    const apiKey = process.env.ELEVEN_API_KEY;
+    const apiKey = process.env.ELEVEN_API_KEY || process.env.ELEVENLABS_API_KEY;
     if (!apiKey) {
       return new Response(
-        JSON.stringify({ error: 'ElevenLabs API key not configured. Add ELEVEN_API_KEY=... to .env.local and to Vercel env vars.' }),
+        JSON.stringify({ error: 'ElevenLabs API key not configured. Add ELEVENLABS_API_KEY=... to .env.local and to Vercel env vars.' }),
         { status: 500 }
       );
     }

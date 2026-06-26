@@ -10,8 +10,8 @@ export async function POST(req: Request) {
 
     const gatewayApiKey = process.env.AI_GATEWAY_API_KEY;
 
-    // Use selected model, default to Gemini 1.5 Pro
-    const selectedModel = model || 'google/gemini-1.5-pro';
+    // Use selected model, default to DeepSeek V4 Flash
+    const selectedModel = model || 'deepseek/deepseek-v4-flash';
     const systemPrompt = getSystemPrompt(agent);
 
     let modelInstance;
