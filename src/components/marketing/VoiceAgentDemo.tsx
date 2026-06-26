@@ -35,7 +35,7 @@ export default function VoiceAgentDemo() {
             <p className="text-2xl mb-7">
               Ready to knock off early?
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 w-full justify-center max-w-xl">
+            <div className="flex flex-col sm:flex-row gap-4 w-full justify-center max-w-xl mx-auto">
               <StampButton
                 variant="red"
                 size="lg"
@@ -59,7 +59,7 @@ export default function VoiceAgentDemo() {
                 Agent calls your phone →
               </StampButton>
             </div>
-            <p className="mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--paper)]/70">
+            <p className="mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--gold)]">
               Perth local test dialer. Instant callback.
             </p>
           </StampCard>

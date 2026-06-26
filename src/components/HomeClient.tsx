@@ -17,8 +17,6 @@ import WhyGoodAI from '@/components/marketing/WhyGoodAI';
 import Manifest from '@/components/marketing/Manifest';
 import AISolutions from '@/components/marketing/AISolutions';
 import VoiceAgentDemo from '@/components/marketing/VoiceAgentDemo';
-import AutomationPlayground from '@/components/AutomationPlayground';
-import WebsiteAnalyzer from '@/components/marketing/WebsiteAnalyzer';
 import BuzzCTA from '@/components/marketing/BuzzCTA';
 import { BrandShapesStamp } from '@/components/brand/BrandWordmark';
 
@@ -481,13 +479,6 @@ export default function HomeClient() {
       {/* Voice agent demo (enhanced) + strong CTA */}
       <VoiceAgentDemo />
 
-      {/* Live Workspace Automation Playground */}
-      <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
-        <div className="mx-auto max-w-5xl px-6">
-          <AutomationPlayground />
-        </div>
-      </section>
-
       {/* Fallback text mode (temporary) */}
       <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
         <div className="mx-auto max-w-5xl px-6">
@@ -520,10 +511,9 @@ export default function HomeClient() {
         </div>
       </section>
 
-      {/* Website Analyzer — custom audit automation */}
-      <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
-        <WebsiteAnalyzer />
-      </section>
+      {/* Website Analyzer — BLOCKED OUT until ready.
+          To restore: re-add `import WebsiteAnalyzer from '@/components/marketing/WebsiteAnalyzer';`
+          and a <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]"><WebsiteAnalyzer /></section> here. */}
 
       {/* Single buzz CTA — frontend only; wire onSubmit when backend is ready */}
       <section
