@@ -3,7 +3,7 @@
    ------------------------------------------------------------
    Palette: Mustard-gold + Coral-red + Navy + Warm cream + Black.
    #F3A62A  #F4442E  #202C59  #FFF0D0  #111111
-   Brutalist / direct-mail composition. Warm cream canvas,
+   Direct-mail composition. Warm cream canvas,
    high-contrast COLOURED cards, white-on-colour text.
    ============================================================ */
 
@@ -278,5 +278,3 @@ html, body {
 .hl      { background: var(--gold); color: var(--ink); }   /* default — gold sticker */
 .hl-red  { background: var(--red);  color: var(--paper); } /* loud — coral on the shout word */
 .hl-navy { background: var(--navy); color: var(--paper); } /* quiet — navy block */
-
-/ WHITE CARDS ON WHITE BACKGROUND IS FORBIDDEN

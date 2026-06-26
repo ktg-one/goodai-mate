@@ -43,7 +43,7 @@ Prioritised by the 2026-06-16 validation:
 
 **Remaining (deploy-side + polish):**
 6. **[deploy gate] Wire hosted services + Vercel env vars** (`AI_GATEWAY_API_KEY`, `ELEVEN_*`, `NEXT_PUBLIC_GWS_SCRIPT_URL`, `N8N_CALL_WEBHOOK_URL`, `GWS_CLI_PATH`, `NEXT_PUBLIC_ASR_URL`) — see LAUNCH.md.
-7. **[P1] `api/demo-automation:254`** still defaults the demo webhook to `localhost:5678` — make env-driven for consistency with `trigger-call`.
+7. **[DONE] `api/demo-automation:254`** still defaults the demo webhook to `localhost:5678` — made env-driven for consistency with `trigger-call` (reads `N8N_DEMO_WEBHOOK_URL` / `N8N_CALL_WEBHOOK_URL`).
 8. Perf / a11y pass (Lighthouse) on the GSAP-heavy flow + new sections.
 9. Additional brutalist surfaces (services / about / case studies).
 10. Capture v1.1 retroactively as a proper gsd milestone if continued (gsd-new-milestone / gsd-plan-phase) so future work is tracked.

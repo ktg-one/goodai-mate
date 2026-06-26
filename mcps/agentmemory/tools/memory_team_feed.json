@@ -1,0 +1,13 @@
+{
+  "name": "memory_team_feed",
+  "description": "Get recent shared items from all team members.",
+  "inputSchema": {
+    "properties": {
+      "limit": {
+        "description": "Max items (default 20)",
+        "type": "number"
+      }
+    },
+    "type": "object"
+  }
+}

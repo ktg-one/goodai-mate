@@ -1,0 +1,26 @@
+---
+pid: 52436
+cwd: "C:\Users\kevin\projects2026\06-projects-code\goodai-mate"
+command: "Set-Location \"C:\\Users\\kevin\\projects2026\\06-projects-code\\goodai-mate\"; npm run dev"
+started_at: 2026-06-26T02:27:12.353Z
+running_for_ms: 2224997  
+---
+
+> nextjs@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.7 (Turbopack)
+⚠ Port 3000 is in use by process 18976, using available port 3001 instead.
+- Local:         http://localhost:3001
+- Network:       http://192.168.0.9:3001
+- Environments: .env
+✓ Ready in 548ms
+⨯ Another next dev server is already running.
+
+
+- Local:        http://localhost:3000
+- PID:          18976
+- Dir:          C:\Users\kevin\projects2026\06-projects-code\goodai-mate
+- Log:          .next\dev\logs\next-development.log
+
+Run taskkill /PID 18976 /F to stop it.

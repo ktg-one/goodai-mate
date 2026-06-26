@@ -1,0 +1,17 @@
+{
+  "name": "memory_next",
+  "description": "Get the single most important next action to work on. Combines dependency resolution, priority, and recency into a score.",
+  "inputSchema": {
+    "properties": {
+      "agentId": {
+        "description": "Current agent ID",
+        "type": "string"
+      },
+      "project": {
+        "description": "Filter by project",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  }
+}

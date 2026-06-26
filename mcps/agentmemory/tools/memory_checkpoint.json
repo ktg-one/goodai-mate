@@ -1,0 +1,36 @@
+{
+  "name": "memory_checkpoint",
+  "description": "Create or resolve an external checkpoint (CI result, approval, deploy status) that gates action progress.",
+  "inputSchema": {
+    "properties": {
+      "checkpointId": {
+        "description": "Checkpoint ID (for resolve)",
+        "type": "string"
+      },
+      "linkedActionIds": {
+        "description": "Comma-separated action IDs this checkpoint gates (for create)",
+        "type": "string"
+      },
+      "name": {
+        "description": "Checkpoint name (for create)",
+        "type": "string"
+      },
+      "operation": {
+        "description": "create, resolve, or list",
+        "type": "string"
+      },
+      "status": {
+        "description": "passed or failed (for resolve)",
+        "type": "string"
+      },
+      "type": {
+        "description": "Checkpoint type: ci, approval, deploy, external, timer",
+        "type": "string"
+      }
+    },
+    "required": [
+      "operation"
+    ],
+    "type": "object"
+  }
+}

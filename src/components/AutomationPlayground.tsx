@@ -88,7 +88,7 @@ export default function AutomationPlayground() {
   };
 
   return (
-    <div className="gai-leadcard border-2 border-[var(--ink)] bg-[var(--paper-raised)] p-6 md:p-8 rounded-sm shadow-[4px_4px_0_var(--ink)] w-full">
+    <div className="stamp-card stamp-card-gold p-6 md:p-8 w-full">
       <div className="gai-leadcard-eyebrow flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--red)] mb-3">
         <Sparkles size={14} /> Live Workspace Playground
       </div>
@@ -97,14 +97,14 @@ export default function AutomationPlayground() {
         Run real <span className="hl">Workspace Automations</span>.
       </h3>
       <p className="text-sm md:text-base text-[var(--ink)]/80 mb-6 max-w-2xl leading-relaxed">
-        Test our integration pipeline. Since the Google Workspace CLI is now fully authenticated on your machine, you can run actual Sheets, Docs, Calendar, and Gmail scripts directly from this dashboard.
+        Run a live Workspace demo — Sheets, Docs, Calendar, and Gmail wired into one intake docket.
       </p>
 
       <div className="grid lg:grid-cols-12 gap-8">
         {/* Form Column */}
         <form onSubmit={runAutomation} className="lg:col-span-5 flex flex-col gap-5">
           <div className="flex flex-col gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">1. ENTER DEMO DETAILS</span>
+            <span className="sticker-label sticker-label-navy">CONTACT</span>
             <input
               className="gai-input w-full"
               placeholder="Demo Contact Name"
@@ -141,7 +141,7 @@ export default function AutomationPlayground() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">2. DESCRIBE AUTOMATION JOB</span>
+            <span className="sticker-label sticker-label-navy">THE CHORE</span>
             <textarea
               className="gai-input w-full min-h-[70px] text-sm resize-y"
               placeholder="Define a chore or task..."
@@ -153,7 +153,7 @@ export default function AutomationPlayground() {
 
           {/* Checklist of actions */}
           <div className="flex flex-col gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">3. SELECT GOOGLE SERVICES</span>
+            <span className="sticker-label sticker-label-navy">SERVICES</span>
             <div className="grid grid-cols-2 gap-2 text-xs font-mono">
               <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
                 <input
@@ -251,7 +251,7 @@ export default function AutomationPlayground() {
 
           {/* Results dashboard */}
           {results && (
-            <div className="border-2 border-[var(--ink)] bg-[var(--paper)] p-4 rounded-xs shadow-[2px_2px_0_var(--ink)]">
+            <div className="stamp-card stamp-card-navy p-4">
               <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--red)] font-bold mb-3 flex items-center gap-1">
                 <Check size={12} /> LIVE WORKSPACE DOCKETS FILED:
               </div>
@@ -261,7 +261,7 @@ export default function AutomationPlayground() {
                     href={results.sheetUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 border border-[var(--ink)]/20 hover:border-[var(--ink)] bg-[var(--paper-raised)] p-2 hover:bg-[var(--gold-tint)] hover:translate-y-[-1px] transition-all"
+                    className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--paper)] hover:translate-y-[-1px] transition-all"
                   >
                     <FileSpreadsheet size={16} className="text-[var(--ok)]" />
                     <span className="underline truncate">Google Sheet Lead Board</span>
@@ -272,14 +272,14 @@ export default function AutomationPlayground() {
                     href={results.docUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 border border-[var(--ink)]/20 hover:border-[var(--ink)] bg-[var(--paper-raised)] p-2 hover:bg-[var(--gold-tint)] hover:translate-y-[-1px] transition-all"
+                    className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--paper)] hover:translate-y-[-1px] transition-all"
                   >
                     <FileText size={16} className="text-[var(--navy)]" />
                     <span className="underline truncate">Google Doc Proposal</span>
                   </a>
                 )}
                 {results.emailId && (
-                  <div className="flex items-center gap-2 border border-[var(--ink)]/20 bg-[var(--paper-raised)] p-2">
+                  <div className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2">
                     <Mail size={16} className="text-[var(--red)]" />
                     <span className="truncate">Email Sent (ID: {results.emailId.slice(0,8)}...)</span>
                   </div>
@@ -289,14 +289,14 @@ export default function AutomationPlayground() {
                     href={results.calendarUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 border border-[var(--ink)]/20 hover:border-[var(--ink)] bg-[var(--paper-raised)] p-2 hover:bg-[var(--gold-tint)] hover:translate-y-[-1px] transition-all"
+                    className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--paper)] hover:translate-y-[-1px] transition-all"
                   >
                     <Calendar size={16} className="text-[var(--gold-deep)]" />
                     <span className="underline truncate">Scheduled Calendar Call</span>
                   </a>
                 )}
                 {results.n8nStatus && (
-                  <div className="flex items-center gap-2 border border-[var(--ink)]/20 bg-[var(--paper-raised)] p-2">
+                  <div className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2">
                     <Sparkles size={16} className="text-[var(--navy)]" />
                     <span className="truncate">n8n Webhook: {results.n8nStatus}</span>
                   </div>

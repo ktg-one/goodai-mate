@@ -1,34 +1,13 @@
-/* Fonts load HERE so they never depend on next/font being wired in layout.tsx.
-   DM Sans + JetBrains Mono from Google; Fraunces variable TTF from /public/fonts.
-   MUST precede `@import "tailwindcss"` — Tailwind v4 inlines its rules in place,
-   and CSS requires every @import to sit before all other rules. */
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=JetBrains+Mono:wght@400;500;700&display=swap");
-
+/* Fonts: DM Sans + Fraunces from public/fonts/ via next/font/local in layout.tsx.
+   Logos: public/company-assets/. Character sprites: public/assets/ (keep). */
 @import "tailwindcss";
-
-@font-face {
-  font-family: "Fraunces";
-  src: url("/fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype-variations"),
-       url("/fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Fraunces";
-  src: url("/fonts/Fraunces-Italic-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype-variations"),
-       url("/fonts/Fraunces-Italic-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: swap;
-}
 
 @theme {
   /* Font stacks: next/font var FIRST (if layout wires it), then the real family
      name as a hard fallback so it works even if next/font is missing/broken. */
   --font-sans:    var(--font-dm-sans, "DM Sans"), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fraunces, "Fraunces"), Georgia, serif;
-  --font-mono:    var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-mono:    ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   /* Brand palette exposed to Tailwind so `bg-paper`, `bg-navy`, `text-ink`,
      `bg-gold`, `bg-red`, `border-ink` etc. are real utilities — components
@@ -65,8 +44,7 @@
    Verbatim drop + site overrides for mail-board.
    ============================================================ */
 
-/* Fonts loaded via next/font in layout.tsx (DM Sans + JetBrains Mono from Google; Fraunces variable TTF from public/fonts/ matching the design in public/fonts/ verbatim, with SOFT + WONK axes).
-   --font-display resolves to the Fraunces variable for proper variation-settings support on .wonk-line, .font-display, h1/h2, .brand-wordmark. */
+/* Fonts loaded via next/font/local in layout.tsx from public/fonts/. */
 
 :root {
   /* COLOUR — the five core brand colours (verbatim from June 3 design book) */
@@ -155,7 +133,7 @@
      the correct typeface loads even if next/font isn't wired in layout.tsx. */
   --font-sans:    var(--font-dm-sans, "DM Sans"), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fraunces, "Fraunces"), Georgia, serif;
-  --font-mono:    var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-mono:    ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   /* TYPE — Scale */
   --fs-12: 0.75rem;
@@ -209,16 +187,56 @@
 .hl-red  { background: var(--red);  color: var(--paper); }
 .hl-navy { background: var(--navy); color: var(--paper); }
 
-/* Base paper grain + type (matches design previews) */
+/* Base paper grain + type (matches design previews / colors_and_type.css SSOT) */
 html, body {
   min-height: 100%;
-  background: var(--bg);
+  background:
+    repeating-linear-gradient(0deg, rgba(17, 17, 17, 0.025) 0 1px, transparent 1px 4px),
+    var(--bg);
   color: var(--fg);
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Sticker labels — replace numbered AI scaffolding (01, 02…) */
+.sticker-label {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 2px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.sticker-label-gold { background: var(--gold); color: var(--ink); }
+.sticker-label-red  { background: var(--red);  color: var(--paper); }
+.sticker-label-navy { background: var(--navy); color: var(--paper); }
+
+/* Filed mail in-tray — coloured dockets only (no cream-on-cream) */
+.in-tray-physical {
+  background: var(--navy);
+  border-top: 3px solid var(--ink);
+  box-shadow: 0 -4px 0 var(--ink);
+}
+.filed-docket {
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-xs);
+  box-shadow: 3px 3px 0 var(--ink);
+  background: var(--gold);
+  color: var(--ink);
+}
+.filed-docket:nth-child(even) {
+  background: var(--navy);
+  color: var(--paper);
+}
+.filed-docket:nth-child(even) .font-mono {
+  color: var(--paper);
 }
 
 /* ============================================================
@@ -555,7 +573,8 @@ h1, h2,
   width: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--paper-raised);
+  background: var(--navy);
+  color: var(--paper);
   border: 2px solid var(--ink);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-stamp);
@@ -596,7 +615,7 @@ h1, h2,
 }
 
 .gai-bubble-ai {
-  background: var(--paper-raised);
+  background: var(--gold-tint);
   color: var(--ink);
   box-shadow: 2px 2px 0 var(--ink);
 }
@@ -645,7 +664,7 @@ h1, h2,
 
 .gai-chat-bar {
   border-top: 2px solid var(--ink);
-  background: var(--paper-raised);
+  background: var(--navy-deep);
   padding: 12px;
 }
 
@@ -657,7 +676,7 @@ h1, h2,
 /* Lead Card Container */
 .gai-leadcard {
   width: 100%;
-  background: var(--paper-raised);
+  background: var(--gold);
   border: 2px solid var(--ink);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-stamp-orange);
@@ -671,7 +690,7 @@ h1, h2,
   display: flex;
   align-items: center;
   gap: 16px;
-  background: var(--paper-raised);
+  background: var(--gold-tint);
   border-color: var(--ok);
   box-shadow: 3px 3px 0 var(--ok);
   padding: 16px 20px;

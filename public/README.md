@@ -4,7 +4,7 @@
 
 Good'ai is a Perth-based business automation company that helps small-to-medium businesses (~$1M–$30M turnover) get the boring stuff off their plate. The promise: *knock off early, spend time with the kids — we'll sort the systems.*
 
-This design system is **brutalist / direct-mail**: a warm-cream canvas carrying high-contrast **coloured cards** — navy, gold, red and black blocks with cream-on-colour type, hard edges, and flat "stamp" shadows. It reads like a confident notice pinned to a board, not a soft SaaS landing page.
+This design system is **direct-mail / high-contrast**: a warm-cream canvas carrying high-contrast **coloured cards** — navy, gold, red and black blocks with cream-on-colour type, hard edges, and flat "stamp" shadows. It reads like a confident notice pinned to a board, not a soft SaaS landing page.
 
 ---
 

@@ -1,0 +1,17 @@
+{
+  "name": "memory_obsidian_export",
+  "description": "Export memories, lessons, and crystals as Obsidian-compatible Markdown files with YAML frontmatter and wikilinks for graph view.",
+  "inputSchema": {
+    "properties": {
+      "types": {
+        "description": "Comma-separated types to export: memories,lessons,crystals,sessions (default all)",
+        "type": "string"
+      },
+      "vaultDir": {
+        "description": "Output directory (default ~/.agentmemory/vault/)",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  }
+}

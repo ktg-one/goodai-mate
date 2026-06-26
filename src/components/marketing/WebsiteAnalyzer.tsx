@@ -77,7 +77,7 @@ export default function WebsiteAnalyzer() {
     <div className="mx-auto max-w-3xl px-6 py-12 border-t-2 border-dashed border-[var(--ink)]/30">
       <div className="text-center mb-6">
         <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">
-          BIG BOY AUTOMATION DEMO
+          SITE AUDIT
         </span>
         <h2 className="font-display text-4xl md:text-5xl tracking-[-0.025em] leading-none mt-2 mb-2">
           Try our <span className="hl">Website Analyzer</span>.
@@ -90,8 +90,8 @@ export default function WebsiteAnalyzer() {
       <div className="stamp-card stamp-card-navy p-6 md:p-8 relative">
         <form onSubmit={handleAnalyze} className="space-y-4">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="website-url" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">
-              1. Enter Website Link
+            <label htmlFor="website-url" className="sticker-label sticker-label-gold">
+              YOUR SITE
             </label>
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="relative flex-1">
@@ -154,7 +154,7 @@ export default function WebsiteAnalyzer() {
 
         {/* Audit Report Docket Results */}
         {result && (
-          <div className="mt-6 border-2 border-[var(--ink)] bg-[var(--paper)] p-5 rounded-xs shadow-[2px_2px_0_var(--ink)] space-y-4 text-left animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className="mt-6 stamp-card stamp-card-gold p-5 space-y-4 text-left animate-in fade-in slide-in-from-top-4 duration-300">
             <div className="flex items-center justify-between border-b border-[var(--ink)]/20 pb-2">
               <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--red)] font-bold flex items-center gap-1">
                 <ClipboardCheck size={14} /> CUSTOM SYSTEMS AUDIT
@@ -171,8 +171,8 @@ export default function WebsiteAnalyzer() {
               <ul className="space-y-2.5 text-xs leading-relaxed">
                 {result.automations.map((item, idx) => (
                   <li key={idx} className="flex gap-2.5 items-start">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-[var(--ink)] bg-[var(--gold-tint)] font-mono text-[10px] font-bold text-[var(--ink)]">
-                      {idx + 1}
+                    <span className="sticker-label sticker-label-navy shrink-0 text-[9px] py-0.5">
+                      {['INTAKE', 'CHASE', 'FILE'][idx] ?? 'TASK'}
                     </span>
                     <span className="text-[var(--ink)]/90">{item}</span>
                   </li>

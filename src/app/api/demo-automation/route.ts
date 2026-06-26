@@ -251,7 +251,7 @@ export async function POST(req: NextRequest) {
     // 5. n8n Webhook Pipeline Automation
     if (actions.n8n) {
       logs.push('Executing: n8n Webhook Pipeline Trigger...');
-      const targetUrl = n8nUrl?.trim() || 'http://localhost:5678/webhook/goodai-demo';
+      const targetUrl = n8nUrl?.trim() || process.env.N8N_DEMO_WEBHOOK_URL || process.env.N8N_CALL_WEBHOOK_URL || 'http://localhost:5678/webhook/goodai-demo';
       logs.push(`Sending lead payload to webhook URL: ${targetUrl}`);
       
       try {
