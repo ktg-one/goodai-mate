@@ -1,0 +1,36 @@
+{
+  "name": "memory_slot_create",
+  "description": "Create a new slot. Reject if a slot with the same label already exists.",
+  "inputSchema": {
+    "properties": {
+      "content": {
+        "description": "Initial content (default empty)",
+        "type": "string"
+      },
+      "description": {
+        "description": "What this slot is for",
+        "type": "string"
+      },
+      "label": {
+        "description": "Slot label — lowercase, starts with letter, [a-z0-9_]",
+        "type": "string"
+      },
+      "pinned": {
+        "description": "'false' to exclude from context injection; default true",
+        "type": "string"
+      },
+      "scope": {
+        "description": "'project' (default) or 'global' (shared across projects)",
+        "type": "string"
+      },
+      "sizeLimit": {
+        "description": "Max chars (default 2000, hard cap 20000)",
+        "type": "number"
+      }
+    },
+    "required": [
+      "label"
+    ],
+    "type": "object"
+  }
+}

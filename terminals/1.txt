@@ -1,0 +1,54 @@
+---
+pid: 40488
+cwd: "C:\Users\kevin\projects2026\06-projects-code\goodai-mate"
+command: "cd \"C:\\Users\\kevin\\projects2026\\06-projects-code\\goodai-mate\" && npm run dev"
+started_at: 2026-06-26T01:53:29.328Z
+running_for_ms: 4244995  
+---
+
+> nextjs@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.7 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.9:3000
+- Environments: .env
+✓ Ready in 572ms
+
+(node:42508) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:51192) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET / 200 in 418ms (next.js: 167ms, application-code: 251ms)
+ GET /assets/wave-ribbon.png 404 in 61ms (next.js: 33ms, application-code: 28ms)
+ GET / 200 in 155ms (next.js: 46ms, application-code: 109ms)
+[browser] Uncaught ReferenceError: Cannot access 'speakReply' before initialization
+    at GemVoice (src/components/voice-agent/gem-voice.tsx:304:69)
+    at HomeClient (src/components/HomeClient.tsx:366:7)
+    at Home (src\app\page.tsx:18:10)
+  302 |       setStatus('idle');
+  303 |     }
+> 304 |   }, [supertonicUrl, onMailFiled, getAudioContext, selectedModelId, speakReply]);
+      |                                                                     ^
+  305 |
+  306 |   const speakReply = async (text: string, overrideVoiceId?: string) => {
+  307 |     if (!text) return;
+[browser] ReferenceError: Cannot access 'speakReply' before initialization
+    at GemVoice (src/components/voice-agent/gem-voice.tsx:304:69)
+  302 |       setStatus('idle');
+  303 |     }
+> 304 |   }, [supertonicUrl, onMailFiled, getAudioContext, selectedModelId, speakReply]);
+      |                                                                     ^
+  305 |
+  306 |   const speakReply = async (text: string, overrideVoiceId?: string) => {
+  307 |     if (!text) return; (src/app/global-error.tsx:15:13)
+[browser] ReferenceError: Cannot access 'speakReply' before initialization
+    at GemVoice (src/components/voice-agent/gem-voice.tsx:304:69)
+  302 |       setStatus('idle');
+  303 |     }
+> 304 |   }, [supertonicUrl, onMailFiled, getAudioContext, selectedModelId, speakReply]);
+      |                                                                     ^
+  305 |
+  306 |   const speakReply = async (text: string, overrideVoiceId?: string) => {
+  307 |     if (!text) return; (src/app/global-error.tsx:15:13)
+

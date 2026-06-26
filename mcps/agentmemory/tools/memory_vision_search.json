@@ -1,0 +1,29 @@
+{
+  "name": "memory_vision_search",
+  "description": "Cross-modal image search via CLIP embeddings. Pass queryText to find screenshots matching a description, or queryImageBase64/queryImageRef to find similar images. Requires AGENTMEMORY_IMAGE_EMBEDDINGS=true.",
+  "inputSchema": {
+    "properties": {
+      "queryImageBase64": {
+        "description": "Raw base64 image bytes or data URL",
+        "type": "string"
+      },
+      "queryImageRef": {
+        "description": "Absolute path to a stored image to match against",
+        "type": "string"
+      },
+      "queryText": {
+        "description": "Text query (e.g. 'login form with error banner')",
+        "type": "string"
+      },
+      "sessionId": {
+        "description": "Filter to a single session",
+        "type": "string"
+      },
+      "topK": {
+        "description": "Max results (default 10, max 50)",
+        "type": "number"
+      }
+    },
+    "type": "object"
+  }
+}

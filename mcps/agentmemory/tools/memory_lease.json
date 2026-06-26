@@ -1,0 +1,34 @@
+{
+  "name": "memory_lease",
+  "description": "Acquire, release, or renew an exclusive lease on an action. Prevents multiple agents from working on the same thing.",
+  "inputSchema": {
+    "properties": {
+      "actionId": {
+        "description": "Action ID",
+        "type": "string"
+      },
+      "agentId": {
+        "description": "Agent claiming the action",
+        "type": "string"
+      },
+      "operation": {
+        "description": "acquire, release, or renew",
+        "type": "string"
+      },
+      "result": {
+        "description": "Result when releasing (marks action done)",
+        "type": "string"
+      },
+      "ttlMs": {
+        "description": "Lease duration in ms (default 10min, max 1hr)",
+        "type": "number"
+      }
+    },
+    "required": [
+      "actionId",
+      "agentId",
+      "operation"
+    ],
+    "type": "object"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "memory_profile",
+  "description": "User/project profile with top concepts and file patterns.",
+  "inputSchema": {
+    "properties": {
+      "project": {
+        "description": "Project path",
+        "type": "string"
+      },
+      "refresh": {
+        "description": "Set to 'true' to force rebuild",
+        "type": "string"
+      }
+    },
+    "required": [
+      "project"
+    ],
+    "type": "object"
+  }
+}

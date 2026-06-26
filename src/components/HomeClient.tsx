@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 // CRITICAL (AGENTS.md): direct imports, no barrels
-import { VoiceAgentHero } from '@/components/voice-agent/VoiceAgentHero';
+import { GemVoice } from '@/components/voice-agent/gem-voice';
 import ChatInterface from '@/components/ChatInterface';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
 // Direct imports (AGENTS.md) — stamp primitives for mail docket surfaces
@@ -19,6 +19,7 @@ import AISolutions from '@/components/marketing/AISolutions';
 import VoiceAgentDemo from '@/components/marketing/VoiceAgentDemo';
 import AutomationPlayground from '@/components/AutomationPlayground';
 import WebsiteAnalyzer from '@/components/marketing/WebsiteAnalyzer';
+import { BrandShapesStamp } from '@/components/brand/BrandWordmark';
 
 
 // GSAP for mail-stack composition (per gsap-awwwards-website + gsap-scrolltrigger skills)
@@ -362,7 +363,7 @@ export default function HomeClient() {
   return (
     <div ref={mailBoardRef} className="mail-board overflow-x-hidden">
       {/* HERO - TTS feature (the Voice Agent as the product) — descent files into the stack */}
-      <VoiceAgentHero 
+      <GemVoice 
         supertonicUrl={undefined}
         onMailFiled={handleMailFiled}
       />
@@ -401,7 +402,7 @@ export default function HomeClient() {
             {([
               { title: 'We listen once.', body: 'You speak the mess. Invoicing, follow-ups, quotes, the lot. The Voice Agent catches it locally.', variant: 'gold' },
               { title: 'We build the system.', body: 'Our team turns it into live automations in the tools you already use. Xero, ServiceM8, Tradify, whatever.', variant: 'navy' },
-              { title: 'It just runs.', body: 'You get time back. We keep the boring stuff off your plate every week. Perth mate, not a dashboard.', variant: 'paper' },
+              { title: 'It just runs.', body: 'You get time back. We keep the boring stuff off your plate every week. Perth mate, not a dashboard.', variant: 'gold' },
               { title: 'You knock off early.', body: 'The docket is closed. Kids, footy, whatever matters. We sorted the systems.', variant: 'navy' },
             ] as const).map((item, i) => (
               <StampCard
@@ -416,12 +417,8 @@ export default function HomeClient() {
                 } as React.CSSProperties)}
                 data-wear={i % 2 === 1 ? 'true' : undefined}
               >
-                {/* letter micro stamp in docket (verbatim asset use, one per surface) */}
-                <img 
-                  src={['/assets/letter-a.svg', '/assets/letter-good.svg', '/assets/letter-i.svg', '/assets/letter-swan.svg'][i % 4]} 
-                  alt="" 
-                  aria-hidden 
-                  className="docket-letter pointer-events-none absolute bottom-3 right-3 h-3.5 w-auto opacity-30" 
+                <BrandShapesStamp
+                  className="docket-letter pointer-events-none absolute bottom-3 right-3 h-5 w-auto"
                   style={{ transform: `rotate(${[-8, 6, -4, 9][i % 4]}deg)` }}
                 />
                 <h3 className="font-bold text-2xl tracking-[-0.015em] mb-3">{item.title}</h3>
@@ -467,10 +464,10 @@ export default function HomeClient() {
                     style={{ transformOrigin: '40% 20%' }}
                   >
                     {/* letter micro on filed docket */}
-                    <img src={['/assets/letter-a.svg','/assets/letter-good.svg','/assets/letter-i.svg','/assets/letter-swan.svg'][idx % 4]} alt="" aria-hidden className="absolute top-1 right-1 h-2.5 w-auto opacity-25" />
+                    <BrandShapesStamp className="absolute top-1 right-1 h-3 w-auto opacity-25" />
                     <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--ink)]/50 mb-0.5">YOU SAID</div>
                     <div className="line-clamp-1">“{mail.transcript.slice(0, 82)}”</div>
-                    <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--ocean-400)] mt-1.5 mb-0.5">GOOD&apos;AI FILED</div>
+                    <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--navy)] mt-1.5 mb-0.5"><span className="normal-case">Good<span style={{ color: 'var(--red)' }}>&apos;</span>ai</span> FILED</div>
                     <div className="line-clamp-1 text-[var(--ink)]">“{mail.response.slice(0, 78)}”</div>
                   </motion.div>
                 );
@@ -532,11 +529,11 @@ export default function HomeClient() {
       {/* Contains core promise + minimal contact + "we'll sort the boring stuff" in Fraunces WONK */}
       <footer
         ref={footerRef}
-        className="mail-docket-footer border-t-4 border-[var(--ink)] py-14 px-6 text-[var(--paper)]"
+        className="mail-docket-footer bg-[var(--navy)] border-t-4 border-[var(--ink)] py-14 px-6 text-[var(--paper)]"
       >
         <div className="mx-auto max-w-4xl text-center">
           <div className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--gold)] mb-4">
-            GOOD&apos;AI — PERTH
+            <span className="normal-case">Good<span style={{ color: 'var(--red)' }}>&apos;</span>ai</span> — PERTH
           </div>
 
           <div className="core-promise text-4xl md:text-5xl tracking-[-0.025em] leading-none mb-6">

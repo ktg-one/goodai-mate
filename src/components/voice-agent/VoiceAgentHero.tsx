@@ -3,9 +3,11 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Mic, Square, Volume2, RotateCcw } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'motion/react';
-import { Visualizer } from '@/components/hero/Visualizer';
+import { AudioVisualizer } from '@/components/voice-agent/AudioVisualizer';
 import { transcribeWithSupertonic } from '@/lib/voice/supertonic';
-import { BrandWordmark } from '@/components/brand/BrandWordmark';
+import { BrandMark, BrandWordmark } from '@/components/brand/BrandWordmark';
+import { CHARACTER_ASSETS } from '@/lib/brand-assets';
+import { TalkingCharacter } from '@/components/voice-agent/TalkingCharacter';
 import StampButton from '@/components/StampButton';
 
 // Mechanical stamp easing (canon design system)
@@ -30,19 +32,20 @@ interface VoiceAgentHeroProps {
   supertonicUrl?: string;
   /** Leaks the "mail" (transcript + response) to parent for persistent docket / in-tray filing across sections */
   onMailFiled?: (transcript: string, response: string) => void;
+  /** Compact mode when embedded inside VoiceAgentDemo (no duplicate chrome) */
+  embedded?: boolean;
 }
 
-export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroProps) {
+export function VoiceAgentHero({ supertonicUrl, onMailFiled, embedded = false }: VoiceAgentHeroProps) {
   const [status, setStatus] = useState<AgentStatus>('idle');
   const [selectedAgent, setSelectedAgent] = useState<'darl' | 'robokev'>('darl');
-  const [problemText, setProblemText] = useState('');
   const [userTranscript, setUserTranscript] = useState('');
   const [agentResponse, setAgentResponse] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   const [analyzerNode, setAnalyzerNode] = useState<AnalyserNode | null>(null);
-  const [sensitivity, setSensitivity] = useState(1);
-  const [visualMode, setVisualMode] = useState<'calm' | 'dynamic'>('dynamic');
+  const [viewMode, setViewMode] = useState<'avatar' | 'wave'>('avatar');
+  const [showLab, setShowLab] = useState(false);
 
   // ElevenLabs voice selection — "a few to try"
   const voiceOptions = [
@@ -75,16 +78,26 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
     }
   }, [selectedAgent]);
 
-  const sensitivityRef = useRef(sensitivity);
-  const visualModeRef = useRef(visualMode);
-
-  // Stamp clack signal for Visualizer (bump on every new transcript line = hard mechanical pop in ribbons)
-  const stampSignalRef = useRef(0);
-
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  // Single persistent AudioContext shared by mic (listening) AND TTS (speaking).
+  // Created once, resumed if suspended; disconnected (never closed) so it survives reuse.
   const audioContextRef = useRef<AudioContext | null>(null);
+  // Mic MediaStreamSource — disconnected on stop without tearing down the context.
+  const micSourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+
+  // Lazily create-once the shared AudioContext; resume if suspended. Returns the live ctx.
+  const getAudioContext = useCallback((): AudioContext => {
+    if (!audioContextRef.current) {
+      const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      audioContextRef.current = new Ctx();
+    }
+    if (audioContextRef.current.state === 'suspended') {
+      void audioContextRef.current.resume();
+    }
+    return audioContextRef.current;
+  }, []);
 
   // === HERO DESCENT SCROLL PHYSICS (signature Awwwards move) ===
   // The stamp-box "files itself" into the mail stack as you scroll. Shadows + ribbons react.
@@ -101,9 +114,7 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
   // ALSO publishes --hero-filing-progress CSS var (0-1) so the entire mail-board (ribbons, dockets, stamps)
   // can participate in physical "ink soak / shadow depth / paper settle" as the stamp-box descends.
   // One source of truth. 60fps. No additional scroll listeners.
-  const settleRef = useRef(0);
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    settleRef.current = latest;
     // Global participation in the filing ritual (brand: every docket feels the weight of the hero mail dropping)
     if (typeof document !== 'undefined') {
       document.documentElement.style.setProperty('--hero-filing-progress', latest.toFixed(3));
@@ -121,9 +132,69 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
     '2px 11px 0 var(--navy-ink)',
   ]);
 
-  // Keep refs in sync for Visualizer without causing re-renders in hot path
-  useEffect(() => { sensitivityRef.current = sensitivity; }, [sensitivity]);
-  useEffect(() => { visualModeRef.current = visualMode; }, [visualMode]);
+  const speakReply = useCallback(async (text: string, overrideVoiceId?: string) => {
+    if (!text) return;
+
+    const vId = overrideVoiceId || selectedVoiceId;
+    setStatus('speaking');
+
+    try {
+      const res = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, voiceId: vId }),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(errText || 'TTS request failed');
+      }
+
+      const audioBlob = await res.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+
+      const ctx = getAudioContext();
+      const src = ctx.createMediaElementSource(audio);
+      const ttsAnalyser = ctx.createAnalyser();
+      ttsAnalyser.fftSize = 128;
+      ttsAnalyser.smoothingTimeConstant = 0.75;
+      src.connect(ttsAnalyser);
+      ttsAnalyser.connect(ctx.destination);
+
+      const cleanup = () => {
+        src.disconnect();
+        ttsAnalyser.disconnect();
+        setAnalyzerNode(null);
+      };
+
+      audio.onended = () => {
+        cleanup();
+        setStatus('idle');
+        URL.revokeObjectURL(audioUrl);
+      };
+
+      audio.onerror = () => {
+        cleanup();
+        setStatus('idle');
+        setError('Voice playback failed.');
+        URL.revokeObjectURL(audioUrl);
+      };
+
+      setAnalyzerNode(ttsAnalyser);
+      setStatus('speaking');
+      await audio.play();
+    } catch {
+      setStatus('idle');
+      setError('Voice playback failed. Read the reply below.');
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.volume = 0.95;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+  }, [selectedVoiceId, getAudioContext]);
 
   const stopListening = useCallback(() => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
@@ -133,10 +204,9 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
     }
-    if (audioContextRef.current) {
-      audioContextRef.current.close();
-      audioContextRef.current = null;
-    }
+    // Disconnect the mic source but KEEP the shared AudioContext alive for TTS reuse.
+    micSourceRef.current?.disconnect();
+    micSourceRef.current = null;
     setAnalyzerNode(null);
   }, []);
 
@@ -149,10 +219,9 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
 
-       
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      audioContextRef.current = audioContext;
+      const audioContext = getAudioContext();
       const source = audioContext.createMediaStreamSource(stream);
+      micSourceRef.current = source;
       const analyser = audioContext.createAnalyser();
       analyser.fftSize = 64;
       analyser.smoothingTimeConstant = 0.7;
@@ -174,7 +243,6 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
           const transcript = await transcribeWithSupertonic(audioBlob, supertonicUrl);
           if (transcript && transcript.trim()) {
             setUserTranscript(transcript.trim());
-            stampSignalRef.current = (stampSignalRef.current || 0) + 1;
 
             // Call the real chat API (Good'ai persona)
             const res = await fetch('/api/chat', {
@@ -213,66 +281,20 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
             streamRef.current.getTracks().forEach(track => track.stop());
             streamRef.current = null;
           }
+          // Disconnect mic source but KEEP the shared context alive for TTS reuse.
+          micSourceRef.current?.disconnect();
+          micSourceRef.current = null;
           setAnalyzerNode(null);
         }
       };
 
       mediaRecorder.start();
       setStatus('listening');
-    } catch (err) {
-      setError('Microphone access needed for voice. Using text fallback.');
+    } catch {
+      setError('Microphone access needed. Allow mic access and try again.');
       setStatus('idle');
     }
-  }, [supertonicUrl, onMailFiled, userTranscript]);
-
-  // ElevenLabs TTS — replaces browser speechSynthesis for higher quality
-  // Streams audio from server route (key stays server-side)
-  const speakReply = async (text: string, overrideVoiceId?: string) => {
-    if (!text) return;
-
-    const vId = overrideVoiceId || selectedVoiceId;
-    setStatus('speaking');
-
-    try {
-      const res = await fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, voiceId: vId }),
-      });
-
-      if (!res.ok) {
-        const err = await res.text();
-        throw new Error(err || 'TTS request failed');
-      }
-
-      const audioBlob = await res.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio(audioUrl);
-
-      audio.onended = () => {
-        setStatus('idle');
-        URL.revokeObjectURL(audioUrl);
-      };
-
-      audio.onerror = () => {
-        setStatus('idle');
-        setError('Voice playback failed.');
-        URL.revokeObjectURL(audioUrl);
-      };
-
-      await audio.play();
-    } catch (err) {
-      setStatus('idle');
-      setError('ElevenLabs TTS failed. Falling back to browser voice.');
-      // graceful fallback to old browser speech (keeps the flow working)
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.volume = 0.95;
-        window.speechSynthesis.speak(utterance);
-      }
-    }
-  };
+  }, [supertonicUrl, onMailFiled, userTranscript, getAudioContext, selectedModelId, selectedAgent, speakReply]);
 
   const replayLastResponse = () => {
     if (agentResponse) speakReply(agentResponse);
@@ -281,179 +303,72 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
   const reset = () => {
     stopListening();
     setStatus('idle');
-    setProblemText('');
     setUserTranscript('');
     setAgentResponse('');
     setError(null);
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   };
 
-  const submitTypedProblem = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const problem = problemText.trim();
-    if (!problem || status === 'thinking') return;
-
-    setError(null);
-    setUserTranscript(problem);
-    setAgentResponse('');
-    setStatus('thinking');
-
-    try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: problem }),
-      });
-      const data = await res.json();
-      const reply = (data.reply || "We'll sort that. Tell us what tools it touches and we'll scope the system.").trim();
-      setAgentResponse(reply);
-      onMailFiled?.(problem, reply);
-      await speakReply(reply);
-    } catch {
-      setStatus('idle');
-      setError('Could not reach the intake. Try again in a moment.');
-    }
-  };
-
   const isActive = status === 'listening' || status === 'speaking';
 
   return (
-    <>
-    <section className="gai-onepage">
-      <div className="gai-onepage-top">
-        <BrandWordmark className="h-8" />
-        <span className="gai-perth-chip">PERTH <span>/</span> WA</span>
-      </div>
+    <div className={`relative w-full flex flex-col overflow-hidden font-sans ${embedded ? '' : 'min-h-screen bg-[var(--paper)]'}`}>
 
-      <div className="gai-onepage-inner">
-        <div className="w-full">
-          <span className="gai-eyebrow">Business automations · Perth · WA</span>
-
-          <h1 className="gai-hero-h1">
-            Knock off early.<br />
-            <em>We&apos;ll sort the <span className="hl">boring stuff</span>.</em>
-          </h1>
-
-          <p className="gai-hero-lede">
-            Tell us your problem. We&apos;ll figure out how to fix it.
-          </p>
-
-          <form className="gai-intake" onSubmit={submitTypedProblem}>
-            <div className="gai-intake-field">
-              <textarea
-                className="gai-intake-input"
-                value={problemText}
-                onChange={(event) => setProblemText(event.target.value)}
-                placeholder="My Friday invoicing eats 6 hours..."
-                aria-label="Describe your problem"
-                rows={3}
-                disabled={status === 'thinking'}
-              />
-              <div className="gai-intake-toolbar">
-                <button
-                  type="button"
-                  className={`gai-tool ${status === 'listening' ? 'is-on' : ''}`}
-                  onClick={isActive ? stopListening : startListening}
-                  aria-label={isActive ? 'Stop voice intake' : 'Speak instead of typing'}
-                >
-                  {isActive ? <Square size={14} aria-hidden="true" /> : <Mic size={14} aria-hidden="true" />}
-                  <span>{status === 'listening' ? 'Listening' : 'Speak'}</span>
-                </button>
-                <div className="gai-intake-spacer" />
-                <button type="submit" className="gai-tool gai-tool-send" disabled={status === 'thinking' || !problemText.trim()}>
-                  <span>{status === 'thinking' ? 'Sorting' : 'Sort it'}</span>
-                </button>
-              </div>
-            </div>
-            <p className="gai-intake-hint">One conversation. No sales call until you say so.</p>
-          </form>
-
-          {error && <div className="gai-error">{error}</div>}
-
-          {agentResponse && (
-            <div className="gai-answer">
-              <div className="gai-answer-head">
-                <span className="gai-answer-tag">Good&apos;ai says</span>
-                <button type="button" className="gai-tool gai-tool-mini" onClick={replayLastResponse}>
-                  <Volume2 size={14} aria-hidden="true" />
-                  <span>Hear it</span>
-                </button>
-                <button type="button" className="gai-tool gai-tool-mini" onClick={reset}>
-                  <RotateCcw size={14} aria-hidden="true" />
-                  <span>Reset</span>
-                </button>
-              </div>
-              <p className="gai-answer-text">{agentResponse}</p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="gai-features">
-        {[
-          ['Voice intake', 'Speak your problem'],
-          ['Read it back', 'Hear our reply'],
-          ['Real reasoning', 'Fired by Claude'],
-          ['Sub-second', 'No waiting room'],
-          ['Yours alone', 'No data resold'],
-        ].map(([label, detail], index) => (
-          <div className="gai-feature" key={label}>
-            <span className="gai-feature-icon">{String(index + 1).padStart(2, '0')}</span>
-            <div className="gai-feature-text">
-              <strong>{label}</strong>
-              <span>{detail}</span>
-            </div>
+      {!embedded && (
+        <div className="relative z-20 flex items-center justify-between px-6 md:px-12 pt-6 pb-4 border-b-2 border-[var(--ink)]">
+          <div className="flex items-center gap-2.5">
+            <BrandWordmark className="h-8" />
+            <BrandMark variant="dark" className="h-5 opacity-60" />
           </div>
-        ))}
-      </div>
-
-      <div className="gai-marquee">
-        <div className="gai-marquee-track">
-          {[0, 1].flatMap((loop) => [
-            'Quote builders',
-            'Booking flows',
-            'Voice agents',
-            'Lead capture',
-            'Report generation',
-            'Onboarding',
-            'Data entry',
-            'Email drafting',
-          ].map((item) => (
-            <span key={`${loop}-${item}`} className="gai-marquee-item">
-              {item}<span className="gai-marquee-sep">/</span>
-            </span>
-          )))}
-        </div>
-      </div>
-    </section>
-
-    <div className="relative w-full min-h-screen flex flex-col bg-[var(--paper)] overflow-hidden font-sans">
-
-      {/* Minimal top bar — BrandWordmark + asset variant stamp */}
-      <div className="relative z-20 flex items-center justify-between px-6 md:px-12 pt-6 pb-4 border-b-2 border-[var(--ink)]">
-        <div className="flex items-center gap-2.5">
-          <BrandWordmark className="h-8" />
-          {/* Asset integration: logo-mark-dark variant as small header stamp (pairs with navy accents) */}
-          <img src="/assets/logo-mark-dark.svg" alt="" className="h-5 w-auto opacity-60" aria-hidden />
-        </div>
-        <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink)]/60">
-          The Voice Agent
-        </div>
-      </div>
-
-      <div className="relative z-10 flex-1 flex flex-col items-center pt-6 md:pt-10 px-6 md:px-12">
-        {/* Small framing text — the "words" are intentionally minimal in the hero */}
-        <div className="mb-6 text-center">
-          <div className="inline-block font-mono text-xs uppercase tracking-[0.16em] bg-[var(--hi-yellow)] text-[var(--ink)] px-3 py-1 mb-2">
-            Real. Local. No hype.
+          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink)]/60">
+            Voice intake
           </div>
-          <div className="flex justify-center gap-2 mb-4 font-mono text-[10px]">
+        </div>
+      )}
+
+      <div className={`relative z-10 flex-1 flex flex-col items-center px-6 md:px-12 ${embedded ? 'pt-0' : 'pt-6 md:pt-10'}`}>
+        {!embedded && (
+          <div className="mb-6 text-center">
+            <span className="sticker-label sticker-label-gold mb-2">PERTH MATE</span>
+            <div className="flex justify-center gap-2 mb-4 font-mono text-[10px]">
+              <StampButton
+                variant="paper"
+                size="sm"
+                engaged={selectedAgent === 'darl'}
+                onClick={() => setSelectedAgent('darl')}
+                aria-label="Use Darl assistant persona"
+              >
+                Darl
+              </StampButton>
+              <StampButton
+                variant="paper"
+                size="sm"
+                engaged={selectedAgent === 'robokev'}
+                onClick={() => setSelectedAgent('robokev')}
+                aria-label="Use RoboKev voice persona"
+              >
+                RoboKev
+              </StampButton>
+            </div>
+            <h1 className="font-display text-[3.2rem] md:text-[4.5rem] leading-none tracking-[-0.04em] text-[var(--ink)]">
+              Talk to <span className="hl-red">Good&apos;ai</span>
+            </h1>
+            <p className="mt-3 text-xl text-[var(--ink)]/80 max-w-md mx-auto">
+              Speak your admin problem. We&apos;ll listen like a mate who actually gets it.
+            </p>
+          </div>
+        )}
+
+        {/* The Voice Agent surface — the actual product demo */}
+        {/* HIGHEST-LEVERAGE Awwwards moment: physical mail "descent & filing" on scroll.
+            Stamp shadow participates, ribbons damp, slight mechanical sink + rotation settle. 100% loyal to brutalist identity. */}
+        {embedded && (
+          <div className="flex justify-center gap-2 mb-4 font-mono text-[10px] w-full max-w-5xl">
             <StampButton
               variant="paper"
               size="sm"
               engaged={selectedAgent === 'darl'}
               onClick={() => setSelectedAgent('darl')}
-              aria-label="Use Darl assistant persona"
             >
               Darl
             </StampButton>
@@ -462,25 +377,15 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
               size="sm"
               engaged={selectedAgent === 'robokev'}
               onClick={() => setSelectedAgent('robokev')}
-              aria-label="Use RoboKev voice persona"
             >
               RoboKev
             </StampButton>
           </div>
-          <h1 className="font-display text-[3.2rem] md:text-[4.5rem] leading-none tracking-[-0.04em] text-[var(--ink)]">
-            Talk to <span className="hl-red">Good&apos;ai</span>
-          </h1>
-          <p className="mt-3 text-xl text-[var(--ink)]/80 max-w-md mx-auto">
-            Speak your admin problem. We&apos;ll listen like a mate who actually gets it.
-          </p>
-        </div>
+        )}
 
-        {/* The Voice Agent surface — the actual product demo */}
-        {/* HIGHEST-LEVERAGE Awwwards moment: physical mail "descent & filing" on scroll.
-            Stamp shadow participates, ribbons damp, slight mechanical sink + rotation settle. 100% loyal to brutalist identity. */}
-        <div className="w-full max-w-5xl mt-4 md:mt-6" ref={heroStampRef}>
+        <div className="w-full max-w-5xl mt-4 md:mt-6" ref={embedded ? undefined : heroStampRef}>
           <motion.div
-            className="stamp-box relative overflow-hidden bg-[var(--paper-raised)] border-2 border-[var(--ink)]"
+            className="stamp-box relative overflow-hidden bg-[var(--paper)] border-2 border-[var(--ink)]"
             style={{
               // Physical descent + filing: gentle sink + deepening shadow as "mailed into stack".
               // Rotate/scale removed — they warped the card (and its canvas/text) on scroll.
@@ -505,7 +410,7 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
                   <div className="w-2.5 h-2.5 border-2 border-[var(--ink)]" />
                 </div>
                 <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/70">
-                  Acoustic Feed — Supertonic + ElevenLabs
+                  Acoustic box
                 </span>
               </div>
 
@@ -521,23 +426,30 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
             </div>
 
             {/* Visualizer area — wave-ribbon.png added verbatim as design signal / waveform layer (Brutalist Skill.html example, multiply blend, scaleY(0.7), participates in filing) */}
-            <div className="relative h-[420px] md:h-[520px] bg-[var(--paper)] overflow-hidden">
+            <div className="relative h-[420px] md:h-[520px] bg-[var(--paper)] overflow-hidden flex items-center justify-center">
               <img 
-                src="/assets/wave-ribbon.png" 
+                src={CHARACTER_ASSETS.waveRibbon} 
                 alt="" 
                 aria-hidden 
                 className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[68px] w-full object-cover mix-blend-multiply opacity-38" 
                 style={{ transform: 'scaleY(0.7) translateY(calc(-50% + var(--hero-filing-progress, 0) * -7px))' }} 
               />
-              <Visualizer
-                analyzer={analyzerNode}
-                active={isActive}
-                status={status}
-                sensitivityRef={sensitivityRef}
-                modeRef={visualModeRef}
-                settleRef={settleRef}
-                stampSignalRef={stampSignalRef}
-              />
+              <div className={`absolute inset-0 z-10 ${viewMode === 'avatar' ? 'opacity-30' : 'opacity-100'}`}>
+                <AudioVisualizer
+                  analyser={analyzerNode}
+                  active={isActive}
+                  status={status}
+                />
+              </div>
+              {viewMode === 'avatar' && (
+                <div className="relative z-20">
+                  <TalkingCharacter
+                    analyser={analyzerNode}
+                    status={status}
+                    agent={selectedAgent === 'robokev' ? 'robokev' : 'darl'}
+                  />
+                </div>
+              )}
 
               {/* Live status overlay — mechanical relay stamp */}
               <div className="absolute top-4 left-4 z-30">
@@ -560,15 +472,15 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
 
               {/* Mode controls — SSOT StampButton (paper variant) with engaged + focus die ring, keyboard parity. Grouped segmented. */}
               <div className="absolute bottom-4 right-4 z-30 flex border-2 border-[var(--ink)] bg-[var(--paper)] text-[10px] font-mono uppercase font-bold overflow-hidden shadow-[2px_2px_0_var(--ink)]" role="group" aria-label="Visualizer mode">
-                {(['calm', 'dynamic'] as const).map((m) => (
+                {(['avatar', 'wave'] as const).map((m) => (
                   <StampButton
                     key={m}
                     variant="paper"
                     size="sm"
-                    engaged={visualMode === m}
-                    onClick={() => setVisualMode(m)}
-                    aria-pressed={visualMode === m}
-                    className={`px-5 py-2 text-[10px] border-r-2 border-[var(--ink)] last:border-r-0 ${visualMode === m ? 'bg-[var(--ink)] text-[var(--paper)]' : ''}`}
+                    engaged={viewMode === m}
+                    onClick={() => setViewMode(m)}
+                    aria-pressed={viewMode === m}
+                    className={`px-5 py-2 text-[10px] border-r-2 border-[var(--ink)] last:border-r-0 ${viewMode === m ? 'bg-[var(--ink)] text-[var(--paper)]' : ''}`}
                   >
                     {m}
                   </StampButton>
@@ -607,7 +519,7 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
                     transition={{ duration: 0.1, ease: STAMP_EASE }}
                     className="pl-1"
                   >
-                    <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--navy)]/70 mb-1">GOOD&apos;AI</div>
+                    <div className="font-mono text-[10px] tracking-[0.16em] text-[var(--navy)]/70 mb-1">Good<span className="text-[var(--red)]">&rsquo;</span>ai</div>
                     <p className="text-[var(--ink)] text-[15px] leading-snug">“{agentResponse}”</p>
                     <button onClick={replayLastResponse} className="mt-1 text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--navy)]/60 hover:text-[var(--navy)] underline decoration-1 underline-offset-2">Replay voice</button>
                   </motion.div>
@@ -621,86 +533,87 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
               )}
             </div>
 
-            {/* Backend model selector */}
-            <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-3 flex flex-wrap items-center gap-2">
-              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">BACKEND:</span>
-              {modelOptions.map((m) => (
-                <StampButton
-                  key={m.id}
-                  variant="paper"
-                  size="sm"
-                  engaged={selectedModelId === m.id}
-                  onClick={() => {
-                    setSelectedModelId(m.id);
-                  }}
-                  className="text-[10px] px-3 py-1"
-                >
-                  {m.name}
-                </StampButton>
-              ))}
-              <span className="ml-auto text-[10px] font-mono text-[var(--ink)]/40">Vercel AI Gateway</span>
-            </div>
-
-            {/* Voice selector — try a few ElevenLabs voices (career layer over the base TTS skill) */}
-            <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-3 flex flex-wrap items-center gap-2">
-              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">VOICE:</span>
-              {voiceOptions.map((v) => (
-                <StampButton
-                  key={v.id}
-                  variant="paper"
-                  size="sm"
-                  engaged={selectedVoiceId === v.id && !isCustomVoiceActive}
-                  onClick={() => {
-                    setIsCustomVoiceActive(false);
-                    setSelectedVoiceId(v.id);
-                    if (agentResponse) {
-                      // replay last response with the new voice
-                      speakReply(agentResponse, v.id);
-                    }
-                  }}
-                  className="text-[10px] px-3 py-1"
-                >
-                  {v.name}
-                </StampButton>
-              ))}
-
+            <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-2 flex justify-end">
               <StampButton
                 variant="paper"
                 size="sm"
-                engaged={isCustomVoiceActive}
-                onClick={() => {
-                  setIsCustomVoiceActive(true);
-                  if (customVoiceId) {
-                    setSelectedVoiceId(customVoiceId);
-                    if (agentResponse) {
-                      speakReply(agentResponse, customVoiceId);
-                    }
-                  }
-                }}
-                className="text-[10px] px-3 py-1"
+                engaged={showLab}
+                onClick={() => setShowLab((v) => !v)}
+                className="font-mono text-[10px] uppercase tracking-[0.16em]"
+                aria-expanded={showLab}
               >
-                Custom ID
+                {showLab ? 'Hide lab settings' : 'Lab settings'}
               </StampButton>
-
-              {isCustomVoiceActive && (
-                <input
-                  type="text"
-                  placeholder="Paste ElevenLabs Voice ID..."
-                  value={customVoiceId}
-                  onChange={(e) => {
-                    const val = e.target.value.trim();
-                    setCustomVoiceId(val);
-                    setSelectedVoiceId(val);
-                  }}
-                  className="font-mono text-[10px] bg-[var(--paper-deep)] border-2 border-[var(--ink)] px-2 py-1 max-w-[200px] text-[var(--ink)] focus:outline-none"
-                />
-              )}
-              
-              <span className="ml-auto text-[10px] font-mono text-[var(--ink)]/40">ElevenLabs</span>
             </div>
+            {showLab && (
+              <>
+                <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-3 flex flex-wrap items-center gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">Backend</span>
+                  {modelOptions.map((m) => (
+                    <StampButton
+                      key={m.id}
+                      variant="paper"
+                      size="sm"
+                      engaged={selectedModelId === m.id}
+                      onClick={() => setSelectedModelId(m.id)}
+                      className="text-[10px] px-3 py-1"
+                    >
+                      {m.name}
+                    </StampButton>
+                  ))}
+                </div>
+                <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-3 flex flex-wrap items-center gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">Voice</span>
+                  {voiceOptions.map((v) => (
+                    <StampButton
+                      key={v.id}
+                      variant="paper"
+                      size="sm"
+                      engaged={selectedVoiceId === v.id && !isCustomVoiceActive}
+                      onClick={() => {
+                        setIsCustomVoiceActive(false);
+                        setSelectedVoiceId(v.id);
+                        if (agentResponse) speakReply(agentResponse, v.id);
+                      }}
+                      className="text-[10px] px-3 py-1"
+                    >
+                      {v.name}
+                    </StampButton>
+                  ))}
+                  <StampButton
+                    variant="paper"
+                    size="sm"
+                    engaged={isCustomVoiceActive}
+                    onClick={() => {
+                      setIsCustomVoiceActive(true);
+                      if (customVoiceId) {
+                        setSelectedVoiceId(customVoiceId);
+                        if (agentResponse) speakReply(agentResponse, customVoiceId);
+                      }
+                    }}
+                    className="text-[10px] px-3 py-1"
+                  >
+                    Custom ID
+                  </StampButton>
+                  {isCustomVoiceActive && (
+                    <input
+                      type="text"
+                      placeholder="Voice ID…"
+                      value={customVoiceId}
+                      onChange={(e) => {
+                        const val = e.target.value.trim();
+                        setCustomVoiceId(val);
+                        setSelectedVoiceId(val);
+                      }}
+                      className="font-mono text-[10px] bg-[var(--paper-deep)] border-2 border-[var(--ink)] px-2 py-1 max-w-[200px] text-[var(--ink)] focus:outline-none"
+                    />
+                  )}
+                </div>
+              </>
+            )}
 
             {/* Big red stamp CTA — one red per surface, full physics */}
-            <div className="border-t-2 border-[var(--ink)] bg-[var(--paper-raised)] p-5 flex justify-center">
+            <div className="border-t-2 border-[var(--ink)] bg-[var(--gold-tint)] p-5 flex justify-center">
               <StampButton
                 variant="red"
                 size="lg"
@@ -723,12 +636,13 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled }: VoiceAgentHeroPro
             </div>
           </motion.div>
 
-          <p className="text-center mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--ink)]/50">
-            Powered by local Supertonic (ASR) • ElevenLabs (TTS) • Good&apos;ai persona
-          </p>
+          {!embedded && (
+            <p className="text-center mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--ink)]/50">
+              Built in Perth · Voice intake demo
+            </p>
+          )}
         </div>
       </div>
     </div>
-    </>
   );
 }

@@ -1,0 +1,20 @@
+{
+  "name": "memory_sentinel_trigger",
+  "description": "Externally fire a sentinel, providing an optional result payload. Unblocks any gated actions.",
+  "inputSchema": {
+    "properties": {
+      "result": {
+        "description": "JSON result payload",
+        "type": "string"
+      },
+      "sentinelId": {
+        "description": "Sentinel ID to trigger",
+        "type": "string"
+      }
+    },
+    "required": [
+      "sentinelId"
+    ],
+    "type": "object"
+  }
+}

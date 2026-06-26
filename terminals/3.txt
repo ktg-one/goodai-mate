@@ -1,0 +1,28 @@
+---
+pid: 52816
+cwd: "C:\Users\kevin\projects2026\06-projects-code\goodai-mate"
+command: "taskkill /PID 18976 /F 2>$null; taskkill /PID 52436 /F 2>$null; Start-Sleep -Seconds 1; Set-Location \"C:\\Users\\kevin\\projects2026\\06-projects-code\\goodai-mate\"; npm run dev"
+started_at: 2026-06-26T02:27:43.851Z
+running_for_ms: 2194992  
+---
+SUCCESS: The process with PID 18976 has been terminated.
+
+> nextjs@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.7 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.9:3000
+- Environments: .env
+✓ Ready in 409ms
+
+(node:47212) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET / 200 in 426ms (next.js: 164ms, application-code: 262ms)
+ GET / 200 in 163ms (next.js: 55ms, application-code: 108ms)
+ GET / 200 in 34ms (next.js: 5ms, application-code: 29ms)
+ GET / 200 in 134ms (next.js: 40ms, application-code: 94ms)
+ GET / 200 in 142ms (next.js: 41ms, application-code: 101ms)
+ GET / 200 in 227ms (next.js: 100ms, application-code: 128ms)
+ GET / 200 in 204ms (next.js: 52ms, application-code: 152ms)
+ GET / 200 in 141ms (next.js: 42ms, application-code: 99ms)

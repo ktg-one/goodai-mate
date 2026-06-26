@@ -1,0 +1,28 @@
+{
+  "name": "memory_sketch_create",
+  "description": "Create an ephemeral action graph for exploratory work. Auto-expires after TTL. Can be promoted to permanent actions or discarded.",
+  "inputSchema": {
+    "properties": {
+      "description": {
+        "description": "What this sketch explores",
+        "type": "string"
+      },
+      "expiresInMs": {
+        "description": "TTL in ms (default 1 hour)",
+        "type": "number"
+      },
+      "project": {
+        "description": "Project context",
+        "type": "string"
+      },
+      "title": {
+        "description": "Sketch title",
+        "type": "string"
+      }
+    },
+    "required": [
+      "title"
+    ],
+    "type": "object"
+  }
+}

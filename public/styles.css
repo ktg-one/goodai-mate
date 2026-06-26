@@ -1,0 +1,13 @@
+/* ============================================================
+   Good'AI Design System — root stylesheet
+   ------------------------------------------------------------
+   Single entry point for consumers. Link THIS file and you get
+   the full canonical token set + type classes + keyword highlight.
+
+   Source of truth lives in colors_and_type.css; everything else
+   (ui_kits/web/styles.css landing components, globals.fixed.css
+   production Tailwind build, export/* artifacts) is downstream of
+   these tokens and is NOT imported here on purpose.
+   ============================================================ */
+
+@import "./colors_and_type.css";

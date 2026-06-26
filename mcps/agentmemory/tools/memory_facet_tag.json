@@ -1,0 +1,31 @@
+{
+  "name": "memory_facet_tag",
+  "description": "Attach a structured tag (dimension:value) to an action, memory, or observation for multi-dimensional categorization.",
+  "inputSchema": {
+    "properties": {
+      "dimension": {
+        "description": "Tag dimension (e.g., priority, team, status)",
+        "type": "string"
+      },
+      "targetId": {
+        "description": "ID of the target to tag",
+        "type": "string"
+      },
+      "targetType": {
+        "description": "Type: action, memory, or observation",
+        "type": "string"
+      },
+      "value": {
+        "description": "Tag value (e.g., urgent, backend, reviewed)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "targetId",
+      "targetType",
+      "dimension",
+      "value"
+    ],
+    "type": "object"
+  }
+}

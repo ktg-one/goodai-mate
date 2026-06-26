@@ -1,6 +1,0 @@
-{
-  "name": "Good'ai",
-  "description": "A bidirectional speech interface with a polished wooden aesthetic and real-time audio visualization.",
-  "requestFramePermissions": ["microphone"],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

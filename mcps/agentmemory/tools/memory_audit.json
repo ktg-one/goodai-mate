@@ -1,0 +1,17 @@
+{
+  "name": "memory_audit",
+  "description": "View the audit trail of memory operations.",
+  "inputSchema": {
+    "properties": {
+      "limit": {
+        "description": "Max entries (default 50)",
+        "type": "number"
+      },
+      "operation": {
+        "description": "Filter by operation type",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  }
+}
