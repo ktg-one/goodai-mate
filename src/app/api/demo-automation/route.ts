@@ -52,16 +52,6 @@ async function runGwsCommand(args: string[], jsonInput?: unknown): Promise<unkno
   } catch (error: unknown) {
     const err = error as { stdout?: string; stderr?: string; message?: string };
     console.error(`GWS execution failed: ${command} ${fullArgs.map(a => `"${a}"`).join(' ')}`, err);
-    let errMsg = err.stdout || err.stderr || err.message || '';
-    try {
-      if (err.stdout) {
-        // Check if stdout was a JSON error response
-        const jsonErr = JSON.parse(err.stdout.trim());
-        if (jsonErr?.error?.message) {
-          errMsg = jsonErr.error.message;
-        }
-      }
-    } catch {}
     // Instead of throwing, we return null to allow graceful simulation degradation
     return null;
   }
@@ -141,7 +131,7 @@ export async function POST(req: NextRequest) {
                         `"${problem}"\n` +
                         `\n` +
                         `PREMIUM BRUTALIST SERVICE PROPOSAL:\n` +
-                        `1. Intake Setup: Deploy a bidirectional local voice agent via Supertonic.\n` +
+                        `1. Intake Setup: Deploy a bidirectional conversational voice agent via ElevenLabs.\n` +
                         `2. Core Pipeline: Sync incoming client logs to Google Sheets with real-time alerts.\n` +
                         `3. Final Settle: Implement automatic Google Docs docket generation and scheduling.\n` +
                         `\n` +

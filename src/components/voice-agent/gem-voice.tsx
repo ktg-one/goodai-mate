@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Mic, Square, Volume2, RotateCcw } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from 'motion/react';
 import { AudioVisualizer } from '@/components/voice-agent/AudioVisualizer';
-import { transcribeWithSupertonic } from '@/lib/voice/supertonic';
 import { BrandMark, BrandWordmark } from '@/components/brand/BrandWordmark';
 import { CHARACTER_ASSETS } from '@/lib/brand-assets';
 import StampButton from '@/components/StampButton';
@@ -12,8 +11,6 @@ import StampButton from '@/components/StampButton';
 type AgentStatus = 'idle' | 'listening' | 'thinking' | 'speaking' | 'error';
 
 interface GemVoiceProps {
-  /** Local Supertonic endpoint for transcription. Example: http://localhost:8000/transcribe */
-  supertonicUrl?: string;
   /** Leaks the "mail" (transcript + response) to parent for persistent docket / in-tray filing across sections */
   onMailFiled?: (transcript: string, response: string) => void;
 }
@@ -164,7 +161,7 @@ function GemTalkingCharacter({ analyser, status }: { analyser: AnalyserNode | nu
  * GemVoice
  * Dedicated Voice Agent demo for "Gem". Isolated to prevent AI conflicts.
  */
-export function GemVoice({ supertonicUrl, onMailFiled }: GemVoiceProps) {
+export function GemVoice({ onMailFiled }: GemVoiceProps) {
   const [status, setStatus] = useState<AgentStatus>('idle');
   const [userTranscript, setUserTranscript] = useState('');
   const [agentResponse, setAgentResponse] = useState('');
@@ -199,6 +196,9 @@ export function GemVoice({ supertonicUrl, onMailFiled }: GemVoiceProps) {
   const audioContextRef = useRef<AudioContext | null>(null);
   const micSourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
+  const recognitionTranscriptRef = useRef<string>('');
 
   const getAudioContext = useCallback((): AudioContext => {
     if (!audioContextRef.current) {
@@ -293,6 +293,14 @@ export function GemVoice({ supertonicUrl, onMailFiled }: GemVoiceProps) {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop();
     }
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch (err) {
+        console.warn('Error stopping speech recognition:', err);
+      }
+      recognitionRef.current = null;
+    }
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
@@ -328,11 +336,51 @@ export function GemVoice({ supertonicUrl, onMailFiled }: GemVoiceProps) {
         if (event.data.size > 0) audioChunksRef.current.push(event.data);
       };
 
+      // Set up native browser SpeechRecognition (ASR)
+      const SpeechRecognition = typeof window !== 'undefined'
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ? ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)
+        : null;
+
+      if (SpeechRecognition) {
+        const rec = new SpeechRecognition();
+        rec.continuous = true;
+        rec.interimResults = true;
+        rec.lang = 'en-US';
+        recognitionTranscriptRef.current = '';
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        rec.onresult = (event: any) => {
+          let interimTranscript = '';
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+              recognitionTranscriptRef.current = event.results[i][0].transcript;
+            } else {
+              interimTranscript += event.results[i][0].transcript;
+            }
+          }
+          if (!recognitionTranscriptRef.current && interimTranscript) {
+            recognitionTranscriptRef.current = interimTranscript;
+          }
+        };
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        rec.onerror = (e: any) => {
+          console.warn('Browser SpeechRecognition error:', e);
+        };
+
+        recognitionRef.current = rec;
+        try {
+          rec.start();
+        } catch (err) {
+          console.warn('Failed to start SpeechRecognition:', err);
+        }
+      }
+
       mediaRecorder.onstop = async () => {
         setStatus('thinking');
         try {
-          const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-          const transcript = await transcribeWithSupertonic(audioBlob, supertonicUrl);
+          const transcript = recognitionTranscriptRef.current || '';
           if (transcript && transcript.trim()) {
             setUserTranscript(transcript.trim());
 
@@ -380,7 +428,7 @@ export function GemVoice({ supertonicUrl, onMailFiled }: GemVoiceProps) {
       setError('Microphone access needed. Allow mic access and try again.');
       setStatus('idle');
     }
-  }, [supertonicUrl, onMailFiled, getAudioContext, selectedModelId, speakReply]);
+  }, [onMailFiled, getAudioContext, selectedModelId, speakReply]);
 
   const reset = () => {
     stopListening();

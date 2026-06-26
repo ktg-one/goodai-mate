@@ -22,7 +22,7 @@ export default function Manifest() {
   } as const;
 
   return (
-    <section ref={sectionRef} className="min-h-screen flex items-center py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+    <section ref={sectionRef} className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
       {/* Ribbon bridge above owned by HomeClient GSAP mailBoard */}
 
       <div className="mx-auto max-w-5xl px-6 text-center">

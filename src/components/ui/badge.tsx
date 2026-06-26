@@ -13,8 +13,8 @@ const badgeVariants = cva(
         secondary: "bg-gold text-ink [a&]:hover:bg-gold-deep",
         destructive:
           "bg-red text-paper focus-visible:ring-red/40 [a&]:hover:bg-red-deep",
-        outline: "border-ink text-ink [a&]:hover:bg-paper-raised",
-        ghost: "text-ink [a&]:hover:bg-paper-raised",
+        outline: "border-ink text-ink [a&]:hover:bg-gold-tint",
+        ghost: "text-ink [a&]:hover:bg-gold-tint",
         link: "text-red underline-offset-4 [a&]:hover:underline",
       },
     },

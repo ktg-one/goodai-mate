@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Mic, Square, Volume2, RotateCcw } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'motion/react';
 import { AudioVisualizer } from '@/components/voice-agent/AudioVisualizer';
-import { transcribeWithSupertonic } from '@/lib/voice/supertonic';
+// Supertonic import removed
 import { BrandMark, BrandWordmark } from '@/components/brand/BrandWordmark';
 import { CHARACTER_ASSETS } from '@/lib/brand-assets';
 import { TalkingCharacter } from '@/components/voice-agent/TalkingCharacter';
@@ -18,7 +18,7 @@ const STAMP_EASE = [0.23, 1, 0.32, 1] as const;
  * The new flagship product experience for the Good'ai marketing site.
  * Pure functional Voice Agent demo as the hero (no marketing copy inside).
  *
- * Uses local "Supertonic" for high-quality ASR during testing (user's setup).
+ * Uses browser SpeechRecognition for high-quality, free client-side ASR.
  * Falls back gracefully. Wires into the existing /api/chat + Good'ai persona.
  *
  * Brand: Brutalist stamp aesthetic, one red per surface, paper ribbons.
@@ -28,15 +28,13 @@ const STAMP_EASE = [0.23, 1, 0.32, 1] as const;
 type AgentStatus = 'idle' | 'listening' | 'thinking' | 'speaking' | 'error';
 
 interface VoiceAgentHeroProps {
-  /** Local Supertonic endpoint for transcription. Example: http://localhost:8000/transcribe */
-  supertonicUrl?: string;
   /** Leaks the "mail" (transcript + response) to parent for persistent docket / in-tray filing across sections */
   onMailFiled?: (transcript: string, response: string) => void;
   /** Compact mode when embedded inside VoiceAgentDemo (no duplicate chrome) */
   embedded?: boolean;
 }
 
-export function VoiceAgentHero({ supertonicUrl, onMailFiled, embedded = false }: VoiceAgentHeroProps) {
+export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHeroProps) {
   const [status, setStatus] = useState<AgentStatus>('idle');
   const [selectedAgent, setSelectedAgent] = useState<'darl' | 'robokev'>('darl');
   const [userTranscript, setUserTranscript] = useState('');
@@ -86,6 +84,9 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled, embedded = false }:
   // Mic MediaStreamSource — disconnected on stop without tearing down the context.
   const micSourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
+  const recognitionTranscriptRef = useRef<string>('');
 
   // Lazily create-once the shared AudioContext; resume if suspended. Returns the live ctx.
   const getAudioContext = useCallback((): AudioContext => {
@@ -200,6 +201,14 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled, embedded = false }:
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop();
     }
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch (err) {
+        console.warn('Error stopping speech recognition:', err);
+      }
+      recognitionRef.current = null;
+    }
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
@@ -236,11 +245,51 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled, embedded = false }:
         if (event.data.size > 0) audioChunksRef.current.push(event.data);
       };
 
+      // Set up native browser SpeechRecognition (ASR)
+      const SpeechRecognition = typeof window !== 'undefined'
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ? ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)
+        : null;
+
+      if (SpeechRecognition) {
+        const rec = new SpeechRecognition();
+        rec.continuous = true;
+        rec.interimResults = true;
+        rec.lang = 'en-US';
+        recognitionTranscriptRef.current = '';
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        rec.onresult = (event: any) => {
+          let interimTranscript = '';
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+              recognitionTranscriptRef.current = event.results[i][0].transcript;
+            } else {
+              interimTranscript += event.results[i][0].transcript;
+            }
+          }
+          if (!recognitionTranscriptRef.current && interimTranscript) {
+            recognitionTranscriptRef.current = interimTranscript;
+          }
+        };
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        rec.onerror = (e: any) => {
+          console.warn('Browser SpeechRecognition error:', e);
+        };
+
+        recognitionRef.current = rec;
+        try {
+          rec.start();
+        } catch (err) {
+          console.warn('Failed to start SpeechRecognition:', err);
+        }
+      }
+
       mediaRecorder.onstop = async () => {
         setStatus('thinking');
         try {
-          const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-          const transcript = await transcribeWithSupertonic(audioBlob, supertonicUrl);
+          const transcript = recognitionTranscriptRef.current || '';
           if (transcript && transcript.trim()) {
             setUserTranscript(transcript.trim());
 
@@ -294,7 +343,7 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled, embedded = false }:
       setError('Microphone access needed. Allow mic access and try again.');
       setStatus('idle');
     }
-  }, [supertonicUrl, onMailFiled, userTranscript, getAudioContext, selectedModelId, selectedAgent, speakReply]);
+  }, [onMailFiled, userTranscript, getAudioContext, selectedModelId, selectedAgent, speakReply]);
 
   const replayLastResponse = () => {
     if (agentResponse) speakReply(agentResponse);
@@ -526,7 +575,7 @@ export function VoiceAgentHero({ supertonicUrl, onMailFiled, embedded = false }:
                 )}
               </AnimatePresence>
               {!userTranscript && !agentResponse && (
-                <div className="text-[var(--ink)]/60 text-sm pl-1">Hold the button and speak naturally. The local Supertonic instance will transcribe it.</div>
+                <div className="text-[var(--ink)]/60 text-sm pl-1">Press the button and speak naturally. The browser will transcribe your voice locally.</div>
               )}
               {error && (
                 <div className="text-[var(--warn)] text-sm pl-1 font-medium">{error}</div>
