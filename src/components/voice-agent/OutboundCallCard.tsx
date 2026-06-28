@@ -120,18 +120,19 @@ export default function OutboundCallCard() {
       <form onSubmit={handleCallbackTrigger} className="space-y-5">
         {/* Agent Selector Card Grid */}
         <div className="space-y-2">
-          <label className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 block">
+          <label id="agent-selector-label" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 block">
             1. Select Agent Persona
           </label>
-          <div className="grid sm:grid-cols-2 gap-3">
+          <div className="grid sm:grid-cols-2 gap-3" role="group" aria-labelledby="agent-selector-label">
             {agents.map(agent => {
               const isSelected = selectedAgent === agent.id;
               return (
                 <button
                   key={agent.id}
                   type="button"
+                  aria-pressed={isSelected}
                   onClick={() => setSelectedAgent(agent.id)}
-                  className={`border-2 p-3 text-left rounded-xs cursor-pointer select-none transition-all flex flex-col justify-between h-28 relative focus-visible:outline-2 focus-visible:outline-[var(--ink)] ${
+                  className={`border-2 p-3 text-left rounded-xs cursor-pointer select-none transition-all flex flex-col justify-between h-28 relative focus-visible:outline-2 focus-visible:outline-[var(--red)] ${
                     isSelected
                       ? `${agent.color} border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] scale-[0.99] translate-y-[1px]`
                       : 'bg-[var(--paper)] border-[var(--ink)]/20 hover:border-[var(--ink)]/40 hover:bg-[var(--paper-deep)] shadow-none'
