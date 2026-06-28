@@ -25,3 +25,6 @@
 ## 2025-05-18 - [React Performance] Lazy Evaluating Derived State During Streaming
 **Learning:** In chat interfaces using the Vercel AI SDK, computing derived state like `messages.map(...).join('\n')` inside a `useMemo` that depends on `messages` causes O(N) string concatenation on every single streaming token, destroying performance and causing input lag.
 **Action:** Always lazy-evaluate expensive derived state. If the derived state is only needed when a specific component (like a lead capture form) is visible, add those visibility flags to the `useMemo` dependencies and return early (e.g., return `''` if the form is hidden) to bypass the computation during the heavy streaming phase.
+## 2025-06-28 - Unmemoized Derived State in Highly Interactive Components
+**Learning:** Components that combine frequent state updates (like controlled text inputs on every keystroke) with derived list mappings (like rendering a `logs` array into DOM elements) will needlessly recalculate the list mapping and recreate DOM nodes on every keystroke, causing O(N) operations per key press.
+**Action:** Always wrap array mappings (`.map()`) in a `useMemo` hook when they reside in the same component as a controlled text input. This ensures the mapping only runs when the array actually changes, not on every unrelated state update.
