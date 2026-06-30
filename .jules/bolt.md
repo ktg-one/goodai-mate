@@ -25,3 +25,7 @@
 ## 2025-05-18 - [React Performance] Lazy Evaluating Derived State During Streaming
 **Learning:** In chat interfaces using the Vercel AI SDK, computing derived state like `messages.map(...).join('\n')` inside a `useMemo` that depends on `messages` causes O(N) string concatenation on every single streaming token, destroying performance and causing input lag.
 **Action:** Always lazy-evaluate expensive derived state. If the derived state is only needed when a specific component (like a lead capture form) is visible, add those visibility flags to the `useMemo` dependencies and return early (e.g., return `''` if the form is hidden) to bypass the computation during the heavy streaming phase.
+
+## 2025-05-18 - [React Performance] Inline Hook Anti-pattern
+**Learning:** Embedding `useMemo` hooks directly inside a JSX return block (e.g., `{useMemo(() => ...)}`) is a severe React anti-pattern that violates the Rules of Hooks and destroys code readability. While mathematically it may memoize the value, it makes the code unmaintainable and risks unpredictable execution order.
+**Action:** Always declare hooks at the top level of the component's function body and assign their results to a variable (e.g., `const renderedLogs = useMemo(...)`), then reference that variable in the JSX.
