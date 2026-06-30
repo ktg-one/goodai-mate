@@ -120,16 +120,18 @@ export default function OutboundCallCard() {
       <form onSubmit={handleCallbackTrigger} className="space-y-5">
         {/* Agent Selector Card Grid */}
         <div className="space-y-2">
-          <label className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 block">
+          <label id="agent-selector-label" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 block">
             1. Select Agent Persona
           </label>
-          <div className="grid sm:grid-cols-2 gap-3">
+          <div role="radiogroup" aria-labelledby="agent-selector-label" className="grid sm:grid-cols-2 gap-3">
             {agents.map(agent => {
               const isSelected = selectedAgent === agent.id;
               return (
                 <button
                   key={agent.id}
                   type="button"
+                  role="radio"
+                  aria-checked={isSelected}
                   onClick={() => setSelectedAgent(agent.id)}
                   className={`border-2 p-3 text-left rounded-xs cursor-pointer select-none transition-all flex flex-col justify-between h-28 relative focus-visible:outline-2 focus-visible:outline-[var(--ink)] ${
                     isSelected
