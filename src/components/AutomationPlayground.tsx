@@ -4,6 +4,9 @@ import { useState, useRef, useMemo } from 'react';
 import { Sparkles, Terminal, FileText, Calendar, Mail, FileSpreadsheet, Check, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
 
+const CHECKBOX_LABEL_CLASSES = "flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--red)]";
+const CHECKBOX_INPUT_CLASSES = "accent-[var(--red)] outline-none focus-visible:outline-none";
+
 export default function AutomationPlayground() {
   const [name, setName] = useState('');
   const [business, setBusiness] = useState('');
@@ -174,55 +177,55 @@ export default function AutomationPlayground() {
 
           {/* Checklist of actions */}
           <div className="flex flex-col gap-2">
-            <span className="sticker-label sticker-label-navy">SERVICES</span>
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+            <span id="services-group-label" className="sticker-label sticker-label-navy">SERVICES</span>
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono" role="group" aria-labelledby="services-group-label">
+              <label className={CHECKBOX_LABEL_CLASSES}>
                 <input
                   type="checkbox"
                   checked={actions.sheet}
                   onChange={() => toggleAction('sheet')}
-                  className="accent-[var(--red)]"
+                  className={CHECKBOX_INPUT_CLASSES}
                 />
                 <span>Append Sheet</span>
               </label>
               
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+              <label className={CHECKBOX_LABEL_CLASSES}>
                 <input
                   type="checkbox"
                   checked={actions.doc}
                   onChange={() => toggleAction('doc')}
-                  className="accent-[var(--red)]"
+                  className={CHECKBOX_INPUT_CLASSES}
                 />
                 <span>Generate Doc</span>
               </label>
               
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+              <label className={CHECKBOX_LABEL_CLASSES}>
                 <input
                   type="checkbox"
                   checked={actions.emailNotification}
                   onChange={() => toggleAction('emailNotification')}
                   disabled={!email}
-                  className="accent-[var(--red)]"
+                  className={CHECKBOX_INPUT_CLASSES}
                 />
                 <span className={!email ? 'opacity-40' : ''}>Gmail Send</span>
               </label>
               
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+              <label className={CHECKBOX_LABEL_CLASSES}>
                 <input
                   type="checkbox"
                   checked={actions.calendar}
                   onChange={() => toggleAction('calendar')}
-                  className="accent-[var(--red)]"
+                  className={CHECKBOX_INPUT_CLASSES}
                 />
                 <span>Schedule Call</span>
               </label>
 
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+              <label className={CHECKBOX_LABEL_CLASSES}>
                 <input
                   type="checkbox"
                   checked={actions.n8n}
                   onChange={() => toggleAction('n8n')}
-                  className="accent-[var(--red)]"
+                  className={CHECKBOX_INPUT_CLASSES}
                 />
                 <span>n8n Webhook</span>
               </label>
