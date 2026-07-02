@@ -196,7 +196,11 @@ export default function OutboundCallCard() {
             <Terminal size={10} /> Dialer log
           </span>
 
-          <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-[11px] h-[130px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
+          <div
+            className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-[11px] h-[130px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]"
+            role="log"
+            aria-live="polite"
+          >
             <div className="space-y-1">
               {logs.map((log, index) => {
                 let color = 'text-[var(--paper)]/80';

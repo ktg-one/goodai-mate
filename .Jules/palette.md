@@ -1,0 +1,3 @@
+## 2024-12-18 - [Add aria-live to custom Terminal Logs & Status Overlays]
+**Learning:** This app heavily uses Brutalist "terminal log" text areas and custom floating status indicators (like the Voice Agent's LISTENING/SPEAKING pill) to display live system state. By default, visual updates in these dynamically updating container elements are entirely missed by screen readers.
+**Action:** Always add `role="log"` and `aria-live="polite"` to terminal output containers, and `role="status"` with `aria-live="polite"` to custom UI status overlays, so assistive technologies announce new log entries and state changes automatically.
