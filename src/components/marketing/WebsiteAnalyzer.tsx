@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Search, Terminal, ClipboardCheck, Sparkles, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
 
@@ -16,6 +16,19 @@ export default function WebsiteAnalyzer() {
   } | null>(null);
 
   const consoleEndRef = useRef<HTMLDivElement>(null);
+
+  // Without useMemo, typing a single character forces the O(N) array mapping
+  // and full DOM element recreation for the terminal logs.
+  const memoizedLogs = useMemo(() => logs.map((log, index) => {
+    let colorClass = 'text-[var(--paper)]/80';
+    if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--red-tint)] font-bold';
+    if (log.startsWith('[SERVER]')) colorClass = 'text-[var(--gold-tint)]';
+    return (
+      <div key={index} className={colorClass}>
+        {log}
+      </div>
+    );
+  }), [logs]);
 
   useEffect(() => {
     if (consoleEndRef.current) {
@@ -133,16 +146,7 @@ export default function WebsiteAnalyzer() {
             </span>
             <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-xs h-[120px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
               <div className="space-y-1">
-                {logs.map((log, index) => {
-                  let colorClass = 'text-[var(--paper)]/80';
-                  if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--red-tint)] font-bold';
-                  if (log.startsWith('[SERVER]')) colorClass = 'text-[var(--gold-tint)]';
-                  return (
-                    <div key={index} className={colorClass}>
-                      {log}
-                    </div>
-                  );
-                })}
+                {memoizedLogs}
                 {isAnalyzing && (
                   <div className="text-[var(--paper)]/40 animate-pulse">● Mapping sitemap elements...</div>
                 )}
