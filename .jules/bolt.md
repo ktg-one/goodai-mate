@@ -29,3 +29,7 @@
 ## 2025-05-18 - [React Performance] Memoizing list maps alongside controlled inputs
 **Learning:** The React AutomationPlayground component contained a `logs.map(...)` operation inline with multiple controlled inputs (like `name`, `business`, `phone`). Because it wasn't memoized, typing a single character forced the entire logs array mapping and DOM element recreation to run again, causing input lag.
 **Action:** Always wrap derived lists or array mappings (e.g., `logs.map()`) in a `useMemo` hook when they reside in the same component as a controlled text input to prevent O(N) recomputations on every keystroke.
+
+## 2025-05-18 - [React Performance] Memoizing list maps alongside controlled inputs (Addendum)
+**Learning:** The React `WebsiteAnalyzer` and `OutboundCallCard` components contained `logs.map(...)` operations inline with controlled inputs (like `url` or `phone`). Because they weren't memoized, typing a single character forced the entire logs array mapping and DOM element recreation to run again, causing input lag similar to `AutomationPlayground`.
+**Action:** Always wrap derived lists or array mappings (e.g., `logs.map()`) in a `useMemo` hook when they reside in the same component as a controlled text input to prevent O(N) recomputations on every keystroke.
