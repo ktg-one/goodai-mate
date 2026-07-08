@@ -1,0 +1,3 @@
+## 2024-07-08 - Accessible Terminal Outputs
+**Learning:** This app frequently uses brutalist 'terminal log' components to simulate live automation processes (e.g., in `AutomationPlayground.tsx` and `OutboundCallCard.tsx`). Without ARIA live regions, the rapid sequence of log updates (like "Connecting to dialer...", "RINGING...") is entirely invisible to screen reader users, breaking the narrative illusion of the site's live capabilities.
+**Action:** Always verify that dynamic textual output blocks simulating live terminals or consoles include `role="log"` and `aria-live="polite"` so screen readers can announce the sequence of updates without interrupting the user.
