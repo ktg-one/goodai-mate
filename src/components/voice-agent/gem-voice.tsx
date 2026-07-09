@@ -482,6 +482,7 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
             className="stamp-box relative overflow-hidden bg-[var(--paper)] border-2 border-[var(--ink)]"
             style={{
               filter: heroShadow,
+              boxShadow: 'none',
             }}
           >
             {/* Header / Reset Bar */}
