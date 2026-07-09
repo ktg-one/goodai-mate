@@ -153,11 +153,9 @@ export default function HomeClient() {
           const p = self.progress;
           heroProgress.value = p;
           // Subtle grain "settle" + deeper pile shadow on the board itself.
-          // ALSO feed --global-settle + --hero-filing-progress so ALL stamp surfaces + ribbons
+          // ALSO feed --hero-filing-progress so ALL stamp surfaces + ribbons
           // get unified ink transfer + shadow compression (Framer hero + GSAP board = one physical mail stack).
           if (mailBoardRef.current) {
-            mailBoardRef.current.style.setProperty('--board-depth', (p * 0.6).toFixed(2));
-            mailBoardRef.current.style.setProperty('--global-settle', p.toFixed(3));
             mailBoardRef.current.style.setProperty('--hero-filing-progress', p.toFixed(3)); // bridge for full participation
             mailBoardRef.current.dataset.depth = p > 0.55 ? 'deep' : '';
           }
@@ -226,6 +224,7 @@ export default function HomeClient() {
           });
           if (wears[idx % wears.length]) (card as HTMLElement).dataset.wear = 'true';
 
+          let isSettled = false;
           ScrollTrigger.create({
             trigger: card,
             start: `top ${80 + (idx % 4) * 1.8}%`,
@@ -235,14 +234,17 @@ export default function HomeClient() {
               const p = self.progress;
               const settleY = (1 - p) * 22;
               const settleRot = rot * (1 - p * 0.72);
-              const shadow = p > 0.68 
-                ? `${4 + p * 2.1}px ${4 + p * 2.1}px 0 var(--ink)` 
-                : '2.5px 2.5px 0 var(--ink)';
+              const nowSettled = p > 0.68;
+              if (nowSettled !== isSettled) {
+                isSettled = nowSettled;
+                gsap.set(card, {
+                  boxShadow: isSettled ? '6.1px 6.1px 0 var(--ink)' : '2.5px 2.5px 0 var(--ink)',
+                });
+              }
               gsap.set(card, {
                 y: oy + settleY,
                 rotate: settleRot,
                 opacity: Math.min(1, p * 1.12),
-                boxShadow: shadow,
                 '--stamp-depth': Math.min(0.95, p * 1.05),
               });
             },
@@ -288,11 +290,7 @@ export default function HomeClient() {
           onUpdate: (self) => {
             const p = self.progress;
             if (footerRef.current) {
-              footerRef.current.style.setProperty('--final-clack', (p * 1.05).toFixed(2));
               footerRef.current.style.setProperty('--stamp-depth', (p * 0.95).toFixed(2));
-              if (mailBoardRef.current && p > 0.6) {
-                mailBoardRef.current.style.setProperty('--board-depth', (0.58 + p * 0.18).toFixed(2));
-              }
             }
           },
           onLeave: () => {
@@ -302,18 +300,13 @@ export default function HomeClient() {
             const f = footerRef.current;
             if (f) {
               f.classList.add('stamp-clack-red');
-              // Heavy shadow slam + wonk lock + global pile compression
+              // Heavy shadow slam + wonk lock
               gsap.to(f, {
-                '--final-clack': 1.0,
                 '--stamp-depth': 1.0,
                 duration: 0.12,
                 ease: 'none',
                 onComplete: () => f.classList.remove('stamp-clack-red'),
               });
-            }
-            if (mailBoardRef.current) {
-              mailBoardRef.current.style.setProperty('--global-settle', '0.97');
-              mailBoardRef.current.style.setProperty('--pile-compress', '0.31');
             }
             // Final ribbon3 tear shear clack (real perforated snap)
             if (ribbon3Ref.current) {
