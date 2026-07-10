@@ -501,7 +501,7 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
               )}
 
               {/* Live status overlay — mechanical relay stamp */}
-              <div className="absolute top-4 left-4 z-30">
+              <div className="absolute top-4 left-4 z-30" role="status" aria-live="polite">
                 <div className="stamp-box inline-flex items-center gap-2 bg-[var(--paper)] border-2 border-[var(--ink)] px-4 py-1.5 font-mono text-xs uppercase tracking-[0.16em]">
                   {status === 'listening' && (
                     <span className="text-[var(--red)] stamp-relay font-bold">● LISTENING</span>
