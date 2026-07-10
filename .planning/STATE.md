@@ -72,9 +72,9 @@ See: .planning/PROJECT.md (re-validated 2026-06-24)
 - **package.json currently pins `next@^15.5.20`, `eslint-config-next@^15.5.20`**, deliberately downgraded from `^16.2.3` for this reason. `eslint.config.mjs` uses `FlatCompat` (not direct flat-config imports) because 15.5.20's `eslint-config-next` doesn't ship the flat-config array shape 16.x does.
 - **Before merging ANY agent's PR to `main` from now on, confirm `npm run build` actually exits 0.** That single check would have caught this three weeks earlier. There is currently no branch-protection rule enforcing this — consider adding one.
 
-**Status:** Fix verified locally (Node 20, matching Vercel's build runtime) and confirmed live — Vercel deployment `dpl_HWqVhp3F5wk9oFaWkL3eZzNKWKAp` for this fix reached `READY` state (first successful build in weeks). Sitting in PR #64 (draft), awaiting merge.
+**Status:** Fix verified locally (Node 20, matching Vercel's build runtime). Vercel **preview** deployment `dpl_HWqVhp3F5wk9oFaWkL3eZzNKWKAp` for this branch reached `READY` state (first successful build in weeks) — that confirms the fix builds and deploys cleanly, it does not mean production is live yet. PR #64 is open, checks passing, not yet merged. Confirm actual production availability only after merge, against a fresh production deployment.
 
-**Follow-up, not urgent:** Node 20 is deprecated by Vercel as of 2026-10-01; `package.json` engines pins `>=20.9.0 <21` while the Vercel project setting wants `24.x`. Needs a dedicated, tested migration pass before October — don't do it opportunistically inside an unrelated change, since the last person who touched build config here (twice) is why we're writing this section.
+**Follow-up, not urgent:** Node 20 will be deprecated by Vercel on 2026-10-01; `package.json` engines pins `>=20.9.0 <21` while the Vercel project setting wants `24.x`. Needs a dedicated, tested migration pass before that date — don't do it opportunistically inside an unrelated change, since the last person who touched build config here (twice) is why we're writing this section.
 
 ## Continuity Without Multica
 
