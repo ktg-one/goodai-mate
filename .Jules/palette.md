@@ -1,0 +1,3 @@
+## 2026-07-10 - ARIA Live Regions for Dynamic Brutalist UI
+**Learning:** This app frequently employs highly styled, Brutalist 'terminal log' text areas and custom floating status indicators (like the 'LISTENING' relay stamp). Because these do not use native HTML live region elements by default, their dynamic text changes and streaming content updates are completely invisible to screen readers, causing a broken experience.
+**Action:** Always add `role="log"` and `aria-live="polite"` to terminal output containers, and `role="status"` with `aria-live="polite"` to custom UI status overlays to ensure screen readers announce dynamic state changes.
