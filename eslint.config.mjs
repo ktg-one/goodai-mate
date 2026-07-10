@@ -1,7 +1,10 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import { FlatCompat } from "@eslint/eslintrc";
+import { fileURLToPath } from "node:url";
 
-const compat = new FlatCompat({ baseDirectory: import.meta.dirname });
+// import.meta.dirname requires Node >=20.11 — package.json's engines range
+// allows down to 20.9.0, so derive it the version-independent way instead.
+const compat = new FlatCompat({ baseDirectory: fileURLToPath(new URL(".", import.meta.url)) });
 
 const eslintConfig = defineConfig([
   ...compat.extends("next/core-web-vitals", "next/typescript"),
