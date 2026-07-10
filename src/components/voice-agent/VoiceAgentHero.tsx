@@ -504,7 +504,7 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
               <div className="absolute top-4 left-4 z-30">
                 <div className="stamp-box inline-flex items-center gap-2 bg-[var(--paper)] border-2 border-[var(--ink)] px-4 py-1.5 font-mono text-xs uppercase tracking-[0.16em]">
                   {status === 'listening' && (
-                    <span className="text-[var(--red)] stamp-relay font-bold">● LISTENING</span>
+                    <span className="text-[var(--coral)] stamp-relay font-bold">● LISTENING</span>
                   )}
                   {status === 'thinking' && (
                     <span className="text-[var(--ink)] tracking-[0.3em]">THINKING…</span>
@@ -568,7 +568,7 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
                     transition={{ duration: 0.1, ease: STAMP_EASE }}
                     className="pl-1"
                   >
-                    <div className="font-mono text-[10px] tracking-[0.16em] text-[var(--navy)]/70 mb-1">Good<span className="text-[var(--red)]">&rsquo;</span>ai</div>
+                    <div className="font-mono text-[10px] tracking-[0.16em] text-[var(--navy)]/70 mb-1">Good<span className="text-[var(--coral)]">&rsquo;</span>ai</div>
                     <p className="text-[var(--ink)] text-[15px] leading-snug">“{agentResponse}”</p>
                     <button onClick={replayLastResponse} className="mt-1 text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--navy)]/60 hover:text-[var(--navy)] underline decoration-1 underline-offset-2">Replay voice</button>
                   </motion.div>

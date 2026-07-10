@@ -137,9 +137,9 @@ export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterPr
         </div>
         <div className={`absolute bottom-2 right-2 z-10 px-2 py-0.5 border border-[var(--ink)] text-[9px] font-mono uppercase font-bold shadow-[1px_1px_0_var(--ink)] ${
           status === 'speaking' 
-            ? 'bg-[var(--gold)] text-[var(--ink)]' 
+            ? 'bg-[var(--gold-tint)] text-[var(--ink)]'
             : status === 'listening' 
-              ? 'bg-[var(--red)] text-[var(--paper)]' 
+              ? 'bg-[var(--coral)] text-[var(--paper)]'
               : 'bg-[var(--paper)] text-[var(--ink)]/50'
         }`}>
           {status}
