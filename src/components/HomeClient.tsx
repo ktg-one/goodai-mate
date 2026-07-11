@@ -86,11 +86,11 @@ export default function HomeClient() {
         delay: 0.05,
       });
     };
-    // @ts-expect-error Typescript infers HTMLDivElement | null instead of HTMLDivElement
+
     snap(ribbon1Ref, 0.9);
-    // @ts-expect-error Typescript infers HTMLDivElement | null instead of HTMLDivElement
+
     snap(ribbon2Ref, 1.35);
-    // @ts-expect-error Typescript infers HTMLDivElement | null instead of HTMLDivElement
+
     snap(ribbon3Ref, -0.6);
   };
 
