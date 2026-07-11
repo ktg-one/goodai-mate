@@ -290,36 +290,46 @@ export function Hero() {
 
           {/* Mode controls */}
           {/* Mode + Sensitivity controls — now stamp-btn physics + keyboard stamp focus */}
-          <div className="absolute bottom-4 left-4 z-40 flex border-2 border-[var(--ink)] bg-paper-raised text-[10px] font-mono uppercase font-bold overflow-hidden">
+          <div className="absolute bottom-4 left-4 z-40 flex border-2 border-[var(--ink)] bg-paper-raised text-[10px] font-mono uppercase font-bold overflow-hidden" role="group" aria-label="Visualizer Mode">
             <button
+              type="button"
               onClick={() => setVisualMode('calm')}
+              aria-pressed={visualMode === 'calm'}
               className={`stamp-btn stamp-btn-paper px-4 py-1.5 text-[10px] border-r-2 border-[var(--ink)] ${visualMode === 'calm' ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               CALM
             </button>
             <button
+              type="button"
               onClick={() => setVisualMode('dynamic')}
+              aria-pressed={visualMode === 'dynamic'}
               className={`stamp-btn stamp-btn-paper px-4 py-1.5 text-[10px] ${visualMode === 'dynamic' ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               DYNAMIC
             </button>
           </div>
 
-          <div className="absolute bottom-4 right-4 z-40 flex border-2 border-[var(--ink)] bg-paper-raised text-[10px] font-mono uppercase font-bold overflow-hidden">
+          <div className="absolute bottom-4 right-4 z-40 flex border-2 border-[var(--ink)] bg-paper-raised text-[10px] font-mono uppercase font-bold overflow-hidden" role="group" aria-label="Visualizer Sensitivity">
             <button
+              type="button"
               onClick={() => setSensitivity(0.5)}
+              aria-pressed={sensitivity === 0.5}
               className={`stamp-btn stamp-btn-paper px-3 py-1.5 text-[10px] border-r-2 border-[var(--ink)] ${sensitivity === 0.5 ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               STEADY
             </button>
             <button
+              type="button"
               onClick={() => setSensitivity(1)}
+              aria-pressed={sensitivity === 1}
               className={`stamp-btn stamp-btn-paper px-3 py-1.5 text-[10px] border-r-2 border-[var(--ink)] ${sensitivity === 1 ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               NORMAL
             </button>
             <button
+              type="button"
               onClick={() => setSensitivity(2.5)}
+              aria-pressed={sensitivity === 2.5}
               className={`stamp-btn stamp-btn-paper px-3 py-1.5 text-[10px] ${sensitivity === 2.5 ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               HIGH
