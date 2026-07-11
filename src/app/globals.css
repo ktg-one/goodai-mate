@@ -529,13 +529,12 @@ html, body {
   .pinned-notice {
     box-shadow: 3px 3px 0 var(--ink) !important;
   }
-  .mail-board { --global-settle: 0; --pile-compress: 1; } /* @kind other */
-  .mail-docket-footer { --final-clack: 0; --stamp-depth: 0.6; --tape-flutter: 0px; }
+  .mail-docket-footer { --stamp-depth: 0.6; --tape-flutter: 0px; }
 }
 
 /* MAIL-STACK + DOCKET FOOTER RITUAL (GSAP driven) */
-.mail-board { --global-settle: 0; --hero-filing-progress: 0; --board-depth: 0; } /* @kind other */
-.mail-docket-footer { --final-clack: 0; --stamp-depth: 0.6; --tape-flutter: 0px; } /* @kind other */
+.mail-board { --hero-filing-progress: 0; } /* @kind other */
+.mail-docket-footer { --stamp-depth: 0.6; --tape-flutter: 0px; } /* @kind other */
 
 /* ... (additional footer clack, docket-edge, wonk participation rules from prior; kept surgical) */
 .wonk-line {

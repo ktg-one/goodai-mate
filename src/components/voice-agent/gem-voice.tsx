@@ -23,6 +23,17 @@ function GemTalkingCharacter({ analyser, status }: { analyser: AnalyserNode | nu
   const [frame, setFrame] = useState(1);
   const animationRef = useRef<number>(null);
   const statusRef = useRef(status);
+  const frameRef = useRef(1);
+
+  // Only touches React state when the frame actually changes, so the rAF
+  // loop below doesn't force a re-render (VDOM diff + <img> src decode) on
+  // every tick while speaking/listening.
+  const applyFrame = useCallback((next: number) => {
+    if (frameRef.current !== next) {
+      frameRef.current = next;
+      setFrame(next);
+    }
+  }, []);
 
   useEffect(() => {
     statusRef.current = status;
@@ -32,7 +43,7 @@ function GemTalkingCharacter({ analyser, status }: { analyser: AnalyserNode | nu
     // If not active, reset to closed mouth (Frame 1)
     if (!analyser || (status !== 'speaking' && status !== 'listening')) {
       const timer = setTimeout(() => {
-        setFrame(1);
+        applyFrame(1);
       }, 0);
       return () => clearTimeout(timer);
     }
@@ -65,7 +76,7 @@ function GemTalkingCharacter({ analyser, status }: { analyser: AnalyserNode | nu
         } else {
           targetFrame = 1;
         }
-        setFrame(targetFrame);
+        applyFrame(targetFrame);
       }
       // Handle listening reaction (slight micro-jitter to show alertness)
       else if (statusRef.current === 'listening') {
@@ -73,12 +84,12 @@ function GemTalkingCharacter({ analyser, status }: { analyser: AnalyserNode | nu
         let sum = 0;
         for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
         const avg = sum / dataArray.length;
-        
+
         // Slight alert response if user is making sound
         if (avg > 15) {
-          setFrame(now % 300 < 150 ? 2 : 1);
+          applyFrame(now % 300 < 150 ? 2 : 1);
         } else {
-          setFrame(1);
+          applyFrame(1);
         }
       }
 
@@ -92,18 +103,18 @@ function GemTalkingCharacter({ analyser, status }: { analyser: AnalyserNode | nu
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [analyser, status]);
+  }, [analyser, status, applyFrame]);
 
   // Handle subtle processing animation during 'thinking' state (slow breathing/humming)
   useEffect(() => {
     if (status !== 'thinking') return;
 
     const interval = setInterval(() => {
-      setFrame(prev => (prev === 1 ? 2 : 1));
+      applyFrame(frameRef.current === 1 ? 2 : 1);
     }, 450);
 
     return () => clearInterval(interval);
-  }, [status]);
+  }, [status, applyFrame]);
 
   return (
     <div className="relative w-full h-full flex items-center justify-center bg-[var(--paper)] p-4 select-none">
@@ -225,10 +236,10 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
   });
 
   const heroShadow = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [
-    '4px 4px 0 var(--ink)',
-    '6px 7px 0 var(--ink)',
-    '3px 9px 0 var(--navy-deep)',
-    '2px 11px 0 var(--navy-ink)',
+    'drop-shadow(4px 4px 0 var(--ink))',
+    'drop-shadow(6px 7px 0 var(--ink))',
+    'drop-shadow(3px 9px 0 var(--navy-deep))',
+    'drop-shadow(2px 11px 0 var(--navy-ink))',
   ]);
 
   const speakReply = useCallback(async (text: string, overrideVoiceId?: string) => {
@@ -470,7 +481,8 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
           <motion.div
             className="stamp-box relative overflow-hidden bg-[var(--paper)] border-2 border-[var(--ink)]"
             style={{
-              boxShadow: heroShadow,
+              filter: heroShadow,
+              boxShadow: 'none',
             }}
           >
             {/* Header / Reset Bar */}
