@@ -8,6 +8,31 @@ import fs from 'fs';
 
 const execFileAsync = promisify(execFile);
 
+// Security Helper: Prevent SSRF
+function isSafeUrl(urlString: string): boolean {
+  try {
+    const url = new URL(urlString);
+    if (!['http:', 'https:'].includes(url.protocol)) return false;
+    const hostname = url.hostname;
+    if (
+      hostname === 'localhost' ||
+      hostname === '[::1]' ||
+      hostname.endsWith('.local') ||
+      hostname.endsWith('.internal')
+    ) {
+      return false;
+    }
+    if (
+      /^(127\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.|192\.168\.|169\.254\.)/.test(hostname)
+    ) {
+      return false;
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 // Helper to resolve GWS CLI path dynamically
 function getGwsCliPath(): string {
   if (process.env.GWS_CLI_PATH) {
@@ -58,6 +83,14 @@ export async function POST(req: NextRequest) {
     }
 
     const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
+
+    if (!isSafeUrl(targetUrl)) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid or restricted website URL' },
+        { status: 400 }
+      );
+    }
+
     const logs: string[] = [`[SYSTEM] Initializing Website Analysis for: ${targetUrl}`];
     let extractedEmail = '';
 

@@ -6,6 +6,31 @@ import fs from 'fs';
 
 const execFileAsync = promisify(execFile);
 
+// Security Helper: Prevent SSRF
+function isSafeUrl(urlString: string): boolean {
+  try {
+    const url = new URL(urlString);
+    if (!['http:', 'https:'].includes(url.protocol)) return false;
+    const hostname = url.hostname;
+    if (
+      hostname === 'localhost' ||
+      hostname === '::1' ||
+      hostname.endsWith('.local') ||
+      hostname.endsWith('.internal')
+    ) {
+      return false;
+    }
+    if (
+      /^(127\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.|192\.168\.|169\.254\.)/.test(hostname)
+    ) {
+      return false;
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 // Helper to resolve GWS CLI path dynamically
 function getGwsCliPath(): string {
   if (process.env.GWS_CLI_PATH) {
@@ -242,7 +267,21 @@ export async function POST(req: NextRequest) {
     if (actions.n8n) {
       logs.push('Executing: n8n Webhook Pipeline Trigger...');
       const targetUrl = n8nUrl?.trim() || process.env.N8N_DEMO_WEBHOOK_URL || process.env.N8N_CALL_WEBHOOK_URL || 'http://localhost:5678/webhook/goodai-demo';
-      logs.push(`Sending lead payload to webhook URL: ${targetUrl}`);
+
+      const finalUrl = targetUrl;
+      // Strict SSRF check if it's user provided
+      if (n8nUrl?.trim() && !isSafeUrl(n8nUrl.trim())) {
+          logs.push(`[WARNING] Webhook URL provided is unsafe or restricted. Skipping n8n webhook.`);
+          results.n8nStatus = 'Blocked (Unsafe URL)';
+
+          return NextResponse.json({
+            success: true,
+            logs,
+            results
+          });
+      }
+
+      logs.push(`Sending lead payload to webhook URL: ${finalUrl}`);
       
       try {
         const payload = {
@@ -254,7 +293,7 @@ export async function POST(req: NextRequest) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout
         
-        const n8nRes = await fetch(targetUrl, {
+        const n8nRes = await fetch(finalUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
