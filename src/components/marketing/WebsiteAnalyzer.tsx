@@ -76,7 +76,7 @@ export default function WebsiteAnalyzer() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12 border-t-2 border-dashed border-[var(--ink)]/30">
       <div className="text-center mb-6">
-        <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">
+        <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">
           SITE AUDIT
         </span>
         <h2 className="font-display text-4xl md:text-5xl tracking-[-0.025em] leading-none mt-2 mb-2">
@@ -135,7 +135,7 @@ export default function WebsiteAnalyzer() {
               <div className="space-y-1">
                 {logs.map((log, index) => {
                   let colorClass = 'text-[var(--paper)]/80';
-                  if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--red-tint)] font-bold';
+                  if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--coral-tint)] font-bold';
                   if (log.startsWith('[SERVER]')) colorClass = 'text-[var(--gold-tint)]';
                   return (
                     <div key={index} className={colorClass}>
@@ -156,7 +156,7 @@ export default function WebsiteAnalyzer() {
         {result && (
           <div className="mt-6 stamp-card stamp-card-gold p-5 space-y-4 text-left animate-in fade-in slide-in-from-top-4 duration-300">
             <div className="flex items-center justify-between border-b border-[var(--ink)]/20 pb-2">
-              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--red)] font-bold flex items-center gap-1">
+              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--coral)] font-bold flex items-center gap-1">
                 <ClipboardCheck size={14} /> CUSTOM SYSTEMS AUDIT
               </div>
               <span className="text-[9px] font-mono bg-[var(--navy-tint)] text-[var(--navy-deep)] px-2 py-0.5 rounded-sm">

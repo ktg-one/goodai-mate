@@ -12,9 +12,9 @@
 export const BRAND_ASSETS = {
   wordmark: {
     /** For cream / paper backgrounds */
-    dark: '/company-assets/wordmark-dark.jpg',
+    dark: '/brand/wordmark.png',
     /** For navy / dark surfaces */
-    light: '/company-assets/wordmark-light.jpg',
+    light: '/brand/wordmark-light.png',
   },
   logo: {
     default: '/company-assets/Logo.jpg',

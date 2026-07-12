@@ -4,8 +4,8 @@ import { useState, useRef, useMemo } from 'react';
 import { Sparkles, Terminal, FileText, Calendar, Mail, FileSpreadsheet, Check, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
 
-const CHECKBOX_LABEL_CLASSES = "flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--red)]";
-const CHECKBOX_INPUT_CLASSES = "accent-[var(--red)] outline-none focus-visible:outline-none";
+const CHECKBOX_LABEL_CLASSES = "flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--coral)]";
+const CHECKBOX_INPUT_CLASSES = "accent-[var(--coral)] outline-none focus-visible:outline-none";
 
 export default function AutomationPlayground() {
   const [name, setName] = useState('');
@@ -47,8 +47,8 @@ export default function AutomationPlayground() {
   // and DOM recreation to run again, causing input lag.
   const memoizedLogs = useMemo(() => logs.map((log, index) => {
     let colorClass = 'text-[var(--paper)]/90';
-    if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--red)] font-bold';
-    if (log.startsWith('[SYSTEM]')) colorClass = 'text-[var(--gold)] font-bold';
+    if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--coral)] font-bold';
+    if (log.startsWith('[SYSTEM]')) colorClass = 'text-[var(--gold-tint)] font-bold';
     return (
       <div key={index} className={colorClass}>
         {log}
@@ -107,7 +107,7 @@ export default function AutomationPlayground() {
 
   return (
     <div className="stamp-card stamp-card-gold p-6 md:p-8 w-full">
-      <div className="gai-leadcard-eyebrow flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--red)] mb-3">
+      <div className="gai-leadcard-eyebrow flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--coral)] mb-3">
         <Sparkles size={14} /> Live Workspace Playground
       </div>
       
@@ -267,7 +267,7 @@ export default function AutomationPlayground() {
           {/* Results dashboard */}
           {results && (
             <div className="stamp-card stamp-card-navy p-4">
-              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--red)] font-bold mb-3 flex items-center gap-1">
+              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--coral)] font-bold mb-3 flex items-center gap-1">
                 <Check size={12} /> LIVE WORKSPACE DOCKETS FILED:
               </div>
               <div className="grid sm:grid-cols-2 gap-2 text-xs font-mono">
@@ -295,7 +295,7 @@ export default function AutomationPlayground() {
                 )}
                 {results.emailId && (
                   <div className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2">
-                    <Mail size={16} className="text-[var(--red)]" />
+                    <Mail size={16} className="text-[var(--coral)]" />
                     <span className="truncate">Email Sent (ID: {results.emailId.slice(0,8)}...)</span>
                   </div>
                 )}
@@ -306,7 +306,7 @@ export default function AutomationPlayground() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--paper)] hover:translate-y-[-1px] transition-all"
                   >
-                    <Calendar size={16} className="text-[var(--gold-deep)]" />
+                    <Calendar size={16} className="text-[var(--gold-tint)]" />
                     <span className="underline truncate">Scheduled Calendar Call</span>
                   </a>
                 )}
