@@ -160,7 +160,7 @@ export function Hero() {
             Brand treatment follows the design system.
           */}
           <span className="brand-wordmark text-[1.9rem]">
-            Good<span className="apos" style={{ color: 'var(--red)' }}>&apos;</span>ai
+            Good<span className="apos" style={{ color: 'var(--coral)' }}>&apos;</span>ai
           </span>
         </div>
 
@@ -173,13 +173,13 @@ export function Hero() {
           </a>
           <a
             href="#systems"
-            className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] hover:bg-[var(--gold)] px-6 py-3 transition-colors border-x-2 border-[var(--ink)]"
+            className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] hover:bg-[var(--gold-tint)] px-6 py-3 transition-colors border-x-2 border-[var(--ink)]"
           >
             Systems
           </a>
           <a
             href="#pricing"
-            className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] hover:bg-[var(--gold)] px-6 py-3 transition-colors"
+            className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] hover:bg-[var(--gold-tint)] px-6 py-3 transition-colors"
           >
             Pricing
           </a>
@@ -190,7 +190,7 @@ export function Hero() {
         {/* Left column */}
         <div className="flex flex-col gap-8 w-full max-w-xl mx-auto lg:mx-0 order-2 lg:order-1">
           <div>
-            <span className="font-mono text-xs font-bold tracking-[0.16em] uppercase bg-[var(--gold)] text-[var(--ink)] px-3 py-1">
+            <span className="font-mono text-xs font-bold tracking-[0.16em] uppercase bg-[var(--gold-tint)] text-[var(--ink)] px-3 py-1">
               Bidirectional Voice
             </span>
             <h1 className="font-display text-5xl md:text-[5.5rem] font-bold text-[var(--ink)] leading-[0.92] mt-6 mb-6 tracking-[-0.03em]">
@@ -250,7 +250,7 @@ export function Hero() {
               ) : (
                 <div className="stamp-box flex items-center gap-3 px-4 py-3 w-fit">
                   <Activity
-                    className={`h-4 w-4 ${isRecording ? 'text-[var(--red)] animate-pulse' : 'text-[var(--border)]'}`}
+                    className={`h-4 w-4 ${isRecording ? 'text-[var(--coral)] animate-pulse' : 'text-[var(--border)]'}`}
                   />
                   <span className="font-mono text-xs font-bold uppercase tracking-widest text-[var(--ink)]/70">
                     {isRecording ? 'Go on — we\'re listening' : 'Ready when you are'}

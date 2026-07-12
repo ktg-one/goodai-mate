@@ -33,7 +33,7 @@ export default function OutboundCallCard() {
       role: 'My Assistant',
       desc: 'Assists with invoices, schedules, and quotes. Preset: 0877414191.',
       defaultPhone: '0877414191',
-      color: 'bg-[var(--gold-tint)] border-[var(--gold)] text-[var(--ink)]'
+      color: 'bg-[var(--gold-tint)] border-[var(--gold-tint)] text-[var(--ink)]'
     },
     {
       id: 'robokev' as const,
@@ -41,7 +41,7 @@ export default function OutboundCallCard() {
       role: 'My Voice Clone',
       desc: 'My custom voice assistant. Enter your number to have Robokev call you.',
       defaultPhone: '',
-      color: 'bg-[var(--red-tint)] border-[var(--red)] text-[var(--ink)]'
+      color: 'bg-[var(--coral-tint)] border-[var(--coral)] text-[var(--ink)]'
     }
   ];
 
@@ -118,7 +118,7 @@ export default function OutboundCallCard() {
 
   return (
     <div className="stamp-card stamp-card-paper p-6 relative w-full text-left" data-pin="true">
-      <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--red)] mb-4">
+      <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--coral)] mb-4">
         <Phone size={12} /> Outbound Agent Dialer
       </div>
 
@@ -144,7 +144,7 @@ export default function OutboundCallCard() {
                   type="button"
                   aria-pressed={isSelected}
                   onClick={() => setSelectedAgent(agent.id)}
-                  className={`border-2 p-3 text-left rounded-xs cursor-pointer select-none transition-all flex flex-col justify-between h-28 relative focus-visible:outline-2 focus-visible:outline-[var(--red)] ${
+                  className={`border-2 p-3 text-left rounded-xs cursor-pointer select-none transition-all flex flex-col justify-between h-28 relative focus-visible:outline-2 focus-visible:outline-[var(--coral)] ${
                     isSelected
                       ? `${agent.color} border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] scale-[0.99] translate-y-[1px]`
                       : 'bg-[var(--paper)] border-[var(--ink)]/20 hover:border-[var(--ink)]/40 hover:bg-[var(--paper-deep)] shadow-none'
@@ -211,6 +211,17 @@ export default function OutboundCallCard() {
           <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-[11px] h-[130px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
             <div className="space-y-1">
               {memoizedLogs}
+              {logs.map((log, index) => {
+                let color = 'text-[var(--paper)]/80';
+                if (log.startsWith('[ERROR]')) color = 'text-[var(--coral-tint)] font-bold';
+                if (log.startsWith('[SERVER]')) color = 'text-[var(--gold-tint)]';
+                if (log.includes('RINGING') || log.includes('CONNECTED')) color = 'text-[var(--gold-tint)] font-bold';
+                return (
+                  <div key={index} className={color}>
+                    {log}
+                  </div>
+                );
+              })}
               {isDialing && (
                 <div className="text-[var(--paper)]/40 animate-pulse">● Dialing gateway...</div>
               )}

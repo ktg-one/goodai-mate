@@ -19,7 +19,7 @@ export default function VoiceAgentDemo() {
     <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
       <div className="mx-auto max-w-5xl px-6">
         <ScrollReveal className="text-center mb-9">
-          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">
+          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">
             FILE ANOTHER ON THE BOARD
           </span>
           <h2 className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-3 mb-3">
@@ -59,7 +59,7 @@ export default function VoiceAgentDemo() {
                 Agent calls your phone →
               </StampButton>
             </div>
-            <p className="mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--gold)]">
+            <p className="mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--gold-tint)]">
               Perth local test dialer. Instant callback.
             </p>
           </StampCard>

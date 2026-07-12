@@ -378,7 +378,7 @@ export default function HomeClient() {
       <section ref={docketFlowRef} className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
         <div className="mx-auto max-w-5xl px-6">
           <div className="mb-9">
-            <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">FILED · MAIL</span>
+            <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">FILED · MAIL</span>
             <h2 className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-2">
               What happens after you <span className="hl">speak</span>.
             </h2>
@@ -414,7 +414,7 @@ export default function HomeClient() {
                 />
                 <h3 className="font-bold text-2xl tracking-[-0.015em] mb-3">{item.title}</h3>
                 <p className="opacity-85 text-[15px] leading-snug">{item.body}</p>
-                {i === 3 && <div className="mt-3 inline-block text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--red)] border-b border-[var(--red)]">LAST PIN • DOCKET CLOSED</div>}
+                {i === 3 && <div className="mt-3 inline-block text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--coral)] border-b border-[var(--coral)]">LAST PIN • DOCKET CLOSED</div>}
               </StampCard>
             ))}
           </div>
@@ -430,7 +430,7 @@ export default function HomeClient() {
         <div className="in-tray-physical py-5 sticky bottom-0 z-40">
           <div className="mx-auto max-w-5xl px-6">
             <div className="flex items-center gap-3 mb-2.5">
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--red)]">MAIL RECEIVED — IN TRAY</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--coral)]">MAIL RECEIVED — IN TRAY</span>
               <div className="flex-1 h-px bg-[var(--ink)]/30" />
             </div>
             <div className="flex flex-wrap gap-3 text-xs">
@@ -458,7 +458,7 @@ export default function HomeClient() {
                     <BrandShapesStamp className="absolute top-1 right-1 h-3 w-auto opacity-25" />
                     <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--ink)]/50 mb-0.5">YOU SAID</div>
                     <div className="line-clamp-1">“{mail.transcript.slice(0, 82)}”</div>
-                    <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--navy)] mt-1.5 mb-0.5"><span className="normal-case">Good<span style={{ color: 'var(--red)' }}>&apos;</span>ai</span> FILED</div>
+                    <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--navy)] mt-1.5 mb-0.5"><span className="normal-case">Good<span style={{ color: 'var(--coral)' }}>&apos;</span>ai</span> FILED</div>
                     <div className="line-clamp-1 text-[var(--ink)]">“{mail.response.slice(0, 78)}”</div>
                   </motion.div>
                 );
@@ -525,8 +525,8 @@ export default function HomeClient() {
         className="mail-docket-footer bg-[var(--navy)] border-t-4 border-[var(--ink)] py-14 px-6 text-[var(--paper)]"
       >
         <div className="mx-auto max-w-4xl text-center">
-          <div className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--gold)] mb-4">
-            <span className="normal-case">Good<span style={{ color: 'var(--red)' }}>&apos;</span>ai</span> — PERTH
+          <div className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--gold-tint)] mb-4">
+            <span className="normal-case">Good<span style={{ color: 'var(--coral)' }}>&apos;</span>ai</span> — PERTH
           </div>
 
           <div className="core-promise text-4xl md:text-5xl tracking-[-0.025em] leading-none mb-6">
