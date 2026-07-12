@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Phone, Terminal, UserCheck, CheckCircle2, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
 
@@ -21,7 +21,7 @@ export default function OutboundCallCard() {
       role: 'My Assistant',
       desc: 'Assists with invoices, schedules, and quotes. Preset: 0877414191.',
       defaultPhone: '0877414191',
-      color: 'bg-[var(--gold-tint)] border-[var(--gold)] text-[var(--ink)]'
+      color: 'bg-[var(--gold-tint)] border-[var(--gold-tint)] text-[var(--ink)]'
     },
     {
       id: 'robokev' as const,
@@ -29,7 +29,7 @@ export default function OutboundCallCard() {
       role: 'My Voice Clone',
       desc: 'My custom voice assistant. Enter your number to have Robokev call you.',
       defaultPhone: '',
-      color: 'bg-[var(--red-tint)] border-[var(--red)] text-[var(--ink)]'
+      color: 'bg-[var(--coral-tint)] border-[var(--coral)] text-[var(--ink)]'
     }
   ];
 
@@ -48,19 +48,6 @@ export default function OutboundCallCard() {
       consoleEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [logs]);
-
-  // ⚡ Bolt Performance Optimization: Memoize logs rendering to prevent O(N) array mapping on every keystroke in the form above
-  const renderedLogs = useMemo(() => logs.map((log, index) => {
-    let color = 'text-[var(--paper)]/80';
-    if (log.startsWith('[ERROR]')) color = 'text-[var(--red-tint)] font-bold';
-    if (log.startsWith('[SERVER]')) color = 'text-[var(--gold-tint)]';
-    if (log.includes('RINGING') || log.includes('CONNECTED')) color = 'text-[var(--gold)] font-bold';
-    return (
-      <div key={index} className={color}>
-        {log}
-      </div>
-    );
-  }), [logs]);
 
   const handleCallbackTrigger = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,7 +106,7 @@ export default function OutboundCallCard() {
 
   return (
     <div className="stamp-card stamp-card-paper p-6 relative w-full text-left" data-pin="true">
-      <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--red)] mb-4">
+      <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--coral)] mb-4">
         <Phone size={12} /> Outbound Agent Dialer
       </div>
 
@@ -133,18 +120,19 @@ export default function OutboundCallCard() {
       <form onSubmit={handleCallbackTrigger} className="space-y-5">
         {/* Agent Selector Card Grid */}
         <div className="space-y-2">
-          <label className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 block">
+          <label id="agent-selector-label" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 block">
             1. Select Agent Persona
           </label>
-          <div className="grid sm:grid-cols-2 gap-3">
+          <div className="grid sm:grid-cols-2 gap-3" role="group" aria-labelledby="agent-selector-label">
             {agents.map(agent => {
               const isSelected = selectedAgent === agent.id;
               return (
                 <button
                   key={agent.id}
                   type="button"
+                  aria-pressed={isSelected}
                   onClick={() => setSelectedAgent(agent.id)}
-                  className={`border-2 p-3 text-left rounded-xs cursor-pointer select-none transition-all flex flex-col justify-between h-28 relative focus-visible:outline-2 focus-visible:outline-[var(--ink)] ${
+                  className={`border-2 p-3 text-left rounded-xs cursor-pointer select-none transition-all flex flex-col justify-between h-28 relative focus-visible:outline-2 focus-visible:outline-[var(--coral)] ${
                     isSelected
                       ? `${agent.color} border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] scale-[0.99] translate-y-[1px]`
                       : 'bg-[var(--paper)] border-[var(--ink)]/20 hover:border-[var(--ink)]/40 hover:bg-[var(--paper-deep)] shadow-none'
@@ -210,7 +198,17 @@ export default function OutboundCallCard() {
 
           <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-[11px] h-[130px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
             <div className="space-y-1">
-              {renderedLogs}
+              {logs.map((log, index) => {
+                let color = 'text-[var(--paper)]/80';
+                if (log.startsWith('[ERROR]')) color = 'text-[var(--coral-tint)] font-bold';
+                if (log.startsWith('[SERVER]')) color = 'text-[var(--gold-tint)]';
+                if (log.includes('RINGING') || log.includes('CONNECTED')) color = 'text-[var(--gold-tint)] font-bold';
+                return (
+                  <div key={index} className={color}>
+                    {log}
+                  </div>
+                );
+              })}
               {isDialing && (
                 <div className="text-[var(--paper)]/40 animate-pulse">● Dialing gateway...</div>
               )}

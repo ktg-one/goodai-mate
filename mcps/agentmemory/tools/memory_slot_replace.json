@@ -1,0 +1,21 @@
+{
+  "name": "memory_slot_replace",
+  "description": "Replace slot content in place. Fails if content exceeds sizeLimit.",
+  "inputSchema": {
+    "properties": {
+      "content": {
+        "description": "New full content",
+        "type": "string"
+      },
+      "label": {
+        "description": "Slot label",
+        "type": "string"
+      }
+    },
+    "required": [
+      "label",
+      "content"
+    ],
+    "type": "object"
+  }
+}

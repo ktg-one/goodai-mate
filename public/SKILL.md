@@ -1,21 +1,248 @@
----
-name: goodai-design
-description: Use this skill to generate well-branded interfaces and assets for Good'ai, either for production or throwaway prototypes/mocks/etc. Contains essential design guidelines, colours, type, fonts, assets, and UI kit components for prototyping. Good'ai is a Perth-based SME automation business with a brutalist / direct-mail identity (warm cream paper, high-contrast coloured cards in navy / gold / red / black) and a casual "switched-on mate" voice.
-user-invocable: true
----
-
-Read the README.md file within this skill, and explore the other available files.
-
-If creating visual artifacts (slides, mocks, throwaway prototypes, etc), copy assets out and create static HTML files for the user to view. If working on production code, you can copy assets and read the rules here to become an expert in designing with this brand.
-
-If the user invokes this skill without any other guidance, ask them what they want to build or design, ask some questions, and act as an expert designer who outputs HTML artifacts _or_ production code, depending on the need.
-
-Key things to remember about Good'ai:
-- **Warm cream paper** (`#FFF0D0`) background, never pure white. **Colour the cards, not the page** — navy / gold / red / black blocks carry the content with cream-on-colour text. A white card on cream reads as unfinished.
-- **The five core colours:** Navy `#202C59` (blocks, links), Black `#111111` (text, edges), Cream `#FFF0D0` (canvas), Mustard-gold `#F3A62A` (panels, sticker labels), Coral-red `#F4442E` (CTA / shout). One accent moment per surface — usually the red CTA. Never all loud at once.
-- **Voice = switched-on Aussie mate.** Short sentences, "we" not "I", no jargon, no "AI"/"machine learning"/"leverage"/"synergy". Say automation / system / workflow.
-- **Wordmark:** `Good'ai` — lowercase `ai`, red apostrophe. Never GoodAI / Good AI / goodai.
-- **Sharp corners** (0–8px) on cards and buttons; pills (999px) only for chips / status dots / counters. No pill buttons.
-- **Stamp shadow** — flat offset only (`3px 3px 0` ink; red stamp for CTAs, navy for blocks). Never blurred shadows.
-- **No emoji in UI.** No animated WebGL backgrounds. No drop-shadow glows. No purple/teal pivots, no gradients.
-- **Fonts:** Fraunces (display) + DM Sans (body) + JetBrains Mono (eyebrows/code). Italic + WONK on Fraunces = emphasis lift, one phrase per surface.
+/* ============================================================
+   Good'AI — Colors & Type  (source of truth)
+   ------------------------------------------------------------
+   Palette: Mustard-gold + Coral-red + Navy + Warm cream + Black.
+   #F3A62A  #F4442E  #202C59  #FFF0D0  #111111
+   Brutalist / direct-mail composition. Warm cream canvas,
+   high-contrast COLOURED cards, white-on-colour text.
+   ============================================================ */
+/* -------- Fonts -------- */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=JetBrains+Mono:wght@400;500;700&display=swap");
+/* Fraunces — local variable file with SOFT + WONK axes (in addition to opsz + wght) */
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype-variations"),
+       url("fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/Fraunces-Italic-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype-variations"),
+       url("fonts/Fraunces-Italic-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+:root {
+  /* ---------------------------------------------------------
+     COLOUR — the five core brand colours
+     --------------------------------------------------------- */
+  --gold:        #F3A62A;   /* mustard-gold — coloured panels / blocks */
+  --gold-deep:   #D98E1C;   /* gold hover / depth */
+  --gold-tint:   #FBDFA6;   /* soft gold surface */
+  --red:         #F4442E;   /* coral-red — primary CTA / shout accent */
+  --red-deep:    #D8331F;   /* red hover / depth */
+  --red-tint:    #FBC9C1;   /* soft red surface */
+  --navy:        #202C59;   /* deep navy — dark surfaces / headlines / dark cards */
+  --navy-deep:   #161E3D;   /* navy depth / stamp shadow */
+  --navy-tint:   #C9CEDD;   /* soft navy surface */
+  /* ---------------------------------------------------------
+     COLOUR — Neutrals (WARM cream canvas + true black)
+     --------------------------------------------------------- */
+  --paper:        #FFF0D0;   /* page canvas — warm cream */
+  --paper-deep:   #F6E2B8;   /* raised / sunken cream surface */
+  --paper-3:      #ECD49A;   /* deeper cream divider tone */
+  --cream-line:   #E0C690;   /* cream hairline border */
+  --ink:          #111111;   /* near-black — text, borders, hard edges */
+  --ink-soft:     #1C1C1C;   /* body text */
+  --ink-mute:     #6B6452;   /* secondary / labels (warm grey) */
+  --ink-faint:    #A0967C;   /* placeholder / disabled (warm) */
+  /* ---------------------------------------------------------
+     COLOUR — Supporting (used sparingly)
+     --------------------------------------------------------- */
+  --hi-yellow:    #F3A62A;   /* sticker label = gold */
+  --trust-blue:   #202C59;   /* links = navy */
+  --ok:           #2E6E3E;   /* success */
+  --warn:         #D8331F;   /* error = deep red */
+  --danger:       #D8331F;
+  /* ---------------------------------------------------------
+     LEGACY ALIASES — keep old token names working
+     (orange → red, ocean → navy) so existing files don't break
+     --------------------------------------------------------- */
+  --orange:       var(--red);
+  --orange-deep:  var(--red-deep);
+  --orange-tint:  var(--red-tint);
+  --orange-100:   #FBC9C1;
+  --orange-50:    #FDE9E5;
+  --ocean-50:    #E8EAF1;
+  --ocean-100:   #C9CEDD;
+  --ocean-200:   #8A93B4;
+  --ocean-300:   #4A5685;
+  --ocean-400:   var(--navy);
+  --ocean-500:   #1A2349;
+  --ocean-600:   var(--navy-deep);
+  /* ---------------------------------------------------------
+     COLOUR — Semantic tokens
+     --------------------------------------------------------- */
+  --bg:            var(--paper);
+  --bg-raised:     #FFFAEC;
+  --bg-sunken:     var(--paper-deep);
+  --bg-brand:      var(--navy);
+  --bg-accent:     var(--red);
+  --bg-gold:       var(--gold);
+  --bg-ocean:      var(--navy);
+  --fg:            var(--ink);
+  --fg-soft:       var(--ink-soft);
+  --fg-mute:       var(--ink-mute);
+  --fg-faint:      var(--ink-faint);
+  --fg-on-brand:   var(--paper);
+  --fg-on-ocean:   var(--paper);
+  --border:        var(--cream-line);
+  --border-strong: #C9A961;
+  --accent:        var(--red);
+  --accent-hover:  var(--red-deep);
+  --accent-soft:   var(--red-tint);
+  --highlight:     var(--gold);
+  --success:       var(--ok);
+  /* stamp shadows */
+  --shadow-stamp:        3px 3px 0 var(--ink);
+  --shadow-stamp-orange: 3px 3px 0 var(--red);
+  --shadow-stamp-ocean:  3px 3px 0 var(--navy);
+  --shadow-stamp-deep:   4px 4px 0 var(--ink);
+  /* ---------------------------------------------------------
+     TYPE — Families
+     --------------------------------------------------------- */
+  --font-sans:    "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* ---------------------------------------------------------
+     TYPE — Scale
+     --------------------------------------------------------- */
+  --fs-12: 0.75rem;    /* eyebrow */
+  --fs-16: 1rem;       /* body */
+  --fs-20: 1.25rem;    /* lede */
+  --fs-24: 1.5rem;     /* h3 */
+  --fs-36: 2.25rem;    /* h2 */
+  --fs-64: 4rem;       /* h1 */
+  /* ---------------------------------------------------------
+     SPACING
+     --------------------------------------------------------- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  /* ---------------------------------------------------------
+     SPACING / RADIUS / SHADOW
+     --------------------------------------------------------- */
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+  --radius-xl:   26px;
+  --radius-pill: 999px;
+  /* ---------------------------------------------------------
+     SHADOW — flat "stamp" only. No blurs.
+     --------------------------------------------------------- */
+  --shadow-stamp:        3px 3px 0 var(--ink);
+  --shadow-stamp-orange: 3px 3px 0 var(--orange);
+  --shadow-stamp-deep:   4px 4px 0 var(--ink);
+}
+/* ============================================================
+   BASE
+   ============================================================ */
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--fs-16);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+/* ============================================================
+   TYPE CLASSES
+   ============================================================ */
+.h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-64);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  font-variation-settings: "opsz" 144;
+  color: var(--fg);
+}
+.h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-36);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 72;
+  color: var(--fg);
+}
+.h3 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: var(--fs-24);
+  line-height: 1.2;
+  color: var(--fg);
+}
+.lede {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--fs-20);
+  line-height: 1.5;
+  color: var(--fg-soft);
+}
+.body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--fs-16);
+  line-height: 1.55;
+  color: var(--fg-soft);
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+}
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+  color: var(--fg-soft);
+}
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  font-variation-settings: "opsz" 144;
+}
+.wordmark .apos { color: var(--orange); }
+/* ============================================================
+   KEYWORD HIGHLIGHT — coloured card behind a standout word.
+   Highlight as many keywords as the line needs; vary the colour
+   (gold / red / navy) so two highlights in one heading don't
+   read as the same beat. Metrics are em-based so it scales at
+   any heading size.
+   <h1><span class="hl">Knock off</span> early —
+       we'll sort the <span class="hl-red">boring stuff</span>.</h1>
+   ============================================================ */
+.hl,
+.hl-red,
+.hl-navy {
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding: 0.02em 0.24em;
+  border-radius: 0.06em;            /* stays sharp at scale */
+  box-shadow: 0.06em 0.06em 0 var(--ink);
+  font-style: normal;               /* upright even inside an italic line */
+  white-space: nowrap;
+}
+.hl      { background: var(--gold); color: var(--ink); }   /* default — gold sticker */
+.hl-red  { background: var(--red);  color: var(--paper); } /* loud — coral on the shout word */
+.hl-navy { background: var(--navy); color: var(--paper); } /* quiet — navy block */
+/ WHITE CARDS ON WHITE BACKGROUND IS FORBIDDEN

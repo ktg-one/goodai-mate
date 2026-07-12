@@ -8,18 +8,18 @@ export async function POST(req: NextRequest) {
       return new Response(JSON.stringify({ error: 'Text is required' }), { status: 400 });
     }
 
-    const apiKey = process.env.ELEVEN_API_KEY;
+    const apiKey = process.env.ELEVEN_API_KEY || process.env.ELEVENLABS_API_KEY;
     if (!apiKey) {
       return new Response(
-        JSON.stringify({ error: 'ElevenLabs API key not configured. Add ELEVEN_API_KEY=... to .env.local and to Vercel env vars.' }),
+        JSON.stringify({ error: 'ElevenLabs API key not configured. Add ELEVENLABS_API_KEY=... to .env.local and to Vercel env vars.' }),
         { status: 500 }
       );
     }
 
     const effectiveVoiceId = voiceId || process.env.ELEVEN_DEFAULT_VOICE || 'vr54y8Xovf4AEnfNrGqH';
 
-    // Use the streaming endpoint for lower latency
-    const url = `https://api.elevenlabs.io/v1/text-to-speech/${effectiveVoiceId}/stream`;
+    // Use the streaming endpoint with latency optimization query parameter
+    const url = `https://api.elevenlabs.io/v1/text-to-speech/${effectiveVoiceId}/stream?optimize_streaming_latency=4`;
 
     const response = await fetch(url, {
       method: 'POST',
@@ -30,12 +30,12 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         text,
-        model_id: 'eleven_turbo_v2_5', // fast, high quality for conversational
+        model_id: 'eleven_flash_v2_5', // Flash model for ultra-low latency conversational agents
         voice_settings: {
           stability: 0.55,
           similarity_boost: 0.75,
           style: 0.2,
-          use_speaker_boost: true,
+          use_speaker_boost: false, // Disabled to save server processing time and reduce latency
         },
         output_format: 'mp3_44100_128',
       }),

@@ -1,0 +1,21 @@
+{
+  "name": "memory_frontier",
+  "description": "Get all unblocked actions ranked by priority and urgency. Returns the frontier of actionable work with no unsatisfied dependencies.",
+  "inputSchema": {
+    "properties": {
+      "agentId": {
+        "description": "Agent ID to check lease conflicts",
+        "type": "string"
+      },
+      "limit": {
+        "description": "Max results (default 20)",
+        "type": "number"
+      },
+      "project": {
+        "description": "Filter by project",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  }
+}

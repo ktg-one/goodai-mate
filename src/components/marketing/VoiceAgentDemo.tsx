@@ -16,10 +16,10 @@ export default function VoiceAgentDemo() {
   const [activeTab, setActiveTab] = useState<'mic' | 'phone'>('mic');
 
   return (
-    <section className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+    <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
       <div className="mx-auto max-w-5xl px-6">
         <ScrollReveal className="text-center mb-9">
-          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">
+          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">
             FILE ANOTHER ON THE BOARD
           </span>
           <h2 className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-3 mb-3">
@@ -31,11 +31,11 @@ export default function VoiceAgentDemo() {
         </ScrollReveal>
 
         {!showInline ? (
-          <StampCard variant="paper" className="p-9 text-center flex flex-col items-center justify-center" interactive pin>
+          <StampCard variant="navy" className="p-9 text-center flex flex-col items-center justify-center" interactive pin>
             <p className="text-2xl mb-7">
               Ready to knock off early?
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 w-full justify-center max-w-xl">
+            <div className="flex flex-col sm:flex-row gap-4 w-full justify-center max-w-xl mx-auto">
               <StampButton
                 variant="red"
                 size="lg"
@@ -45,7 +45,7 @@ export default function VoiceAgentDemo() {
                 }}
                 className="flex-1"
               >
-                Speak in browser (mic) →
+                Speak in browser →
               </StampButton>
               <StampButton
                 variant="gold"
@@ -56,44 +56,42 @@ export default function VoiceAgentDemo() {
                 }}
                 className="flex-1"
               >
-                Have Agent call your phone →
+                Agent calls your phone →
               </StampButton>
             </div>
-            <p className="mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--ink)]/50">
-              Perth local test dialer. Instant callback via n8n automation.
+            <p className="mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--gold-tint)]">
+              Perth local test dialer. Instant callback.
             </p>
           </StampCard>
         ) : (
           <div className="space-y-6 max-w-3xl mx-auto">
-            {/* Tabs Controller */}
-            <div className="flex border-2 border-[var(--ink)] rounded-xs bg-[var(--paper-deep)] p-1.5 shadow-[2px_2px_0_var(--ink)]" role="group" aria-label="Demo mode selection">
-              <button
+            <div className="flex border-2 border-[var(--ink)] rounded-xs bg-[var(--paper-deep)] p-1.5 shadow-[2px_2px_0_var(--ink)]" role="tablist">
+              <StampButton
+                variant="paper"
+                size="sm"
+                engaged={activeTab === 'mic'}
                 onClick={() => setActiveTab('mic')}
-                aria-pressed={activeTab === 'mic'}
-                className={`flex-1 py-2 font-mono text-xs font-bold uppercase tracking-[0.12em] transition-all cursor-pointer rounded-xs outline-none focus-visible:ring-2 focus-visible:ring-[var(--red)] ${
-                  activeTab === 'mic'
-                    ? 'bg-[var(--ink)] text-[var(--paper)] shadow-[inset_1px_1px_2px_rgba(0,0,0,0.5)]'
-                    : 'text-[var(--ink)]/70 hover:bg-[var(--paper)]/50 hover:text-[var(--ink)]'
-                }`}
+                className={`flex-1 py-2 text-[10px] ${activeTab === 'mic' ? 'bg-[var(--ink)] text-[var(--paper)]' : ''}`}
+                role="tab"
+                aria-selected={activeTab === 'mic'}
               >
-                🎙️ Speak In Browser
-              </button>
-              <button
+                Speak in browser
+              </StampButton>
+              <StampButton
+                variant="paper"
+                size="sm"
+                engaged={activeTab === 'phone'}
                 onClick={() => setActiveTab('phone')}
-                aria-pressed={activeTab === 'phone'}
-                className={`flex-1 py-2 font-mono text-xs font-bold uppercase tracking-[0.12em] transition-all cursor-pointer rounded-xs outline-none focus-visible:ring-2 focus-visible:ring-[var(--red)] ${
-                  activeTab === 'phone'
-                    ? 'bg-[var(--ink)] text-[var(--paper)] shadow-[inset_1px_1px_2px_rgba(0,0,0,0.5)]'
-                    : 'text-[var(--ink)]/70 hover:bg-[var(--paper)]/50 hover:text-[var(--ink)]'
-                }`}
+                className={`flex-1 py-2 text-[10px] ${activeTab === 'phone' ? 'bg-[var(--ink)] text-[var(--paper)]' : ''}`}
+                role="tab"
+                aria-selected={activeTab === 'phone'}
               >
-                📞 Have Agent Call You
-              </button>
+                Agent calls you
+              </StampButton>
             </div>
 
-            {/* Tab Panels */}
             {activeTab === 'mic' ? (
-              <VoiceAgentHero supertonicUrl={undefined} />
+              <VoiceAgentHero embedded />
             ) : (
               <OutboundCallCard />
             )}
@@ -105,7 +103,7 @@ export default function VoiceAgentDemo() {
                 onClick={() => setShowInline(false)}
                 className="font-mono uppercase tracking-[0.16em]"
               >
-                CLOSE FILING SURFACE
+                Close filing surface
               </StampButton>
             </div>
           </div>

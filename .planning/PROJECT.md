@@ -29,11 +29,13 @@ A switched-on Perth tradie/owner lands, speaks (or types) their admin mess into 
 - [x] GSAP scroll reveals on VoiceAgentDemo + AISolutions; Fraunces font-loading fix; Vercel deploy fixes (physical font files, no symlinks)
 
 ### Active / Ongoing (open — see ROADMAP §Open Workstreams)
-- [x] **[prod blocker]** De-hardcode the GWS CLI path (`D:\packages\…` in 3 API routes) → env-driven / hosted endpoint
-- [ ] **[prod blocker]** Point `N8N_CALL_WEBHOOK_URL` at a hosted n8n (`api/trigger-call` defaults to `localhost:5678`)
-- [ ] Production ASR path (replace `localhost:8000` Supertonic dev endpoint — 4 files)
-- [ ] Resolve design SSOT (`public/design-system-new/` flattened to `public/` root on 2026-06-10; 11 files still cite the removed subpath in comments)
-- [ ] Commit in-flight work (remove `public/voice-feature/*`, css/HomeClient edits, new audit assets)
+- [x] **[prod blocker — DONE 2026-06-17 `7c47a55`]** De-hardcode the GWS CLI path (`D:\packages\…`) → env-driven (`GWS_CLI_PATH` + node_modules fallback); 0 refs remain
+- [x] **[prod blocker — DONE 2026-06-17 `7c47a55`]** `api/trigger-call` n8n webhook now reads `N8N_CALL_WEBHOOK_URL`, no localhost default (throws/mocks if unset)
+- [x] **[prod blocker — DONE 2026-06-17 `7c47a55`]** Production ASR path now reads `NEXT_PUBLIC_ASR_URL`; localhost:8000 only as dev fallback/example
+- [x] **[DONE 2026-06-17 `3b92089`]** Resolve design SSOT — `public/design-system-new/` comment refs cleared (0 in src/); canonical = `public/` root + PRODUCT.md
+- [x] **[DONE 2026-06-17]** Commit in-flight work (Vite `public/voice-feature/*` removal, css/HomeClient edits, new audit assets) — working tree clean
+- [ ] **[deploy gate]** Set required env vars in Vercel + host ASR/n8n endpoints (see LAUNCH.md)
+- [ ] **[P1]** `api/demo-automation` demo webhook still defaults to `localhost:5678` — make env-driven for consistency
 - [ ] Lighthouse / perf / a11y pass on the GSAP-heavy flow
 - [ ] Additional surfaces (services, about, case studies) in the same brutalist language
 - [ ] Production deploy / domain + analytics
@@ -46,7 +48,7 @@ A switched-on Perth tradie/owner lands, speaks (or types) their admin mess into 
 
 - **Refactor → v1.1**: original phase plan (shader/cursor/old-lead) was superseded by the v1 mechanical brutalist redesign (goodai-award-configuration swarm). Since 2026-06-04 a lead-gen + automation layer (v1.1) was added ad-hoc on top. Old `.planning/phases/` archived to `milestones/v0.9-pre-refactor-phases/`.
 - **Brand**: "Good'ai" (good eye, mate). "we'll sort the boring stuff." Practical, warm, direct. "We", never "I". No hype, no "AI-powered", no corporate.
-- **Design SSOT**: paper canvas, navy/gold/red, flat 3px participating stamp shadows, Fraunces var + WONK, 4px grid, mechanical motion only, one red per surface. Tokens now live at `public/` root (`colors_and_type.css`, `fonts/`, `good-ai-design-final.html`, `README.md`) after the 2026-06-10 consolidation. NOTE: 11 source files' comments still reference the removed `public/design-system-new/` subpath — canonical source needs declaring (likely `public/` root + PRODUCT.md) and the stale comments fixing.
+- **Design SSOT**: paper canvas, navy/gold/red, flat 3px participating stamp shadows, Fraunces var + WONK, 4px grid, mechanical motion only, one red per surface. Canonical source is `public/` root (`colors_and_type.css`, `fonts/`, `good-ai-design-final.html`, `README.md`) + PRODUCT.md, after the 2026-06-10 consolidation. The stale `public/design-system-new/` comment refs were cleared on 2026-06-17 (`3b92089`) — 0 remain in `src/`.
 - **Tech**: Next.js 16, React 19, Tailwind v4, GSAP/ScrollTrigger + @gsap/react + motion/react (hybrid), direct imports.
 - **Backends**: AI Gateway (`AI_GATEWAY_API_KEY`) for chat + audit; ElevenLabs (`ELEVEN_API_KEY`, `ELEVEN_DEFAULT_VOICE`) for TTS; Google Workspace CLI + n8n for automation/email dispatch; Supertonic local for dev ASR; `NEXT_PUBLIC_GWS_SCRIPT_URL` for lead capture.
 - **Skills in use**: local `.agents/skills` + `.claude/skills` (goodai-award-configuration + awwwards/gsap/impeccable swarm, next-best-practices, gsd-* family).
@@ -66,9 +68,10 @@ A switched-on Perth tradie/owner lands, speaks (or types) their admin mess into 
 | Award Configuration swarm for the v1 redesign | Delivered coordinated 60fps mechanical brutalist mail-board | Shipped (May 2026) |
 | Add a lead-gen + automation layer (v1.1) | Turn the brand demo into a working funnel (audit → call → pipeline) | Shipped 2026-06-09/10, work in flight |
 | AI Gateway for all model calls | Single keyed entry point vs per-provider SDKs | Shipped |
-| Google Workspace CLI + n8n as automation backend | Reuse existing GWS/n8n tooling for email + lead routing | Shipped, but path hardcoded (prod blocker) |
+| Google Workspace CLI + n8n as automation backend | Reuse existing GWS/n8n tooling for email + lead routing | Shipped; path de-hardcoded + env-driven 2026-06-17 |
 | Archive pre-refactor phases | Old 01–05 plans described the abandoned shader/cursor v1 | Archived |
+| Keep `.planning/` + repo self-contained (no Multica dependency) | Owner needs dev to continue via any AI CLI, not bound to the platform | Decided 2026-06-24 |
 
 ---
 
-*Last validated: 2026-06-16 against the live codebase, then re-verified all concerns directly in source. v1.1 lead-gen/automation recorded; SSOT + prod-blocker concerns confirmed in ROADMAP/STATE.*
+*Last validated: 2026-06-24 against the live codebase + git (branch `goo-47-verify`). All P0 code blockers confirmed resolved & committed (`7c47a55`), SSOT comment drift cleared (`3b92089`), working tree clean. Remaining work is deploy-side only. Repo + `.planning/` confirmed self-sufficient — no Multica dependency for continued dev.*

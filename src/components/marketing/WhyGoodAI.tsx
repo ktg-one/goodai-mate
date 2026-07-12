@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 import { BrandWordmark } from '@/components/brand/BrandWordmark';
 
 /**
@@ -11,7 +11,6 @@ import { BrandWordmark } from '@/components/brand/BrandWordmark';
  */
 export default function WhyGoodAI() {
   const sectionRef = useRef<HTMLElement>(null);
-  const prefersReducedMotion = useReducedMotion();
 
   // NOTE: Ribbon bridges are now owned exclusively by HomeClient GSAP mailBoard
   // (aggressive .mail-ribbon + shear/tear). This section is pure content participant
@@ -29,7 +28,7 @@ export default function WhyGoodAI() {
   } as const;
 
   return (
-    <section ref={sectionRef} className="min-h-screen flex items-center py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+    <section ref={sectionRef} className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
       {/* Unified physical ribbon bridge handled by parent mailBoard GSAP — no competing motion here */}
 
       <div className="mx-auto max-w-5xl px-6">

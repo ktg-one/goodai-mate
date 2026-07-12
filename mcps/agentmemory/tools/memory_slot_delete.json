@@ -1,0 +1,16 @@
+{
+  "name": "memory_slot_delete",
+  "description": "Delete a slot. Seeded default slots can be deleted unless marked readOnly.",
+  "inputSchema": {
+    "properties": {
+      "label": {
+        "description": "Slot label",
+        "type": "string"
+      }
+    },
+    "required": [
+      "label"
+    ],
+    "type": "object"
+  }
+}

@@ -9,11 +9,9 @@ function HeroOnePager() {
   const [problem, setProblem] = useStateHero('');
   const [phase, setPhase] = useStateHero('idle'); // idle | thinking | answered
   const [answer, setAnswer] = useStateHero('');
-  const [speaking, setSpeaking] = useStateHero(false);
   const [listening, setListening] = useStateHero(false);
   const [error, setError] = useStateHero('');
   const recogRef = useRefHero(null);
-  const utterRef = useRefHero(null);
 
   async function ask(e) {
     e?.preventDefault();
@@ -32,23 +30,7 @@ function HeroOnePager() {
   }
 
   function speak() {
-    if (!answer) return;
-    if (speaking) {
-      window.speechSynthesis.cancel();
-      setSpeaking(false);
-      return;
-    }
-    const u = new SpeechSynthesisUtterance(answer);
-    // Prefer an English voice
-    const voices = window.speechSynthesis.getVoices();
-    const en = voices.find((v) => /en[-_]AU/i.test(v.lang)) || voices.find((v) => /en/i.test(v.lang));
-    if (en) u.voice = en;
-    u.rate = 1.0; u.pitch = 1.0;
-    u.onend = () => setSpeaking(false);
-    u.onerror = () => setSpeaking(false);
-    utterRef.current = u;
-    setSpeaking(true);
-    window.speechSynthesis.speak(u);
+    /* TTS removed — being reworked */
   }
 
   function startListen() {
@@ -79,8 +61,6 @@ function HeroOnePager() {
   }
 
   function reset() {
-    window.speechSynthesis?.cancel();
-    setSpeaking(false);
     setProblem('');
     setAnswer('');
     setPhase('idle');
@@ -149,10 +129,6 @@ function HeroOnePager() {
                 <span className="gai-answer-dot" />
                 Good&rsquo;ai says
               </span>
-              <button type="button" className={cn('gai-tool gai-tool-mini', speaking && 'is-on')} onClick={speak}>
-                <Icon name={speaking ? 'pause' : 'speaker'} size={14} />
-                <span>{speaking ? 'Stop' : 'Hear it'}</span>
-              </button>
               <button type="button" className="gai-tool gai-tool-mini" onClick={reset}>
                 <Icon name="refresh" size={14} />
                 <span>Reset</span>
@@ -173,7 +149,6 @@ function HeroOnePager() {
       {/* Feature strip — coloured panels */}
       <div className="gai-features">
         <FeatureChip icon="mic" label="Voice intake" detail="Speak your problem" />
-        <FeatureChip icon="speaker" label="Read it back" detail="Hear our reply" />
         <FeatureChip icon="brain" label="Real reasoning" detail="Powered by Claude" />
         <FeatureChip icon="bolt" label="Sub-second" detail="No waiting room" />
         <FeatureChip icon="lock" label="Yours alone" detail="No data resold" />

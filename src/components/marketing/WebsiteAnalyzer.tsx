@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Search, Terminal, ClipboardCheck, Sparkles, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
 
@@ -22,18 +22,6 @@ export default function WebsiteAnalyzer() {
       consoleEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [logs]);
-
-  // ⚡ Bolt Performance Optimization: Memoize logs rendering to prevent O(N) array mapping on every keystroke in the form above
-  const renderedLogs = useMemo(() => logs.map((log, index) => {
-    let colorClass = 'text-[var(--paper)]/80';
-    if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--red-tint)] font-bold';
-    if (log.startsWith('[SERVER]')) colorClass = 'text-[var(--gold-tint)]';
-    return (
-      <div key={index} className={colorClass}>
-        {log}
-      </div>
-    );
-  }), [logs]);
 
   const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,8 +76,8 @@ export default function WebsiteAnalyzer() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12 border-t-2 border-dashed border-[var(--ink)]/30">
       <div className="text-center mb-6">
-        <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">
-          BIG BOY AUTOMATION DEMO
+        <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">
+          SITE AUDIT
         </span>
         <h2 className="font-display text-4xl md:text-5xl tracking-[-0.025em] leading-none mt-2 mb-2">
           Try our <span className="hl">Website Analyzer</span>.
@@ -99,11 +87,11 @@ export default function WebsiteAnalyzer() {
         </p>
       </div>
 
-      <div className="stamp-card stamp-card-paper p-6 md:p-8 rounded-sm shadow-[4px_4px_0_var(--ink)] bg-[var(--paper-raised)] border-2 border-[var(--ink)] relative">
+      <div className="stamp-card stamp-card-navy p-6 md:p-8 relative">
         <form onSubmit={handleAnalyze} className="space-y-4">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="website-url" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">
-              1. Enter Website Link
+            <label htmlFor="website-url" className="sticker-label sticker-label-gold">
+              YOUR SITE
             </label>
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="relative flex-1">
@@ -132,7 +120,7 @@ export default function WebsiteAnalyzer() {
               </StampButton>
             </div>
             <p id="url-help" className="text-[9px] font-mono text-[var(--ink)]/50">
-              Paste your business URL. The AI will scan your landing page, find your contact email, and send the audit report.
+              Paste your business URL. The system will scan your landing page, find your contact email, and send the audit report.
             </p>
           </div>
         </form>
@@ -145,7 +133,16 @@ export default function WebsiteAnalyzer() {
             </span>
             <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-xs h-[120px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
               <div className="space-y-1">
-                {renderedLogs}
+                {logs.map((log, index) => {
+                  let colorClass = 'text-[var(--paper)]/80';
+                  if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--coral-tint)] font-bold';
+                  if (log.startsWith('[SERVER]')) colorClass = 'text-[var(--gold-tint)]';
+                  return (
+                    <div key={index} className={colorClass}>
+                      {log}
+                    </div>
+                  );
+                })}
                 {isAnalyzing && (
                   <div className="text-[var(--paper)]/40 animate-pulse">● Mapping sitemap elements...</div>
                 )}
@@ -157,9 +154,9 @@ export default function WebsiteAnalyzer() {
 
         {/* Audit Report Docket Results */}
         {result && (
-          <div className="mt-6 border-2 border-[var(--ink)] bg-[var(--paper)] p-5 rounded-xs shadow-[2px_2px_0_var(--ink)] space-y-4 text-left animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className="mt-6 stamp-card stamp-card-gold p-5 space-y-4 text-left animate-in fade-in slide-in-from-top-4 duration-300">
             <div className="flex items-center justify-between border-b border-[var(--ink)]/20 pb-2">
-              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--red)] font-bold flex items-center gap-1">
+              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--coral)] font-bold flex items-center gap-1">
                 <ClipboardCheck size={14} /> CUSTOM SYSTEMS AUDIT
               </div>
               <span className="text-[9px] font-mono bg-[var(--navy-tint)] text-[var(--navy-deep)] px-2 py-0.5 rounded-sm">
@@ -174,8 +171,8 @@ export default function WebsiteAnalyzer() {
               <ul className="space-y-2.5 text-xs leading-relaxed">
                 {result.automations.map((item, idx) => (
                   <li key={idx} className="flex gap-2.5 items-start">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-[var(--ink)] bg-[var(--gold-tint)] font-mono text-[10px] font-bold text-[var(--ink)]">
-                      {idx + 1}
+                    <span className="sticker-label sticker-label-navy shrink-0 text-[9px] py-0.5">
+                      {['INTAKE', 'CHASE', 'FILE'][idx] ?? 'TASK'}
                     </span>
                     <span className="text-[var(--ink)]/90">{item}</span>
                   </li>

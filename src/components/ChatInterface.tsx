@@ -3,7 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
 import { Send } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState, memo, useCallback } from 'react';
+import { useEffect, useRef, useState, memo, useCallback } from 'react';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
 
 type TextPart = UIMessage['parts'][number] & { type: 'text'; text: string };
@@ -61,12 +61,9 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   });
 
   const isBusy = status === 'submitted' || status === 'streaming';
-  // ⚡ Bolt Performance Optimization: Lazy-evaluate the transcript generation string
-  // By only mapping and joining the message array when showLeadCard is true, we avoid an O(N)
-  // operation on every single token streamed when the array is updating rapidly.
-  const conversationTranscript = useMemo(
-    () => (showLeadCard ? messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n') : ''),
-    [messages, showLeadCard],
+  const getConversationTranscript = useCallback(
+    () => messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n'),
+    [messages],
   );
   const errorMessage = error?.message?.trim() || 'Something went sideways. Try again in a moment.';
 
@@ -101,7 +98,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
     <div className="gai-chat">
       {/* Header bar */}
       <div className="border-b border-[var(--ink)] bg-[var(--paper)] px-4 py-3">
-        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--ocean-600)]">
+        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--navy-deep)]">
           Good&apos;ai intake
         </p>
         <h2 className="mt-1 text-[17px] font-bold leading-tight text-[var(--ink)]">
@@ -139,7 +136,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
             <div ref={leadCardRef}>
               <LeadCaptureCard
                 firstMessage={firstMessage}
-                conversationTranscript={conversationTranscript}
+                conversationTranscript={getConversationTranscript}
                 onDismiss={() => setLeadDismissed(true)}
               />
             </div>

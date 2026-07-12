@@ -22,14 +22,10 @@
 **Learning:** In Next.js / React apps using Vercel AI SDK, array spreading and reversing `[...messages].reverse()` on every render or effect during text streaming creates unnecessary object allocations and GC overhead.
 **Action:** Use a backwards `for` loop to search the array backwards instead of making a reversed copy.
 
-## 2025-06-13 - [React Performance] Lazy-Evaluating Derived State in Streaming Contexts
-**Learning:** In chat interfaces using the Vercel AI SDK, maintaining derived state like a concatenated `conversationTranscript` string via `useMemo` that only depends on `[messages]` causes an O(N) operation on every single token streamed.
-**Action:** Always lazy-evaluate derived state (like string concatenation) in `useMemo` by also checking a component visibility flag (e.g. `showLeadCard`) so it only executes when actually needed, preventing O(N) DOM reconciliation complexity per token.
+## 2025-05-18 - [React Performance] Lazy Evaluating Derived State During Streaming
+**Learning:** In chat interfaces using the Vercel AI SDK, computing derived state like `messages.map(...).join('\n')` inside a `useMemo` that depends on `messages` causes O(N) string concatenation on every single streaming token, destroying performance and causing input lag.
+**Action:** Always lazy-evaluate expensive derived state. If the derived state is only needed when a specific component (like a lead capture form) is visible, add those visibility flags to the `useMemo` dependencies and return early (e.g., return `''` if the form is hidden) to bypass the computation during the heavy streaming phase.
 
-## 2025-06-25 - [Memoizing Controlled Form Inputs in React with Complex Derived Arrays]
-**Learning:** In components like `AutomationPlayground`, `WebsiteAnalyzer`, and `OutboundCallCard`, controlled form inputs (`<input value={name} onChange={...} />`) force a full component re-render on *every single keystroke*. If these components also render lists inline using `logs.map(...)`, the mapping operation re-executes on every typed character. This `O(N)` operation blocks the main thread and causes severe input lag for the user.
-**Action:** Always wrap derived lists or array mappings (like `logs.map()`) in a `useMemo` hook when they reside in the same component as a controlled text input. This ensures the React elements are only recreated when the array actually changes, not when the user types.
-
-## 2025-06-25 - [React Performance] Lazy-Evaluating Derived State in Streaming Contexts
-**Learning:** In chat interfaces using the Vercel AI SDK, maintaining derived state like a concatenated `conversationTranscript` string via `useMemo` that only depends on `[messages]` causes an O(N) operation on every single token streamed.
-**Action:** Always lazy-evaluate derived state (like string concatenation) in `useMemo` by also checking a component visibility flag (e.g. `showLeadCard`) so it only executes when actually needed, preventing O(N) DOM reconciliation complexity per token.
+## 2025-05-18 - [React Performance] Memoizing list maps alongside controlled inputs
+**Learning:** The React AutomationPlayground component contained a `logs.map(...)` operation inline with multiple controlled inputs (like `name`, `business`, `phone`). Because it wasn't memoized, typing a single character forced the entire logs array mapping and DOM element recreation to run again, causing input lag.
+**Action:** Always wrap derived lists or array mappings (e.g., `logs.map()`) in a `useMemo` hook when they reside in the same component as a controlled text input to prevent O(N) recomputations on every keystroke.

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 // CRITICAL (AGENTS.md): direct imports, no barrels
-import { VoiceAgentHero } from '@/components/voice-agent/VoiceAgentHero';
+import { GemVoice } from '@/components/voice-agent/gem-voice';
 import ChatInterface from '@/components/ChatInterface';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
 // Direct imports (AGENTS.md) — stamp primitives for mail docket surfaces
@@ -17,8 +17,8 @@ import WhyGoodAI from '@/components/marketing/WhyGoodAI';
 import Manifest from '@/components/marketing/Manifest';
 import AISolutions from '@/components/marketing/AISolutions';
 import VoiceAgentDemo from '@/components/marketing/VoiceAgentDemo';
-import AutomationPlayground from '@/components/AutomationPlayground';
-import WebsiteAnalyzer from '@/components/marketing/WebsiteAnalyzer';
+import BuzzCTA from '@/components/marketing/BuzzCTA';
+import { BrandShapesStamp } from '@/components/brand/BrandWordmark';
 
 
 // GSAP for mail-stack composition (per gsap-awwwards-website + gsap-scrolltrigger skills)
@@ -153,11 +153,9 @@ export default function HomeClient() {
           const p = self.progress;
           heroProgress.value = p;
           // Subtle grain "settle" + deeper pile shadow on the board itself.
-          // ALSO feed --global-settle + --hero-filing-progress so ALL stamp surfaces + ribbons
+          // ALSO feed --hero-filing-progress so ALL stamp surfaces + ribbons
           // get unified ink transfer + shadow compression (Framer hero + GSAP board = one physical mail stack).
           if (mailBoardRef.current) {
-            mailBoardRef.current.style.setProperty('--board-depth', (p * 0.6).toFixed(2));
-            mailBoardRef.current.style.setProperty('--global-settle', p.toFixed(3));
             mailBoardRef.current.style.setProperty('--hero-filing-progress', p.toFixed(3)); // bridge for full participation
             mailBoardRef.current.dataset.depth = p > 0.55 ? 'deep' : '';
           }
@@ -226,6 +224,7 @@ export default function HomeClient() {
           });
           if (wears[idx % wears.length]) (card as HTMLElement).dataset.wear = 'true';
 
+          let isSettled = false;
           ScrollTrigger.create({
             trigger: card,
             start: `top ${80 + (idx % 4) * 1.8}%`,
@@ -235,14 +234,17 @@ export default function HomeClient() {
               const p = self.progress;
               const settleY = (1 - p) * 22;
               const settleRot = rot * (1 - p * 0.72);
-              const shadow = p > 0.68 
-                ? `${4 + p * 2.1}px ${4 + p * 2.1}px 0 var(--ink)` 
-                : '2.5px 2.5px 0 var(--ink)';
+              const nowSettled = p > 0.68;
+              if (nowSettled !== isSettled) {
+                isSettled = nowSettled;
+                gsap.set(card, {
+                  boxShadow: isSettled ? '6.1px 6.1px 0 var(--ink)' : '2.5px 2.5px 0 var(--ink)',
+                });
+              }
               gsap.set(card, {
                 y: oy + settleY,
                 rotate: settleRot,
                 opacity: Math.min(1, p * 1.12),
-                boxShadow: shadow,
                 '--stamp-depth': Math.min(0.95, p * 1.05),
               });
             },
@@ -288,11 +290,7 @@ export default function HomeClient() {
           onUpdate: (self) => {
             const p = self.progress;
             if (footerRef.current) {
-              footerRef.current.style.setProperty('--final-clack', (p * 1.05).toFixed(2));
               footerRef.current.style.setProperty('--stamp-depth', (p * 0.95).toFixed(2));
-              if (mailBoardRef.current && p > 0.6) {
-                mailBoardRef.current.style.setProperty('--board-depth', (0.58 + p * 0.18).toFixed(2));
-              }
             }
           },
           onLeave: () => {
@@ -302,18 +300,13 @@ export default function HomeClient() {
             const f = footerRef.current;
             if (f) {
               f.classList.add('stamp-clack-red');
-              // Heavy shadow slam + wonk lock + global pile compression
+              // Heavy shadow slam + wonk lock
               gsap.to(f, {
-                '--final-clack': 1.0,
                 '--stamp-depth': 1.0,
                 duration: 0.12,
                 ease: 'none',
                 onComplete: () => f.classList.remove('stamp-clack-red'),
               });
-            }
-            if (mailBoardRef.current) {
-              mailBoardRef.current.style.setProperty('--global-settle', '0.97');
-              mailBoardRef.current.style.setProperty('--pile-compress', '0.31');
             }
             // Final ribbon3 tear shear clack (real perforated snap)
             if (ribbon3Ref.current) {
@@ -362,8 +355,7 @@ export default function HomeClient() {
   return (
     <div ref={mailBoardRef} className="mail-board overflow-x-hidden">
       {/* HERO - TTS feature (the Voice Agent as the product) — descent files into the stack */}
-      <VoiceAgentHero 
-        supertonicUrl={undefined}
+      <GemVoice 
         onMailFiled={handleMailFiled}
       />
 
@@ -383,10 +375,10 @@ export default function HomeClient() {
       <div ref={ribbon3Ref} className="mail-ribbon-tear w-full" aria-hidden="true" />
 
       {/* Voice Agents Tiers — REPLACED: strong narrative "Docket Flow" (pinned mail rhythm, non-uniform) */}
-      <section ref={docketFlowRef} className="min-h-screen flex items-center py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+      <section ref={docketFlowRef} className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
         <div className="mx-auto max-w-5xl px-6">
           <div className="mb-9">
-            <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">FILED · MAIL</span>
+            <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">FILED · MAIL</span>
             <h2 className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-2">
               What happens after you <span className="hl">speak</span>.
             </h2>
@@ -401,7 +393,7 @@ export default function HomeClient() {
             {([
               { title: 'We listen once.', body: 'You speak the mess. Invoicing, follow-ups, quotes, the lot. The Voice Agent catches it locally.', variant: 'gold' },
               { title: 'We build the system.', body: 'Our team turns it into live automations in the tools you already use. Xero, ServiceM8, Tradify, whatever.', variant: 'navy' },
-              { title: 'It just runs.', body: 'You get time back. We keep the boring stuff off your plate every week. Perth mate, not a dashboard.', variant: 'paper' },
+              { title: 'It just runs.', body: 'You get time back. We keep the boring stuff off your plate every week. Perth mate, not a dashboard.', variant: 'gold' },
               { title: 'You knock off early.', body: 'The docket is closed. Kids, footy, whatever matters. We sorted the systems.', variant: 'navy' },
             ] as const).map((item, i) => (
               <StampCard
@@ -416,17 +408,13 @@ export default function HomeClient() {
                 } as React.CSSProperties)}
                 data-wear={i % 2 === 1 ? 'true' : undefined}
               >
-                {/* letter micro stamp in docket (verbatim asset use, one per surface) */}
-                <img 
-                  src={['/assets/letter-a.svg', '/assets/letter-good.svg', '/assets/letter-i.svg', '/assets/letter-swan.svg'][i % 4]} 
-                  alt="" 
-                  aria-hidden 
-                  className="docket-letter pointer-events-none absolute bottom-3 right-3 h-3.5 w-auto opacity-30" 
+                <BrandShapesStamp
+                  className="docket-letter pointer-events-none absolute bottom-3 right-3 h-5 w-auto"
                   style={{ transform: `rotate(${[-8, 6, -4, 9][i % 4]}deg)` }}
                 />
                 <h3 className="font-bold text-2xl tracking-[-0.015em] mb-3">{item.title}</h3>
                 <p className="opacity-85 text-[15px] leading-snug">{item.body}</p>
-                {i === 3 && <div className="mt-3 inline-block text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--red)] border-b border-[var(--red)]">LAST PIN • DOCKET CLOSED</div>}
+                {i === 3 && <div className="mt-3 inline-block text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--coral)] border-b border-[var(--coral)]">LAST PIN • DOCKET CLOSED</div>}
               </StampCard>
             ))}
           </div>
@@ -442,7 +430,7 @@ export default function HomeClient() {
         <div className="in-tray-physical py-5 sticky bottom-0 z-40">
           <div className="mx-auto max-w-5xl px-6">
             <div className="flex items-center gap-3 mb-2.5">
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--red)]">MAIL RECEIVED — IN TRAY</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--coral)]">MAIL RECEIVED — IN TRAY</span>
               <div className="flex-1 h-px bg-[var(--ink)]/30" />
             </div>
             <div className="flex flex-wrap gap-3 text-xs">
@@ -467,10 +455,10 @@ export default function HomeClient() {
                     style={{ transformOrigin: '40% 20%' }}
                   >
                     {/* letter micro on filed docket */}
-                    <img src={['/assets/letter-a.svg','/assets/letter-good.svg','/assets/letter-i.svg','/assets/letter-swan.svg'][idx % 4]} alt="" aria-hidden className="absolute top-1 right-1 h-2.5 w-auto opacity-25" />
+                    <BrandShapesStamp className="absolute top-1 right-1 h-3 w-auto opacity-25" />
                     <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--ink)]/50 mb-0.5">YOU SAID</div>
                     <div className="line-clamp-1">“{mail.transcript.slice(0, 82)}”</div>
-                    <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--ocean-400)] mt-1.5 mb-0.5">GOOD&apos;AI FILED</div>
+                    <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--navy)] mt-1.5 mb-0.5"><span className="normal-case">Good<span style={{ color: 'var(--coral)' }}>&apos;</span>ai</span> FILED</div>
                     <div className="line-clamp-1 text-[var(--ink)]">“{mail.response.slice(0, 78)}”</div>
                   </motion.div>
                 );
@@ -484,15 +472,8 @@ export default function HomeClient() {
       {/* Voice agent demo (enhanced) + strong CTA */}
       <VoiceAgentDemo />
 
-      {/* Live Workspace Automation Playground */}
-      <section className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
-        <div className="mx-auto max-w-5xl px-6">
-          <AutomationPlayground />
-        </div>
-      </section>
-
       {/* Fallback text mode (temporary) */}
-      <section className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+      <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-6">
             <StampButton
@@ -523,20 +504,29 @@ export default function HomeClient() {
         </div>
       </section>
 
-      {/* Website Analyzer — custom audit automation */}
-      <section className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
-        <WebsiteAnalyzer />
+      {/* Website Analyzer — BLOCKED OUT until ready.
+          To restore: re-add `import WebsiteAnalyzer from '@/components/marketing/WebsiteAnalyzer';`
+          and a <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]"><WebsiteAnalyzer /></section> here. */}
+
+      {/* Single buzz CTA — frontend only; wire onSubmit when backend is ready */}
+      <section
+        id="buzz-cta"
+        className="py-16 md:py-20 border-t-2 border-[var(--ink)] bg-[var(--paper)]"
+      >
+        <div className="mx-auto max-w-3xl px-6">
+          <BuzzCTA />
+        </div>
       </section>
 
       {/* POWERFUL CLOSING RITUAL — final thick ink navy stamped footer docket */}
       {/* Contains core promise + minimal contact + "we'll sort the boring stuff" in Fraunces WONK */}
       <footer
         ref={footerRef}
-        className="mail-docket-footer border-t-4 border-[var(--ink)] py-14 px-6 text-[var(--paper)]"
+        className="mail-docket-footer bg-[var(--navy)] border-t-4 border-[var(--ink)] py-14 px-6 text-[var(--paper)]"
       >
         <div className="mx-auto max-w-4xl text-center">
-          <div className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--gold)] mb-4">
-            GOOD&apos;AI — PERTH
+          <div className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--gold-tint)] mb-4">
+            <span className="normal-case">Good<span style={{ color: 'var(--coral)' }}>&apos;</span>ai</span> — PERTH
           </div>
 
           <div className="core-promise text-4xl md:text-5xl tracking-[-0.025em] leading-none mb-6">
