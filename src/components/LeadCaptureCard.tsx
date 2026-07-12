@@ -6,7 +6,7 @@ import StampButton from '@/components/StampButton';
 
 interface LeadCaptureCardProps {
   firstMessage: string;
-  conversationTranscript: string;
+  conversationTranscript: string | (() => string);
   onDismiss?: () => void;
 }
 
@@ -25,6 +25,9 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
     setIsSubmitting(true);
 
     try {
+      const resolvedConversationTranscript =
+        typeof conversationTranscript === 'function' ? conversationTranscript() : conversationTranscript;
+
       // 1. Submit to Google Apps Script Webhook (if defined)
       const gwsUrl = process.env.NEXT_PUBLIC_GWS_SCRIPT_URL;
       if (gwsUrl) {
@@ -38,7 +41,7 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
             phone: phone.trim(),
             email: email.trim() || '(not provided)',
             problem: firstMessage,
-            conversation: conversationTranscript,
+            conversation: resolvedConversationTranscript,
             timestamp: new Date().toISOString(),
           }),
         });
@@ -53,7 +56,7 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
           business: business.trim(),
           phone: phone.trim(),
           email: email.trim(),
-          problem: `Client Admin Problem from Chat:\n"${firstMessage}"\n\nFull Chat History:\n${conversationTranscript}`,
+          problem: `Client Admin Problem from Chat:\n"${firstMessage}"\n\nFull Chat History:\n${resolvedConversationTranscript}`,
           actions: {
             sheet: true,
             doc: true,

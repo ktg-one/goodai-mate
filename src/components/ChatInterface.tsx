@@ -3,7 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
 import { Send } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState, memo, useCallback } from 'react';
+import { useEffect, useRef, useState, memo, useCallback } from 'react';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
 
 type TextPart = UIMessage['parts'][number] & { type: 'text'; text: string };
@@ -61,15 +61,9 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   });
 
   const isBusy = status === 'submitted' || status === 'streaming';
-  const conversationTranscript = useMemo(
-    () => {
-      // ⚡ Bolt: Lazy evaluate expensive state
-      // We only need the transcript when the lead card is visible.
-      // Returning early here prevents O(N) string concatenation on every streaming token.
-      if (!showLeadCard || leadDismissed) return '';
-      return messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n');
-    },
-    [messages, showLeadCard, leadDismissed],
+  const getConversationTranscript = useCallback(
+    () => messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n'),
+    [messages],
   );
   const errorMessage = error?.message?.trim() || 'Something went sideways. Try again in a moment.';
 
@@ -142,7 +136,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
             <div ref={leadCardRef}>
               <LeadCaptureCard
                 firstMessage={firstMessage}
-                conversationTranscript={conversationTranscript}
+                conversationTranscript={getConversationTranscript}
                 onDismiss={() => setLeadDismissed(true)}
               />
             </div>
