@@ -26,7 +26,7 @@ export default function Manifest() {
       {/* Ribbon bridge above owned by HomeClient GSAP mailBoard */}
 
       <div className="mx-auto max-w-5xl px-6 text-center">
-        <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">THE PROMISE</span>
+        <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">THE PROMISE</span>
 
         <motion.h2
           className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-3 mb-8"

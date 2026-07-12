@@ -54,7 +54,7 @@ export default function AISolutions() {
 
       <div className="mx-auto max-w-5xl px-6">
         <ScrollReveal className="mb-10">
-          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">THE SYSTEMS</span>
+          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">THE SYSTEMS</span>
           <h2 className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-3">
             Real <span className="hl">systems</span>.<br />Not another app.
           </h2>

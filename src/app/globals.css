@@ -4,34 +4,32 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans:    var(--font-dm-sans, "DM Sans"), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces, "Fraunces"), Georgia, serif;
+  --font-sans:    var(--font-sora, "Sora"), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-instrument, "Instrument Serif"), Georgia, serif;
   --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
+  --color-coral:        #F66F61;
+  --color-coral-deep:   #D8331F;
+  --color-coral-tint:   #FBC9C1;
+  --color-navy:         #202B3D;
+  --color-navy-deep:    #161E3D;
+  --color-navy-tint:    #C9CEDD;
+  --color-silver:       #D9D9D9;
+  --color-teal:         #1CABB0;
   --color-paper:        #FFF0D0;
   --color-paper-deep:   #F6E2B8;
   --color-gold-tint:    #FBDFA6;
-  --color-red-tint:     #FBC9C1;
-  --color-navy-tint:    #C9CEDD;
-  --color-cream-line:   #E0C690;
+  --color-deep-sea:     #04A777;
   --color-ink:          #111111;
   --color-ink-soft:     #1C1C1C;
-  --color-ink-mute:     #6B6452;
-  --color-ink-faint:    #A0967C;
-  --color-gold:         #F3A62A;
-  --color-gold-deep:    #D98E1C;
-  --color-red:          #F4442E;
-  --color-red-deep:     #D8331F;
-  --color-navy:         #202C59;
-  --color-navy-deep:    #161E3D;
-  --color-ok:           #2E6E3E;
-  --color-warn:         #D8331F;
 
-  /* Canvas = cream. No near-white card utility on cream. */
-  --color-white:        #FFF0D0;
-  --color-black:        #111111;
-  --color-background:   #FFF0D0;
-  --color-foreground:   #111111;
+  --color-bg:          var(--bg);
+  --color-raised:      var(--bg-raised);
+  --color-fg:          var(--fg);
+  --color-muted:       var(--fg-muted);
+  --color-accent:      var(--accent);
+  --color-accent2:     var(--accent-2);
+  --color-line:        var(--line);
 }
 
 /* ============================================================
@@ -40,84 +38,43 @@
    ============================================================ */
 
 :root {
-  --gold:        #F3A62A;
-  --gold-deep:   #D98E1C;
-  --gold-tint:   #FBDFA6;
-
-  --red:         #F4442E;
-  --red-deep:    #D8331F;
-  --red-tint:    #FBC9C1;
-
-  --navy:        #202C59;
+  --coral:       #F66F61;
+  --coral-deep:  #D8331F;
+  --coral-tint:  #FBC9C1;
+  --navy:        #202B3D;
   --navy-deep:   #161E3D;
   --navy-tint:   #C9CEDD;
+  --silver:      #D9D9D9;
+  --teal:        #1CABB0;
+  --paper:       #FFF0D0;
+  --paper-deep:  #F6E2B8;
+  --gold-tint:   #FBDFA6;
+  --deep-sea:    #04A777;
+  --ink:         #111111;
+  --ink-soft:    #1C1C1C;
 
-  --paper:        #FFF0D0;
-  --paper-deep:   #F6E2B8;
-  --paper-3:      #ECD49A;
-  --cream-line:   #E0C690;
+  /* ---- semantic: default = brand (dark) ---- */
+  --bg:          var(--navy);
+  --bg-raised:   var(--navy-deep);
+  --fg:          var(--paper);
+  --fg-muted:    var(--navy-tint);
+  --accent:      var(--coral);
+  --accent-2:    var(--teal);
+  --line:        color-mix(in srgb, var(--silver) 25%, transparent);
 
-  --ink:          #111111;
-  --ink-soft:     #1C1C1C;
-  --ink-mute:     #6B6452;
-  --ink-faint:    #A0967C;
-
-  --hi-yellow:    #F3A62A;
-  --trust-blue:   #202C59;
-  --ok:           #2E6E3E;
-  --warn:         #D8331F;
-  --danger:       #D8331F;
-
-  --orange:       var(--red);
-  --orange-deep:  var(--red-deep);
-  --orange-tint:  var(--red-tint);
-  --orange-100:   #FBC9C1;
-  --orange-50:    #FDE9E5;
-  --ocean-50:    #E8EAF1;
-  --ocean-100:   #C9CEDD;
-  --ocean-200:   #8A93B4;
-  --ocean-300:   #4A5685;
-  --ocean-400:   var(--navy);
-  --ocean-500:   #1A2349;
-  --ocean-600:   var(--navy-deep);
-
-  --bg:            var(--paper);
-  --bg-raised:     #FFFAEC;
-  --bg-sunken:     var(--paper-deep);
-  --bg-brand:      var(--navy);
-  --bg-accent:     var(--red);
-  --bg-gold:       var(--gold);
-  --bg-ocean:      var(--navy);
-
-  --fg:            var(--ink);
-  --fg-soft:       var(--ink-soft);
-  --fg-mute:       var(--ink-mute);
-  --fg-faint:      var(--ink-faint);
-  --fg-on-brand:   var(--paper);
-  --fg-on-ocean:   var(--paper);
-
-  --border:        var(--cream-line);
-  --border-strong: #C9A961;
-
-  --accent:        var(--red);
-  --accent-hover:  var(--red-deep);
-  --accent-soft:   var(--red-tint);
-
-  --highlight:     var(--gold);
-  --success:       var(--ok);
+  /* Shared globals mapping */
+  --border:      var(--line);
+  --fg-soft:     var(--ink-soft);
+  --ok:          var(--deep-sea);
+  --warn:        var(--coral-deep);
 
   --shadow-stamp:        3px 3px 0 var(--ink);
-  --shadow-stamp-orange: 3px 3px 0 var(--red);
-  --shadow-stamp-ocean:  3px 3px 0 var(--navy);
-  --shadow-stamp-deep:   4px 4px 0 var(--ink);
+  --shadow-stamp-coral: 3px 3px 0 var(--coral);
 
-  --navy-ink: #0F162B;
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
 
-  --font-sans:    var(--font-dm-sans, "DM Sans"), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces, "Fraunces"), Georgia, serif;
-  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
-
-  /* TYPE — Scale */
   --fs-12: 0.75rem;
   --fs-16: 1rem;
   --fs-20: 1.25rem;
@@ -125,32 +82,18 @@
   --fs-36: 2.25rem;
   --fs-64: 4rem;
 
-  /* 4pt SPACING GRID */
-  --space-1:  4px;
-  --space-2:  8px;
-  --space-3:  12px;
-  --space-4:  16px;
-  --space-5:  20px;
-  --space-6:  24px;
-  --space-8:  32px;
-  --space-10: 40px;
-  --space-12: 48px;
-  --space-16: 64px;
-  --space-20: 80px;
-  --space-24: 96px;
+  --ease-stamp-press: cubic-bezier(0.2, 0.9, 0.3, 1);
+}
 
-  /* RADIUS / SHADOW */
-  --radius-xs:   4px;
-  --radius-sm:   8px;
-  --radius-md:   12px;
-  --radius-lg:   18px;
-  --radius-xl:   26px;
-  --radius-pill: 999px;
-
-  /* Hard mechanical easings (kept from prior brutalist work) */
-  --ease-brutal: cubic-bezier(0, 0, 0.2, 1);      /* @kind other */
-  --ease-hard-out: cubic-bezier(0.2, 0, 0, 1);    /* @kind other */
-  --ease-stamp-press: cubic-bezier(0.23, 1, 0.32, 1); /* @kind other — design 90-160ms cubic */
+/* ---- brand-L (light / paper ground) ---- */
+[data-theme="light"] {
+  --bg:          var(--paper);
+  --bg-raised:   var(--paper-deep);
+  --fg:          var(--navy);
+  --fg-muted:    color-mix(in srgb, var(--navy) 60%, var(--paper));
+  --accent:      var(--coral);
+  --accent-2:    var(--teal);
+  --line:        color-mix(in srgb, var(--navy) 15%, transparent);
 }
 
 /* HL / WONK emphasis (verbatim from design, exactly one per major surface) */
@@ -165,8 +108,8 @@
   font-style: normal;
   white-space: nowrap;
 }
-.hl      { background: var(--gold); color: var(--ink); }
-.hl-red  { background: var(--red);  color: var(--paper); }
+.hl      { background: var(--gold-tint); color: var(--ink); }
+.hl-red  { background: var(--coral);  color: var(--paper); }
 .hl-navy { background: var(--navy); color: var(--paper); }
 
 /* TYPE CLASSES — public/SKILL.md */
@@ -258,8 +201,8 @@ html, body {
   border: 2px solid var(--ink);
   box-shadow: 2px 2px 0 var(--ink);
 }
-.sticker-label-gold { background: var(--gold); color: var(--ink); }
-.sticker-label-red  { background: var(--red);  color: var(--paper); }
+.sticker-label-gold { background: var(--gold-tint); color: var(--ink); }
+.sticker-label-red  { background: var(--coral);  color: var(--paper); }
 .sticker-label-navy { background: var(--navy); color: var(--paper); }
 
 /* Filed mail in-tray — coloured dockets only (no cream-on-cream) */
@@ -272,7 +215,7 @@ html, body {
   border: 2px solid var(--ink);
   border-radius: var(--radius-xs);
   box-shadow: 3px 3px 0 var(--ink);
-  background: var(--gold);
+  background: var(--gold-tint);
   color: var(--ink);
 }
 .filed-docket:nth-child(even) {
@@ -311,13 +254,13 @@ html, body {
 .stamp-btn-lg { padding: 14px 28px; font-size: 16px; }
 .stamp-btn-sm { padding: 6px 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 
-.stamp-btn-red { background: var(--red); color: var(--paper); border-color: var(--ink); }
-.stamp-btn-red:hover:not(:disabled) { background: var(--red-deep); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
-.stamp-btn-red:active:not(:disabled), .stamp-btn-red.is-engaged { background: var(--red-deep); transform: translate(2px, 2px); box-shadow: none; }
+.stamp-btn-red { background: var(--coral); color: var(--paper); border-color: var(--ink); }
+.stamp-btn-red:hover:not(:disabled) { background: var(--coral-deep); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+.stamp-btn-red:active:not(:disabled), .stamp-btn-red.is-engaged { background: var(--coral-deep); transform: translate(2px, 2px); box-shadow: none; }
 
-.stamp-btn-gold { background: var(--gold); color: var(--ink); border-color: var(--ink); }
-.stamp-btn-gold:hover:not(:disabled) { background: var(--gold-deep); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
-.stamp-btn-gold:active:not(:disabled), .stamp-btn-gold.is-engaged { background: var(--gold-deep); transform: translate(2px, 2px); box-shadow: none; }
+.stamp-btn-gold { background: var(--gold-tint); color: var(--ink); border-color: var(--ink); }
+.stamp-btn-gold:hover:not(:disabled) { background: var(--gold-tint); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+.stamp-btn-gold:active:not(:disabled), .stamp-btn-gold.is-engaged { background: var(--gold-tint); transform: translate(2px, 2px); box-shadow: none; }
 
 .stamp-btn-navy { background: var(--navy); color: var(--paper); border-color: var(--ink); }
 .stamp-btn-navy:hover:not(:disabled) { background: var(--navy-deep); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
@@ -335,7 +278,7 @@ html, body {
 
 /* Focus ring matches stamp (ink or red for shout) */
 .stamp-btn:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--ink); }
-.stamp-btn-red:focus-visible { box-shadow: 0 0 0 2px var(--red); }
+.stamp-btn-red:focus-visible { box-shadow: 0 0 0 2px var(--coral); }
 
 /* ============================================================
    STAMP-CARD / COLOURED SURFACE PRIMITIVES
@@ -367,12 +310,12 @@ html, body {
   color: var(--paper);
 }
 .stamp-card-gold {
-  background: var(--gold);
+  background: var(--gold-tint);
   color: var(--ink);
   box-shadow: 3px 3px 0 var(--ink);
 }
 .stamp-card-red {
-  background: var(--red);
+  background: var(--coral);
   color: var(--paper);
   box-shadow: 3px 3px 0 var(--ink);
 }
@@ -382,7 +325,7 @@ html, body {
 .stamp-card-ink {
   background: var(--ink);
   color: var(--paper);
-  box-shadow: 3px 3px 0 var(--gold);
+  box-shadow: 3px 3px 0 var(--gold-tint);
 }
 .stamp-card-ink h1, .stamp-card-ink h2, .stamp-card-ink h3, .stamp-card-ink h4, .stamp-card-ink p, .stamp-card-ink span {
   color: var(--paper);
@@ -395,7 +338,7 @@ html, body {
 }
 .stamp-card-ink.interactive:hover:not(.is-engaged):not(.pinned-notice) {
   transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--gold);
+  box-shadow: 4px 4px 0 var(--gold-tint);
 }
 
 .stamp-card.interactive:active:not(.pinned-notice),
@@ -415,7 +358,7 @@ html, body {
   border: 2px solid var(--ink);
   box-shadow: 4px 4px 0 var(--ink);
   border-radius: 4px;
-  background: var(--gold);
+  background: var(--gold-tint);
   color: var(--ink);
 }
 .stamp-clack, .stamp-clack-red {
@@ -721,10 +664,10 @@ h1, h2,
 /* Lead Card Container */
 .gai-leadcard {
   width: 100%;
-  background: var(--gold);
+  background: var(--gold-tint);
   border: 2px solid var(--ink);
   border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-stamp-orange);
+  box-shadow: var(--shadow-stamp-coral);
   padding: 24px;
   position: relative;
   text-align: left;
@@ -767,7 +710,7 @@ h1, h2,
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--red);
+  color: var(--coral);
   margin-bottom: 8px;
 }
 
@@ -829,7 +772,7 @@ h1, h2,
 
 .gai-input:focus {
   background: var(--paper-deep);
-  box-shadow: 3px 3px 0 var(--red);
+  box-shadow: 3px 3px 0 var(--coral);
   transform: translate(-1px, -1px);
 }
 
@@ -839,7 +782,7 @@ h1, h2,
   justify-content: center;
   width: 42px;
   height: 42px;
-  background: var(--red);
+  background: var(--coral);
   color: var(--paper);
   border: 2px solid var(--ink);
   border-radius: var(--radius-xs);
@@ -849,7 +792,7 @@ h1, h2,
 }
 
 .gai-iconbtn-send:hover {
-  background: var(--red-deep);
+  background: var(--coral-deep);
   transform: translate(-1px, -1px);
   box-shadow: 3px 3px 0 var(--ink);
 }
