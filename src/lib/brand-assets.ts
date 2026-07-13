@@ -1,26 +1,32 @@
 /**
- * Asset layout (do not conflate):
+ * Asset layout:
  *
- * - public/company-assets/  → canonical logos & wordmarks (BrandWordmark, nav, footer)
- * - public/assets/          → runtime sprites & motion art (TalkingCharacter frames, ribbons)
+ * - public/assets/          → logos, icons, sprites & motion art
  * - public/fonts/           → DM Sans + Fraunces (loaded in layout.tsx)
- *
- * When deleting legacy public/ folders, keep company-assets AND assets.
  */
 
-/** Logos & wordmarks — company-assets only */
+/** Logos & wordmarks — Figma-exported SVGs */
 export const BRAND_ASSETS = {
   wordmark: {
-    /** For cream / paper backgrounds */
-    dark: '/company-assets/wordmark-dark.jpg',
-    /** For navy / dark surfaces */
-    light: '/company-assets/wordmark-light.jpg',
+    /** For cream / paper backgrounds — navy + coral text */
+    dark: '/assets/logo-L.svg',
+    /** For navy / dark surfaces — cream + coral text */
+    light: '/assets/logo-B.svg',
   },
   logo: {
-    default: '/company-assets/Logo.jpg',
-    dark: '/company-assets/logo-dark2.jpg',
+    default: '/assets/logo-L.svg',
+    /** Light-coloured mark for dark surfaces */
+    dark: '/assets/logo-B.svg',
   },
-  shapes: '/company-assets/wordmark-shapes.jpg',
+  icon: {
+    dark: '/assets/ico-D.svg',
+    light: '/assets/ico-L.svg',
+  },
+  /** Decorative swirl vectors (teal + navy) */
+  shapes: '/assets/shapes/vec-teal.svg',
+  /** Per-theme shape variants */
+  shapesOrange: '/assets/shapes/vec-orange.svg',
+  shapesSilver: '/assets/shapes/vec-silver.svg',
 } as const;
 
 /** Character animation & UI motion art — assets folder (keep for lip-sync / avatar frames) */

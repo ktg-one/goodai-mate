@@ -28,10 +28,12 @@ export default function WhyGoodAI() {
   } as const;
 
   return (
-    <section ref={sectionRef} className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+    <section ref={sectionRef} className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)] relative overflow-hidden">
+      {/* Decorative swirl shape — bottom-right corner */}
+      <img src="/assets/shapes/vec-teal.svg" alt="" aria-hidden className="pointer-events-none select-none absolute -bottom-24 -right-24 w-72 opacity-10" />
       {/* Unified physical ribbon bridge handled by parent mailBoard GSAP — no competing motion here */}
 
-      <div className="mx-auto max-w-5xl px-6">
+      <div className="mx-auto max-w-5xl px-6 relative z-10">
         <div className="flex items-center gap-4 mb-6">
           <BrandWordmark className="h-7" />
           <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--ink)]/60">

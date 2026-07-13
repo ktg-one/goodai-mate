@@ -5,7 +5,7 @@ import { Mic, Square, Volume2, RotateCcw } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'motion/react';
 import { AudioVisualizer } from '@/components/voice-agent/AudioVisualizer';
 // Supertonic import removed
-import { BrandMark, BrandWordmark } from '@/components/brand/BrandWordmark';
+import { BrandWordmark } from '@/components/brand/BrandWordmark';
 import { CHARACTER_ASSETS } from '@/lib/brand-assets';
 import { TalkingCharacter } from '@/components/voice-agent/TalkingCharacter';
 import StampButton from '@/components/StampButton';
@@ -367,7 +367,6 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
         <div className="relative z-20 flex items-center justify-between px-6 md:px-12 pt-6 pb-4 border-b-2 border-[var(--ink)]">
           <div className="flex items-center gap-2.5">
             <BrandWordmark className="h-8" />
-            <BrandMark variant="dark" className="h-5 opacity-60" />
           </div>
           <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink)]/60">
             Voice intake

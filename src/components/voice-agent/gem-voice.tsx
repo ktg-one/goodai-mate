@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Mic, Square, Volume2, RotateCcw } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from 'motion/react';
 import { AudioVisualizer } from '@/components/voice-agent/AudioVisualizer';
-import { BrandMark, BrandWordmark } from '@/components/brand/BrandWordmark';
+import { BrandWordmark } from '@/components/brand/BrandWordmark';
 import { CHARACTER_ASSETS } from '@/lib/brand-assets';
 import StampButton from '@/components/StampButton';
 
@@ -454,12 +454,18 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
   return (
     <div ref={heroStampRef} className="w-full max-w-[620px] mx-auto px-4 md:px-0">
       <div className="relative">
-        <div className="stamp-card stamp-card-navy p-6 relative rounded-sm">
+        <div className="stamp-card stamp-card-navy p-6 relative rounded-sm overflow-hidden">
+          {/* Decorative swirl shape — peeks from top-right corner */}
+          <img
+            src="/assets/shapes/vec-teal.svg"
+            alt=""
+            aria-hidden
+            className="pointer-events-none select-none absolute -top-16 -right-16 w-56 opacity-20 rotate-12"
+          />
           {/* Brutalist Docket Header */}
-          <div className="border-b-2 border-[var(--ink)] pb-4 mb-5 flex items-center justify-between">
+          <div className="border-b-2 border-[var(--ink)] pb-4 mb-5 flex items-center justify-between relative z-10">
             <div className="flex items-center gap-2.5">
-              <BrandWordmark className="h-8" />
-              <BrandMark variant="dark" className="h-5 opacity-60" />
+              <BrandWordmark tone="light" className="h-8" />
             </div>
             <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--paper)]/70">
               Voice intake

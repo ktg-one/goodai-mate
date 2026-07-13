@@ -3,9 +3,7 @@
 import React from 'react';
 import { BRAND_ASSETS, type WordmarkTone, wordmarkSrc } from '@/lib/brand-assets';
 
-/**
- * BrandWordmark — canonical wordmark from public/company-assets/
- */
+/** BrandWordmark — Figma-exported SVG wordmark. tone='dark' = for light/cream bg. tone='light' = for navy bg. */
 export function BrandWordmark({
   className = '',
   tone = 'dark',
@@ -22,7 +20,7 @@ export function BrandWordmark({
   );
 }
 
-/** Swan / mark lockup */
+/** Icon mark only — use variant='dark' on dark/navy surfaces */
 export function BrandMark({
   className = '',
   variant = 'default',
@@ -41,7 +39,7 @@ export function BrandMark({
   );
 }
 
-/** Full logo lockup */
+/** Full wordmark lockup */
 export function BrandLogo({ className = '' }: { className?: string }) {
   return (
     <img
@@ -52,20 +50,26 @@ export function BrandLogo({ className = '' }: { className?: string }) {
   );
 }
 
-/** Shape language stamp for docket micro-details */
+/** Decorative swirl vector — teal+navy. Use as corner/background ornament. */
 export function BrandShapesStamp({
   className = '',
   style,
+  theme = 'teal',
 }: {
   className?: string;
   style?: React.CSSProperties;
+  theme?: 'teal' | 'orange' | 'silver';
 }) {
+  const src =
+    theme === 'orange' ? BRAND_ASSETS.shapesOrange :
+    theme === 'silver' ? BRAND_ASSETS.shapesSilver :
+    BRAND_ASSETS.shapes;
   return (
     <img
-      src={BRAND_ASSETS.shapes}
+      src={src}
       alt=""
       aria-hidden
-      className={`w-auto select-none opacity-30 ${className}`}
+      className={`w-auto select-none ${className}`}
       style={style}
     />
   );
