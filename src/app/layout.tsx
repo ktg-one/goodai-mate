@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
-import { Instrument_Serif, Sora } from 'next/font/google';
+import { DM_Sans } from 'next/font/google';
+import localFont from 'next/font/local';
 import "./globals.css";
 
-const instrument = Instrument_Serif({
-  weight: '400',
+const dmSans = DM_Sans({
   subsets: ['latin'],
-  variable: '--font-instrument',
+  variable: '--font-sans',
   display: 'swap',
 });
 
-const sora = Sora({
-  subsets: ['latin'],
-  variable: '--font-sora',
+const fraunces = localFont({
+  src: [
+    { path: '../../public/fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.ttf', style: 'normal' },
+    { path: '../../public/fonts/Fraunces-Italic-VariableFont_SOFT_WONK_opsz_wght.ttf', style: 'italic' },
+  ],
+  variable: '--font-display',
   display: 'swap',
 });
 
@@ -28,9 +31,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${instrument.variable} ${sora.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${dmSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-bg text-fg">{children}</body>
+      <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--fg)] font-sans">{children}</body>
     </html>
   );
 }

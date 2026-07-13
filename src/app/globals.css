@@ -1,118 +1,202 @@
-/* Canon: public/SKILL.md — cream canvas, coloured cards only.
-   DM Sans + Fraunces via next/font/local in layout.tsx; JetBrains Mono below. */
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
 
 @theme {
-  --font-sans:    var(--font-sora, "Sora"), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-instrument, "Instrument Serif"), Georgia, serif;
+  --font-sans:    var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), Georgia, serif;
   --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  --color-coral:        #F66F61;
-  --color-coral-deep:   #D8331F;
-  --color-coral-tint:   #FBC9C1;
-  --color-navy:         #202B3D;
-  --color-navy-deep:    #161E3D;
-  --color-navy-tint:    #C9CEDD;
-  --color-silver:       #D9D9D9;
-  --color-teal:         #1CABB0;
-  --color-paper:        #FFF0D0;
-  --color-paper-deep:   #F6E2B8;
-  --color-gold-tint:    #FBDFA6;
-  --color-deep-sea:     #04A777;
-  --color-ink:          #111111;
-  --color-ink-soft:     #1C1C1C;
+  --color-gold:        var(--gold);
+  --color-gold-deep:   var(--gold-deep);
+  --color-gold-tint:   var(--gold-tint);
+  --color-red:         var(--red);
+  --color-navy:        var(--navy);
+  --color-paper:       var(--paper);
+  --color-ink:         var(--ink);
 
   --color-bg:          var(--bg);
   --color-raised:      var(--bg-raised);
   --color-fg:          var(--fg);
-  --color-muted:       var(--fg-muted);
+  --color-muted:       var(--fg-mute);
   --color-accent:      var(--accent);
-  --color-accent2:     var(--accent-2);
-  --color-line:        var(--line);
+  --color-line:        var(--border);
 }
 
 /* ============================================================
-   Good'ai — Canonical tokens from public/SKILL.md (SSOT)
-   Warm cream canvas + high-contrast COLOURED cards.
+   Good'AI — Colors & Type  (source of truth)
+   ------------------------------------------------------------
+   Palette: Mustard-gold + Coral-red + Navy + Warm cream + Black.
+   #F3A62A  #F4442E  #202C59  #FFF0D0  #111111
+   Direct-mail composition. Warm cream canvas,
+   high-contrast COLOURED cards, white-on-colour text.
    ============================================================ */
 
+/* -------- Fonts -------- */
+
+
+/* Fraunces — local variable file with SOFT + WONK axes (in addition to opsz + wght) */
+
+
+
 :root {
-  --coral:       #F66F61;
-  --coral-deep:  #D8331F;
-  --coral-tint:  #FBC9C1;
-  --navy:        #202B3D;
-  --navy-deep:   #161E3D;
-  --navy-tint:   #C9CEDD;
-  --silver:      #D9D9D9;
-  --teal:        #1CABB0;
-  --paper:       #FFF0D0;
-  --paper-deep:  #F6E2B8;
-  --gold-tint:   #FBDFA6;
-  --deep-sea:    #04A777;
-  --ink:         #111111;
-  --ink-soft:    #1C1C1C;
+  /* ---------------------------------------------------------
+     COLOUR — the five core brand colours
+     --------------------------------------------------------- */
+  --gold:        #F3A62A;   /* mustard-gold — coloured panels / blocks */
+  --gold-deep:   #D98E1C;   /* gold hover / depth */
+  --gold-tint:   #FBDFA6;   /* soft gold surface */
 
-  /* ---- semantic: default = brand (dark) ---- */
-  --bg:          var(--navy);
-  --bg-raised:   var(--navy-deep);
-  --fg:          var(--paper);
-  --fg-muted:    var(--navy-tint);
-  --accent:      var(--coral);
-  --accent-2:    var(--teal);
-  --line:        color-mix(in srgb, var(--silver) 25%, transparent);
+  --red:         #F4442E;   /* coral-red — primary CTA / shout accent */
+  --red-deep:    #D8331F;   /* red hover / depth */
+  --red-tint:    #FBC9C1;   /* soft red surface */
 
-  /* Shared globals mapping */
-  --border:      var(--line);
-  --fg-soft:     var(--ink-soft);
-  --ok:          var(--deep-sea);
-  --warn:        var(--coral-deep);
+  --navy:        #202C59;   /* deep navy — dark surfaces / headlines / dark cards */
+  --navy-deep:   #161E3D;   /* navy depth / stamp shadow */
+  --navy-tint:   #C9CEDD;   /* soft navy surface */
 
+  /* ---------------------------------------------------------
+     COLOUR — Neutrals (WARM cream canvas + true black)
+     --------------------------------------------------------- */
+  --paper:        #FFF0D0;   /* page canvas — warm cream */
+  --paper-deep:   #F6E2B8;   /* raised / sunken cream surface */
+  --paper-3:      #ECD49A;   /* deeper cream divider tone */
+  --cream-line:   #E0C690;   /* cream hairline border */
+
+  --ink:          #111111;   /* near-black — text, borders, hard edges */
+  --ink-soft:     #1C1C1C;   /* body text */
+  --ink-mute:     #6B6452;   /* secondary / labels (warm grey) */
+  --ink-faint:    #A0967C;   /* placeholder / disabled (warm) */
+
+  /* ---------------------------------------------------------
+     COLOUR — Supporting (used sparingly)
+     --------------------------------------------------------- */
+  --hi-yellow:    #F3A62A;   /* sticker label = gold */
+  --trust-blue:   #202C59;   /* links = navy */
+  --ok:           #2E6E3E;   /* success */
+  --warn:         #D8331F;   /* error = deep red */
+  --danger:       #D8331F;
+
+  /* ---------------------------------------------------------
+     LEGACY ALIASES — keep old token names working
+     (orange → red, ocean → navy) so existing files don't break
+     --------------------------------------------------------- */
+  --orange:       var(--red);
+  --orange-deep:  var(--red-deep);
+  --orange-tint:  var(--red-tint);
+  --orange-100:   #FBC9C1;
+  --orange-50:    #FDE9E5;
+
+  --ocean-50:    #E8EAF1;
+  --ocean-100:   #C9CEDD;
+  --ocean-200:   #8A93B4;
+  --ocean-300:   #4A5685;
+  --ocean-400:   var(--navy);
+  --ocean-500:   #1A2349;
+  --ocean-600:   var(--navy-deep);
+
+  /* ---------------------------------------------------------
+     COLOUR — Semantic tokens
+     --------------------------------------------------------- */
+  --bg:            var(--paper);
+  --bg-raised:     #FFFAEC;
+  --bg-sunken:     var(--paper-deep);
+  --bg-brand:      var(--navy);
+  --bg-accent:     var(--red);
+  --bg-gold:       var(--gold);
+  --bg-ocean:      var(--navy);
+
+  --fg:            var(--ink);
+  --fg-soft:       var(--ink-soft);
+  --fg-mute:       var(--ink-mute);
+  --fg-faint:      var(--ink-faint);
+  --fg-on-brand:   var(--paper);
+  --fg-on-ocean:   var(--paper);
+
+  --border:        var(--cream-line);
+  --border-strong: #C9A961;
+
+  --accent:        var(--red);
+  --accent-hover:  var(--red-deep);
+  --accent-soft:   var(--red-tint);
+
+  --highlight:     var(--gold);
+  --success:       var(--ok);
+
+  /* stamp shadows */
   --shadow-stamp:        3px 3px 0 var(--ink);
-  --shadow-stamp-coral: 3px 3px 0 var(--coral);
+  --shadow-stamp-orange: 3px 3px 0 var(--red);
+  --shadow-stamp-ocean:  3px 3px 0 var(--navy);
+  --shadow-stamp-deep:   4px 4px 0 var(--ink);
 
-  --radius-xs: 4px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
+  /* ---------------------------------------------------------
+     TYPE — Families
+     --------------------------------------------------------- */
+  --font-sans:    "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  --fs-12: 0.75rem;
-  --fs-16: 1rem;
-  --fs-20: 1.25rem;
-  --fs-24: 1.5rem;
-  --fs-36: 2.25rem;
-  --fs-64: 4rem;
+  /* ---------------------------------------------------------
+     TYPE — Scale
+     --------------------------------------------------------- */
+  --fs-12: 0.75rem;    /* eyebrow */
+  --fs-16: 1rem;       /* body */
+  --fs-20: 1.25rem;    /* lede */
+  --fs-24: 1.5rem;     /* h3 */
+  --fs-36: 2.25rem;    /* h2 */
+  --fs-64: 4rem;       /* h1 */
 
-  --ease-stamp-press: cubic-bezier(0.2, 0.9, 0.3, 1);
+  /* ---------------------------------------------------------
+     SPACING
+     --------------------------------------------------------- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ---------------------------------------------------------
+     SPACING / RADIUS / SHADOW
+     --------------------------------------------------------- */
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+  --radius-xl:   26px;
+  --radius-pill: 999px;
+
+  /* ---------------------------------------------------------
+     SHADOW — flat "stamp" only. No blurs.
+     --------------------------------------------------------- */
+  --shadow-stamp:        3px 3px 0 var(--ink);
+  --shadow-stamp-orange: 3px 3px 0 var(--orange);
+  --shadow-stamp-deep:   4px 4px 0 var(--ink);
 }
 
-/* ---- brand-L (light / paper ground) ---- */
-[data-theme="light"] {
-  --bg:          var(--paper);
-  --bg-raised:   var(--paper-deep);
-  --fg:          var(--navy);
-  --fg-muted:    color-mix(in srgb, var(--navy) 60%, var(--paper));
-  --accent:      var(--coral);
-  --accent-2:    var(--teal);
-  --line:        color-mix(in srgb, var(--navy) 15%, transparent);
+/* ============================================================
+   BASE
+   ============================================================ */
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--fs-16);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* HL / WONK emphasis (verbatim from design, exactly one per major surface) */
-.hl,
-.hl-red,
-.hl-navy {
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  padding: 0.02em 0.24em;
-  border-radius: 0.06em;
-  box-shadow: 0.06em 0.06em 0 var(--ink);
-  font-style: normal;
-  white-space: nowrap;
-}
-.hl      { background: var(--gold-tint); color: var(--ink); }
-.hl-red  { background: var(--coral);  color: var(--paper); }
-.hl-navy { background: var(--navy); color: var(--paper); }
+/* ============================================================
+   TYPE CLASSES
+   ============================================================ */
 
-/* TYPE CLASSES — public/SKILL.md */
 .h1 {
   font-family: var(--font-display);
   font-weight: 700;
@@ -122,6 +206,7 @@
   font-variation-settings: "opsz" 144;
   color: var(--fg);
 }
+
 .h2 {
   font-family: var(--font-display);
   font-weight: 600;
@@ -131,6 +216,7 @@
   font-variation-settings: "opsz" 72;
   color: var(--fg);
 }
+
 .h3 {
   font-family: var(--font-sans);
   font-weight: 700;
@@ -138,6 +224,7 @@
   line-height: 1.2;
   color: var(--fg);
 }
+
 .lede {
   font-family: var(--font-sans);
   font-weight: 400;
@@ -145,6 +232,7 @@
   line-height: 1.5;
   color: var(--fg-soft);
 }
+
 .body {
   font-family: var(--font-sans);
   font-weight: 400;
@@ -152,6 +240,7 @@
   line-height: 1.55;
   color: var(--fg-soft);
 }
+
 .eyebrow {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
@@ -160,12 +249,14 @@
   text-transform: uppercase;
   color: var(--fg-mute);
 }
+
 .mono {
   font-family: var(--font-mono);
   font-size: 0.875rem;
   letter-spacing: 0.02em;
   color: var(--fg-soft);
 }
+
 .wordmark {
   font-family: var(--font-display);
   font-weight: 700;
@@ -174,630 +265,490 @@
 }
 .wordmark .apos { color: var(--orange); }
 
-/* Base — cream canvas only; cards use gold / red / navy */
-html, body {
-  min-height: 100%;
+/* ============================================================
+   KEYWORD HIGHLIGHT — coloured card behind a standout word.
+   Highlight as many keywords as the line needs; vary the colour
+   (gold / red / navy) so two highlights in one heading don't
+   read as the same beat. Metrics are em-based so it scales at
+   any heading size.
+   <h1><span class="hl">Knock off</span> early —
+       we'll sort the <span class="hl-red">boring stuff</span>.</h1>
+   ============================================================ */
+.hl,
+.hl-red,
+.hl-navy {
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding: 0.02em 0.24em;
+  border-radius: 0.06em;            /* stays sharp at scale */
+  box-shadow: 0.06em 0.06em 0 var(--ink);
+  font-style: normal;               /* upright even inside an italic line */
+  white-space: nowrap;
+}
+.hl      { background: var(--gold); color: var(--ink); }   /* default — gold sticker */
+.hl-red  { background: var(--red);  color: var(--paper); } /* loud — coral on the shout word */
+.hl-navy { background: var(--navy); color: var(--paper); } /* quiet — navy block */
+
+
+/* ============================================================
+   Good'ai — Landing (direct-mail)
+   Ink + brand orange + paper + ocean + sticker yellow.
+   ============================================================ */
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
   background:
-    repeating-linear-gradient(0deg, rgba(17, 17, 17, 0.025) 0 1px, transparent 1px 4px),
-    var(--bg);
-  color: var(--fg);
+    repeating-linear-gradient(0deg, rgba(11,11,11,0.025) 0 1px, transparent 1px 4px),
+    var(--paper);
+  color: var(--ink);
   font-family: var(--font-sans);
-  font-size: 16px;
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+  min-height: 100vh;
 }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; }
 
-/* Sticker labels — replace numbered AI scaffolding (01, 02…) */
-.sticker-label {
-  display: inline-flex;
-  align-items: center;
+/* ─── Shell ─────────────────────────── */
+.gai-onepage {
+  position: relative;
+  min-height: 100vh;
+  padding: 0;
+}
+.gai-hero-bg { display: none; }
+
+/* ─── Top utility bar ───────────────── */
+.gai-onepage-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px clamp(20px, 5vw, 64px);
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
+}
+.gai-perth-chip {
   font-family: var(--font-mono);
-  font-size: var(--fs-12);
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  font-size: 11px; letter-spacing: 0.2em;
   text-transform: uppercase;
-  padding: 4px 10px;
-  border: 2px solid var(--ink);
-  box-shadow: 2px 2px 0 var(--ink);
-}
-.sticker-label-gold { background: var(--gold-tint); color: var(--ink); }
-.sticker-label-red  { background: var(--coral);  color: var(--paper); }
-.sticker-label-navy { background: var(--navy); color: var(--paper); }
-
-/* Filed mail in-tray — coloured dockets only (no cream-on-cream) */
-.in-tray-physical {
-  background: var(--navy);
-  border-top: 3px solid var(--ink);
-  box-shadow: 0 -4px 0 var(--ink);
-}
-.filed-docket {
-  border: 2px solid var(--ink);
-  border-radius: var(--radius-xs);
-  box-shadow: 3px 3px 0 var(--ink);
-  background: var(--gold-tint);
   color: var(--ink);
-}
-.filed-docket:nth-child(even) {
-  background: var(--navy);
-  color: var(--paper);
-}
-.filed-docket:nth-child(even) .font-mono {
-  color: var(--paper);
-}
-
-/* ============================================================
-   STAMP-BTN PRIMITIVES (production, from site StampButton + design stamp physics)
-   Hover: translate(-1px,-1px) + shadow grow. Active/engaged: translate(2px,2px) + collapse.
-   One red per surface. 120ms stamp press. Flat 3px only.
-   ============================================================ */
-.stamp-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.02em;
-  text-transform: none; /* sentence case */
-  padding: 10px 18px;
+  background: var(--hi-yellow);
   border: 2px solid var(--ink);
-  border-radius: 4px;
-  cursor: pointer;
-  transition: transform 120ms var(--ease-stamp-press), box-shadow 120ms var(--ease-stamp-press), background 120ms;
-  box-shadow: var(--shadow-stamp);
-  user-select: none;
-  position: relative;
-  overflow: hidden;
+  box-shadow: 3px 3px 0 var(--ink);
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-weight: 700;
 }
-.stamp-btn-lg { padding: 14px 28px; font-size: 16px; }
-.stamp-btn-sm { padding: 6px 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.gai-perth-chip span { color: var(--ink); padding: 0 4px; opacity: 0.6; }
 
-.stamp-btn-red { background: var(--coral); color: var(--paper); border-color: var(--ink); }
-.stamp-btn-red:hover:not(:disabled) { background: var(--coral-deep); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
-.stamp-btn-red:active:not(:disabled), .stamp-btn-red.is-engaged { background: var(--coral-deep); transform: translate(2px, 2px); box-shadow: none; }
+/* ─── Hero stacked, centered ─────── */
+.gai-onepage-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 72px) clamp(20px, 5vw, 64px) 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  text-align: left;
+}
 
-.stamp-btn-gold { background: var(--gold-tint); color: var(--ink); border-color: var(--ink); }
-.stamp-btn-gold:hover:not(:disabled) { background: var(--gold-tint); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
-.stamp-btn-gold:active:not(:disabled), .stamp-btn-gold.is-engaged { background: var(--gold-tint); transform: translate(2px, 2px); box-shadow: none; }
-
-.stamp-btn-navy { background: var(--navy); color: var(--paper); border-color: var(--ink); }
-.stamp-btn-navy:hover:not(:disabled) { background: var(--navy-deep); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
-.stamp-btn-navy:active:not(:disabled), .stamp-btn-navy.is-engaged { background: var(--navy-deep); transform: translate(2px, 2px); box-shadow: none; }
-
-.stamp-btn-ink { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.stamp-btn-ink:hover:not(:disabled) { background: #000; transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
-.stamp-btn-ink:active:not(:disabled), .stamp-btn-ink.is-engaged { background: #000; transform: translate(2px, 2px); box-shadow: none; }
-
-.stamp-btn-paper { background: var(--paper); color: var(--ink); border-color: var(--ink); }
-.stamp-btn-paper:hover:not(:disabled) { background: var(--paper-deep); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
-.stamp-btn-paper:active:not(:disabled), .stamp-btn-paper.is-engaged { background: var(--paper-deep); transform: translate(2px, 2px); box-shadow: none; }
-
-.stamp-btn:disabled, .stamp-btn[aria-disabled="true"] { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: 1px 1px 0 var(--ink); }
-
-/* Focus ring matches stamp (ink or red for shout) */
-.stamp-btn:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--ink); }
-.stamp-btn-red:focus-visible { box-shadow: 0 0 0 2px var(--coral); }
-
-/* ============================================================
-   STAMP-CARD / COLOURED SURFACE PRIMITIVES
-   Hover: translate(-1px,-1px) + shadow grow. Active/engaged: translate(2px,2px) + collapse.
-   Borders 2px solid var(--ink), border-radius 4px, default padding 22px.
-   ============================================================ */
-.stamp-card {
+/* g-mark — empirical from logo, sits above the type */
+.gai-hero-mark {
+  width: 96px;
+  aspect-ratio: 1 / 1.18;
   display: block;
-  border: 2px solid var(--ink);
-  border-radius: 4px;
-  padding: 22px;
-  transition: transform 120ms var(--ease-stamp-press), box-shadow 120ms var(--ease-stamp-press), background 120ms;
   position: relative;
+  margin-bottom: 24px;
 }
+.gai-hero-mark svg { width: 100%; height: 100%; display: block; }
+.gai-hero-mark img { display: none; }
 
-/* Variant Backgrounds & Foregrounds */
-/* Cream-on-cream forbidden — gold tint only, nested inside coloured shells */
-.stamp-card-paper {
-  background: var(--gold-tint);
+/* Eyebrow */
+.gai-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   color: var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
-}
-.stamp-card-navy {
-  background: var(--navy);
-  color: var(--paper);
-  box-shadow: 3px 3px 0 var(--ink);
-}
-.stamp-card-navy h1, .stamp-card-navy h2, .stamp-card-navy h3, .stamp-card-navy h4, .stamp-card-navy p, .stamp-card-navy span {
-  color: var(--paper);
-}
-.stamp-card-gold {
-  background: var(--gold-tint);
-  color: var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
-}
-.stamp-card-red {
-  background: var(--coral);
-  color: var(--paper);
-  box-shadow: 3px 3px 0 var(--ink);
-}
-.stamp-card-red h1, .stamp-card-red h2, .stamp-card-red h3, .stamp-card-red h4, .stamp-card-red p, .stamp-card-red span {
-  color: var(--paper);
-}
-.stamp-card-ink {
+  margin-bottom: 18px;
+  display: inline-block;
+  padding: 4px 10px;
   background: var(--ink);
   color: var(--paper);
-  box-shadow: 3px 3px 0 var(--gold-tint);
-}
-.stamp-card-ink h1, .stamp-card-ink h2, .stamp-card-ink h3, .stamp-card-ink h4, .stamp-card-ink p, .stamp-card-ink span {
-  color: var(--paper);
+  font-weight: 600;
 }
 
-/* Interactive States */
-.stamp-card.interactive:hover:not(.is-engaged):not(.pinned-notice) {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--ink);
+/* Headline */
+.gai-hero-h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.6rem, 7vw, 5.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  margin: 4px 0 16px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 50;
 }
-.stamp-card-ink.interactive:hover:not(.is-engaged):not(.pinned-notice) {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--gold-tint);
-}
-
-.stamp-card.interactive:active:not(.pinned-notice),
-.stamp-card.is-engaged:not(.pinned-notice) {
-  transform: translate(2px, 2px);
-  box-shadow: none !important;
-}
-
-/* For pinned notices, let GSAP control transform, and only change box-shadow/filter on CSS hover */
-.pinned-notice.interactive:hover:not(.is-engaged) {
-  box-shadow: 5px 5px 0 var(--ink) !important;
-  filter: brightness(1.01);
+.gai-hero-h1 em {
+  font-style: italic;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
 }
 
-/* Stamp box / clack surfaces (hero, dockets) */
-.stamp-box {
+.gai-hero-lede {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  line-height: 1.3;
+  color: var(--ink-soft);
+  margin: 0 0 30px;
+  max-width: 40ch;
+  font-variation-settings: "opsz" 96, "SOFT" 60;
+}
+
+/* ─── Intake (high-contrast coloured card — white on ink) ─── */
+.gai-intake {
+  width: 100%; max-width: 640px;
+}
+.gai-intake-field {
+  background: var(--ink);
   border: 2px solid var(--ink);
-  box-shadow: 4px 4px 0 var(--ink);
   border-radius: 4px;
-  background: var(--gold-tint);
-  color: var(--ink);
-}
-.stamp-clack, .stamp-clack-red {
-  transition: transform 90ms var(--ease-stamp-press), box-shadow 90ms var(--ease-stamp-press);
-}
-.stamp-clack:active, .stamp-clack-red:active { transform: translate(2px, 2px); box-shadow: none; }
-
-/* ============================================================
-   Perforated ribbon / receipt bridge — physical paper tape (verbatim fidelity + png)
-   AGGRESSIVE SPYLT PHYSICAL: multi-layer tape + shear/tear on scrub.
-   wave-ribbon.png (public/assets/) is the definitive visual source.
-   Perforations + fiber from png + css shear/flutter on scrub. GSAP drives --tape-progress (0-1.2) + --tape-shear.
-   60fps, transforms only on pseudos. Reduced = static complete (perfs + fiber visible).
-   ============================================================ */
-.mail-ribbon {
-  position: relative;
-  height: 19px;
-  /* Definitive ribbon asset as base visual (wavy receipt tape in brand tones). CSS provides shear + perf overlays for motion. */
-  background: url('/assets/wave-ribbon.png') repeat-x center / auto 100%;
-  border-top: 1px solid var(--ink);
-  border-bottom: 1px solid var(--ink);
-  overflow: hidden;
-  /* GSAP drives these for feed + physical tear (refs 60fps, settle damps flutter) */
-  --tape-progress: 0;   /* @kind other */
-  --tape-shear: 0;      /* @kind other */
-  --tape-flutter: 0px;
-}
-.mail-ribbon::before {
-  /* Highlight feed layer + subtle png texture blend for ink/paper tactility on wave */
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.32) 38%, transparent 72%),
-    url('/assets/wave-ribbon.png') repeat-x center / auto 100%;
-  background-blend-mode: screen, multiply;
-  opacity: 0.82;
-  transform: 
-    translateX(calc(-100% + var(--tape-progress) * 235%)) 
-    translateY(var(--tape-flutter))
-    skewX(calc(var(--tape-shear) * 2.2deg));
-  transition: none;
-  pointer-events: none;
-  z-index: 1;
-}
-/* Perforation holes — advance + slight independent shear + micro flutter for mechanical reality (perforated tape ratchet) */
-.mail-ribbon::after {
-  content: '';
-  position: absolute;
-  inset: 2px 0;
-  background-image: 
-    radial-gradient(circle at 5px 50%, var(--ink) 1.6px, transparent 2.1px),
-    radial-gradient(circle at calc(100% - 5px) 50%, var(--ink) 1.6px, transparent 2.1px);
-  background-size: 26px 100%, 26px 100%;
-  background-repeat: repeat-x;
-  opacity: 0.52;
-  transform: translateX(calc(var(--tape-progress) * -15.5px)) translateY(calc(var(--tape-flutter) * 0.6)) skewX(calc(var(--tape-shear) * -0.9deg));
-  z-index: 2;
-  transition: none;
-}
-
-/* Receipt tear line variant — real jagged docket with shear/tear physics + final clack distortion. wave-ribbon base too. */
-.mail-ribbon-tear {
-  height: 23px;
-  background: url('/assets/wave-ribbon.png') repeat-x center / auto 100%;
-  border-top: 2px dashed var(--ink);
-  border-bottom: 2px dashed var(--ink);
-  position: relative;
-  overflow: hidden;
-  --tape-progress: 0;
-  --tape-shear: 0;
-  --tape-flutter: 0px;
-}
-.mail-ribbon-tear::before {
-  /* Tear distortion + advancing scissor/physical rip indicator — shear + flutter for real tape snap. */
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    linear-gradient(90deg, transparent 0 18%, rgba(17,17,17,0.12) 22% 29%, transparent 34% 100%),
-    repeating-linear-gradient(90deg, var(--ink) 0 1px, transparent 1px 5px);
-  transform: 
-    translateX(calc(var(--tape-progress) * -38%)) 
-    translateY(calc(var(--tape-flutter) * 0.4))
-    skewX(calc(var(--tape-shear) * 4.2deg));
-  opacity: 0.5;
-  z-index: 1;
-  transition: none;
-}
-.mail-ribbon-tear::after {
-  content: '✂';
-  position: absolute;
-  right: 14px;
-  top: 50%;
-  transform: 
-    translateY(-50%) 
-    rotate(calc(var(--tape-progress) * 18deg - 9deg)) 
-    translateY(calc(var(--tape-flutter) * 0.7))
-    scaleX(calc(1 + var(--tape-shear) * 0.08));
-  font-size: 10px;
-  color: var(--ink);
-  opacity: 0.38;
-  z-index: 3;
-  transition: none;
-}
-
-/* Pinned notice / coloured card with realistic variance (no uniform stagger)
-   REAL MAIL: rot + offset + edge wear + stamp imprint participation.
-   GSAP drives live variance on scrub. One red accent max per surface. */
-.pinned-notice {
-  will-change: transform, box-shadow, filter;
-  transition: box-shadow 80ms linear, transform 80ms linear, filter 80ms linear;
-  transform-origin: 47% 11%; /* top-biased pin hole */
-  transform: rotate(var(--rot, 0deg)) translate(var(--ox, 0px), var(--oy, 0px));
-  /* Per-card --rot --ox --oy + optional --wear for dog-ear */
-  position: relative;
-  overflow: hidden;
-}
-.pinned-notice::before {
-  /* Subtle pin-hole + edge wear simulation (physical board) */
-  content: '';
-  position: absolute;
-  top: 7px; left: 9px;
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.45);
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.4);
-  pointer-events: none;
-  z-index: 10;
-  opacity: 0.65;
-}
-.pinned-notice::after {
-  /* Ink stamp imprint or slight crease wear (participates on deeper settle) */
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    radial-gradient(circle at 82% 21%, rgba(17,17,17,0.06) 0 22%, transparent 28%);
-  pointer-events: none;
-  z-index: 2;
-  mix-blend-mode: multiply;
-  opacity: calc(0.3 + var(--stamp-depth, 0) * 0.55);
-}
-.pinned-notice:hover {
-  box-shadow: 5px 5px 0 var(--ink);
-  filter: brightness(1.01);
-}
-
-/* Reduced motion: fully static but COMPLETE docket board (all stamps/pins/rots/perforations visible) */
-@media (prefers-reduced-motion: reduce) {
-  .stamp-press,
-  .stamp-press-red,
-  .stamp-box,
-  .stamp-pop,
-  .stamp-clack,
-  .stamp-clack-red,
-  .mail-ribbon,
-  .mail-ribbon-tear,
-  .pinned-notice {
-    transition: none !important;
-    transform: none !important;
-    animation: none !important;
-  }
-  .mail-ribbon,
-  .mail-ribbon-tear {
-    background: url('/assets/wave-ribbon.png') repeat-x center / auto 100% !important; /* static png visible */
-  }
-  .pinned-notice {
-    box-shadow: 3px 3px 0 var(--ink) !important;
-  }
-  .mail-docket-footer { --stamp-depth: 0.6; --tape-flutter: 0px; }
-}
-
-/* MAIL-STACK + DOCKET FOOTER RITUAL (GSAP driven) */
-.mail-board { --hero-filing-progress: 0; } /* @kind other */
-.mail-docket-footer { --stamp-depth: 0.6; --tape-flutter: 0px; } /* @kind other */
-
-/* ... (additional footer clack, docket-edge, wonk participation rules from prior; kept surgical) */
-.wonk-line {
-  font-family: var(--font-display);
-  font-variation-settings: "WONK" var(--wonk, 1), "SOFT" 50, "opsz" 144;
-  transition: font-variation-settings 80ms linear;
-}
-
-/* .font-display, .brand-wordmark, h1/h2, .wonk-line now resolve to Fraunces variable per design in public/README.md (SOFT + WONK + opsz + wght axes; one phrase per surface for Italic + WONK emphasis). Loaded via next/font/local in layout using the TTFs from public/fonts/ matching the design verbatim. */
-.font-display,
-h1, h2,
-.brand-wordmark {
-  font-family: var(--font-display);
-  font-variation-settings: "WONK" var(--wonk, 1), "SOFT" 50, "opsz" 144;
-}
-
-/* ============================================================
-   CHAT INTERFACE & LEAD CAPTURE CARD STYLES
-   Brutalist mechanical styling — public/SKILL.md
-   ============================================================ */
-
-/* Chat/Bubble styles */
-.gai-chat {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background: var(--navy);
-  color: var(--paper);
-  border: 2px solid var(--ink);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-stamp);
-  overflow: hidden;
-}
-
-.gai-chat-scroll {
-  max-height: 380px;
-  overflow-y: auto;
-  padding: 16px;
-  background: var(--gold-tint);
-}
-
-.gai-chat-inner {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.gai-bubble-row {
-  display: flex;
-  width: 100%;
-  margin-bottom: 8px;
-}
-
-.gai-bubble-row.is-user {
-  justify-content: flex-end;
-}
-
-.gai-bubble {
-  max-width: 80%;
-  padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-sans);
-  font-size: var(--fs-16);
-  line-height: 1.45;
-  border: 2px solid var(--ink);
-}
-
-.gai-bubble-ai {
-  background: var(--gold-tint);
-  color: var(--ink);
-  box-shadow: 2px 2px 0 var(--ink);
-}
-
-.gai-bubble-user {
-  background: var(--navy);
-  color: var(--paper);
-  box-shadow: 2px 2px 0 var(--ink);
-}
-
-/* Typing indicator */
-.gai-typing {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 12px 16px;
-}
-
-.gai-typing span {
-  width: 6px;
-  height: 6px;
-  background-color: var(--ink);
-  border-radius: 50%;
-  display: inline-block;
-  animation: bounce 1.4s infinite ease-in-out both;
-}
-
-.gai-typing span:nth-child(1) { animation-delay: -0.32s; }
-.gai-typing span:nth-child(2) { animation-delay: -0.16s; }
-
-@keyframes bounce {
-  0%, 80%, 100% { transform: scale(0); }
-  40% { transform: scale(1.0); }
-}
-
-.gai-error {
-  font-family: var(--font-mono);
-  font-size: var(--fs-12);
-  color: var(--paper);
-  background: var(--warn);
-  border: 2px solid var(--ink);
-  padding: 8px 12px;
-  margin: 8px 0;
-  box-shadow: 2px 2px 0 var(--ink);
-}
-
-.gai-chat-bar {
-  border-top: 2px solid var(--ink);
-  background: var(--navy-deep);
-  padding: 12px;
-}
-
-.gai-chat-bar-inner {
-  display: flex;
-  gap: 8px;
-}
-
-/* Lead Card Container */
-.gai-leadcard {
-  width: 100%;
-  background: var(--gold-tint);
-  border: 2px solid var(--ink);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-stamp-coral);
-  padding: 24px;
-  position: relative;
+  box-shadow: var(--shadow-stamp-orange);
+  padding: 18px 18px 12px;
   text-align: left;
-  margin-top: 12px;
+  transition: box-shadow 150ms, transform 150ms;
 }
-
-.gai-leadcard-success {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  background: var(--gold-tint);
-  border-color: var(--ok);
-  box-shadow: 3px 3px 0 var(--ok);
-  padding: 16px 20px;
+.gai-intake-field:focus-within {
+  box-shadow: 5px 5px 0 var(--orange);
+  transform: translate(-1px, -1px);
 }
-
-.gai-leadcard-checkwrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--ok);
+.gai-intake-input {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 1.45;
   color: var(--paper);
+  background: transparent;
+  border: none; outline: none;
+  resize: none;
+  padding: 4px 4px;
+  min-height: 80px;
 }
+.gai-intake-input::placeholder { color: rgba(248,248,246,0.5); }
 
-.gai-leadcard-success-text {
+.gai-intake-toolbar {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 10px; padding-top: 12px;
+  border-top: 1px dashed rgba(248,248,246,0.3);
+}
+.gai-intake-spacer { flex: 1; }
+
+.gai-tool {
+  display: inline-flex; align-items: center; gap: 7px;
   font-family: var(--font-sans);
-  font-size: 15px;
-  color: var(--ink);
-}
-
-.gai-leadcard-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-mono);
-  font-size: var(--fs-12);
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--coral);
-  margin-bottom: 8px;
-}
-
-.gai-leadcard-title {
-  font-family: var(--font-display);
-  font-size: var(--fs-24);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: var(--ink);
-  margin: 0 0 6px 0;
-}
-
-.gai-leadcard-help {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  color: var(--ink-mute);
-  margin: 0 0 16px 0;
-}
-
-.gai-leadcard-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.gai-leadcard-row {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-@media (min-width: 640px) {
-  .gai-leadcard-row {
-    flex-direction: row;
-  }
-  .gai-leadcard-row > .gai-input {
-    flex: 1;
-  }
-}
-
-/* Brutalist text inputs */
-.gai-input {
-  font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 13px; font-weight: 600;
   color: var(--ink);
   background: var(--paper);
   border: 2px solid var(--ink);
-  border-radius: var(--radius-xs);
-  padding: 10px 14px;
-  outline: none;
-  box-shadow: inset 1px 1px 0 rgba(0,0,0,0.05);
-  transition: box-shadow 120ms var(--ease-stamp-press), transform 120ms var(--ease-stamp-press);
-}
-
-.gai-input::placeholder {
-  color: var(--ink-faint);
-}
-
-.gai-input:focus {
-  background: var(--paper-deep);
-  box-shadow: 3px 3px 0 var(--coral);
-  transform: translate(-1px, -1px);
-}
-
-.gai-iconbtn-send {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  background: var(--coral);
-  color: var(--paper);
-  border: 2px solid var(--ink);
-  border-radius: var(--radius-xs);
-  cursor: pointer;
   box-shadow: 2px 2px 0 var(--ink);
-  transition: transform 120ms var(--ease-stamp-press), box-shadow 120ms var(--ease-stamp-press);
+  padding: 8px 13px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 120ms, box-shadow 120ms;
 }
-
-.gai-iconbtn-send:hover {
-  background: var(--coral-deep);
+.gai-tool:hover:not(:disabled) {
   transform: translate(-1px, -1px);
   box-shadow: 3px 3px 0 var(--ink);
 }
+.gai-tool.is-on {
+  background: var(--orange);
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.gai-tool:disabled { opacity: 0.4; cursor: not-allowed; }
 
-.gai-iconbtn-send:active {
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--ink);
+.gai-tool-send {
+  background: var(--orange);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--paper);
+  padding: 10px 18px;
+  border-radius: 4px;
+}
+.gai-tool-send:hover:not(:disabled) {
+  background: var(--orange-deep);
+  color: var(--ink);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--paper);
+}
+.gai-tool-send:active { transform: translate(2px,2px); box-shadow: none; }
+
+.gai-tool-mini {
+  font-size: 12px; padding: 6px 10px;
+}
+
+.gai-intake-hint {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 14px 0 0;
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+/* spinner */
+.gai-spinner {
+  width: 12px; height: 12px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: gai-spin 0.7s linear infinite;
+}
+@keyframes gai-spin { to { transform: rotate(360deg); } }
+
+/* error */
+.gai-error {
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  background: var(--warn);
+  border: 2px solid var(--ink);
+  box-shadow: var(--shadow-stamp);
+  padding: 10px 14px;
+  border-radius: 0;
+}
+
+/* ─── Answer panel ──────────────────── */
+.gai-answer {
+  width: 100%; max-width: 640px;
+  margin-top: 24px;
+  background: var(--ocean-400);
+  color: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  box-shadow: var(--shadow-stamp);
+  padding: 22px 22px;
+  text-align: left;
+  animation: gai-pop 400ms cubic-bezier(0.23,1,0.32,1) both;
+}
+@keyframes gai-pop {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.gai-answer-head {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(248,248,246,0.3);
+}
+.gai-answer-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--hi-yellow);
+  flex: 1;
+  font-weight: 700;
+}
+.gai-answer-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--hi-yellow);
+  animation: gai-pulse 1.6s ease-in-out infinite;
+}
+@keyframes gai-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+.gai-answer .gai-tool {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.gai-answer .gai-tool.is-on { background: var(--orange); }
+.gai-answer-text {
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--paper);
+  margin: 0 0 18px;
+  white-space: pre-wrap;
+}
+.gai-answer-cta {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(248,248,246,0.3);
+}
+.gai-answer-cta-help {
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--paper); opacity: 0.7;
+}
+
+/* ─── Buttons ───────────────────────── */
+.gai-btn {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  transition: transform 120ms, box-shadow 120ms;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  white-space: nowrap;
+}
+.gai-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.gai-btn-md { font-size: 14px; padding: 11px 20px; border-radius: 4px; }
+.gai-btn-primary {
+  background: var(--orange); color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.gai-btn-primary:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.gai-btn-primary:active { transform: translate(2px,2px); box-shadow: none; }
+
+/* ─── Wordmark ──────────────────────── */
+.gai-wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  font-variation-settings: "opsz" 144;
+  line-height: 1;
+}
+.gai-wordmark .apos { color: var(--orange); }
+
+/* ─── Logo ─── */
+.gai-logo { height: 30px; width: auto; display: block; }
+
+/* ─── Logo slot (drop your own logo here) ─── */
+.gai-logo-slot {
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 2px dashed var(--ink);
+  border-radius: 2px;
+  background: repeating-linear-gradient(45deg, transparent 0 7px, rgba(17,17,17,0.05) 7px 9px);
+  font-family: var(--font-mono);
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+/* ─── Feature panels (coloured cards) ─── */
+.gai-features {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  margin-top: 56px;
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+@media (max-width: 1000px) { .gai-features { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .gai-features { grid-template-columns: 1fr; } }
+.gai-feature {
+  display: flex; flex-direction: column; gap: 14px;
+  padding: 22px 20px;
+  border-right: 1px solid var(--ink);
+  background: var(--paper);
+  text-align: left;
+  position: relative;
+}
+.gai-feature:last-child { border-right: 0; }
+.gai-feature:nth-child(1) { background: var(--paper); }
+.gai-feature:nth-child(2) { background: var(--hi-yellow); }
+.gai-feature:nth-child(3) { background: var(--orange); color: var(--ink); }
+.gai-feature:nth-child(4) { background: var(--ocean-400); color: var(--paper); }
+.gai-feature:nth-child(5) { background: var(--ink); color: var(--paper); }
+@media (max-width: 1000px) {
+  .gai-feature { border-right: none; border-bottom: 1px solid var(--ink); }
+  .gai-feature:nth-child(2), .gai-feature:nth-child(4) { border-right: 1px solid var(--ink); }
+  .gai-feature:nth-last-child(-n+2) { border-bottom: 0; }
+}
+@media (max-width: 520px) {
+  .gai-feature { border-right: 0; border-bottom: 1px solid var(--ink); }
+  .gai-feature:last-child { border-bottom: 0; }
+}
+
+.gai-feature-icon {
+  width: 36px; height: 36px;
+  background: var(--ink);
+  color: var(--paper);
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  border-radius: 0;
+}
+.gai-feature:nth-child(4) .gai-feature-icon,
+.gai-feature:nth-child(5) .gai-feature-icon { background: var(--paper); color: var(--ink); }
+.gai-feature:nth-child(3) .gai-feature-icon { background: var(--ink); color: var(--orange); }
+.gai-feature:nth-child(2) .gai-feature-icon { background: var(--ink); color: var(--hi-yellow); }
+
+.gai-feature-text {
+  display: flex; flex-direction: column; line-height: 1.2; text-align: left;
+}
+.gai-feature-text strong {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 96, "SOFT" 40;
+}
+.gai-feature-text span {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  opacity: 0.8;
+}
+
+/* ─── Marquee ───────────────────────── */
+.gai-marquee {
+  margin-top: 0;
+  overflow: hidden;
+  border-bottom: 2px solid var(--ink);
+  padding: 14px 0;
+  background: var(--ink);
+  color: var(--paper);
+}
+.gai-marquee-track {
+  display: flex; gap: 0; white-space: nowrap;
+  animation: gai-scroll 36s linear infinite;
+  width: max-content;
+}
+.gai-marquee-item {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--paper);
+  flex-shrink: 0;
+}
+.gai-marquee-sep { color: var(--orange); padding: 0 22px; font-weight: 700; }
+@keyframes gai-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ─── Animations ────────────────────── */
+@keyframes gai-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.gai-onepage-inner > * {
+  animation: gai-fade-up 600ms cubic-bezier(0.23,1,0.32,1) both;
+}
+.gai-onepage-inner > .gai-hero-mark { animation-delay: 0ms; }
+.gai-onepage-inner .gai-eyebrow { animation-delay: 80ms; }
+.gai-onepage-inner .gai-hero-h1 { animation-delay: 120ms; }
+.gai-onepage-inner .gai-hero-lede { animation-delay: 200ms; }
+.gai-onepage-inner .gai-intake { animation-delay: 260ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+  .gai-hero-mark { width: 140px; }
 }

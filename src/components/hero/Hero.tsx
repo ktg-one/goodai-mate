@@ -159,8 +159,7 @@ export function Hero() {
             WORDMARK — using Fraunces from the design (public/fonts/ matching public/fonts/ verbatim).
             Brand treatment follows the design system.
           */}
-          <span className="brand-wordmark text-[1.9rem]">
-            Good<span className="apos" style={{ color: 'var(--coral)' }}>&apos;</span>ai
+          <img src="/company-assets/brand-reference.png" alt="Good'ai" className="h-12 w-auto object-contain" />ai
           </span>
         </div>
 
