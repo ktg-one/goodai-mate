@@ -1,0 +1,4 @@
+## 2025-05-18 - Prevent SSRF in Website Analyzer
+**Vulnerability:** The `/api/analyze-website` endpoint takes a user-provided URL and uses `fetch()` directly without validating if the URL resolves to internal network addresses or private IP spaces (SSRF).
+**Learning:** In Next.js API routes, unvalidated outbound requests to user-provided URLs can allow attackers to scan internal networks, access metadata services (like AWS IMDS or Vercel internals), or bypass firewalls to hit internal endpoints (`localhost`).
+**Prevention:** Always parse user-provided URLs using `new URL()`, enforce `http:` or `https:` protocols, and explicitly block resolution of local hostnames (`localhost`, `.local`, `.internal`) and private IPv4/IPv6 address blocks (e.g. `127.0.0.0/8`, `10.0.0.0/8`, `192.168.0.0/16`, `169.254.0.0/16`) prior to execution.
