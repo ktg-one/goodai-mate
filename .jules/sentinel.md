@@ -1,0 +1,4 @@
+## 2025-05-18 - SSRF Vulnerability in API Routes
+**Vulnerability:** Server-Side Request Forgery (SSRF) allowed the `url` parameter in `/api/analyze-website` and the `n8nUrl` parameter in `/api/demo-automation` to make outgoing requests to internal and private network addresses (e.g. `localhost`, `10.x.x.x`, `169.254.169.254`) on the server without validation.
+**Learning:** Directly passing user-controlled input into `fetch` or other network request mechanisms without hostname parsing and validation permits SSRF attacks against internal infrastructure.
+**Prevention:** Implement a strict URL validation helper before performing any server-side fetch. Use `new URL()` to parse the user input, ensure protocols are restricted to `http:`/`https:`, and explicitly reject localhost and internal IPv4 ranges.
