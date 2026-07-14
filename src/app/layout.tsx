@@ -29,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="en" data-theme="light"
       className={`${instrument.variable} ${sora.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg text-fg">{children}</body>
