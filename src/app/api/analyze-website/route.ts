@@ -58,6 +58,34 @@ export async function POST(req: NextRequest) {
     }
 
     const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
+
+    // 🛡️ SSRF Mitigation: Validate URL and check against internal networks
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(targetUrl);
+    } catch {
+      return NextResponse.json({ success: false, error: 'Invalid URL format' }, { status: 400 });
+    }
+
+    if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+      return NextResponse.json({ success: false, error: 'Invalid protocol' }, { status: 400 });
+    }
+
+    const hostname = parsedUrl.hostname.toLowerCase();
+
+    // Prevent resolution of local domains and private IPs
+    const isLocal = hostname === 'localhost' || hostname.endsWith('.local') || hostname.endsWith('.internal');
+    const isPrivateIP = /^127\./.test(hostname) ||
+                        /^10\./.test(hostname) ||
+                        /^192\.168\./.test(hostname) ||
+                        /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname) ||
+                        hostname === '::1' ||
+                        /^169\.254\./.test(hostname) ||
+                        /^0\./.test(hostname);
+
+    if (isLocal || isPrivateIP) {
+      return NextResponse.json({ success: false, error: 'Access to internal network resources is forbidden' }, { status: 400 });
+    }
     const logs: string[] = [`[SYSTEM] Initializing Website Analysis for: ${targetUrl}`];
     let extractedEmail = '';
 
