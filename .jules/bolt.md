@@ -29,3 +29,7 @@
 ## 2025-05-18 - [React Performance] Memoizing list maps alongside controlled inputs
 **Learning:** The React AutomationPlayground component contained a `logs.map(...)` operation inline with multiple controlled inputs (like `name`, `business`, `phone`). Because it wasn't memoized, typing a single character forced the entire logs array mapping and DOM element recreation to run again, causing input lag.
 **Action:** Always wrap derived lists or array mappings (e.g., `logs.map()`) in a `useMemo` hook when they reside in the same component as a controlled text input to prevent O(N) recomputations on every keystroke.
+
+## 2026-07-13 - [Package Manager Strictness] Dependency Management during Fixes
+**Learning:** When executing `pnpm install --config.engine-strict=false` to resolve local linting environment errors (like missing `@eslint/eslintrc`), the package manager will modify `package.json` and generate `pnpm-lock.yaml`. If these auto-generated modifications are blindly staged and committed, it violates the strict instruction to *never* modify `package.json` or `tsconfig.json` without explicit instruction, causing the PR to fail review.
+**Action:** Always run `git status` after executing package manager commands for local setup. Use `git checkout -- package.json` and delete the `pnpm-lock.yaml` file (or simply do not stage them) to ensure only the intended performance optimization files are committed.

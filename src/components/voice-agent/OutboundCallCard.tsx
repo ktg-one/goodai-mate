@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Phone, Terminal, UserCheck, CheckCircle2, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
 
@@ -13,6 +13,18 @@ export default function OutboundCallCard() {
   const [success, setSuccess] = useState(false);
 
   const consoleEndRef = useRef<HTMLDivElement>(null);
+
+  const memoizedLogs = useMemo(() => logs.map((log, index) => {
+    let color = 'text-[var(--paper)]/80';
+    if (log.startsWith('[ERROR]')) color = 'text-[var(--coral-tint)] font-bold';
+    if (log.startsWith('[SERVER]')) color = 'text-[var(--gold-tint)]';
+    if (log.includes('RINGING') || log.includes('CONNECTED')) color = 'text-[var(--gold-tint)] font-bold';
+    return (
+      <div key={index} className={color}>
+        {log}
+      </div>
+    );
+  }), [logs]);
 
   const agents = [
     {
@@ -198,17 +210,11 @@ export default function OutboundCallCard() {
 
           <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-[11px] h-[130px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
             <div className="space-y-1">
-              {logs.map((log, index) => {
-                let color = 'text-[var(--paper)]/80';
-                if (log.startsWith('[ERROR]')) color = 'text-[var(--coral-tint)] font-bold';
-                if (log.startsWith('[SERVER]')) color = 'text-[var(--gold-tint)]';
-                if (log.includes('RINGING') || log.includes('CONNECTED')) color = 'text-[var(--gold-tint)] font-bold';
-                return (
-                  <div key={index} className={color}>
-                    {log}
-                  </div>
-                );
-              })}
+              {/* ⚡ Bolt: Memoize expensive array mapping
+                  This array map is in the same component as a controlled input.
+                  Without useMemo, typing a single character forces the O(N) array mapping
+                  and DOM recreation to run again, causing input lag. */}
+              {memoizedLogs}
               {isDialing && (
                 <div className="text-[var(--paper)]/40 animate-pulse">● Dialing gateway...</div>
               )}
