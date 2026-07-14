@@ -5,6 +5,70 @@ import { execFile } from 'child_process';
 import { promisify } from 'util';
 import path from 'path';
 import fs from 'fs';
+import dns from 'dns';
+
+const lookupAsync = promisify(dns.lookup);
+
+function isIpAddress(str: string): boolean {
+  const ipv4Pattern = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+  return ipv4Pattern.test(str);
+}
+
+function ipToNumber(ip: string): number {
+  return ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet, 10), 0) >>> 0;
+}
+
+function isPrivateOrLocalIp(ip: string): boolean {
+  if (!isIpAddress(ip)) return false;
+
+  const ipNum = ipToNumber(ip);
+
+  const ranges = [
+    { start: '10.0.0.0', end: '10.255.255.255' },       // 10.0.0.0/8
+    { start: '172.16.0.0', end: '172.31.255.255' },    // 172.16.0.0/12
+    { start: '192.168.0.0', end: '192.168.255.255' },  // 192.168.0.0/16
+    { start: '127.0.0.0', end: '127.255.255.255' },    // 127.0.0.0/8
+    { start: '169.254.0.0', end: '169.254.255.255' },  // 169.254.0.0/16 (Link-local / Cloud Metadata)
+    { start: '0.0.0.0', end: '0.255.255.255' },        // 0.0.0.0/8
+  ];
+
+  for (const range of ranges) {
+    const startNum = ipToNumber(range.start);
+    const endNum = ipToNumber(range.end);
+    if (ipNum >= startNum && ipNum <= endNum) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+async function isSafeUrl(urlString: string): Promise<boolean> {
+  try {
+    const parsedUrl = new URL(urlString);
+
+    if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+      return false;
+    }
+
+    const hostname = parsedUrl.hostname;
+
+    try {
+      const { address } = await lookupAsync(hostname);
+      if (isPrivateOrLocalIp(address) || address === '::1') {
+        return false;
+      }
+    } catch (dnsError) {
+       // if DNS fails, fail safe.
+       return false;
+    }
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 
 const execFileAsync = promisify(execFile);
 
@@ -58,6 +122,14 @@ export async function POST(req: NextRequest) {
     }
 
     const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
+
+    // SSRF Protection: Validate the URL
+    if (!(await isSafeUrl(targetUrl))) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid or restricted website URL' },
+        { status: 400 }
+      );
+    }
     const logs: string[] = [`[SYSTEM] Initializing Website Analysis for: ${targetUrl}`];
     let extractedEmail = '';
 
