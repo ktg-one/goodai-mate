@@ -33,3 +33,7 @@
 ## 2026-07-13 - [Package Manager Strictness] Dependency Management during Fixes
 **Learning:** When executing `pnpm install --config.engine-strict=false` to resolve local linting environment errors (like missing `@eslint/eslintrc`), the package manager will modify `package.json` and generate `pnpm-lock.yaml`. If these auto-generated modifications are blindly staged and committed, it violates the strict instruction to *never* modify `package.json` or `tsconfig.json` without explicit instruction, causing the PR to fail review.
 **Action:** Always run `git status` after executing package manager commands for local setup. Use `git checkout -- package.json` and delete the `pnpm-lock.yaml` file (or simply do not stage them) to ensure only the intended performance optimization files are committed.
+
+## 2026-07-14 - [Eliminate GC Overhead in RAF Loops]
+**Learning:** Instantiating new objects or arrays (like `new Float32Array(BAR_COUNT)`) inside a `requestAnimationFrame` loop creates continuous object allocations (e.g., 60 times per second at 60fps). This causes excessive memory churn and forces the Garbage Collector (GC) to run frequently, leading to frame drops and UI stuttering in audio visualizers or physics animations.
+**Action:** Always hoist object and array allocations outside the `render` loop and reuse them across frames.

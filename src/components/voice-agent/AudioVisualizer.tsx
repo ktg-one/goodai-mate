@@ -73,6 +73,9 @@ export function AudioVisualizer({ analyser, active, status }: AudioVisualizerPro
 
     // Per-bar smoothed heights (0-1) for organic fall/rise.
     const levels = new Float32Array(BAR_COUNT);
+    // ⚡ Bolt: Pre-allocate targets array outside the RAF loop to prevent
+    // 60 GC allocations per second, eliminating memory churn and UI stutter.
+    const targets = new Float32Array(BAR_COUNT);
 
     const drawBar = (i: number, norm: number, color: string) => {
       const x = PAD_X + i * (BAR_W + GAP);
@@ -157,7 +160,6 @@ export function AudioVisualizer({ analyser, active, status }: AudioVisualizerPro
       // Compute raw targets + find peak bar for the single red accent.
       let peakIdx = 0;
       let peakVal = -1;
-      const targets = new Float32Array(BAR_COUNT);
       for (let i = 0; i < BAR_COUNT; i++) {
         const srcIdx = Math.floor((i / BAR_COUNT) * usable);
         let v = (dataArray[srcIdx] || 0) / 255;
