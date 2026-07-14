@@ -46,6 +46,34 @@ async function runGwsCommand(args: string[], jsonInput?: unknown): Promise<unkno
   }
 }
 
+function isSafeUrl(urlString: string): boolean {
+  try {
+    const parsed = new URL(urlString);
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
+
+    const hostname = parsed.hostname.toLowerCase();
+
+    // Explicitly reject internal/private hostnames and IP ranges (SSRF mitigation)
+    if (
+      hostname === 'localhost' ||
+      hostname.endsWith('.local') ||
+      hostname.endsWith('.internal') ||
+      hostname.startsWith('127.') ||
+      hostname === '::1' ||
+      hostname === '169.254.169.254' ||
+      hostname.startsWith('10.') ||
+      hostname.startsWith('192.168.') ||
+      /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname) ||
+      hostname.match(/^0+\.0+\.0+\.0+$/)
+    ) {
+      return false;
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { url } = (await req.json()) as AnalyzePayload;
@@ -58,6 +86,14 @@ export async function POST(req: NextRequest) {
     }
 
     const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
+
+    if (!isSafeUrl(targetUrl)) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid or restricted URL provided.' },
+        { status: 400 }
+      );
+    }
+
     const logs: string[] = [`[SYSTEM] Initializing Website Analysis for: ${targetUrl}`];
     let extractedEmail = '';
 
