@@ -1,0 +1,4 @@
+## 2024-05-30 - SSRF Vulnerability in analyze-website Route
+**Vulnerability:** The `/api/analyze-website` endpoint took a user-provided URL (`targetUrl`) and passed it directly to `fetch()` without any validation to ensure the URL wasn't pointing to internal network resources (e.g., `localhost`, `127.0.0.1`, AWS metadata service at `169.254.169.254`, etc). This is a classic Server-Side Request Forgery (SSRF) vulnerability.
+**Learning:** Even simple "scrape this website" tools can be weaponized if they don't validate the destination. The server acting as a proxy means it will execute requests using its own internal network privileges.
+**Prevention:** Always validate user-provided URLs before fetching them. Ensure the protocol is `http:` or `https:`, and explicitly reject internal IP ranges and hostnames (`localhost`, `.local`, `127.0.0.1/8`, `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `169.254.0.0/16`, `::1`, etc.).
