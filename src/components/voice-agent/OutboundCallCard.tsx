@@ -135,14 +135,15 @@ export default function OutboundCallCard() {
           <label id="agent-selector-label" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 block">
             1. Select Agent Persona
           </label>
-          <div className="grid sm:grid-cols-2 gap-3" role="group" aria-labelledby="agent-selector-label">
+          <div className="grid sm:grid-cols-2 gap-3" role="radiogroup" aria-labelledby="agent-selector-label">
             {agents.map(agent => {
               const isSelected = selectedAgent === agent.id;
               return (
                 <button
                   key={agent.id}
                   type="button"
-                  aria-pressed={isSelected}
+                  role="radio"
+                  aria-checked={isSelected}
                   onClick={() => setSelectedAgent(agent.id)}
                   className={`border-2 p-3 text-left rounded-xs cursor-pointer select-none transition-all flex flex-col justify-between h-28 relative focus-visible:outline-2 focus-visible:outline-[var(--coral)] ${
                     isSelected
@@ -208,7 +209,7 @@ export default function OutboundCallCard() {
             <Terminal size={10} /> Dialer log
           </span>
 
-          <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-[11px] h-[130px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
+          <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-[11px] h-[130px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]" role="log" aria-live="polite">
             <div className="space-y-1">
               {/* ⚡ Bolt: Memoize expensive array mapping
                   This array map is in the same component as a controlled input.
@@ -223,14 +224,14 @@ export default function OutboundCallCard() {
           </div>
 
           {success && (
-            <div className="border-2 border-[var(--ink)] bg-[var(--ok)]/10 text-[var(--ok)] p-2.5 rounded-xs flex items-center gap-2 text-xs font-mono">
+            <div className="border-2 border-[var(--ink)] bg-[var(--ok)]/10 text-[var(--ok)] p-2.5 rounded-xs flex items-center gap-2 text-xs font-mono" role="status" aria-live="polite">
               <CheckCircle2 size={14} className="shrink-0" />
               <span>Dialer triggered! Pick up when your phone rings.</span>
             </div>
           )}
 
           {error && (
-            <div className="border-2 border-[var(--ink)] bg-[var(--warn)]/10 text-[var(--warn)] p-2.5 rounded-xs flex items-center gap-2 text-xs font-mono">
+            <div className="border-2 border-[var(--ink)] bg-[var(--warn)]/10 text-[var(--warn)] p-2.5 rounded-xs flex items-center gap-2 text-xs font-mono" role="alert" aria-live="assertive">
               <AlertCircle size={14} className="shrink-0" />
               <span>Failed: {error}</span>
             </div>
