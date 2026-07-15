@@ -57,8 +57,46 @@ export async function POST(req: NextRequest) {
       );
     }
 
+
     const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
+
+    // Security mitigation: Server-Side Request Forgery (SSRF) validation
+    try {
+      const parsedUrl = new URL(targetUrl);
+      if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+         throw new Error('Invalid protocol');
+      }
+      const hostname = parsedUrl.hostname.toLowerCase();
+
+      // Block internal hostnames and private IP ranges
+      const isInternal =
+        hostname === 'localhost' ||
+        hostname.endsWith('.local') ||
+        hostname.endsWith('.internal') ||
+        hostname.startsWith('127.') || // 127.0.0.0/8 loopback
+        hostname.startsWith('10.') ||  // 10.0.0.0/8 private
+        hostname.startsWith('192.168.') || // 192.168.0.0/16 private
+        /^172.(1[6-9]|2[0-9]|3[0-1])./.test(hostname) || // 172.16.0.0/12 private
+        hostname.startsWith('169.254.') || // 169.254.0.0/16 link-local
+        hostname === '::1' || // IPv6 loopback
+        /^[fF][cCdD]/.test(hostname) || // IPv6 unique local
+        /^[fF][eE][89aAbB]/.test(hostname); // IPv6 link local
+
+      if (isInternal) {
+        return NextResponse.json(
+          { success: false, error: 'Invalid URL hostname' },
+          { status: 400 }
+        );
+      }
+    } catch { // unused exception variable removed for linting
+      return NextResponse.json(
+        { success: false, error: 'Invalid URL format' },
+        { status: 400 }
+      );
+    }
+
     const logs: string[] = [`[SYSTEM] Initializing Website Analysis for: ${targetUrl}`];
+
     let extractedEmail = '';
 
     // 1. Scrape Website
