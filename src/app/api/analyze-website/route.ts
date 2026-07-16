@@ -26,6 +26,49 @@ interface AnalyzePayload {
   url: string;
 }
 
+function isSafeUrl(urlString: string): boolean {
+  try {
+    const url = new URL(urlString);
+
+    // Only allow HTTP/HTTPS
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      return false;
+    }
+
+    // Block internal hostnames
+    if (url.hostname === 'localhost' || url.hostname.endsWith('.local')) {
+      return false;
+    }
+
+    // Block private IP ranges
+    const hostname = url.hostname;
+
+    // Strict Regex for IPv4 private ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 127.0.0.0/8)
+    // Avoids false positives like 10.example.com
+    const isLocalIPv4 = /^(?:127\.\d{1,3}\.\d{1,3}\.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|172\.(?:1[6-9]|2\d|3[0-1])\.\d{1,3}\.\d{1,3}|0\.0\.0\.0|255\.255\.255\.255)$/;
+    if (isLocalIPv4.test(hostname)) {
+      return false;
+    }
+
+    // Very basic IPv6 local blocks check (::1, fc00::/7, fe80::/10, fd00::/8)
+    if (
+      hostname === '[::1]' ||
+      /^\[fc[0-9a-f]{2}:/i.test(hostname) ||
+      /^\[fd[0-9a-f]{2}:/i.test(hostname) ||
+      /^\[fe8[0-9a-f]:/i.test(hostname) ||
+      /^\[fe9[0-9a-f]:/i.test(hostname) ||
+      /^\[fea[0-9a-f]:/i.test(hostname) ||
+      /^\[feb[0-9a-f]:/i.test(hostname)
+    ) {
+      return false;
+    }
+
+    return true;
+  } catch (_e) {
+    return false;
+  }
+}
+
 async function runGwsCommand(args: string[], jsonInput?: unknown): Promise<unknown> {
   const isJs = GWS_PATH.endsWith('.js');
   const command = isJs ? 'node' : GWS_PATH;
@@ -63,6 +106,15 @@ export async function POST(req: NextRequest) {
 
     // 1. Scrape Website
     let scrapedText = '';
+
+    // Add SSRF protection check before making outbound request
+    if (!isSafeUrl(targetUrl)) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid or restricted URL provided.' },
+        { status: 403 }
+      );
+    }
+
     try {
       logs.push(`[ANALYZER] Fetching website content...`);
       const controller = new AbortController();
