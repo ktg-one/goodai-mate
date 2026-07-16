@@ -9,3 +9,7 @@
 ## 2026-07-14 - Enhanced OutboundCallCard accessibility
 **Learning:** Custom segmented controls (like the agent selector) using `role="group"` and `aria-pressed` do not correctly convey radio button semantics to screen readers. Furthermore, dynamic elements like terminal logs and custom success/error overlays must explicitly declare `role="log"` or `role="status"/`role="alert"` with `aria-live` attributes to ensure updates are announced dynamically.
 **Action:** Always use `role="radiogroup"`, `role="radio"`, and `aria-checked` for grouped mutually-exclusive buttons. Always add `role="log" aria-live="polite"` to terminal-style text output containers and `role="status"` or `role="alert"` for dynamically appearing custom feedback overlays.
+
+## 2026-07-16 - Add ARIA live regions to chat interfaces
+**Learning:** For chat interfaces (e.g., using Vercel AI SDK) where incoming streaming messages are appended dynamically, these updates are invisible to screen readers without proper roles.
+**Action:** Always wrap the chat thread container with `role="log"` and `aria-live="polite"`. Additionally, apply `role="status"` to typing indicators and `role="alert" aria-live="assertive"` to error messages to ensure screen readers announce these critical conversational updates immediately.
