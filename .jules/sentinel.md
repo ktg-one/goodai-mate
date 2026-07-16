@@ -1,0 +1,4 @@
+## 2026-07-16 - Fix SSRF Vulnerability in Analyze Website Endpoint
+**Vulnerability:** The API endpoint `/api/analyze-website` fetched content from a user-provided URL using the `fetch` API without prior validation, allowing potential Server-Side Request Forgery (SSRF). Attackers could probe internal networks or interact with local services.
+**Learning:** When dealing with server-side fetching of arbitrary URLs, especially on internal-facing or containerized Node.js endpoints, lack of validation makes the infrastructure susceptible to SSRF attacks.
+**Prevention:** Always parse and validate user-supplied URLs using `new URL()`. Ensure protocols are strictly limited to `http:` and `https:` and systematically block loopback, link-local, and private IPv4/IPv6 address spaces prior to establishing the outbound connection.
