@@ -5,6 +5,8 @@ import { execFile } from 'child_process';
 import { promisify } from 'util';
 import path from 'path';
 import fs from 'fs';
+import net from 'net';
+import dns from 'dns';
 
 const execFileAsync = promisify(execFile);
 
@@ -58,6 +60,59 @@ export async function POST(req: NextRequest) {
     }
 
     const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
+
+    // SSRF Mitigation: Validate URL before making requests
+    try {
+      const parsedUrl = new URL(targetUrl);
+      if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+        throw new Error('Invalid protocol');
+      }
+      const hostname = parsedUrl.hostname.replace(/^\[|\]$/g, '').toLowerCase();
+
+      if (hostname === 'localhost' || hostname.endsWith('.local')) {
+        throw new Error('Localhost/Internal domains not allowed');
+      }
+
+      // Resolve hostname to IP to prevent DNS rebinding or custom domains pointing to local IPs
+      let resolvedIp = hostname;
+      if (!net.isIP(hostname)) {
+        const lookupResult = await dns.promises.lookup(hostname);
+        resolvedIp = lookupResult.address;
+      }
+
+      if (net.isIPv4(resolvedIp)) {
+        const parts = resolvedIp.split('.').map(Number);
+        if (
+          parts[0] === 10 ||
+          (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) ||
+          (parts[0] === 192 && parts[1] === 168) ||
+          parts[0] === 127 ||
+          (parts[0] === 169 && parts[1] === 254) ||
+          parts[0] === 0
+        ) {
+          throw new Error('Private IPv4 ranges not allowed');
+        }
+      }
+      if (net.isIPv6(resolvedIp)) {
+        if (
+          resolvedIp === '::1' ||
+          resolvedIp.startsWith('fc') ||
+          resolvedIp.startsWith('fd') ||
+          resolvedIp.startsWith('fe8') ||
+          resolvedIp.startsWith('fe9') ||
+          resolvedIp.startsWith('fea') ||
+          resolvedIp.startsWith('feb')
+        ) {
+          throw new Error('Private IPv6 ranges not allowed');
+        }
+      }
+    } catch (e: unknown) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid or unsafe URL provided' },
+        { status: 400 }
+      );
+    }
+
     const logs: string[] = [`[SYSTEM] Initializing Website Analysis for: ${targetUrl}`];
     let extractedEmail = '';
 
