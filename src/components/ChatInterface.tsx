@@ -108,7 +108,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
 
       {/* Scrollable thread */}
       <div className="gai-chat-scroll">
-        <div className="gai-chat-inner">
+        <div className="gai-chat-inner" role="log" aria-live="polite">
           {/* Initial prompt bubble */}
           <div className="gai-bubble-row">
             <div className="gai-bubble gai-bubble-ai">
@@ -121,7 +121,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
           ))}
 
           {isBusy && (
-            <div className="gai-bubble-row">
+            <div className="gai-bubble-row" role="status" aria-live="polite">
               <div className="gai-bubble gai-bubble-ai gai-typing">
                 <span key="a" /><span key="b" /><span key="c" />
               </div>
@@ -129,7 +129,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
           )}
 
           {error && (
-            <div className="gai-error">{errorMessage}</div>
+            <div className="gai-error" role="alert" aria-live="assertive">{errorMessage}</div>
           )}
 
           {showLeadCard && !leadDismissed && firstMessage && (
