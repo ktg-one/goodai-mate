@@ -5,8 +5,39 @@ import { execFile } from 'child_process';
 import { promisify } from 'util';
 import path from 'path';
 import fs from 'fs';
+import dns from 'dns';
+import net from 'net';
 
 const execFileAsync = promisify(execFile);
+
+function isPrivateIP(ip: string): boolean {
+  if (!net.isIP(ip)) return false;
+
+  // Check IPv4
+  if (net.isIPv4(ip)) {
+    const parts = ip.split('.').map(Number);
+    return (
+      parts[0] === 10 ||
+      (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) ||
+      (parts[0] === 192 && parts[1] === 168) ||
+      parts[0] === 127 ||
+      parts[0] === 0 ||
+      parts[0] === 169 // Link-local
+    );
+  }
+
+  // Check IPv6
+  if (net.isIPv6(ip)) {
+    return (
+      ip === '::1' ||
+      ip.startsWith('fe80:') ||
+      ip.startsWith('fc00:') ||
+      ip.startsWith('fd00:')
+    );
+  }
+
+  return false;
+}
 
 // Helper to resolve GWS CLI path dynamically
 function getGwsCliPath(): string {
@@ -60,6 +91,42 @@ export async function POST(req: NextRequest) {
     const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
     const logs: string[] = [`[SYSTEM] Initializing Website Analysis for: ${targetUrl}`];
     let extractedEmail = '';
+
+    // Security: Validate URL for SSRF protection
+    try {
+      const parsedUrl = new URL(targetUrl);
+
+      // Allow only http and https
+      if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+        return NextResponse.json(
+          { success: false, error: 'Invalid URL protocol' },
+          { status: 400 }
+        );
+      }
+
+      // Reject internal hostnames
+      const hostname = parsedUrl.hostname.toLowerCase();
+      if (hostname === 'localhost' || hostname.endsWith('.local')) {
+        return NextResponse.json(
+          { success: false, error: 'Internal requests are not allowed' },
+          { status: 400 }
+        );
+      }
+
+      // DNS lookup to prevent DNS rebinding / A-record spoofing
+      const lookupResult = await dns.promises.lookup(hostname);
+      if (isPrivateIP(lookupResult.address)) {
+        return NextResponse.json(
+          { success: false, error: 'Internal requests are not allowed' },
+          { status: 400 }
+        );
+      }
+    } catch (error) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid URL provided' },
+        { status: 400 }
+      );
+    }
 
     // 1. Scrape Website
     let scrapedText = '';

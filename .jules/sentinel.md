@@ -1,0 +1,4 @@
+## 2024-07-19 - SSRF Vulnerability in Website Analyzer
+**Vulnerability:** The website analyzer endpoint (`/api/analyze-website/route.ts`) accepted a user-provided URL and fetched it via `fetch()` without validating the destination. This allowed Server-Side Request Forgery (SSRF), enabling a user to make the server send requests to internal services (e.g., `localhost`, AWS metadata endpoint, or private network IPs).
+**Learning:** Even if a URL looks like an external website, DNS rebinding or custom domains pointing to `127.0.0.1` can bypass basic string checks.
+**Prevention:** Always parse user-provided URLs using `new URL()`, reject non-HTTP/HTTPS protocols, block explicit internal hostnames, and crucially, resolve the hostname to an IP address using `dns.promises.lookup()` and validate the resolved IP against private IPv4/IPv6 ranges using `net.isIP` before executing the request.
