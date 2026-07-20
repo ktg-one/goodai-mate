@@ -58,6 +58,16 @@ export async function POST(req: NextRequest) {
     }
 
     const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
+
+    // Validate URL against Server-Side Request Forgery (SSRF)
+    const { isSafeUrl } = await import('@/lib/urlValidator');
+    if (!(await isSafeUrl(targetUrl))) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid or forbidden URL' },
+        { status: 403 }
+      );
+    }
+
     const logs: string[] = [`[SYSTEM] Initializing Website Analysis for: ${targetUrl}`];
     let extractedEmail = '';
 
