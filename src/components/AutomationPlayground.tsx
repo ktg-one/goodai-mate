@@ -128,6 +128,7 @@ export default function AutomationPlayground() {
               placeholder="Demo Contact Name"
               aria-label="Demo Contact Name"
               required
+              autoComplete="name"
               value={name}
               onChange={e => setName(e.target.value)}
             />
@@ -135,14 +136,17 @@ export default function AutomationPlayground() {
               className="gai-input w-full"
               placeholder="Business Name (Optional)"
               aria-label="Business Name (Optional)"
+              autoComplete="organization"
               value={business}
               onChange={e => setBusiness(e.target.value)}
             />
             <input
               className="gai-input w-full"
+              type="tel"
               placeholder="Phone Number"
               aria-label="Phone Number"
               required
+              autoComplete="tel"
               value={phone}
               onChange={e => setPhone(e.target.value)}
             />
@@ -151,13 +155,16 @@ export default function AutomationPlayground() {
               placeholder="Email (Required for Gmail demo)"
               aria-label="Email (Required for Gmail demo)"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
             />
             <input
               className="gai-input w-full"
+              type="url"
               placeholder="n8n Webhook URL (Optional)"
               aria-label="n8n Webhook URL (Optional)"
+              autoComplete="url"
               value={n8nUrl}
               onChange={e => setN8nUrl(e.target.value)}
             />
