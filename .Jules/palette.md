@@ -9,3 +9,7 @@
 ## 2026-07-14 - Enhanced OutboundCallCard accessibility
 **Learning:** Custom segmented controls (like the agent selector) using `role="group"` and `aria-pressed` do not correctly convey radio button semantics to screen readers. Furthermore, dynamic elements like terminal logs and custom success/error overlays must explicitly declare `role="log"` or `role="status"/`role="alert"` with `aria-live` attributes to ensure updates are announced dynamically.
 **Action:** Always use `role="radiogroup"`, `role="radio"`, and `aria-checked` for grouped mutually-exclusive buttons. Always add `role="log" aria-live="polite"` to terminal-style text output containers and `role="status"` or `role="alert"` for dynamically appearing custom feedback overlays.
+
+## 2025-01-22 - Improved mobile input semantics
+**Learning:** For custom styled inputs (like `.gai-input`), explicitly declaring `type="tel"`, `type="email"`, and `type="url"` is crucial for triggering the correct mobile software keyboards. Additionally, adding relevant `autoComplete` attributes (like `name`, `organization`, `tel`, `email`, `url`) significantly improves the UX by allowing the browser's native autofill functionality to easily map to the inputs, reducing friction on lead generation forms.
+**Action:** When creating or updating custom inputs for user data, always verify and explicitly set the `type` and `autoComplete` attributes corresponding to the intended data field.
