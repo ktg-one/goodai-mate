@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
+import { isSafeUrl } from '@/lib/ssrf';
 import path from 'path';
 import fs from 'fs';
 
@@ -242,6 +243,17 @@ export async function POST(req: NextRequest) {
     if (actions.n8n) {
       logs.push('Executing: n8n Webhook Pipeline Trigger...');
       const targetUrl = n8nUrl?.trim() || process.env.N8N_DEMO_WEBHOOK_URL || process.env.N8N_CALL_WEBHOOK_URL || 'http://localhost:5678/webhook/goodai-demo';
+
+      // SSRF Protection for custom webhooks
+      if (n8nUrl?.trim()) {
+        const isSafe = await isSafeUrl(targetUrl);
+        if (!isSafe) {
+          logs.push(`[SECURITY] Blocked webhook execution: target URL resolves to an internal network address or invalid domain.`);
+          results.n8nStatus = 'Blocked (SSRF Protection)';
+          return NextResponse.json({ success: true, logs, results });
+        }
+      }
+
       logs.push(`Sending lead payload to webhook URL: ${targetUrl}`);
       
       try {
