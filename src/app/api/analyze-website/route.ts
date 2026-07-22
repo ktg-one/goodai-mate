@@ -5,6 +5,7 @@ import { execFile } from 'child_process';
 import { promisify } from 'util';
 import path from 'path';
 import fs from 'fs';
+import { isSafeUrl } from '@/lib/ssrf';
 
 const execFileAsync = promisify(execFile);
 
@@ -58,6 +59,15 @@ export async function POST(req: NextRequest) {
     }
 
     const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
+
+    // SSRF Protection: Validate targetUrl before fetching
+    if (!(await isSafeUrl(targetUrl))) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid or restricted website URL' },
+        { status: 400 }
+      );
+    }
+
     const logs: string[] = [`[SYSTEM] Initializing Website Analysis for: ${targetUrl}`];
     let extractedEmail = '';
 
