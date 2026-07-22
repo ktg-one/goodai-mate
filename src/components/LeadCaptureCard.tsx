@@ -118,16 +118,20 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
           <div className="gai-leadcard-row">
             <input
               className="gai-input"
+              type="text"
               placeholder="Your name"
               aria-label="Your name"
+              autoComplete="name"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
             <input
               className="gai-input"
+              type="text"
               placeholder="Business name"
               aria-label="Business name"
+              autoComplete="organization"
               value={business}
               onChange={(e) => setBusiness(e.target.value)}
             />
@@ -135,16 +139,20 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
           <div className="gai-leadcard-row">
             <input
               className="gai-input"
+              type="tel"
               placeholder="Phone"
               aria-label="Phone"
+              autoComplete="tel"
               required
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
             <input
               className="gai-input"
+              type="email"
               placeholder="Email"
               aria-label="Email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
