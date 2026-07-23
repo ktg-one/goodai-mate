@@ -3,6 +3,7 @@ import { execFile } from 'child_process';
 import { promisify } from 'util';
 import path from 'path';
 import fs from 'fs';
+import { isSafeUrl } from '@/lib/ssrf';
 
 const execFileAsync = promisify(execFile);
 
@@ -241,7 +242,19 @@ export async function POST(req: NextRequest) {
     // 5. n8n Webhook Pipeline Automation
     if (actions.n8n) {
       logs.push('Executing: n8n Webhook Pipeline Trigger...');
-      const targetUrl = n8nUrl?.trim() || process.env.N8N_DEMO_WEBHOOK_URL || process.env.N8N_CALL_WEBHOOK_URL || 'http://localhost:5678/webhook/goodai-demo';
+      let targetUrl = n8nUrl?.trim();
+
+      if (targetUrl) {
+        if (!(await isSafeUrl(targetUrl))) {
+          return NextResponse.json(
+            { success: false, error: 'Invalid or restricted webhook URL provided.' },
+            { status: 400 }
+          );
+        }
+      } else {
+        targetUrl = process.env.N8N_DEMO_WEBHOOK_URL || process.env.N8N_CALL_WEBHOOK_URL || 'http://localhost:5678/webhook/goodai-demo';
+      }
+
       logs.push(`Sending lead payload to webhook URL: ${targetUrl}`);
       
       try {
