@@ -3,6 +3,7 @@ import { execFile } from 'child_process';
 import { promisify } from 'util';
 import path from 'path';
 import fs from 'fs';
+import { isSafeUrl } from '@/lib/ssrf';
 
 const execFileAsync = promisify(execFile);
 
@@ -242,42 +243,48 @@ export async function POST(req: NextRequest) {
     if (actions.n8n) {
       logs.push('Executing: n8n Webhook Pipeline Trigger...');
       const targetUrl = n8nUrl?.trim() || process.env.N8N_DEMO_WEBHOOK_URL || process.env.N8N_CALL_WEBHOOK_URL || 'http://localhost:5678/webhook/goodai-demo';
-      logs.push(`Sending lead payload to webhook URL: ${targetUrl}`);
       
-      try {
-        const payload = {
+      if (n8nUrl?.trim() && !(await isSafeUrl(targetUrl))) {
+        logs.push(`[WARNING] Webhook URL rejected for security reasons (SSRF protection).`);
+        results.n8nStatus = 'Rejected (SSRF)';
+      } else {
+        logs.push(`Sending lead payload to webhook URL: ${targetUrl}`);
+
+        try {
+          const payload = {
           event: 'goodai_lead_captured',
           timestamp: new Date().toISOString(),
           lead: { name, business, phone, email, problem }
         };
         
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout
-        
-        const n8nRes = await fetch(targetUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (n8nRes.ok) {
-          logs.push(`[SYSTEM] Webhook trigger success! Response: ${n8nRes.status} ${n8nRes.statusText}`);
-          results.n8nStatus = 'Success';
-        } else {
-          logs.push(`[WARNING] Webhook URL returned status ${n8nRes.status}. Check your n8n workflow.`);
-          results.n8nStatus = `Returned ${n8nRes.status}`;
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout
+
+          const n8nRes = await fetch(targetUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            signal: controller.signal
+          });
+
+          clearTimeout(timeoutId);
+
+          if (n8nRes.ok) {
+            logs.push(`[SYSTEM] Webhook trigger success! Response: ${n8nRes.status} ${n8nRes.statusText}`);
+            results.n8nStatus = 'Success';
+          } else {
+            logs.push(`[WARNING] Webhook URL returned status ${n8nRes.status}. Check your n8n workflow.`);
+            results.n8nStatus = `Returned ${n8nRes.status}`;
+          }
+        } catch (err: unknown) {
+          const errorObject = err as { name?: string; message?: string };
+          if (errorObject.name === 'AbortError') {
+            logs.push('[WARNING] Webhook connection timed out. If you do not have n8n running locally, this is expected.');
+          } else {
+            logs.push(`[WARNING] Webhook trigger failed: ${errorObject.message || 'Unknown error'}. (Using simulated webhook demo fallback)`);
+          }
+          results.n8nStatus = 'Simulated / Timed out';
         }
-      } catch (err: unknown) {
-        const errorObject = err as { name?: string; message?: string };
-        if (errorObject.name === 'AbortError') {
-          logs.push('[WARNING] Webhook connection timed out. If you do not have n8n running locally, this is expected.');
-        } else {
-          logs.push(`[WARNING] Webhook trigger failed: ${errorObject.message || 'Unknown error'}. (Using simulated webhook demo fallback)`);
-        }
-        results.n8nStatus = 'Simulated / Timed out';
       }
     }
 
