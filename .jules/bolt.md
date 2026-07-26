@@ -33,3 +33,6 @@
 ## 2026-07-13 - [Package Manager Strictness] Dependency Management during Fixes
 **Learning:** When executing `pnpm install --config.engine-strict=false` to resolve local linting environment errors (like missing `@eslint/eslintrc`), the package manager will modify `package.json` and generate `pnpm-lock.yaml`. If these auto-generated modifications are blindly staged and committed, it violates the strict instruction to *never* modify `package.json` or `tsconfig.json` without explicit instruction, causing the PR to fail review.
 **Action:** Always run `git status` after executing package manager commands for local setup. Use `git checkout -- package.json` and delete the `pnpm-lock.yaml` file (or simply do not stage them) to ensure only the intended performance optimization files are committed.
+## 2025-02-12 - Extracted Automation Playground Form to prevent O(N) Array Iteration Re-rendering
+**Learning:** Found a case in a complex component (\`AutomationPlayground.tsx\`) where a large form with controlled inputs was causing the entire component to re-render on every keystroke, including its terminal logs and results UI, which is inefficient.
+**Action:** Extract text inputs and form state into a separate, memoized child component (\`AutomationInputForm\`) and pass the final data back up via an \`onSubmit\` callback to isolate re-renders and keep typing snappy.
