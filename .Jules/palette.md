@@ -13,3 +13,7 @@
 ## 2026-07-22 - Explicit Input Types and AutoComplete for Custom Form Inputs
 **Learning:** For custom form inputs (e.g., using the `gai-input` class), omitting explicit `type` and `autoComplete` attributes results in poor UX on mobile devices, as it fails to trigger the appropriate virtual keyboards (e.g., numeric for phone, email for email) and prevents native browser autofill, increasing user friction.
 **Action:** Always explicitly declare the correct `type` attribute (`tel`, `email`, `url`, `text`) and include relevant `autoComplete` attributes (`name`, `organization`, `tel`, `email`, `url`) on form inputs to ensure proper keyboard selection and enable autofill.
+
+## 2026-07-26 - Add ARIA live regions to chat interfaces
+**Learning:** Chat interfaces with dynamically appended streaming messages (like Vercel AI SDK) do not announce updates to screen readers by default. Typing indicators and error messages also lack semantic context.
+**Action:** Always wrap the chat thread container with `role="log"` and `aria-live="polite"`. Apply `role="status"` to typing indicators and `role="alert" aria-live="assertive"` to error messages to ensure screen readers announce these critical conversational updates immediately.
