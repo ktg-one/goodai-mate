@@ -3,6 +3,7 @@ import { execFile } from 'child_process';
 import { promisify } from 'util';
 import path from 'path';
 import fs from 'fs';
+import { isSafeUrl } from '@/lib/ssrf';
 
 const execFileAsync = promisify(execFile);
 
@@ -61,6 +62,16 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as AutomationPayload;
     const { name, business, phone, email, problem, actions, n8nUrl } = body;
+
+    // SSRF Protection: Validate user-provided webhook URL before executing any actions
+    if (n8nUrl && n8nUrl.trim()) {
+      if (!(await isSafeUrl(n8nUrl.trim()))) {
+        return NextResponse.json(
+          { success: false, error: 'Invalid or restricted webhook URL' },
+          { status: 400 }
+        );
+      }
+    }
     
     const logs: string[] = [];
     const results: Record<string, string> = {};
