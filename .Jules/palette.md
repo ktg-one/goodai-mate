@@ -13,3 +13,7 @@
 ## 2026-07-22 - Explicit Input Types and AutoComplete for Custom Form Inputs
 **Learning:** For custom form inputs (e.g., using the `gai-input` class), omitting explicit `type` and `autoComplete` attributes results in poor UX on mobile devices, as it fails to trigger the appropriate virtual keyboards (e.g., numeric for phone, email for email) and prevents native browser autofill, increasing user friction.
 **Action:** Always explicitly declare the correct `type` attribute (`tel`, `email`, `url`, `text`) and include relevant `autoComplete` attributes (`name`, `organization`, `tel`, `email`, `url`) on form inputs to ensure proper keyboard selection and enable autofill.
+
+## 2026-07-25 - Improve Disabled Checkbox UX with Tooltips and Wrapper Styling
+**Learning:** When styling custom checkboxes via a wrapper label (e.g., `has-[:focus-visible]`), the wrapper itself doesn't automatically inherit or convey the disabled state of its child input, leaving active cursors and no explanation for why it is disabled.
+**Action:** Always apply `has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50` to custom checkbox/radio wrappers to ensure visual consistency, and add a `title` attribute to the wrapper when a control is dynamically disabled to provide a native tooltip explaining the reason to the user.
