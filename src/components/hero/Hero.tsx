@@ -159,8 +159,7 @@ export function Hero() {
             WORDMARK — using Fraunces from the design (public/fonts/ matching public/fonts/ verbatim).
             Brand treatment follows the design system.
           */}
-          <img src="/company-assets/brand-reference.png" alt="Good'ai" className="h-12 w-auto object-contain" />ai
-          </span>
+          <img src="/company-assets/brand-reference.png" alt="Good'ai" className="h-12 w-auto object-contain" />
         </div>
 
         <nav className="hidden md:flex items-center border-2 border-[var(--ink)] bg-paper-raised shadow-[3px_3px_0_var(--ink)]">
