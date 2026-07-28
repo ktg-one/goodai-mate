@@ -75,7 +75,8 @@ jobs:
           test -n "$VERCEL_PROJECT_ID" || (echo "Missing VERCEL_PROJECT_ID" && exit 1)
 
       - name: Install Vercel CLI
-        run: npm install --global vercel@latest
+        # Pin Vercel CLI to a major version to avoid unexpected breakages from new major releases
+        run: npm install --global vercel@39
 
       - name: Pull Vercel project settings
         env:
