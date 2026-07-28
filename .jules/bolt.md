@@ -33,3 +33,7 @@
 ## 2026-07-13 - [Package Manager Strictness] Dependency Management during Fixes
 **Learning:** When executing `pnpm install --config.engine-strict=false` to resolve local linting environment errors (like missing `@eslint/eslintrc`), the package manager will modify `package.json` and generate `pnpm-lock.yaml`. If these auto-generated modifications are blindly staged and committed, it violates the strict instruction to *never* modify `package.json` or `tsconfig.json` without explicit instruction, causing the PR to fail review.
 **Action:** Always run `git status` after executing package manager commands for local setup. Use `git checkout -- package.json` and delete the `pnpm-lock.yaml` file (or simply do not stage them) to ensure only the intended performance optimization files are committed.
+
+## 2025-02-13 - CI Lockfile Syncing
+**Learning:** The GitHub actions CI pipelines rely on pnpm/action-setup which requires a valid `pnpm-lock.yaml` file. Previous runs were using `npm ci` and failing because there was no `package-lock.json` kept in sync with the package.json file.
+**Action:** Commit `pnpm-lock.yaml` to source control to fix the action setup.
