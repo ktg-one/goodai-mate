@@ -5,3 +5,7 @@
 ## 2024-08-01 - Focus Rings on Wrapper Elements
 **Learning:** Custom UI patterns like brutalist checklist inputs and segmented buttons often wrap native hidden/unstyled inputs in styled containers (e.g., using Tailwind). By default, the native focus indicator appears on the unstyled inner element, which looks broken, while the stylized container provides no visual keyboard focus feedback.
 **Action:** When implementing custom interactive wrappers around native inputs, apply `outline-none focus-visible:outline-none` to the native input to hide the broken focus ring, and use CSS (like `has-[:focus-visible]:ring-[var(--brand)]` or passing `aria-pressed` states up) to trigger focus styles on the parent container. Additionally, ensure button groups or tabs use `role="group"` and `aria-pressed` to correctly announce their active state to screen readers.
+
+## 2024-12-07 - Chat Thread ARIA Updates
+**Learning:** For chat interfaces (like Vercel AI SDK chat flows) where conversational text flows continuously and state updates rapidly (e.g. typing, incoming streaming tokens, submission errors), screen readers fail to announce these changes without explicit ARIA roles.
+**Action:** Always wrap the incoming chat stream container with `role="log"` and `aria-live="polite"`. Add `role="status"` to typing indicators and `role="alert" aria-live="assertive"` to chat submission error messages.
