@@ -175,9 +175,14 @@ export async function POST(req: NextRequest) {
       logs.push('Executing: gws gmail users messages send...');
       const timestamp = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Perth' });
       
+      // 🛡️ Sentinel: Sanitize user inputs to prevent Email Header Injection (CRLF)
+      const sanitizeHeader = (val: unknown) => String(val || '').replace(/[\r\n]/g, '');
+      const safeEmail = sanitizeHeader(email);
+      const safeName = sanitizeHeader(name);
+
       const rawEmail = 
-        `To: ${email}\r\n` +
-        `Subject: Good'ai Automation Received - Hello ${name}\r\n` +
+        `To: ${safeEmail}\r\n` +
+        `Subject: Good'ai Automation Received - Hello ${safeName}\r\n` +
         `Content-Type: text/plain; charset="utf-8"\r\n` +
         `\r\n` +
         `Hi ${name},\r\n\r\n` +

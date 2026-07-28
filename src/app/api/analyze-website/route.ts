@@ -200,9 +200,13 @@ Only output the raw JSON object. Do not wrap in markdown code blocks or add addi
       logs.push(`[GWS] Sending website audit lead details to: ${destination}...`);
       const timestamp = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Perth' });
       
+      // 🛡️ Sentinel: Sanitize AI output to prevent Email Header Injection (CRLF) if output is manipulated
+      const sanitizeHeader = (val: unknown) => String(val || '').replace(/[\r\n]/g, '');
+      const safeBusinessType = sanitizeHeader(analysisResult.businessType || '');
+
       const rawEmail = 
         `To: ${destination}\r\n` +
-        `Subject: Good'ai Web Audit Lead - ${analysisResult.businessType}\r\n` +
+        `Subject: Good'ai Web Audit Lead - ${safeBusinessType}\r\n` +
         `Content-Type: text/plain; charset="utf-8"\r\n` +
         `\r\n` +
         `Good'ai Team / Darl,\r\n\r\n` +
