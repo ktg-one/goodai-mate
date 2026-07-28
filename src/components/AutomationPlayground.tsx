@@ -4,7 +4,7 @@ import { useState, useRef, useMemo } from 'react';
 import { Sparkles, Terminal, FileText, Calendar, Mail, FileSpreadsheet, Check, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
 
-const CHECKBOX_LABEL_CLASSES = "flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--coral)]";
+const CHECKBOX_LABEL_CLASSES = "flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--coral)] has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50";
 const CHECKBOX_INPUT_CLASSES = "accent-[var(--coral)] outline-none focus-visible:outline-none";
 
 export default function AutomationPlayground() {
@@ -125,6 +125,8 @@ export default function AutomationPlayground() {
             <span className="sticker-label sticker-label-navy">CONTACT</span>
             <input
               className="gai-input w-full"
+              type="text"
+              autoComplete="name"
               placeholder="Demo Contact Name"
               aria-label="Demo Contact Name"
               required
@@ -133,6 +135,8 @@ export default function AutomationPlayground() {
             />
             <input
               className="gai-input w-full"
+              type="text"
+              autoComplete="organization"
               placeholder="Business Name (Optional)"
               aria-label="Business Name (Optional)"
               value={business}
@@ -140,6 +144,8 @@ export default function AutomationPlayground() {
             />
             <input
               className="gai-input w-full"
+              type="tel"
+              autoComplete="tel"
               placeholder="Phone Number"
               aria-label="Phone Number"
               required
@@ -151,11 +157,14 @@ export default function AutomationPlayground() {
               placeholder="Email (Required for Gmail demo)"
               aria-label="Email (Required for Gmail demo)"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
             />
             <input
               className="gai-input w-full"
+              type="url"
+              autoComplete="url"
               placeholder="n8n Webhook URL (Optional)"
               aria-label="n8n Webhook URL (Optional)"
               value={n8nUrl}
@@ -199,7 +208,7 @@ export default function AutomationPlayground() {
                 <span>Generate Doc</span>
               </label>
               
-              <label className={CHECKBOX_LABEL_CLASSES}>
+              <label className={CHECKBOX_LABEL_CLASSES} title={!email ? 'Email address required' : undefined}>
                 <input
                   type="checkbox"
                   checked={actions.emailNotification}
@@ -207,7 +216,7 @@ export default function AutomationPlayground() {
                   disabled={!email}
                   className={CHECKBOX_INPUT_CLASSES}
                 />
-                <span className={!email ? 'opacity-40' : ''}>Gmail Send</span>
+                <span>Gmail Send</span>
               </label>
               
               <label className={CHECKBOX_LABEL_CLASSES}>
