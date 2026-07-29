@@ -18,6 +18,11 @@ export async function POST(req: NextRequest) {
 
     const effectiveVoiceId = voiceId || process.env.ELEVEN_DEFAULT_VOICE || 'vr54y8Xovf4AEnfNrGqH';
 
+    // 🛡️ Sentinel: Validate voiceId to prevent path traversal in the ElevenLabs API URL
+    if (typeof effectiveVoiceId !== 'string' || !/^[a-zA-Z0-9_-]+$/.test(effectiveVoiceId)) {
+      return new Response(JSON.stringify({ error: 'Invalid voice ID format' }), { status: 400 });
+    }
+
     // Use the streaming endpoint with latency optimization query parameter
     const url = `https://api.elevenlabs.io/v1/text-to-speech/${effectiveVoiceId}/stream?optimize_streaming_latency=4`;
 
