@@ -142,7 +142,7 @@ export default function WebsiteAnalyzer() {
             <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--ink)]/60 flex items-center gap-1.5">
               <Terminal size={12} /> Crawl logs
             </span>
-            <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-xs h-[120px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
+            <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-xs h-[120px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]" role="log" aria-live="polite">
               <div className="space-y-1">
                 {/* ⚡ Bolt: Memoize expensive array mapping
                     This array map is in the same component as a controlled input.
@@ -198,7 +198,7 @@ export default function WebsiteAnalyzer() {
         )}
 
         {error && (
-          <div className="mt-5 border-2 border-[var(--ink)] bg-[var(--warn)]/10 text-[var(--warn)] p-3 rounded-xs flex items-start gap-2 text-xs font-mono">
+          <div className="mt-5 border-2 border-[var(--ink)] bg-[var(--warn)]/10 text-[var(--warn)] p-3 rounded-xs flex items-start gap-2 text-xs font-mono" role="alert" aria-live="assertive">
             <AlertCircle size={16} className="shrink-0" />
             <div>
               <strong>Audit failed:</strong>
