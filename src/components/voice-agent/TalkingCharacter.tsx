@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { CHARACTER_ASSETS } from '@/lib/brand-assets';
 
 interface TalkingCharacterProps {
@@ -17,16 +17,32 @@ export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterPr
   const [frame, setFrame] = useState(1);
   const animationRef = useRef<number>(null);
   const statusRef = useRef(status);
+  const frameRef = useRef(1);
+
+  // Only touches React state when the frame actually changes, so the rAF
+  // loop below doesn't force a re-render (VDOM diff + <img> src decode) on
+  // every tick while speaking/listening.
+  const applyFrame = useCallback((next: number) => {
+    if (frameRef.current !== next) {
+      frameRef.current = next;
+      setFrame(next);
+    }
+  }, []);
 
   useEffect(() => {
     statusRef.current = status;
   }, [status]);
 
+  const applyFrameRef = useRef(applyFrame);
+  useEffect(() => {
+    applyFrameRef.current = applyFrame;
+  }, [applyFrame]);
+
   useEffect(() => {
     // If not active, reset to closed mouth (Frame 1)
     if (!analyser || (status !== 'speaking' && status !== 'listening')) {
       const timer = setTimeout(() => {
-        setFrame(1);
+        applyFrameRef.current(1);
       }, 0);
       return () => clearTimeout(timer);
     }
@@ -61,7 +77,7 @@ export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterPr
         } else {
           targetFrame = 1;
         }
-        setFrame(targetFrame);
+        applyFrameRef.current(targetFrame);
       }
       // Handle listening reaction (slight micro-jitter to show alertness)
       else if (statusRef.current === 'listening') {
@@ -72,9 +88,9 @@ export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterPr
         
         // Slight alert response if user is making sound
         if (avg > 15) {
-          setFrame(now % 300 < 150 ? 2 : 1);
+          applyFrameRef.current(now % 300 < 150 ? 2 : 1);
         } else {
-          setFrame(1);
+          applyFrameRef.current(1);
         }
       }
 
@@ -96,7 +112,7 @@ export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterPr
 
     const interval = setInterval(() => {
       // Toggle between closed mouth and tiny open mouth to simulate humming/thinking
-      setFrame(prev => (prev === 1 ? 2 : 1));
+      applyFrameRef.current(frameRef.current === 1 ? 2 : 1);
     }, 450);
 
     return () => clearInterval(interval);
