@@ -647,6 +647,7 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
                     <input
                       type="text"
                       placeholder="Voice ID…"
+                      aria-label="Voice ID…"
                       value={customVoiceId}
                       onChange={(e) => {
                         const val = e.target.value.trim();
