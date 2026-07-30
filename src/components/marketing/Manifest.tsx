@@ -22,11 +22,11 @@ export default function Manifest() {
   } as const;
 
   return (
-    <section ref={sectionRef} className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+    <section ref={sectionRef} className="py-20 md:py-28 border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)]">
       {/* Ribbon bridge above owned by HomeClient GSAP mailBoard */}
 
       <div className="mx-auto max-w-5xl px-6 text-center">
-        <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">THE PROMISE</span>
+        <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--good-coral)]">THE PROMISE</span>
 
         <motion.h2
           className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-3 mb-8"
@@ -39,7 +39,7 @@ export default function Manifest() {
         </motion.h2>
 
         <motion.div
-          className="max-w-2xl mx-auto text-xl text-[var(--ink)]/80 space-y-4"
+          className="max-w-2xl mx-auto text-xl text-[var(--good-ink)]/80 space-y-4"
           variants={manifestVariants}
           initial="hidden"
           whileInView="visible"
@@ -53,7 +53,7 @@ export default function Manifest() {
           <p>
             We listen. We sort the <span className="hl-red">boring stuff</span>. You run the business you actually wanted.
           </p>
-          <p className="font-medium text-[var(--ink)]">
+          <p className="font-medium text-[var(--good-ink)]">
             Knock off early. Spend time with the kids.<br />We&apos;ll handle the systems.
           </p>
         </motion.div>

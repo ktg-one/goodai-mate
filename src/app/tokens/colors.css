@@ -1,0 +1,26 @@
+:root {
+  /* base palette — four colors, no more */
+  --good-ink: #202b3d;
+  --good-cloud: #d9d9d9;
+  --good-coral: #ff6f61;
+  --good-teal: #1cabb0;
+
+  /* supporting neutrals (text on cloud, captions on ink) */
+  --good-slate: #4a576b;
+  --good-steel: #8fa0b8;
+  --good-white: #ffffff;
+
+  /* semantic aliases */
+  --surface-page: var(--good-ink);
+  --surface-card: var(--good-cloud);
+  --surface-accent: var(--good-coral);
+  --surface-info: var(--good-teal);
+
+  --text-on-dark: var(--good-cloud);
+  --text-on-light: var(--good-ink);
+  --text-muted: var(--good-slate);
+  --text-caption: var(--good-steel);
+
+  --border-hairline: rgba(217, 217, 217, 0.2);
+  --shadow-tint: 32, 43, 61; /* rgb triplet of --good-ink, for building ink-tinted shadows */
+}
