@@ -16,6 +16,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // 🛡️ Sentinel: Validate user-provided voiceId to prevent path traversal and API abuse
+    if (voiceId && !/^[a-zA-Z0-9_-]+$/.test(voiceId)) {
+      return new Response(JSON.stringify({ error: 'Invalid voiceId format' }), { status: 400 });
+    }
+
     const effectiveVoiceId = voiceId || process.env.ELEVEN_DEFAULT_VOICE || 'vr54y8Xovf4AEnfNrGqH';
 
     // Use the streaming endpoint with latency optimization query parameter

@@ -12,3 +12,8 @@
 **Vulnerability:** User-controlled inputs (`name`, `email`) and AI-generated text (`businessType`) were interpolated directly into raw email headers (`To`, `Subject`) before base64Url encoding for the Gmail API. An attacker could inject CRLF (`\r\n`) sequences to append arbitrary headers (like `Bcc:` or `Cc:`) or manipulate the email body.
 **Learning:** Constructing raw RFC 2822 emails manually via string concatenation is dangerous if any of the interpolated values contain newlines, as it allows header injection.
 **Prevention:** Always sanitize variables that are inserted into email headers by stripping carriage returns and newlines (e.g., `.replace(/[\r\n]/g, '')`), or use a dedicated email building library rather than raw string concatenation.
+
+## 2025-02-14 - Path Traversal & API Abuse in TTS Endpoint
+**Vulnerability:** The TTS route (`src/app/api/tts/route.ts`) constructed the external ElevenLabs API URL by interpolating a user-provided `voiceId` without validation. A malicious user could supply a crafted string (e.g., `../../some-other-endpoint`) leading to Path Traversal against the ElevenLabs API, or abuse the server's configured API key for unintended requests.
+**Learning:** Never interpolate unvalidated user inputs directly into external API request URLs, especially when server-side credentials are used. This can result in unauthorized API usage or exploiting unexpected downstream endpoints.
+**Prevention:** Always strictly validate user inputs meant to be part of an API path (like `voiceId`) against a strict regex whitelist (e.g., `/^[a-zA-Z0-9_-]+$/`) before making the outbound request.
