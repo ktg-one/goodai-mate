@@ -131,8 +131,8 @@
   /* ---------------------------------------------------------
      TYPE — Families
      --------------------------------------------------------- */
-  --font-sans:    "DM Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Fraunces", Georgia, serif;
+  --font-sans:    var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-instrument), Georgia, serif;
   --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* ---------------------------------------------------------
