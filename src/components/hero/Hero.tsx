@@ -143,7 +143,7 @@ export function Hero() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--good-cloud)] p-6 md:p-12 relative font-sans overflow-hidden">
+    <div className="flex min-h-screen flex-col bg-[var(--paper)] p-6 md:p-12 relative font-sans overflow-hidden">
       {/* Grain */}
       <div
         className="pointer-events-none fixed inset-0 z-50 opacity-40"
@@ -153,7 +153,7 @@ export function Hero() {
         }}
       />
 
-      <header className="flex items-center justify-between relative z-20 mb-8 md:mb-16 pb-6 border-b-4 border-[var(--good-ink)]">
+      <header className="flex items-center justify-between relative z-20 mb-8 md:mb-16 pb-6 border-b-4 border-[var(--ink)]">
         <div className="flex items-center">
           {/* 
             WORDMARK — using Fraunces from the design (public/fonts/ matching public/fonts/ verbatim).
@@ -162,22 +162,22 @@ export function Hero() {
           <img src="/company-assets/brand-reference.png" alt="Good'ai" className="h-12 w-auto object-contain" />
         </div>
 
-        <nav className="hidden md:flex items-center border-2 border-[var(--good-ink)] bg-paper-raised shadow-[3px_3px_0_var(--good-ink)]">
+        <nav className="hidden md:flex items-center border-2 border-[var(--ink)] bg-paper-raised shadow-[3px_3px_0_var(--ink)]">
           <a
             href="#workflows"
-            className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--good-cloud)] bg-[var(--good-ink)] px-6 py-3"
+            className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--paper)] bg-[var(--ink)] px-6 py-3"
           >
             Workflows
           </a>
           <a
             href="#systems"
-            className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--good-ink)] hover:bg-[var(--gold-tint)] px-6 py-3 transition-colors border-x-2 border-[var(--good-ink)]"
+            className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] hover:bg-[var(--gold-tint)] px-6 py-3 transition-colors border-x-2 border-[var(--ink)]"
           >
             Systems
           </a>
           <a
             href="#pricing"
-            className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--good-ink)] hover:bg-[var(--gold-tint)] px-6 py-3 transition-colors"
+            className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] hover:bg-[var(--gold-tint)] px-6 py-3 transition-colors"
           >
             Pricing
           </a>
@@ -188,13 +188,13 @@ export function Hero() {
         {/* Left column */}
         <div className="flex flex-col gap-8 w-full max-w-xl mx-auto lg:mx-0 order-2 lg:order-1">
           <div>
-            <span className="font-mono text-xs font-bold tracking-[0.16em] uppercase bg-[var(--gold-tint)] text-[var(--good-ink)] px-3 py-1">
+            <span className="font-mono text-xs font-bold tracking-[0.16em] uppercase bg-[var(--gold-tint)] text-[var(--ink)] px-3 py-1">
               Bidirectional Voice
             </span>
-            <h1 className="font-display text-5xl md:text-[5.5rem] font-bold text-[var(--good-ink)] leading-[0.92] mt-6 mb-6 tracking-[-0.03em]">
+            <h1 className="font-display text-5xl md:text-[5.5rem] font-bold text-[var(--ink)] leading-[0.92] mt-6 mb-6 tracking-[-0.03em]">
               Tell us your <span className="hl">problem</span>.
             </h1>
-            <p className="text-xl md:text-2xl text-[var(--good-ink)]/80 leading-snug">
+            <p className="text-xl md:text-2xl text-[var(--ink)]/80 leading-snug">
               We&apos;ll handle the boring stuff. Speak straight in and watch it
               work in real time.
             </p>
@@ -233,7 +233,7 @@ export function Hero() {
                   animate={{ opacity: 1, y: 0 }}
                   className="stamp-box p-6 bg-paper-raised"
                 >
-                  <p className="font-display text-2xl text-[var(--good-ink)] leading-snug">
+                  <p className="font-display text-2xl text-[var(--ink)] leading-snug">
                     “{aiTranscript}”
                   </p>
                   <StampButton
@@ -248,9 +248,9 @@ export function Hero() {
               ) : (
                 <div className="stamp-box flex items-center gap-3 px-4 py-3 w-fit">
                   <Activity
-                    className={`h-4 w-4 ${isRecording ? 'text-[var(--good-coral)] animate-pulse' : 'text-[var(--border)]'}`}
+                    className={`h-4 w-4 ${isRecording ? 'text-[var(--coral)] animate-pulse' : 'text-[var(--border)]'}`}
                   />
-                  <span className="font-mono text-xs font-bold uppercase tracking-widest text-[var(--good-ink)]/70">
+                  <span className="font-mono text-xs font-bold uppercase tracking-widest text-[var(--ink)]/70">
                     {isRecording ? 'Go on — we\'re listening' : 'Ready when you are'}
                   </span>
                 </div>
@@ -261,12 +261,12 @@ export function Hero() {
 
         {/* Right: Visualizer - the main hero visual */}
         <div className="relative w-full h-[420px] lg:h-[520px] stamp-box overflow-hidden order-1 lg:order-2">
-          <div className="absolute top-0 left-0 right-0 h-9 border-b-2 border-[var(--good-ink)] bg-paper-raised flex items-center px-4 justify-between z-30">
+          <div className="absolute top-0 left-0 right-0 h-9 border-b-2 border-[var(--ink)] bg-paper-raised flex items-center px-4 justify-between z-30">
             <div className="flex gap-1.5">
-              <div className="w-3 h-3 border-2 border-[var(--good-ink)]" />
-              <div className="w-3 h-3 border-2 border-[var(--good-ink)]" />
+              <div className="w-3 h-3 border-2 border-[var(--ink)]" />
+              <div className="w-3 h-3 border-2 border-[var(--ink)]" />
             </div>
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--good-ink)]">
+            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--ink)]">
               Acoustic Feed
             </span>
           </div>
@@ -288,12 +288,12 @@ export function Hero() {
 
           {/* Mode controls */}
           {/* Mode + Sensitivity controls — now stamp-btn physics + keyboard stamp focus */}
-          <div className="absolute bottom-4 left-4 z-40 flex border-2 border-[var(--good-ink)] bg-paper-raised text-[10px] font-mono uppercase font-bold overflow-hidden" role="group" aria-label="Visualizer Mode">
+          <div className="absolute bottom-4 left-4 z-40 flex border-2 border-[var(--ink)] bg-paper-raised text-[10px] font-mono uppercase font-bold overflow-hidden" role="group" aria-label="Visualizer Mode">
             <button
               type="button"
               onClick={() => setVisualMode('calm')}
               aria-pressed={visualMode === 'calm'}
-              className={`stamp-btn stamp-btn-paper px-4 py-1.5 text-[10px] border-r-2 border-[var(--good-ink)] ${visualMode === 'calm' ? 'is-engaged bg-[var(--good-ink)] text-[var(--good-cloud)]' : ''}`}
+              className={`stamp-btn stamp-btn-paper px-4 py-1.5 text-[10px] border-r-2 border-[var(--ink)] ${visualMode === 'calm' ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               CALM
             </button>
@@ -301,18 +301,18 @@ export function Hero() {
               type="button"
               onClick={() => setVisualMode('dynamic')}
               aria-pressed={visualMode === 'dynamic'}
-              className={`stamp-btn stamp-btn-paper px-4 py-1.5 text-[10px] ${visualMode === 'dynamic' ? 'is-engaged bg-[var(--good-ink)] text-[var(--good-cloud)]' : ''}`}
+              className={`stamp-btn stamp-btn-paper px-4 py-1.5 text-[10px] ${visualMode === 'dynamic' ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               DYNAMIC
             </button>
           </div>
 
-          <div className="absolute bottom-4 right-4 z-40 flex border-2 border-[var(--good-ink)] bg-paper-raised text-[10px] font-mono uppercase font-bold overflow-hidden" role="group" aria-label="Visualizer Sensitivity">
+          <div className="absolute bottom-4 right-4 z-40 flex border-2 border-[var(--ink)] bg-paper-raised text-[10px] font-mono uppercase font-bold overflow-hidden" role="group" aria-label="Visualizer Sensitivity">
             <button
               type="button"
               onClick={() => setSensitivity(0.5)}
               aria-pressed={sensitivity === 0.5}
-              className={`stamp-btn stamp-btn-paper px-3 py-1.5 text-[10px] border-r-2 border-[var(--good-ink)] ${sensitivity === 0.5 ? 'is-engaged bg-[var(--good-ink)] text-[var(--good-cloud)]' : ''}`}
+              className={`stamp-btn stamp-btn-paper px-3 py-1.5 text-[10px] border-r-2 border-[var(--ink)] ${sensitivity === 0.5 ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               STEADY
             </button>
@@ -320,7 +320,7 @@ export function Hero() {
               type="button"
               onClick={() => setSensitivity(1)}
               aria-pressed={sensitivity === 1}
-              className={`stamp-btn stamp-btn-paper px-3 py-1.5 text-[10px] border-r-2 border-[var(--good-ink)] ${sensitivity === 1 ? 'is-engaged bg-[var(--good-ink)] text-[var(--good-cloud)]' : ''}`}
+              className={`stamp-btn stamp-btn-paper px-3 py-1.5 text-[10px] border-r-2 border-[var(--ink)] ${sensitivity === 1 ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               NORMAL
             </button>
@@ -328,7 +328,7 @@ export function Hero() {
               type="button"
               onClick={() => setSensitivity(2.5)}
               aria-pressed={sensitivity === 2.5}
-              className={`stamp-btn stamp-btn-paper px-3 py-1.5 text-[10px] ${sensitivity === 2.5 ? 'is-engaged bg-[var(--good-ink)] text-[var(--good-cloud)]' : ''}`}
+              className={`stamp-btn stamp-btn-paper px-3 py-1.5 text-[10px] ${sensitivity === 2.5 ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               HIGH
             </button>
@@ -336,7 +336,7 @@ export function Hero() {
         </div>
       </main>
 
-      <div className="text-center mt-10 text-xs font-mono uppercase tracking-[0.16em] text-[var(--good-ink)]/50 relative z-10">
+      <div className="text-center mt-10 text-xs font-mono uppercase tracking-[0.16em] text-[var(--ink)]/50 relative z-10">
         Speak naturally. We&apos;ll turn it into systems. • Or use text mode below
       </div>
     </div>

@@ -98,7 +98,7 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
             variant="paper"
             size="sm"
             onClick={onDismiss}
-            className="absolute top-3 right-3 w-7 h-7 p-0 flex items-center justify-center text-[10px] border-2 border-[var(--good-ink)]"
+            className="absolute top-3 right-3 w-7 h-7 p-0 flex items-center justify-center text-[10px] border-2 border-[var(--ink)]"
             aria-label="Close lead form"
           >
             <X size={12} aria-hidden="true" />

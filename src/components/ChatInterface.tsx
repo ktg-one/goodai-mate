@@ -97,11 +97,11 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   return (
     <div className="gai-chat">
       {/* Header bar */}
-      <div className="border-b border-[var(--good-ink)] bg-[var(--good-cloud)] px-4 py-3">
+      <div className="border-b border-[var(--ink)] bg-[var(--paper)] px-4 py-3">
         <p className="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--navy-deep)]">
           Good&apos;ai intake
         </p>
-        <h2 className="mt-1 text-[17px] font-bold leading-tight text-[var(--good-ink)]">
+        <h2 className="mt-1 text-[17px] font-bold leading-tight text-[var(--ink)]">
           Tell us what keeps landing back on your desk.
         </h2>
       </div>

@@ -117,11 +117,11 @@ function GemTalkingCharacter({ analyser, status }: { analyser: AnalyserNode | nu
   }, [status, applyFrame]);
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center bg-[var(--good-cloud)] p-4 select-none">
+    <div className="relative w-full h-full flex items-center justify-center bg-[var(--paper)] p-4 select-none">
       {/* Outer brutalist frame for the avatar */}
-      <div className="relative w-[340px] h-[340px] border-2 border-[var(--good-ink)] bg-[var(--gold-tint)] overflow-hidden shadow-[3px_3px_0_var(--good-ink)] flex items-center justify-center rounded-sm">
+      <div className="relative w-[340px] h-[340px] border-2 border-[var(--ink)] bg-[var(--gold-tint)] overflow-hidden shadow-[3px_3px_0_var(--ink)] flex items-center justify-center rounded-sm">
         {/* Decorative Grid Lines */}
-        <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 pointer-events-none opacity-[0.03] border border-[var(--good-ink)]" />
+        <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 pointer-events-none opacity-[0.03] border border-[var(--ink)]" />
         
         {/* Neutral Stance Video Loop */}
         <video
@@ -151,15 +151,15 @@ function GemTalkingCharacter({ analyser, status }: { analyser: AnalyserNode | nu
         />
 
         {/* Dynamic Status Stamps */}
-        <div className="absolute bottom-2 left-2 z-10 px-2 py-0.5 border border-[var(--good-ink)] bg-[var(--good-cloud)] text-[9px] font-mono uppercase font-bold shadow-[1px_1px_0_var(--good-ink)]">
+        <div className="absolute bottom-2 left-2 z-10 px-2 py-0.5 border border-[var(--ink)] bg-[var(--paper)] text-[9px] font-mono uppercase font-bold shadow-[1px_1px_0_var(--ink)]">
           AGENT: GEM
         </div>
-        <div className={`absolute bottom-2 right-2 z-10 px-2 py-0.5 border border-[var(--good-ink)] text-[9px] font-mono uppercase font-bold shadow-[1px_1px_0_var(--good-ink)] ${
+        <div className={`absolute bottom-2 right-2 z-10 px-2 py-0.5 border border-[var(--ink)] text-[9px] font-mono uppercase font-bold shadow-[1px_1px_0_var(--ink)] ${
           status === 'speaking' 
-            ? 'bg-[var(--gold-tint)] text-[var(--good-ink)]'
+            ? 'bg-[var(--gold-tint)] text-[var(--ink)]'
             : status === 'listening' 
-              ? 'bg-[var(--good-coral)] text-[var(--good-cloud)]'
-              : 'bg-[var(--good-cloud)] text-[var(--good-ink)]/50'
+              ? 'bg-[var(--coral)] text-[var(--paper)]'
+              : 'bg-[var(--paper)] text-[var(--ink)]/50'
         }`}>
           {status}
         </div>
@@ -236,8 +236,8 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
   });
 
   const heroShadow = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [
-    'drop-shadow(4px 4px 0 var(--good-ink))',
-    'drop-shadow(6px 7px 0 var(--good-ink))',
+    'drop-shadow(4px 4px 0 var(--ink))',
+    'drop-shadow(6px 7px 0 var(--ink))',
     'drop-shadow(3px 9px 0 var(--navy-deep))',
     'drop-shadow(2px 11px 0 var(--navy-ink))',
   ]);
@@ -463,11 +463,11 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
             className="pointer-events-none select-none absolute -top-16 -right-16 w-56 opacity-20 rotate-12"
           />
           {/* Brutalist Docket Header */}
-          <div className="border-b-2 border-[var(--good-ink)] pb-4 mb-5 flex items-center justify-between relative z-10">
+          <div className="border-b-2 border-[var(--ink)] pb-4 mb-5 flex items-center justify-between relative z-10">
             <div className="flex items-center gap-2.5">
               <BrandWordmark tone="light" className="h-8" />
             </div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--good-cloud)]/70">
+            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--paper)]/70">
               Voice intake
             </div>
           </div>
@@ -475,25 +475,25 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
           {/* Dynamic Copy Area */}
           <div className="text-center mb-6">
             <span className="sticker-label sticker-label-gold mb-2">PERTH MATE</span>
-            <h1 className="font-display text-[3.2rem] md:text-[4.5rem] leading-none tracking-[-0.04em] text-[var(--good-cloud)]">
+            <h1 className="font-display text-[3.2rem] md:text-[4.5rem] leading-none tracking-[-0.04em] text-[var(--paper)]">
               Talk to <span className="hl-red">Gem</span>
             </h1>
-            <p className="font-sans text-[15px] text-[var(--good-cloud)]/80 max-w-[420px] mx-auto mt-2.5">
+            <p className="font-sans text-[15px] text-[var(--paper)]/80 max-w-[420px] mx-auto mt-2.5">
               Speak the admin mess once. Gem listens, replies, and files it into a real docket.
             </p>
           </div>
 
           {/* Core Interactive Card */}
           <motion.div
-            className="stamp-box relative overflow-hidden bg-[var(--good-cloud)] border-2 border-[var(--good-ink)]"
+            className="stamp-box relative overflow-hidden bg-[var(--paper)] border-2 border-[var(--ink)]"
             style={{
               filter: heroShadow,
               boxShadow: 'none',
             }}
           >
             {/* Header / Reset Bar */}
-            <div className="border-b-2 border-[var(--good-ink)] bg-[var(--good-cloud)] px-5 py-3 flex items-center justify-between">
-              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-ink)]/50">
+            <div className="border-b-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-3 flex items-center justify-between">
+              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/50">
                 Acoustic Box
               </span>
               <StampButton
@@ -508,7 +508,7 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
             </div>
 
             {/* Visualizer area */}
-            <div className="relative h-[420px] md:h-[520px] bg-[var(--good-cloud)] overflow-hidden flex items-center justify-center">
+            <div className="relative h-[420px] md:h-[520px] bg-[var(--paper)] overflow-hidden flex items-center justify-center">
               <img 
                 src={CHARACTER_ASSETS.waveRibbon} 
                 alt="" 
@@ -534,25 +534,25 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
 
               {/* Live status overlay */}
               <div className="absolute top-4 left-4 z-30">
-                <div className="stamp-box inline-flex items-center gap-2 bg-[var(--good-cloud)] border-2 border-[var(--good-ink)] px-4 py-1.5 font-mono text-xs uppercase tracking-[0.16em]" role="status" aria-live="polite">
+                <div className="stamp-box inline-flex items-center gap-2 bg-[var(--paper)] border-2 border-[var(--ink)] px-4 py-1.5 font-mono text-xs uppercase tracking-[0.16em]" role="status" aria-live="polite">
                   {status === 'listening' && (
-                    <span className="text-[var(--good-coral)] stamp-relay font-bold">● LISTENING</span>
+                    <span className="text-[var(--coral)] stamp-relay font-bold">● LISTENING</span>
                   )}
                   {status === 'thinking' && (
-                    <span className="text-[var(--good-ink)] tracking-[0.3em]">THINKING…</span>
+                    <span className="text-[var(--ink)] tracking-[0.3em]">THINKING…</span>
                   )}
                   {status === 'speaking' && (
-                    <span className="flex items-center gap-1.5 text-[var(--good-teal)] font-medium">
+                    <span className="flex items-center gap-1.5 text-[var(--navy)] font-medium">
                       <Volume2 size={15} /> SPEAKING
                     </span>
                   )}
-                  {status === 'idle' && <span className="text-[var(--good-ink)]/70">READY</span>}
+                  {status === 'idle' && <span className="text-[var(--ink)]/70">READY</span>}
                   {status === 'error' && <span className="text-[var(--warn)] font-bold">ISSUE</span>}
                 </div>
               </div>
 
               {/* Mode controls */}
-              <div className="absolute bottom-4 right-4 z-30 flex border-2 border-[var(--good-ink)] bg-[var(--good-cloud)] text-[10px] font-mono uppercase font-bold overflow-hidden shadow-[2px_2px_0_var(--good-ink)]" role="group" aria-label="Visualizer mode">
+              <div className="absolute bottom-4 right-4 z-30 flex border-2 border-[var(--ink)] bg-[var(--paper)] text-[10px] font-mono uppercase font-bold overflow-hidden shadow-[2px_2px_0_var(--ink)]" role="group" aria-label="Visualizer mode">
                 {(['avatar', 'wave'] as const).map((m) => (
                   <StampButton
                     key={m}
@@ -561,7 +561,7 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
                     engaged={viewMode === m}
                     onClick={() => setViewMode(m)}
                     aria-pressed={viewMode === m}
-                    className={`px-5 py-2 text-[10px] border-r-2 border-[var(--good-ink)] last:border-r-0 ${viewMode === m ? 'bg-[var(--good-ink)] text-[var(--good-cloud)]' : ''}`}
+                    className={`px-5 py-2 text-[10px] border-r-2 border-[var(--ink)] last:border-r-0 ${viewMode === m ? 'bg-[var(--ink)] text-[var(--paper)]' : ''}`}
                   >
                     {m}
                   </StampButton>
@@ -570,7 +570,7 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
             </div>
 
             {/* Transcript/Response Display */}
-            <div className="border-t-2 border-[var(--good-ink)] bg-[var(--gold-tint)] p-5 min-h-[110px] flex flex-col justify-center">
+            <div className="border-t-2 border-[var(--ink)] bg-[var(--gold-tint)] p-5 min-h-[110px] flex flex-col justify-center">
               <AnimatePresence mode="wait">
                 {error ? (
                   <motion.div
@@ -596,11 +596,11 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
                     key="dialogue"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="space-y-3 font-sans text-sm text-[var(--good-ink)]"
+                    className="space-y-3 font-sans text-sm text-[var(--ink)]"
                   >
                     {userTranscript && (
                       <p className="flex gap-2">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-ink)]/40 mt-0.5">YOU:</span>
+                        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/40 mt-0.5">YOU:</span>
                         <span className="font-medium">{userTranscript}</span>
                       </p>
                     )}
@@ -612,8 +612,8 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
                       </div>
                     )}
                     {agentResponse && (
-                      <p className="flex gap-2 border-t border-[var(--good-ink)]/5 pt-3">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-teal)] mt-0.5 font-bold">GEM:</span>
+                      <p className="flex gap-2 border-t border-[var(--ink)]/5 pt-3">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--navy)] mt-0.5 font-bold">GEM:</span>
                         <span>{agentResponse}</span>
                       </p>
                     )}
@@ -623,7 +623,7 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
             </div>
 
             {/* Lab settings — collapsed for demo */}
-            <div className="border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)] px-5 py-2 flex justify-end">
+            <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-2 flex justify-end">
               <StampButton
                 variant="paper"
                 size="sm"
@@ -637,8 +637,8 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
             </div>
             {showLab && (
               <>
-                <div className="border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)] px-5 py-3 flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-ink)]/60 mr-1">Backend</span>
+                <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-3 flex flex-wrap items-center gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">Backend</span>
                   {modelOptions.map((m) => (
                     <StampButton
                       key={m.id}
@@ -652,8 +652,8 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
                     </StampButton>
                   ))}
                 </div>
-                <div className="border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)] px-5 py-3 flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-ink)]/60 mr-1">Voice</span>
+                <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-3 flex flex-wrap items-center gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">Voice</span>
                   {voiceOptions.map((v) => (
                     <StampButton
                       key={v.id}
@@ -696,7 +696,7 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
                         setCustomVoiceId(val);
                         setSelectedVoiceId(val);
                       }}
-                      className="font-mono text-[10px] bg-[var(--paper-deep)] border-2 border-[var(--good-ink)] px-2 py-1 max-w-[200px] text-[var(--good-ink)] focus:outline-none"
+                      className="font-mono text-[10px] bg-[var(--paper-deep)] border-2 border-[var(--ink)] px-2 py-1 max-w-[200px] text-[var(--ink)] focus:outline-none"
                     />
                   )}
                 </div>
@@ -704,7 +704,7 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
             )}
 
             {/* Big red stamp CTA */}
-            <div className="border-t-2 border-[var(--good-ink)] bg-[var(--gold-tint)] p-5 flex justify-center">
+            <div className="border-t-2 border-[var(--ink)] bg-[var(--gold-tint)] p-5 flex justify-center">
               <StampButton
                 variant="red"
                 size="lg"
@@ -727,7 +727,7 @@ export function GemVoice({ onMailFiled }: GemVoiceProps) {
             </div>
           </motion.div>
 
-          <p className="text-center mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--good-cloud)]/60">
+          <p className="text-center mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--paper)]/60">
             Built in Perth · Voice intake demo
           </p>
         </div>
