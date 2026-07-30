@@ -17,3 +17,8 @@
 ## 2026-07-25 - Improve Disabled Checkbox UX with Tooltips and Wrapper Styling
 **Learning:** When styling custom checkboxes via a wrapper label (e.g., `has-[:focus-visible]`), the wrapper itself doesn't automatically inherit or convey the disabled state of its child input, leaving active cursors and no explanation for why it is disabled.
 **Action:** Always apply `has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50` to custom checkbox/radio wrappers to ensure visual consistency, and add a `title` attribute to the wrapper when a control is dynamically disabled to provide a native tooltip explaining the reason to the user.
+
+## 2025-02-12 - Update UI fonts to match brand
+
+**Learning:** When applying brand font updates using `next/font/google` (e.g., swapping to Sora and Instrument Serif), injecting them into the layout and mapping them directly to shared CSS variables in `globals.css` can cause cyclic dependencies (e.g., mapping `--font-sans` to `--font-sans`). It's necessary to use distinct variable names in the `next/font` configuration (like `--font-sora` and `--font-instrument`) and map them correctly within the root CSS file to `--font-sans` and `--font-display`.
+**Action:** Always create unique variable names for local or Google fonts initialized via `next/font` and ensure the global CSS mappings reference these unique variables instead of the generic token names.
