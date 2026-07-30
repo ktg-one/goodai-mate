@@ -42,7 +42,7 @@ function DialogOverlay({
         "fixed inset-0 z-50 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
         className
       )}
-      style={{ backgroundColor: "color-mix(in srgb, var(--ink) 60%, transparent)" }}
+      style={{ backgroundColor: "color-mix(in srgb, var(--good-ink) 60%, transparent)" }}
       {...props}
     />
   )

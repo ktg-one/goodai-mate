@@ -121,7 +121,7 @@ export default function HomeClient() {
           const el = card as HTMLElement;
           el.style.transform = `rotate(${rots[idx % rots.length]}deg) translate(${oxs[idx % oxs.length]}px, ${oys[idx % oys.length]}px)`;
           el.style.opacity = '1';
-          el.style.boxShadow = '3px 3px 0 var(--ink)';
+          el.style.boxShadow = '3px 3px 0 var(--good-ink)';
           // static letter micro for docket (anti under-use)
           const letter = el.querySelector('.docket-letter') as HTMLElement | null;
           if (letter) letter.style.opacity = '0.35';
@@ -219,7 +219,7 @@ export default function HomeClient() {
             x: ox,
             y: oy + 22,
             opacity: 0,
-            boxShadow: '2px 2px 0 var(--ink)',
+            boxShadow: '2px 2px 0 var(--good-ink)',
             '--stamp-depth': 0.15,
           });
           if (wears[idx % wears.length]) (card as HTMLElement).dataset.wear = 'true';
@@ -238,7 +238,7 @@ export default function HomeClient() {
               if (nowSettled !== isSettled) {
                 isSettled = nowSettled;
                 gsap.set(card, {
-                  boxShadow: isSettled ? '6.1px 6.1px 0 var(--ink)' : '2.5px 2.5px 0 var(--ink)',
+                  boxShadow: isSettled ? '6.1px 6.1px 0 var(--good-ink)' : '2.5px 2.5px 0 var(--good-ink)',
                 });
               }
               gsap.set(card, {
@@ -346,7 +346,7 @@ export default function HomeClient() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-[var(--paper)] flex items-center justify-center font-mono text-xs uppercase tracking-[0.16em]">
+      <div className="min-h-screen bg-[var(--good-cloud)] flex items-center justify-center font-mono text-xs uppercase tracking-[0.16em]">
         Compiling docket board...
       </div>
     );
@@ -375,14 +375,14 @@ export default function HomeClient() {
       <div ref={ribbon3Ref} className="mail-ribbon-tear w-full" aria-hidden="true" />
 
       {/* Voice Agents Tiers — REPLACED: strong narrative "Docket Flow" (pinned mail rhythm, non-uniform) */}
-      <section ref={docketFlowRef} className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+      <section ref={docketFlowRef} className="py-20 md:py-28 border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)]">
         <div className="mx-auto max-w-5xl px-6">
           <div className="mb-9">
-            <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">FILED · MAIL</span>
+            <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--good-coral)]">FILED · MAIL</span>
             <h2 className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-2">
               What happens after you <span className="hl">speak</span>.
             </h2>
-            <p className="mt-3 max-w-md text-xl text-[var(--ink)]/80">
+            <p className="mt-3 max-w-md text-xl text-[var(--good-ink)]/80">
               We turn the conversation into a real docket. No portals. No logins. Just work that gets done.
             </p>
           </div>
@@ -414,7 +414,7 @@ export default function HomeClient() {
                 />
                 <h3 className="font-bold text-2xl tracking-[-0.015em] mb-3">{item.title}</h3>
                 <p className="opacity-85 text-[15px] leading-snug">{item.body}</p>
-                {i === 3 && <div className="mt-3 inline-block text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--coral)] border-b border-[var(--coral)]">LAST PIN • DOCKET CLOSED</div>}
+                {i === 3 && <div className="mt-3 inline-block text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--good-coral)] border-b border-[var(--good-coral)]">LAST PIN • DOCKET CLOSED</div>}
               </StampCard>
             ))}
           </div>
@@ -430,8 +430,8 @@ export default function HomeClient() {
         <div className="in-tray-physical py-5 sticky bottom-0 z-40">
           <div className="mx-auto max-w-5xl px-6">
             <div className="flex items-center gap-3 mb-2.5">
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--coral)]">MAIL RECEIVED — IN TRAY</span>
-              <div className="flex-1 h-px bg-[var(--ink)]/30" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--good-coral)]">MAIL RECEIVED — IN TRAY</span>
+              <div className="flex-1 h-px bg-[var(--good-ink)]/30" />
             </div>
             <div className="flex flex-wrap gap-3 text-xs">
               {filedMails.map((mail, idx) => {
@@ -441,14 +441,14 @@ export default function HomeClient() {
                 return (
                   <motion.div 
                     key={mail.ts} 
-                    className="filed-docket px-4 py-2 max-w-[320px] text-[var(--ink)]/90 stamp-press relative"
-                    initial={prefersReducedMotion ? { opacity: 1, rotate: rot, x: ox, boxShadow: '3px 3px 0 var(--ink)' } : { opacity: 0, y: 8, rotate: rot - 1.5, x: ox - 3, boxShadow: '1px 1px 0 var(--ink)' }}
+                    className="filed-docket px-4 py-2 max-w-[320px] text-[var(--good-ink)]/90 stamp-press relative"
+                    initial={prefersReducedMotion ? { opacity: 1, rotate: rot, x: ox, boxShadow: '3px 3px 0 var(--good-ink)' } : { opacity: 0, y: 8, rotate: rot - 1.5, x: ox - 3, boxShadow: '1px 1px 0 var(--good-ink)' }}
                     whileInView={prefersReducedMotion ? { opacity: 1 } : { 
                       opacity: 1, 
                       y: 0, 
                       rotate: rot, 
                       x: ox,
-                      boxShadow: '3px 3px 0 var(--ink)',
+                      boxShadow: '3px 3px 0 var(--good-ink)',
                       transition: { duration: 0.125, ease: [0.23, 1, 0.32, 1] } // exact stamp clack timing (90-160ms canon)
                     }}
                     viewport={{ once: true, margin: '-20px' }}
@@ -456,15 +456,15 @@ export default function HomeClient() {
                   >
                     {/* letter micro on filed docket */}
                     <BrandShapesStamp className="absolute top-1 right-1 h-3 w-auto opacity-25" />
-                    <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--ink)]/50 mb-0.5">YOU SAID</div>
+                    <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--good-ink)]/50 mb-0.5">YOU SAID</div>
                     <div className="line-clamp-1">“{mail.transcript.slice(0, 82)}”</div>
-                    <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--navy)] mt-1.5 mb-0.5"><span className="normal-case">Good<span style={{ color: 'var(--coral)' }}>&apos;</span>ai</span> FILED</div>
-                    <div className="line-clamp-1 text-[var(--ink)]">“{mail.response.slice(0, 78)}”</div>
+                    <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--good-teal)] mt-1.5 mb-0.5"><span className="normal-case">Good<span style={{ color: 'var(--good-coral)' }}>&apos;</span>ai</span> FILED</div>
+                    <div className="line-clamp-1 text-[var(--good-ink)]">“{mail.response.slice(0, 78)}”</div>
                   </motion.div>
                 );
               })}
             </div>
-            <p className="text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--ink)]/40 mt-2">These conversations stay on your machine. Last few dockets filed into the tray.</p>
+            <p className="text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--good-ink)]/40 mt-2">These conversations stay on your machine. Last few dockets filed into the tray.</p>
           </div>
         </div>
       )}
@@ -473,7 +473,7 @@ export default function HomeClient() {
       <VoiceAgentDemo />
 
       {/* Fallback text mode (temporary) */}
-      <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+      <section className="py-20 md:py-28 border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)]">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-6">
             <StampButton
@@ -506,12 +506,12 @@ export default function HomeClient() {
 
       {/* Website Analyzer — BLOCKED OUT until ready.
           To restore: re-add `import WebsiteAnalyzer from '@/components/marketing/WebsiteAnalyzer';`
-          and a <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]"><WebsiteAnalyzer /></section> here. */}
+          and a <section className="py-20 md:py-28 border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)]"><WebsiteAnalyzer /></section> here. */}
 
       {/* Single buzz CTA — frontend only; wire onSubmit when backend is ready */}
       <section
         id="buzz-cta"
-        className="py-16 md:py-20 border-t-2 border-[var(--ink)] bg-[var(--paper)]"
+        className="py-16 md:py-20 border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)]"
       >
         <div className="mx-auto max-w-3xl px-6">
           <BuzzCTA />
@@ -522,11 +522,11 @@ export default function HomeClient() {
       {/* Contains core promise + minimal contact + "we'll sort the boring stuff" in Fraunces WONK */}
       <footer
         ref={footerRef}
-        className="mail-docket-footer bg-[var(--navy)] border-t-4 border-[var(--ink)] py-14 px-6 text-[var(--paper)]"
+        className="mail-docket-footer bg-[var(--good-teal)] border-t-4 border-[var(--good-ink)] py-14 px-6 text-[var(--good-cloud)]"
       >
         <div className="mx-auto max-w-4xl text-center">
           <div className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--gold-tint)] mb-4">
-            <span className="normal-case">Good<span style={{ color: 'var(--coral)' }}>&apos;</span>ai</span> — PERTH
+            <span className="normal-case">Good<span style={{ color: 'var(--good-coral)' }}>&apos;</span>ai</span> — PERTH
           </div>
 
           <div className="core-promise text-4xl md:text-5xl tracking-[-0.025em] leading-none mb-6">
@@ -538,7 +538,7 @@ export default function HomeClient() {
             we&apos;ll sort the boring stuff
           </div>
 
-          <div className="max-w-xs mx-auto text-sm text-[var(--paper)]/70 mb-8">
+          <div className="max-w-xs mx-auto text-sm text-[var(--good-cloud)]/70 mb-8">
             Built in Perth for tradies, makers and small operators who just want their evenings back.
           </div>
 
@@ -550,12 +550,12 @@ export default function HomeClient() {
             >
               DROP US A LINE
             </a>
-            <div className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--paper)]/50 sm:ml-2">
+            <div className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--good-cloud)]/50 sm:ml-2">
               goodai.au • 08 0000 0000
             </div>
           </div>
 
-          <div className="mt-10 text-[10px] font-mono tracking-[0.16em] text-[var(--paper)]/40">
+          <div className="mt-10 text-[10px] font-mono tracking-[0.16em] text-[var(--good-cloud)]/40">
             No dashboards. No portals. Just systems that run.
           </div>
         </div>

@@ -16,16 +16,16 @@ export default function VoiceAgentDemo() {
   const [activeTab, setActiveTab] = useState<'mic' | 'phone'>('mic');
 
   return (
-    <section className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+    <section className="py-20 md:py-28 border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)]">
       <div className="mx-auto max-w-5xl px-6">
         <ScrollReveal className="text-center mb-9">
-          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">
+          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--good-coral)]">
             FILE ANOTHER ON THE BOARD
           </span>
           <h2 className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-3 mb-3">
             The Voice Agent.<br />Right here in the docket.
           </h2>
-          <p className="max-w-md mx-auto text-xl text-[var(--ink)]/80">
+          <p className="max-w-md mx-auto text-xl text-[var(--good-ink)]/80">
             Speak what&apos;s eating your time, or choose an agent to call your phone directly.
           </p>
         </ScrollReveal>
@@ -65,13 +65,13 @@ export default function VoiceAgentDemo() {
           </StampCard>
         ) : (
           <div className="space-y-6 max-w-3xl mx-auto">
-            <div className="flex border-2 border-[var(--ink)] rounded-xs bg-[var(--paper-deep)] p-1.5 shadow-[2px_2px_0_var(--ink)]" role="tablist">
+            <div className="flex border-2 border-[var(--good-ink)] rounded-xs bg-[var(--paper-deep)] p-1.5 shadow-[2px_2px_0_var(--good-ink)]" role="tablist">
               <StampButton
                 variant="paper"
                 size="sm"
                 engaged={activeTab === 'mic'}
                 onClick={() => setActiveTab('mic')}
-                className={`flex-1 py-2 text-[10px] ${activeTab === 'mic' ? 'bg-[var(--ink)] text-[var(--paper)]' : ''}`}
+                className={`flex-1 py-2 text-[10px] ${activeTab === 'mic' ? 'bg-[var(--good-ink)] text-[var(--good-cloud)]' : ''}`}
                 role="tab"
                 aria-selected={activeTab === 'mic'}
               >
@@ -82,7 +82,7 @@ export default function VoiceAgentDemo() {
                 size="sm"
                 engaged={activeTab === 'phone'}
                 onClick={() => setActiveTab('phone')}
-                className={`flex-1 py-2 text-[10px] ${activeTab === 'phone' ? 'bg-[var(--ink)] text-[var(--paper)]' : ''}`}
+                className={`flex-1 py-2 text-[10px] ${activeTab === 'phone' ? 'bg-[var(--good-ink)] text-[var(--good-cloud)]' : ''}`}
                 role="tab"
                 aria-selected={activeTab === 'phone'}
               >

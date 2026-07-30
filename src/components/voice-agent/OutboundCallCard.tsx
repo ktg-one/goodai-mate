@@ -15,7 +15,7 @@ export default function OutboundCallCard() {
   const consoleEndRef = useRef<HTMLDivElement>(null);
 
   const memoizedLogs = useMemo(() => logs.map((log, index) => {
-    let color = 'text-[var(--paper)]/80';
+    let color = 'text-[var(--good-cloud)]/80';
     if (log.startsWith('[ERROR]')) color = 'text-[var(--coral-tint)] font-bold';
     if (log.startsWith('[SERVER]')) color = 'text-[var(--gold-tint)]';
     if (log.includes('RINGING') || log.includes('CONNECTED')) color = 'text-[var(--gold-tint)] font-bold';
@@ -33,7 +33,7 @@ export default function OutboundCallCard() {
       role: 'My Assistant',
       desc: 'Assists with invoices, schedules, and quotes. Preset: 0877414191.',
       defaultPhone: '0877414191',
-      color: 'bg-[var(--gold-tint)] border-[var(--gold-tint)] text-[var(--ink)]'
+      color: 'bg-[var(--gold-tint)] border-[var(--gold-tint)] text-[var(--good-ink)]'
     },
     {
       id: 'robokev' as const,
@@ -41,7 +41,7 @@ export default function OutboundCallCard() {
       role: 'My Voice Clone',
       desc: 'My custom voice assistant. Enter your number to have Robokev call you.',
       defaultPhone: '',
-      color: 'bg-[var(--coral-tint)] border-[var(--coral)] text-[var(--ink)]'
+      color: 'bg-[var(--coral-tint)] border-[var(--good-coral)] text-[var(--good-ink)]'
     }
   ];
 
@@ -118,21 +118,21 @@ export default function OutboundCallCard() {
 
   return (
     <div className="stamp-card stamp-card-paper p-6 relative w-full text-left" data-pin="true">
-      <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--coral)] mb-4">
+      <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-coral)] mb-4">
         <Phone size={12} /> Outbound Agent Dialer
       </div>
 
-      <h3 className="font-display text-2xl font-bold tracking-tight text-[var(--ink)] mb-1">
+      <h3 className="font-display text-2xl font-bold tracking-tight text-[var(--good-ink)] mb-1">
         Have the Voice Agent <span className="hl">Call You</span>.
       </h3>
-      <p className="text-xs text-[var(--ink)]/75 mb-6">
+      <p className="text-xs text-[var(--good-ink)]/75 mb-6">
         Enter your mobile number and select which persona dials you. The agent will call your phone and speak with you live.
       </p>
 
       <form onSubmit={handleCallbackTrigger} className="space-y-5">
         {/* Agent Selector Card Grid */}
         <div className="space-y-2">
-          <label id="agent-selector-label" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 block">
+          <label id="agent-selector-label" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-ink)]/60 block">
             1. Select Agent Persona
           </label>
           <div className="grid sm:grid-cols-2 gap-3" role="radiogroup" aria-labelledby="agent-selector-label">
@@ -145,20 +145,20 @@ export default function OutboundCallCard() {
                   role="radio"
                   aria-checked={isSelected}
                   onClick={() => setSelectedAgent(agent.id)}
-                  className={`border-2 p-3 text-left rounded-xs cursor-pointer select-none transition-all flex flex-col justify-between h-28 relative focus-visible:outline-2 focus-visible:outline-[var(--coral)] ${
+                  className={`border-2 p-3 text-left rounded-xs cursor-pointer select-none transition-all flex flex-col justify-between h-28 relative focus-visible:outline-2 focus-visible:outline-[var(--good-coral)] ${
                     isSelected
-                      ? `${agent.color} border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] scale-[0.99] translate-y-[1px]`
-                      : 'bg-[var(--paper)] border-[var(--ink)]/20 hover:border-[var(--ink)]/40 hover:bg-[var(--paper-deep)] shadow-none'
+                      ? `${agent.color} border-[var(--good-ink)] shadow-[2px_2px_0_var(--good-ink)] scale-[0.99] translate-y-[1px]`
+                      : 'bg-[var(--good-cloud)] border-[var(--good-ink)]/20 hover:border-[var(--good-ink)]/40 hover:bg-[var(--paper-deep)] shadow-none'
                   }`}
                 >
                   <div>
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-base">{agent.name}</span>
-                      {isSelected && <UserCheck size={14} className="text-[var(--ink)]" />}
+                      {isSelected && <UserCheck size={14} className="text-[var(--good-ink)]" />}
                     </div>
-                    <span className="text-[9px] font-mono text-[var(--ink)]/60 block">{agent.role}</span>
+                    <span className="text-[9px] font-mono text-[var(--good-ink)]/60 block">{agent.role}</span>
                   </div>
-                  <p className="text-[10px] text-[var(--ink)]/80 leading-tight mt-2">{agent.desc}</p>
+                  <p className="text-[10px] text-[var(--good-ink)]/80 leading-tight mt-2">{agent.desc}</p>
                 </button>
               );
             })}
@@ -167,7 +167,7 @@ export default function OutboundCallCard() {
 
         {/* Phone Input */}
         <div className="space-y-2">
-          <label htmlFor="callback-phone" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 block">
+          <label htmlFor="callback-phone" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-ink)]/60 block">
             2. Target Phone Number
           </label>
           <div className="relative">
@@ -181,11 +181,11 @@ export default function OutboundCallCard() {
               onChange={e => setPhone(e.target.value)}
               aria-describedby="phone-help"
             />
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink)]/40 pointer-events-none">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--good-ink)]/40 pointer-events-none">
               <Phone size={16} />
             </div>
           </div>
-          <p id="phone-help" className="text-[9px] font-mono text-[var(--ink)]/50">
+          <p id="phone-help" className="text-[9px] font-mono text-[var(--good-ink)]/50">
             Perth local dialer. Defaults to preset target for Darl.
           </p>
         </div>
@@ -205,11 +205,11 @@ export default function OutboundCallCard() {
       {/* Dialer Output logs */}
       {(logs.length > 0 || error || success) && (
         <div className="mt-5 space-y-3">
-          <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--ink)]/60 flex items-center gap-1">
+          <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--good-ink)]/60 flex items-center gap-1">
             <Terminal size={10} /> Dialer log
           </span>
 
-          <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-[11px] h-[130px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]" role="log" aria-live="polite">
+          <div className="border-2 border-[var(--good-ink)] bg-[var(--good-teal)] text-[var(--good-cloud)] rounded-xs p-3 font-mono text-[11px] h-[130px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]" role="log" aria-live="polite">
             <div className="space-y-1">
               {/* ⚡ Bolt: Memoize expensive array mapping
                   This array map is in the same component as a controlled input.
@@ -217,21 +217,21 @@ export default function OutboundCallCard() {
                   and DOM recreation to run again, causing input lag. */}
               {memoizedLogs}
               {isDialing && (
-                <div className="text-[var(--paper)]/40 animate-pulse">● Dialing gateway...</div>
+                <div className="text-[var(--good-cloud)]/40 animate-pulse">● Dialing gateway...</div>
               )}
               <div ref={consoleEndRef} />
             </div>
           </div>
 
           {success && (
-            <div className="border-2 border-[var(--ink)] bg-[var(--ok)]/10 text-[var(--ok)] p-2.5 rounded-xs flex items-center gap-2 text-xs font-mono" role="status" aria-live="polite">
+            <div className="border-2 border-[var(--good-ink)] bg-[var(--ok)]/10 text-[var(--ok)] p-2.5 rounded-xs flex items-center gap-2 text-xs font-mono" role="status" aria-live="polite">
               <CheckCircle2 size={14} className="shrink-0" />
               <span>Dialer triggered! Pick up when your phone rings.</span>
             </div>
           )}
 
           {error && (
-            <div className="border-2 border-[var(--ink)] bg-[var(--warn)]/10 text-[var(--warn)] p-2.5 rounded-xs flex items-center gap-2 text-xs font-mono" role="alert" aria-live="assertive">
+            <div className="border-2 border-[var(--good-ink)] bg-[var(--warn)]/10 text-[var(--warn)] p-2.5 rounded-xs flex items-center gap-2 text-xs font-mono" role="alert" aria-live="assertive">
               <AlertCircle size={14} className="shrink-0" />
               <span>Failed: {error}</span>
             </div>

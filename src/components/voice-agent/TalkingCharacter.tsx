@@ -110,11 +110,11 @@ export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterPr
   };
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center bg-[var(--paper)] p-4 select-none">
+    <div className="relative w-full h-full flex items-center justify-center bg-[var(--good-cloud)] p-4 select-none">
       {/* Outer brutalist frame for the avatar */}
-      <div className="relative w-[340px] h-[340px] border-2 border-[var(--ink)] bg-[var(--gold-tint)] overflow-hidden shadow-[3px_3px_0_var(--ink)] flex items-center justify-center rounded-sm">
+      <div className="relative w-[340px] h-[340px] border-2 border-[var(--good-ink)] bg-[var(--gold-tint)] overflow-hidden shadow-[3px_3px_0_var(--good-ink)] flex items-center justify-center rounded-sm">
         {/* Decorative Grid Lines */}
-        <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 pointer-events-none opacity-[0.03] border border-[var(--ink)]" />
+        <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 pointer-events-none opacity-[0.03] border border-[var(--good-ink)]" />
         
         {/* Animated Avatar Frame */}
         <img
@@ -132,15 +132,15 @@ export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterPr
         />
 
         {/* Dynamic Status Stamps */}
-        <div className="absolute bottom-2 left-2 z-10 px-2 py-0.5 border border-[var(--ink)] bg-[var(--paper)] text-[9px] font-mono uppercase font-bold shadow-[1px_1px_0_var(--ink)]">
+        <div className="absolute bottom-2 left-2 z-10 px-2 py-0.5 border border-[var(--good-ink)] bg-[var(--good-cloud)] text-[9px] font-mono uppercase font-bold shadow-[1px_1px_0_var(--good-ink)]">
           AGENT: {agent === 'robokev' ? 'GEM' : agent.toUpperCase()}
         </div>
-        <div className={`absolute bottom-2 right-2 z-10 px-2 py-0.5 border border-[var(--ink)] text-[9px] font-mono uppercase font-bold shadow-[1px_1px_0_var(--ink)] ${
+        <div className={`absolute bottom-2 right-2 z-10 px-2 py-0.5 border border-[var(--good-ink)] text-[9px] font-mono uppercase font-bold shadow-[1px_1px_0_var(--good-ink)] ${
           status === 'speaking' 
-            ? 'bg-[var(--gold-tint)] text-[var(--ink)]'
+            ? 'bg-[var(--gold-tint)] text-[var(--good-ink)]'
             : status === 'listening' 
-              ? 'bg-[var(--coral)] text-[var(--paper)]'
-              : 'bg-[var(--paper)] text-[var(--ink)]/50'
+              ? 'bg-[var(--good-coral)] text-[var(--good-cloud)]'
+              : 'bg-[var(--good-cloud)] text-[var(--good-ink)]/50'
         }`}>
           {status}
         </div>

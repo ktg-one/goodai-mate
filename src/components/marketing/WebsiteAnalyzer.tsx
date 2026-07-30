@@ -18,7 +18,7 @@ export default function WebsiteAnalyzer() {
   const consoleEndRef = useRef<HTMLDivElement>(null);
 
   const memoizedLogs = useMemo(() => logs.map((log, index) => {
-    let colorClass = 'text-[var(--paper)]/80';
+    let colorClass = 'text-[var(--good-cloud)]/80';
     if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--coral-tint)] font-bold';
     if (log.startsWith('[SERVER]')) colorClass = 'text-[var(--gold-tint)]';
     return (
@@ -85,15 +85,15 @@ export default function WebsiteAnalyzer() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-12 border-t-2 border-dashed border-[var(--ink)]/30">
+    <div className="mx-auto max-w-3xl px-6 py-12 border-t-2 border-dashed border-[var(--good-ink)]/30">
       <div className="text-center mb-6">
-        <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">
+        <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--good-coral)]">
           SITE AUDIT
         </span>
         <h2 className="font-display text-4xl md:text-5xl tracking-[-0.025em] leading-none mt-2 mb-2">
           Try our <span className="hl">Website Analyzer</span>.
         </h2>
-        <p className="max-w-md mx-auto text-base text-[var(--ink)]/80">
+        <p className="max-w-md mx-auto text-base text-[var(--good-ink)]/80">
           Enter your business website and see exactly what chores we can take off your hands.
         </p>
       </div>
@@ -116,7 +116,7 @@ export default function WebsiteAnalyzer() {
                   onChange={e => setUrl(e.target.value)}
                   aria-describedby="url-help"
                 />
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink)]/40 pointer-events-none">
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--good-ink)]/40 pointer-events-none">
                   <Search size={16} />
                 </div>
               </div>
@@ -130,7 +130,7 @@ export default function WebsiteAnalyzer() {
                 {isAnalyzing ? 'Analyzing...' : 'Audit My Business Opportunity'}
               </StampButton>
             </div>
-            <p id="url-help" className="text-[9px] font-mono text-[var(--ink)]/50">
+            <p id="url-help" className="text-[9px] font-mono text-[var(--good-ink)]/50">
               Paste your business URL. The system will scan your landing page, find your contact email, and send the audit report.
             </p>
           </div>
@@ -139,10 +139,10 @@ export default function WebsiteAnalyzer() {
         {/* Live crawling log terminal */}
         {(logs.length > 0 || isAnalyzing || error) && (
           <div className="mt-6 space-y-2">
-            <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--ink)]/60 flex items-center gap-1.5">
+            <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--good-ink)]/60 flex items-center gap-1.5">
               <Terminal size={12} /> Crawl logs
             </span>
-            <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-xs h-[120px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
+            <div className="border-2 border-[var(--good-ink)] bg-[var(--good-teal)] text-[var(--good-cloud)] rounded-xs p-3 font-mono text-xs h-[120px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
               <div className="space-y-1">
                 {/* ⚡ Bolt: Memoize expensive array mapping
                     This array map is in the same component as a controlled input.
@@ -150,7 +150,7 @@ export default function WebsiteAnalyzer() {
                     and DOM recreation to run again, causing input lag. */}
                 {memoizedLogs}
                 {isAnalyzing && (
-                  <div className="text-[var(--paper)]/40 animate-pulse">● Mapping sitemap elements...</div>
+                  <div className="text-[var(--good-cloud)]/40 animate-pulse">● Mapping sitemap elements...</div>
                 )}
                 <div ref={consoleEndRef} />
               </div>
@@ -161,8 +161,8 @@ export default function WebsiteAnalyzer() {
         {/* Audit Report Docket Results */}
         {result && (
           <div className="mt-6 stamp-card stamp-card-gold p-5 space-y-4 text-left animate-in fade-in slide-in-from-top-4 duration-300">
-            <div className="flex items-center justify-between border-b border-[var(--ink)]/20 pb-2">
-              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--coral)] font-bold flex items-center gap-1">
+            <div className="flex items-center justify-between border-b border-[var(--good-ink)]/20 pb-2">
+              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-coral)] font-bold flex items-center gap-1">
                 <ClipboardCheck size={14} /> CUSTOM SYSTEMS AUDIT
               </div>
               <span className="text-[9px] font-mono bg-[var(--navy-tint)] text-[var(--navy-deep)] px-2 py-0.5 rounded-sm">
@@ -171,7 +171,7 @@ export default function WebsiteAnalyzer() {
             </div>
 
             <div className="space-y-3">
-              <div className="font-bold text-sm tracking-tight text-[var(--ink)]">
+              <div className="font-bold text-sm tracking-tight text-[var(--good-ink)]">
                 Three Administrative Chores We Can Automate:
               </div>
               <ul className="space-y-2.5 text-xs leading-relaxed">
@@ -180,17 +180,17 @@ export default function WebsiteAnalyzer() {
                     <span className="sticker-label sticker-label-navy shrink-0 text-[9px] py-0.5">
                       {['INTAKE', 'CHASE', 'FILE'][idx] ?? 'TASK'}
                     </span>
-                    <span className="text-[var(--ink)]/90">{item}</span>
+                    <span className="text-[var(--good-ink)]/90">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="pt-3 border-t border-[var(--ink)]/20">
-              <div className="font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--ink)]/50 mb-1.5 flex items-center gap-1">
+            <div className="pt-3 border-t border-[var(--good-ink)]/20">
+              <div className="font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--good-ink)]/50 mb-1.5 flex items-center gap-1">
                 <Sparkles size={10} /> Good&apos;ai Recommendation
               </div>
-              <p className="text-xs italic text-[var(--ink)]/80 leading-normal">
+              <p className="text-xs italic text-[var(--good-ink)]/80 leading-normal">
                 &ldquo;{result.summaryProposal}&rdquo;
               </p>
             </div>
@@ -198,7 +198,7 @@ export default function WebsiteAnalyzer() {
         )}
 
         {error && (
-          <div className="mt-5 border-2 border-[var(--ink)] bg-[var(--warn)]/10 text-[var(--warn)] p-3 rounded-xs flex items-start gap-2 text-xs font-mono">
+          <div className="mt-5 border-2 border-[var(--good-ink)] bg-[var(--warn)]/10 text-[var(--warn)] p-3 rounded-xs flex items-start gap-2 text-xs font-mono">
             <AlertCircle size={16} className="shrink-0" />
             <div>
               <strong>Audit failed:</strong>

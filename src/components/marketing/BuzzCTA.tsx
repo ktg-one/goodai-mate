@@ -48,10 +48,10 @@ export default function BuzzCTA({ onSubmit, className = '' }: BuzzCTAProps) {
   if (isSuccess) {
     return (
       <div className={`stamp-card stamp-card-gold p-8 md:p-10 text-center ${className}`} data-buzz-cta="success">
-        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border-2 border-[var(--ink)] bg-[var(--ok)] text-[var(--paper)] shadow-[2px_2px_0_var(--ink)]">
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border-2 border-[var(--good-ink)] bg-[var(--ok)] text-[var(--good-cloud)] shadow-[2px_2px_0_var(--good-ink)]">
           <Check size={22} aria-hidden="true" />
         </div>
-        <h3 className="font-display text-2xl md:text-3xl font-bold tracking-[-0.02em] text-[var(--ink)] mb-2">
+        <h3 className="font-display text-2xl md:text-3xl font-bold tracking-[-0.02em] text-[var(--good-ink)] mb-2">
           Sorted — we&apos;ll <span className="hl-red">buzz ya</span> shortly.
         </h3>
         <p className="text-sm text-[var(--ink-mute)] max-w-md mx-auto">
@@ -68,14 +68,14 @@ export default function BuzzCTA({ onSubmit, className = '' }: BuzzCTAProps) {
         Perth callback
       </div>
 
-      <h2 className="font-display text-3xl md:text-[2.6rem] font-bold leading-[1.02] tracking-[-0.03em] text-[var(--paper)] mb-6">
+      <h2 className="font-display text-3xl md:text-[2.6rem] font-bold leading-[1.02] tracking-[-0.03em] text-[var(--good-cloud)] mb-6">
         Give us your deets and your headaches, we&apos;ll <span className="hl">buzz ya</span> back with a fix.
       </h2>
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="grid sm:grid-cols-2 gap-3">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="buzz-name" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--paper)]/70">Name</label>
+            <label htmlFor="buzz-name" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-cloud)]/70">Name</label>
             <input
               id="buzz-name"
               className="gai-input w-full"
@@ -87,7 +87,7 @@ export default function BuzzCTA({ onSubmit, className = '' }: BuzzCTAProps) {
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="buzz-email" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--paper)]/70">Email</label>
+            <label htmlFor="buzz-email" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-cloud)]/70">Email</label>
             <input
               id="buzz-email"
               className="gai-input w-full"
@@ -100,7 +100,7 @@ export default function BuzzCTA({ onSubmit, className = '' }: BuzzCTAProps) {
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="buzz-number" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--paper)]/70">Number</label>
+            <label htmlFor="buzz-number" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-cloud)]/70">Number</label>
             <input
               id="buzz-number"
               className="gai-input w-full"
@@ -115,7 +115,7 @@ export default function BuzzCTA({ onSubmit, className = '' }: BuzzCTAProps) {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="buzz-problem" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--paper)]/70">Problem</label>
+          <label htmlFor="buzz-problem" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-cloud)]/70">Problem</label>
           <textarea
             id="buzz-problem"
             className="gai-input w-full min-h-[96px] resize-y text-sm"
@@ -127,7 +127,7 @@ export default function BuzzCTA({ onSubmit, className = '' }: BuzzCTAProps) {
         </div>
 
         {error && (
-          <p className="font-mono text-xs text-[var(--paper)] bg-[var(--ink)]/20 border border-[var(--paper)]/30 px-3 py-2 rounded-xs" role="alert">
+          <p className="font-mono text-xs text-[var(--good-cloud)] bg-[var(--good-ink)]/20 border border-[var(--good-cloud)]/30 px-3 py-2 rounded-xs" role="alert">
             {error}
           </p>
         )}
