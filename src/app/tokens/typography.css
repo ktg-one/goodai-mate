@@ -1,0 +1,24 @@
+:root {
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Lato', -apple-system, sans-serif;
+  --font-mono: 'Iosevka', 'SF Mono', monospace;
+
+  /* display (Playfair 800, always lowercase) */
+  --fs-h1: 64px;
+  --fs-h2: 52px;
+  --fs-h3: 40px;
+  --fw-display: 800;
+
+  /* body (Lato) */
+  --fs-lead: 22px;
+  --fs-body: 16px;
+  --fw-body-light: 300;
+  --fw-body: 400;
+  --fw-body-bold: 700;
+
+  /* mono labels / overlines (Iosevka, tracked wide, uppercase) */
+  --fs-label: 14px;
+  --fs-caption: 11px;
+  --tracking-label: 0.25em;
+  --tracking-caption: 0.2em;
+}

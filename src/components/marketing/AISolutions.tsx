@@ -48,17 +48,17 @@ export default function AISolutions() {
   ];
 
   return (
-    <section ref={sectionRef} className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+    <section ref={sectionRef} className="py-20 md:py-28 border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)]">
       {/* Unified physical ribbon bridge (GSAP .mail-ribbon) + non-uniform pinned variance now controlled from HomeClient mailBoard.
           This section participates as coloured docket layers on the single brutalist mail artifact. */}
 
       <div className="mx-auto max-w-5xl px-6">
         <ScrollReveal className="mb-10">
-          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">THE SYSTEMS</span>
+          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--good-coral)]">THE SYSTEMS</span>
           <h2 className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-3">
             Real <span className="hl">systems</span>.<br />Not another app.
           </h2>
-          <p className="mt-3 max-w-md text-xl text-[var(--ink)]/80">Speak the mess once. We turn it into the docket that actually runs.</p>
+          <p className="mt-3 max-w-md text-xl text-[var(--good-ink)]/80">Speak the mess once. We turn it into the docket that actually runs.</p>
         </ScrollReveal>
 
         {/* Cards fade in staggered via GSAP (opacity-only — preserves each card's
