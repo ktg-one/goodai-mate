@@ -17,3 +17,7 @@
 ## 2026-07-25 - Improve Disabled Checkbox UX with Tooltips and Wrapper Styling
 **Learning:** When styling custom checkboxes via a wrapper label (e.g., `has-[:focus-visible]`), the wrapper itself doesn't automatically inherit or convey the disabled state of its child input, leaving active cursors and no explanation for why it is disabled.
 **Action:** Always apply `has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50` to custom checkbox/radio wrappers to ensure visual consistency, and add a `title` attribute to the wrapper when a control is dynamically disabled to provide a native tooltip explaining the reason to the user.
+
+## 2026-07-28 - Enhance WebsiteAnalyzer accessibility
+**Learning:** Dynamic state changes in Brutalist 'terminal log' text areas and custom floating status indicators are not announced to screen readers by default.
+**Action:** Always add `role="log"` and `aria-live="polite"` to terminal output containers, and `role="status"` or `role="alert"` with the appropriate `aria-live` attribute to custom UI status overlays.
