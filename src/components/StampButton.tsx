@@ -61,6 +61,7 @@ const StampButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Stam
       sizeClass,
       engagedClass,
       widthClass,
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ink)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)]',
       className,
     ]
       .filter(Boolean)

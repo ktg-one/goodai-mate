@@ -17,3 +17,7 @@
 ## 2026-07-25 - Improve Disabled Checkbox UX with Tooltips and Wrapper Styling
 **Learning:** When styling custom checkboxes via a wrapper label (e.g., `has-[:focus-visible]`), the wrapper itself doesn't automatically inherit or convey the disabled state of its child input, leaving active cursors and no explanation for why it is disabled.
 **Action:** Always apply `has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50` to custom checkbox/radio wrappers to ensure visual consistency, and add a `title` attribute to the wrapper when a control is dynamically disabled to provide a native tooltip explaining the reason to the user.
+
+## 2026-07-30 - Brutalist focus rings on custom buttons
+**Learning:** Default browser focus outlines can break the intentional aesthetics of a Brutalist design system, and custom styled buttons (like `StampButton`) often miss explicit accessible focus states.
+**Action:** Always explicitly disable default outlines (`focus-visible:outline-none`) and add custom focus rings (e.g., `focus-visible:ring-2 focus-visible:ring-[var(--ink)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)]`) to interactive elements to guarantee keyboard accessibility while maintaining design fidelity.
