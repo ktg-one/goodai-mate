@@ -108,7 +108,8 @@ export default function WebsiteAnalyzer() {
               <div className="relative flex-1">
                 <input
                   id="website-url"
-                  type="text"
+                  type="url"
+                  autoComplete="url"
                   className="gai-input w-full pr-10 text-sm"
                   placeholder="e.g. www.perthplumbing.com.au"
                   required
@@ -142,7 +143,7 @@ export default function WebsiteAnalyzer() {
             <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--ink)]/60 flex items-center gap-1.5">
               <Terminal size={12} /> Crawl logs
             </span>
-            <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-xs h-[120px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
+            <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-xs h-[120px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]" role="log" aria-live="polite">
               <div className="space-y-1">
                 {/* ⚡ Bolt: Memoize expensive array mapping
                     This array map is in the same component as a controlled input.
@@ -160,7 +161,7 @@ export default function WebsiteAnalyzer() {
 
         {/* Audit Report Docket Results */}
         {result && (
-          <div className="mt-6 stamp-card stamp-card-gold p-5 space-y-4 text-left animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className="mt-6 stamp-card stamp-card-gold p-5 space-y-4 text-left animate-in fade-in slide-in-from-top-4 duration-300" role="status" aria-live="polite">
             <div className="flex items-center justify-between border-b border-[var(--ink)]/20 pb-2">
               <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--coral)] font-bold flex items-center gap-1">
                 <ClipboardCheck size={14} /> CUSTOM SYSTEMS AUDIT
@@ -198,7 +199,7 @@ export default function WebsiteAnalyzer() {
         )}
 
         {error && (
-          <div className="mt-5 border-2 border-[var(--ink)] bg-[var(--warn)]/10 text-[var(--warn)] p-3 rounded-xs flex items-start gap-2 text-xs font-mono">
+          <div className="mt-5 border-2 border-[var(--ink)] bg-[var(--warn)]/10 text-[var(--warn)] p-3 rounded-xs flex items-start gap-2 text-xs font-mono" role="alert" aria-live="assertive">
             <AlertCircle size={16} className="shrink-0" />
             <div>
               <strong>Audit failed:</strong>
