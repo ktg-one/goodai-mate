@@ -17,3 +17,8 @@
 **Vulnerability:** The TTS route (`src/app/api/tts/route.ts`) constructed the external ElevenLabs API URL by interpolating a user-provided `voiceId` without validation. A malicious user could supply a crafted string (e.g., `../../some-other-endpoint`) leading to Path Traversal against the ElevenLabs API, or abuse the server's configured API key for unintended requests.
 **Learning:** Never interpolate unvalidated user inputs directly into external API request URLs, especially when server-side credentials are used. This can result in unauthorized API usage or exploiting unexpected downstream endpoints.
 **Prevention:** Always strictly validate user inputs meant to be part of an API path (like `voiceId`) against a strict regex whitelist (e.g., `/^[a-zA-Z0-9_-]+$/`) before making the outbound request.
+
+## 2025-05-18 - SSRF Bypass via IPv4-mapped IPv6 Addresses
+**Vulnerability:** The custom SSRF protection utility (`isSafeUrl`) relied on Node's `dns.promises.lookup` which resolves hostnames to strings. The logic only filtered direct IPv4 loopback/private ranges (e.g., `127.0.0.1`) and native IPv6 loopbacks (`::1`). It completely missed IPv4-mapped IPv6 addresses like `::ffff:127.0.0.1` or `::ffff:7f00:1`, allowing SSRF bypasses to local network services.
+**Learning:** Checking for loopback and private IP blocks requires parsing both pure IPv4 formats and IPv4 embedded inside IPv6. Node `net.isIPv6` returns true for these mapped addresses, meaning IPv4 filters will be bypassed if mapped addresses aren't explicitly caught and decoded.
+**Prevention:** Always normalize and decode IPv4-mapped IPv6 addresses (`::ffff:HEX:HEX` or `::ffff:A.B.C.D`) back to their IPv4 octets before applying private network blocklists.
