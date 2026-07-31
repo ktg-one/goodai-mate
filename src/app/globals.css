@@ -1,29 +1,23 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
-@import url("./tokens/colors.css");
+@import url('tokens/colors.css');
+@import url('tokens/typography.css');
+@import url('tokens/spacing.css');
+@import url('tokens/effects.css');
+@import url('tokens/fonts.css');
 @import "tailwindcss";
-
-
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
 
 @theme {
   --font-sans:    var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-display), Georgia, serif;
   --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  --color-good-ink:         var(--good-ink);
-  --color-good-cloud:       var(--good-cloud);
-  --color-good-coral:       var(--good-coral);
-  --color-good-teal:        var(--good-teal);
-  --color-good-slate:       var(--good-slate);
-  --color-good-steel:       var(--good-steel);
-  --color-good-white:       var(--good-white);
-
-  --color-gold:        var(--good-teal);
+  --color-gold:        var(--gold);
   --color-gold-deep:   var(--gold-deep);
   --color-gold-tint:   var(--gold-tint);
-  --color-red:         var(--good-coral);
-  --color-navy:        var(--good-teal);
-  --color-paper:       var(--good-cloud);
-  --color-ink:         var(--good-ink);
+  --color-red:         var(--red);
+  --color-navy:        var(--navy);
+  --color-paper:       var(--paper);
+  --color-ink:         var(--ink);
 
   --color-bg:          var(--bg);
   --color-raised:      var(--bg-raised);
@@ -32,6 +26,7 @@
   --color-accent:      var(--accent);
   --color-line:        var(--border);
 }
+
 /* ============================================================
    Good'AI — Colors & Type  (source of truth)
    ------------------------------------------------------------
@@ -42,9 +37,6 @@
    ============================================================ */
 
 /* -------- Fonts -------- */
-
-
-/* Fraunces — local variable file with SOFT + WONK axes (in addition to opsz + wght) */
 
 
 
@@ -90,7 +82,7 @@
      LEGACY ALIASES — keep old token names working
      (orange → red, ocean → navy) so existing files don't break
      --------------------------------------------------------- */
-  --orange:       var(--good-coral);
+  --orange:       var(--red);
   --orange-deep:  var(--red-deep);
   --orange-tint:  var(--red-tint);
   --orange-100:   #FBC9C1;
@@ -100,49 +92,49 @@
   --ocean-100:   #C9CEDD;
   --ocean-200:   #8A93B4;
   --ocean-300:   #4A5685;
-  --ocean-400:   var(--good-teal);
+  --ocean-400:   var(--navy);
   --ocean-500:   #1A2349;
   --ocean-600:   var(--navy-deep);
 
   /* ---------------------------------------------------------
      COLOUR — Semantic tokens
      --------------------------------------------------------- */
-  --bg: var(--good-ink);
-  --bg-raised: var(--good-cloud);
-  --bg-sunken: var(--good-ink);
-  --bg-brand: var(--good-cloud);
-  --bg-accent: var(--good-coral);
-  --bg-gold:       var(--good-teal);
-  --bg-ocean: var(--good-teal);
+  --bg:            var(--paper);
+  --bg-raised:     #FFFAEC;
+  --bg-sunken:     var(--paper-deep);
+  --bg-brand:      var(--navy);
+  --bg-accent:     var(--red);
+  --bg-gold:       var(--gold);
+  --bg-ocean:      var(--navy);
 
-  --fg: var(--good-cloud);
-  --fg-soft: var(--good-cloud);
-  --fg-mute: var(--good-slate);
-  --fg-faint: var(--good-steel);
-  --fg-on-brand: var(--good-ink);
-  --fg-on-ocean: var(--good-ink);
+  --fg:            var(--ink);
+  --fg-soft:       var(--ink-soft);
+  --fg-mute:       var(--ink-mute);
+  --fg-faint:      var(--ink-faint);
+  --fg-on-brand:   var(--paper);
+  --fg-on-ocean:   var(--paper);
 
-  --border: var(--border-hairline);
-  --border-strong: rgba(217, 217, 217, 0.4);
+  --border:        var(--cream-line);
+  --border-strong: #C9A961;
 
-  --accent: var(--good-coral);
-  --accent-hover: var(--good-coral);
-  --accent-soft: rgba(255, 111, 97, 0.15);
+  --accent:        var(--red);
+  --accent-hover:  var(--red-deep);
+  --accent-soft:   var(--red-tint);
 
-  --highlight: var(--good-teal);
-  --success: var(--good-teal);
+  --highlight:     var(--gold);
+  --success:       var(--ok);
 
   /* stamp shadows */
-  --shadow-stamp: var(--shadow-card);
-  --shadow-stamp-orange: var(--shadow-button);
-  --shadow-stamp-ocean: var(--shadow-button);
-  --shadow-stamp-deep: var(--shadow-soft);
+  --shadow-stamp:        3px 3px 0 var(--ink);
+  --shadow-stamp-orange: 3px 3px 0 var(--red);
+  --shadow-stamp-ocean:  3px 3px 0 var(--navy);
+  --shadow-stamp-deep:   4px 4px 0 var(--ink);
 
   /* ---------------------------------------------------------
      TYPE — Families
      --------------------------------------------------------- */
-  --font-sans:    "DM Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Fraunces", Georgia, serif;
+  --font-sans:    var(--font-lato), "Lato", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
   --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* ---------------------------------------------------------
@@ -184,9 +176,9 @@
   /* ---------------------------------------------------------
      SHADOW — flat "stamp" only. No blurs.
      --------------------------------------------------------- */
-  --shadow-stamp: var(--shadow-card);
-  --shadow-stamp-orange: var(--shadow-button);
-  --shadow-stamp-deep: var(--shadow-soft);
+  --shadow-stamp:        3px 3px 0 var(--ink);
+  --shadow-stamp-orange: 3px 3px 0 var(--orange);
+  --shadow-stamp-deep:   4px 4px 0 var(--ink);
 }
 
 /* ============================================================
@@ -273,7 +265,7 @@ html, body {
   letter-spacing: -0.04em;
   font-variation-settings: "opsz" 144;
 }
-.wordmark .apos { color: var(--good-coral); }
+.wordmark .apos { color: var(--orange); }
 
 /* ============================================================
    KEYWORD HIGHLIGHT — coloured card behind a standout word.
@@ -291,13 +283,13 @@ html, body {
   box-decoration-break: clone;
   padding: 0.02em 0.24em;
   border-radius: 0.06em;            /* stays sharp at scale */
-  box-shadow: 0.06em 0.06em 0 var(--good-ink);
+  box-shadow: 0.06em 0.06em 0 var(--ink);
   font-style: normal;               /* upright even inside an italic line */
   white-space: nowrap;
 }
-.hl      { background: var(--good-teal); color: var(--good-ink); }   /* default — gold sticker */
-.hl-red  { background: var(--good-coral);  color: var(--good-cloud); } /* loud — coral on the shout word */
-.hl-navy { background: var(--good-teal); color: var(--good-cloud); } /* quiet — navy block */
+.hl      { background: var(--gold); color: var(--ink); }   /* default — gold sticker */
+.hl-red  { background: var(--red);  color: var(--paper); } /* loud — coral on the shout word */
+.hl-navy { background: var(--navy); color: var(--paper); } /* quiet — navy block */
 
 
 /* ============================================================
@@ -310,8 +302,8 @@ html, body { margin: 0; padding: 0; }
 body {
   background:
     repeating-linear-gradient(0deg, rgba(11,11,11,0.025) 0 1px, transparent 1px 4px),
-    var(--good-cloud);
-  color: var(--good-ink);
+    var(--paper);
+  color: var(--ink);
   font-family: var(--font-sans);
   min-height: 100vh;
 }
@@ -330,22 +322,22 @@ button { font-family: inherit; }
 .gai-onepage-top {
   display: flex; align-items: center; justify-content: space-between;
   padding: 12px clamp(20px, 5vw, 64px);
-  border-bottom: 2px solid var(--good-ink);
-  background: var(--good-cloud);
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
 }
 .gai-perth-chip {
   font-family: var(--font-mono);
   font-size: 11px; letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--good-ink);
+  color: var(--ink);
   background: var(--hi-yellow);
-  border: 2px solid var(--good-ink);
-  box-shadow: 3px 3px 0 var(--good-ink);
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
   padding: 5px 12px;
   border-radius: 999px;
   font-weight: 700;
 }
-.gai-perth-chip span { color: var(--good-ink); padding: 0 4px; opacity: 0.6; }
+.gai-perth-chip span { color: var(--ink); padding: 0 4px; opacity: 0.6; }
 
 /* ─── Hero stacked, centered ─────── */
 .gai-onepage-inner {
@@ -376,12 +368,12 @@ button { font-family: inherit; }
   font-size: 12px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--good-ink);
+  color: var(--ink);
   margin-bottom: 18px;
   display: inline-block;
   padding: 4px 10px;
-  background: var(--good-ink);
-  color: var(--good-cloud);
+  background: var(--ink);
+  color: var(--paper);
   font-weight: 600;
 }
 
@@ -393,12 +385,12 @@ button { font-family: inherit; }
   line-height: 1.08;
   letter-spacing: -0.035em;
   margin: 4px 0 16px;
-  color: var(--good-ink);
+  color: var(--ink);
   font-variation-settings: "opsz" 144, "SOFT" 50;
 }
 .gai-hero-h1 em {
   font-style: italic;
-  color: var(--good-ink);
+  color: var(--ink);
   font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
 }
 
@@ -418,8 +410,8 @@ button { font-family: inherit; }
   width: 100%; max-width: 640px;
 }
 .gai-intake-field {
-  background: var(--good-ink);
-  border: 2px solid var(--good-ink);
+  background: var(--ink);
+  border: 2px solid var(--ink);
   border-radius: 4px;
   box-shadow: var(--shadow-stamp-orange);
   padding: 18px 18px 12px;
@@ -427,7 +419,7 @@ button { font-family: inherit; }
   transition: box-shadow 150ms, transform 150ms;
 }
 .gai-intake-field:focus-within {
-  box-shadow: 5px 5px 0 var(--good-coral);
+  box-shadow: 5px 5px 0 var(--orange);
   transform: translate(-1px, -1px);
 }
 .gai-intake-input {
@@ -435,7 +427,7 @@ button { font-family: inherit; }
   font-family: var(--font-sans);
   font-size: 18px;
   line-height: 1.45;
-  color: var(--good-cloud);
+  color: var(--paper);
   background: transparent;
   border: none; outline: none;
   resize: none;
@@ -455,10 +447,10 @@ button { font-family: inherit; }
   display: inline-flex; align-items: center; gap: 7px;
   font-family: var(--font-sans);
   font-size: 13px; font-weight: 600;
-  color: var(--good-ink);
-  background: var(--good-cloud);
-  border: 2px solid var(--good-ink);
-  box-shadow: 2px 2px 0 var(--good-ink);
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
   padding: 8px 13px;
   border-radius: 999px;
   cursor: pointer;
@@ -466,28 +458,28 @@ button { font-family: inherit; }
 }
 .gai-tool:hover:not(:disabled) {
   transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0 var(--good-ink);
+  box-shadow: 3px 3px 0 var(--ink);
 }
 .gai-tool.is-on {
-  background: var(--good-coral);
-  color: var(--good-ink);
-  border-color: var(--good-ink);
+  background: var(--orange);
+  color: var(--ink);
+  border-color: var(--ink);
 }
 .gai-tool:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .gai-tool-send {
-  background: var(--good-coral);
-  color: var(--good-ink);
-  border: 2px solid var(--good-ink);
-  box-shadow: 3px 3px 0 var(--good-cloud);
+  background: var(--orange);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--paper);
   padding: 10px 18px;
   border-radius: 4px;
 }
 .gai-tool-send:hover:not(:disabled) {
   background: var(--orange-deep);
-  color: var(--good-ink);
+  color: var(--ink);
   transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--good-cloud);
+  box-shadow: 4px 4px 0 var(--paper);
 }
 .gai-tool-send:active { transform: translate(2px,2px); box-shadow: none; }
 
@@ -519,9 +511,9 @@ button { font-family: inherit; }
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.06em;
-  color: var(--good-cloud);
+  color: var(--paper);
   background: var(--warn);
-  border: 2px solid var(--good-ink);
+  border: 2px solid var(--ink);
   box-shadow: var(--shadow-stamp);
   padding: 10px 14px;
   border-radius: 0;
@@ -531,9 +523,9 @@ button { font-family: inherit; }
 .gai-answer {
   width: 100%; max-width: 640px;
   margin-top: 24px;
-  background: var(--good-teal);
-  color: var(--good-cloud);
-  border: 2px solid var(--good-ink);
+  background: var(--ocean-400);
+  color: var(--paper);
+  border: 2px solid var(--ink);
   border-radius: 4px;
   box-shadow: var(--shadow-stamp);
   padding: 22px 22px;
@@ -568,17 +560,17 @@ button { font-family: inherit; }
   50% { opacity: 0.45; }
 }
 .gai-answer .gai-tool {
-  background: var(--good-cloud);
-  color: var(--good-ink);
-  border-color: var(--good-ink);
-  box-shadow: 2px 2px 0 var(--good-ink);
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
 }
-.gai-answer .gai-tool.is-on { background: var(--good-coral); }
+.gai-answer .gai-tool.is-on { background: var(--orange); }
 .gai-answer-text {
   font-family: var(--font-sans);
   font-size: 17px;
   line-height: 1.5;
-  color: var(--good-cloud);
+  color: var(--paper);
   margin: 0 0 18px;
   white-space: pre-wrap;
 }
@@ -590,14 +582,14 @@ button { font-family: inherit; }
 .gai-answer-cta-help {
   font-family: var(--font-mono);
   font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--good-cloud); opacity: 0.7;
+  color: var(--paper); opacity: 0.7;
 }
 
 /* ─── Buttons ───────────────────────── */
 .gai-btn {
   font-family: var(--font-sans);
   font-weight: 600;
-  border: 2px solid var(--good-ink);
+  border: 2px solid var(--ink);
   cursor: pointer;
   transition: transform 120ms, box-shadow 120ms;
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -606,12 +598,12 @@ button { font-family: inherit; }
 .gai-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .gai-btn-md { font-size: 14px; padding: 11px 20px; border-radius: 4px; }
 .gai-btn-primary {
-  background: var(--good-coral); color: var(--good-ink);
-  box-shadow: 3px 3px 0 var(--good-ink);
+  background: var(--orange); color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
 }
 .gai-btn-primary:hover:not(:disabled) {
   transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--good-ink);
+  box-shadow: 4px 4px 0 var(--ink);
 }
 .gai-btn-primary:active { transform: translate(2px,2px); box-shadow: none; }
 
@@ -623,7 +615,7 @@ button { font-family: inherit; }
   font-variation-settings: "opsz" 144;
   line-height: 1;
 }
-.gai-wordmark .apos { color: var(--good-coral); }
+.gai-wordmark .apos { color: var(--orange); }
 
 /* ─── Logo ─── */
 .gai-logo { height: 30px; width: auto; display: block; }
@@ -631,7 +623,7 @@ button { font-family: inherit; }
 /* ─── Logo slot (drop your own logo here) ─── */
 .gai-logo-slot {
   display: inline-flex; align-items: center; justify-content: center;
-  border: 2px dashed var(--good-ink);
+  border: 2px dashed var(--ink);
   border-radius: 2px;
   background: repeating-linear-gradient(45deg, transparent 0 7px, rgba(17,17,17,0.05) 7px 9px);
   font-family: var(--font-mono);
@@ -646,47 +638,47 @@ button { font-family: inherit; }
   grid-template-columns: repeat(5, 1fr);
   gap: 0;
   margin-top: 56px;
-  border-top: 2px solid var(--good-ink);
-  border-bottom: 2px solid var(--good-ink);
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
 }
 @media (max-width: 1000px) { .gai-features { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px) { .gai-features { grid-template-columns: 1fr; } }
 .gai-feature {
   display: flex; flex-direction: column; gap: 14px;
   padding: 22px 20px;
-  border-right: 1px solid var(--good-ink);
-  background: var(--good-cloud);
+  border-right: 1px solid var(--ink);
+  background: var(--paper);
   text-align: left;
   position: relative;
 }
 .gai-feature:last-child { border-right: 0; }
-.gai-feature:nth-child(1) { background: var(--good-cloud); }
+.gai-feature:nth-child(1) { background: var(--paper); }
 .gai-feature:nth-child(2) { background: var(--hi-yellow); }
-.gai-feature:nth-child(3) { background: var(--good-coral); color: var(--good-ink); }
-.gai-feature:nth-child(4) { background: var(--good-teal); color: var(--good-cloud); }
-.gai-feature:nth-child(5) { background: var(--good-ink); color: var(--good-cloud); }
+.gai-feature:nth-child(3) { background: var(--orange); color: var(--ink); }
+.gai-feature:nth-child(4) { background: var(--ocean-400); color: var(--paper); }
+.gai-feature:nth-child(5) { background: var(--ink); color: var(--paper); }
 @media (max-width: 1000px) {
-  .gai-feature { border-right: none; border-bottom: 1px solid var(--good-ink); }
-  .gai-feature:nth-child(2), .gai-feature:nth-child(4) { border-right: 1px solid var(--good-ink); }
+  .gai-feature { border-right: none; border-bottom: 1px solid var(--ink); }
+  .gai-feature:nth-child(2), .gai-feature:nth-child(4) { border-right: 1px solid var(--ink); }
   .gai-feature:nth-last-child(-n+2) { border-bottom: 0; }
 }
 @media (max-width: 520px) {
-  .gai-feature { border-right: 0; border-bottom: 1px solid var(--good-ink); }
+  .gai-feature { border-right: 0; border-bottom: 1px solid var(--ink); }
   .gai-feature:last-child { border-bottom: 0; }
 }
 
 .gai-feature-icon {
   width: 36px; height: 36px;
-  background: var(--good-ink);
-  color: var(--good-cloud);
+  background: var(--ink);
+  color: var(--paper);
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0;
   border-radius: 0;
 }
 .gai-feature:nth-child(4) .gai-feature-icon,
-.gai-feature:nth-child(5) .gai-feature-icon { background: var(--good-cloud); color: var(--good-ink); }
-.gai-feature:nth-child(3) .gai-feature-icon { background: var(--good-ink); color: var(--good-coral); }
-.gai-feature:nth-child(2) .gai-feature-icon { background: var(--good-ink); color: var(--hi-yellow); }
+.gai-feature:nth-child(5) .gai-feature-icon { background: var(--paper); color: var(--ink); }
+.gai-feature:nth-child(3) .gai-feature-icon { background: var(--ink); color: var(--orange); }
+.gai-feature:nth-child(2) .gai-feature-icon { background: var(--ink); color: var(--hi-yellow); }
 
 .gai-feature-text {
   display: flex; flex-direction: column; line-height: 1.2; text-align: left;
@@ -711,10 +703,10 @@ button { font-family: inherit; }
 .gai-marquee {
   margin-top: 0;
   overflow: hidden;
-  border-bottom: 2px solid var(--good-ink);
+  border-bottom: 2px solid var(--ink);
   padding: 14px 0;
-  background: var(--good-ink);
-  color: var(--good-cloud);
+  background: var(--ink);
+  color: var(--paper);
 }
 .gai-marquee-track {
   display: flex; gap: 0; white-space: nowrap;
@@ -727,10 +719,10 @@ button { font-family: inherit; }
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--good-cloud);
+  color: var(--paper);
   flex-shrink: 0;
 }
-.gai-marquee-sep { color: var(--good-coral); padding: 0 22px; font-weight: 700; }
+.gai-marquee-sep { color: var(--orange); padding: 0 22px; font-weight: 700; }
 @keyframes gai-scroll {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }

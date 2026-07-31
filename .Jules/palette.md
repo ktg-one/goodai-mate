@@ -17,6 +17,3 @@
 ## 2026-07-25 - Improve Disabled Checkbox UX with Tooltips and Wrapper Styling
 **Learning:** When styling custom checkboxes via a wrapper label (e.g., `has-[:focus-visible]`), the wrapper itself doesn't automatically inherit or convey the disabled state of its child input, leaving active cursors and no explanation for why it is disabled.
 **Action:** Always apply `has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50` to custom checkbox/radio wrappers to ensure visual consistency, and add a `title` attribute to the wrapper when a control is dynamically disabled to provide a native tooltip explaining the reason to the user.
-## 2026-07-30 - Refactored Design Tokens (Run 1: Colors)
-**Learning:** Transitioning a Brutalist color system from strict semantic single variables (`--ink`, `--paper`) to a scoped brand schema (`--good-ink`, `--good-cloud`, etc.) requires a careful update of `globals.css` and all hardcoded CSS variables embedded in React inline styles and Tailwind arbitrary values.
-**Action:** Always check both explicit `style={{}}` attributes and arbitrary Tailwind classes like `text-[var(--ink)]` when updating root variables to ensure the new token references correctly map across the app.

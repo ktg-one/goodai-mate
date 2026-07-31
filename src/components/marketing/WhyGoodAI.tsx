@@ -28,7 +28,7 @@ export default function WhyGoodAI() {
   } as const;
 
   return (
-    <section ref={sectionRef} className="py-20 md:py-28 border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)] relative overflow-hidden">
+    <section ref={sectionRef} className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)] relative overflow-hidden">
       {/* Decorative swirl shape — bottom-right corner */}
       <img src="/assets/shapes/vec-teal.svg" alt="" aria-hidden className="pointer-events-none select-none absolute -bottom-24 -right-24 w-72 opacity-10" />
       {/* Unified physical ribbon bridge handled by parent mailBoard GSAP — no competing motion here */}
@@ -36,7 +36,7 @@ export default function WhyGoodAI() {
       <div className="mx-auto max-w-5xl px-6 relative z-10">
         <div className="flex items-center gap-4 mb-6">
           <BrandWordmark className="h-7" />
-          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--good-ink)]/60">
+          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--ink)]/60">
             Why Good&apos;ai?
           </span>
         </div>
@@ -54,7 +54,7 @@ export default function WhyGoodAI() {
           </motion.div>
 
           <motion.div
-            className="text-xl text-[var(--good-ink)]/80 space-y-4"
+            className="text-xl text-[var(--ink)]/80 space-y-4"
             variants={right}
             initial="hidden"
             whileInView="visible"
@@ -68,7 +68,7 @@ export default function WhyGoodAI() {
               We built Good&apos;ai so you can speak the problem once and we turn it into systems that actually run.
               You get your time back. We get the work done.
             </p>
-            <p className="font-medium text-[var(--good-ink)]">
+            <p className="font-medium text-[var(--ink)]">
               Built in Perth. Works everywhere. <span className="hl-red">Knock off early.</span>
             </p>
           </motion.div>

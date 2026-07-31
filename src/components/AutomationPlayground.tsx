@@ -4,8 +4,8 @@ import { useState, useRef, useMemo } from 'react';
 import { Sparkles, Terminal, FileText, Calendar, Mail, FileSpreadsheet, Check, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
 
-const CHECKBOX_LABEL_CLASSES = "flex items-center gap-2 border-2 border-[var(--good-ink)] bg-[var(--good-cloud)] p-2 rounded-xs cursor-pointer select-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--good-coral)] has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50";
-const CHECKBOX_INPUT_CLASSES = "accent-[var(--good-coral)] outline-none focus-visible:outline-none";
+const CHECKBOX_LABEL_CLASSES = "flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--coral)] has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50";
+const CHECKBOX_INPUT_CLASSES = "accent-[var(--coral)] outline-none focus-visible:outline-none";
 
 export default function AutomationPlayground() {
   const [name, setName] = useState('');
@@ -46,8 +46,8 @@ export default function AutomationPlayground() {
   // Without useMemo, typing a single character forces the O(N) array mapping
   // and DOM recreation to run again, causing input lag.
   const memoizedLogs = useMemo(() => logs.map((log, index) => {
-    let colorClass = 'text-[var(--good-cloud)]/90';
-    if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--good-coral)] font-bold';
+    let colorClass = 'text-[var(--paper)]/90';
+    if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--coral)] font-bold';
     if (log.startsWith('[SYSTEM]')) colorClass = 'text-[var(--gold-tint)] font-bold';
     return (
       <div key={index} className={colorClass}>
@@ -107,14 +107,14 @@ export default function AutomationPlayground() {
 
   return (
     <div className="stamp-card stamp-card-gold p-6 md:p-8 w-full">
-      <div className="gai-leadcard-eyebrow flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--good-coral)] mb-3">
+      <div className="gai-leadcard-eyebrow flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--coral)] mb-3">
         <Sparkles size={14} /> Live Workspace Playground
       </div>
       
-      <h3 className="font-display text-3xl md:text-4xl font-bold tracking-[-0.025em] leading-none text-[var(--good-ink)] mb-4">
+      <h3 className="font-display text-3xl md:text-4xl font-bold tracking-[-0.025em] leading-none text-[var(--ink)] mb-4">
         Run real <span className="hl">Workspace Automations</span>.
       </h3>
-      <p className="text-sm md:text-base text-[var(--good-ink)]/80 mb-6 max-w-2xl leading-relaxed">
+      <p className="text-sm md:text-base text-[var(--ink)]/80 mb-6 max-w-2xl leading-relaxed">
         Run a live Workspace demo — Sheets, Docs, Calendar, and Gmail wired into one intake docket.
       </p>
 
@@ -254,18 +254,18 @@ export default function AutomationPlayground() {
 
         {/* Terminal logs column */}
         <div className="lg:col-span-7 flex flex-col gap-3">
-          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-ink)]/60 flex items-center gap-1.5">
+          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 flex items-center gap-1.5">
             <Terminal size={12} /> Live execution log
           </span>
           
-          <div className="border-2 border-[var(--good-ink)] bg-[var(--good-teal)] text-[var(--good-cloud)] rounded-xs p-4 font-mono text-xs h-[240px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]" role="log" aria-live="polite">
+          <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-4 font-mono text-xs h-[240px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]" role="log" aria-live="polite">
             <div className="space-y-2">
               {logs.length === 0 && (
-                <div className="text-[var(--good-cloud)]/40 italic">Waiting to trigger pipeline... Details will compile here in real time.</div>
+                <div className="text-[var(--paper)]/40 italic">Waiting to trigger pipeline... Details will compile here in real time.</div>
               )}
               {memoizedLogs}
               {isRunning && (
-                <div className="flex items-center gap-1.5 text-[var(--good-cloud)]/50 animate-pulse mt-1">
+                <div className="flex items-center gap-1.5 text-[var(--paper)]/50 animate-pulse mt-1">
                   <span>●</span><span>Executing GWS scripts...</span>
                 </div>
               )}
@@ -276,7 +276,7 @@ export default function AutomationPlayground() {
           {/* Results dashboard */}
           {results && (
             <div className="stamp-card stamp-card-navy p-4">
-              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-coral)] font-bold mb-3 flex items-center gap-1">
+              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--coral)] font-bold mb-3 flex items-center gap-1">
                 <Check size={12} /> LIVE WORKSPACE DOCKETS FILED:
               </div>
               <div className="grid sm:grid-cols-2 gap-2 text-xs font-mono">
@@ -285,7 +285,7 @@ export default function AutomationPlayground() {
                     href={results.sheetUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 border-2 border-[var(--good-ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--good-cloud)] hover:translate-y-[-1px] transition-all"
+                    className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--paper)] hover:translate-y-[-1px] transition-all"
                   >
                     <FileSpreadsheet size={16} className="text-[var(--ok)]" />
                     <span className="underline truncate">Google Sheet Lead Board</span>
@@ -296,15 +296,15 @@ export default function AutomationPlayground() {
                     href={results.docUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 border-2 border-[var(--good-ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--good-cloud)] hover:translate-y-[-1px] transition-all"
+                    className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--paper)] hover:translate-y-[-1px] transition-all"
                   >
-                    <FileText size={16} className="text-[var(--good-teal)]" />
+                    <FileText size={16} className="text-[var(--navy)]" />
                     <span className="underline truncate">Google Doc Proposal</span>
                   </a>
                 )}
                 {results.emailId && (
-                  <div className="flex items-center gap-2 border-2 border-[var(--good-ink)] bg-[var(--gold-tint)] p-2">
-                    <Mail size={16} className="text-[var(--good-coral)]" />
+                  <div className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2">
+                    <Mail size={16} className="text-[var(--coral)]" />
                     <span className="truncate">Email Sent (ID: {results.emailId.slice(0,8)}...)</span>
                   </div>
                 )}
@@ -313,15 +313,15 @@ export default function AutomationPlayground() {
                     href={results.calendarUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 border-2 border-[var(--good-ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--good-cloud)] hover:translate-y-[-1px] transition-all"
+                    className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--paper)] hover:translate-y-[-1px] transition-all"
                   >
                     <Calendar size={16} className="text-[var(--gold-tint)]" />
                     <span className="underline truncate">Scheduled Calendar Call</span>
                   </a>
                 )}
                 {results.n8nStatus && (
-                  <div className="flex items-center gap-2 border-2 border-[var(--good-ink)] bg-[var(--gold-tint)] p-2">
-                    <Sparkles size={16} className="text-[var(--good-teal)]" />
+                  <div className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2">
+                    <Sparkles size={16} className="text-[var(--navy)]" />
                     <span className="truncate">n8n Webhook: {results.n8nStatus}</span>
                   </div>
                 )}
@@ -330,11 +330,11 @@ export default function AutomationPlayground() {
           )}
 
           {error && (
-            <div className="border-2 border-[var(--good-ink)] bg-[var(--warn)] text-[var(--good-cloud)] p-3 rounded-xs flex items-start gap-2 text-xs font-mono shadow-[2px_2px_0_var(--good-ink)]">
+            <div className="border-2 border-[var(--ink)] bg-[var(--warn)] text-[var(--paper)] p-3 rounded-xs flex items-start gap-2 text-xs font-mono shadow-[2px_2px_0_var(--ink)]">
               <AlertCircle size={16} className="shrink-0" />
               <div>
                 <strong>Error running pipeline:</strong>
-                <p className="mt-1 text-[var(--good-cloud)]/90">{error}</p>
+                <p className="mt-1 text-[var(--paper)]/90">{error}</p>
               </div>
             </div>
           )}

@@ -127,8 +127,8 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
   // Reduced-motion users get a fully static card (no sink).
   const heroY = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], prefersReducedMotion ? [0, 0, 0, 0] : [0, 22, 52, 85]);
   const heroShadow = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [
-    '4px 4px 0 var(--good-ink)',
-    '6px 7px 0 var(--good-ink)',
+    '4px 4px 0 var(--ink)',
+    '6px 7px 0 var(--ink)',
     '3px 9px 0 var(--navy-deep)',
     '2px 11px 0 var(--navy-ink)',
   ]);
@@ -361,14 +361,14 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
   const isActive = status === 'listening' || status === 'speaking';
 
   return (
-    <div className={`relative w-full flex flex-col overflow-hidden font-sans ${embedded ? '' : 'min-h-screen bg-[var(--good-cloud)]'}`}>
+    <div className={`relative w-full flex flex-col overflow-hidden font-sans ${embedded ? '' : 'min-h-screen bg-[var(--paper)]'}`}>
 
       {!embedded && (
-        <div className="relative z-20 flex items-center justify-between px-6 md:px-12 pt-6 pb-4 border-b-2 border-[var(--good-ink)]">
+        <div className="relative z-20 flex items-center justify-between px-6 md:px-12 pt-6 pb-4 border-b-2 border-[var(--ink)]">
           <div className="flex items-center gap-2.5">
             <BrandWordmark className="h-8" />
           </div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--good-ink)]/60">
+          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink)]/60">
             Voice intake
           </div>
         </div>
@@ -398,10 +398,10 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
                 RoboKev
               </StampButton>
             </div>
-            <h1 className="font-display text-[3.2rem] md:text-[4.5rem] leading-none tracking-[-0.04em] text-[var(--good-ink)]">
+            <h1 className="font-display text-[3.2rem] md:text-[4.5rem] leading-none tracking-[-0.04em] text-[var(--ink)]">
               Talk to <span className="hl-red">Good&apos;ai</span>
             </h1>
-            <p className="mt-3 text-xl text-[var(--good-ink)]/80 max-w-md mx-auto">
+            <p className="mt-3 text-xl text-[var(--ink)]/80 max-w-md mx-auto">
               Speak your admin problem. We&apos;ll listen like a mate who actually gets it.
             </p>
           </div>
@@ -433,7 +433,7 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
 
         <div className="w-full max-w-5xl mt-4 md:mt-6" ref={embedded ? undefined : heroStampRef}>
           <motion.div
-            className="stamp-box relative overflow-hidden bg-[var(--good-cloud)] border-2 border-[var(--good-ink)]"
+            className="stamp-box relative overflow-hidden bg-[var(--paper)] border-2 border-[var(--ink)]"
             style={{
               // Physical descent + filing: gentle sink + deepening shadow as "mailed into stack".
               // Rotate/scale removed — they warped the card (and its canvas/text) on scroll.
@@ -445,19 +445,19 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
                 as the card files down. Rotate/skew removed (they warped the frame on scroll). */}
             <motion.div
               aria-hidden
-              className="pointer-events-none absolute inset-0 border-l-[3px] border-t-[1px] border-[var(--good-ink)]/40 rounded-[3px]"
+              className="pointer-events-none absolute inset-0 border-l-[3px] border-t-[1px] border-[var(--ink)]/40 rounded-[3px]"
               style={{
                 opacity: useTransform(scrollYProgress, [0, 0.25, 0.9, 1], [0.3, 0.65, 0.9, 0.75]),
               }}
             />
             {/* Visualizer header bar */}
-            <div className="flex items-center justify-between border-b-2 border-[var(--good-ink)] bg-[var(--good-cloud)] px-5 py-2.5">
+            <div className="flex items-center justify-between border-b-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-2.5">
               <div className="flex items-center gap-3">
                 <div className="flex gap-1.5">
-                  <div className="w-2.5 h-2.5 border-2 border-[var(--good-ink)]" />
-                  <div className="w-2.5 h-2.5 border-2 border-[var(--good-ink)]" />
+                  <div className="w-2.5 h-2.5 border-2 border-[var(--ink)]" />
+                  <div className="w-2.5 h-2.5 border-2 border-[var(--ink)]" />
                 </div>
-                <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-ink)]/70">
+                <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/70">
                   Acoustic box
                 </span>
               </div>
@@ -474,7 +474,7 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
             </div>
 
             {/* Visualizer area — wave-ribbon.png added verbatim as design signal / waveform layer (Brutalist Skill.html example, multiply blend, scaleY(0.7), participates in filing) */}
-            <div className="relative h-[420px] md:h-[520px] bg-[var(--good-cloud)] overflow-hidden flex items-center justify-center">
+            <div className="relative h-[420px] md:h-[520px] bg-[var(--paper)] overflow-hidden flex items-center justify-center">
               <img 
                 src={CHARACTER_ASSETS.waveRibbon} 
                 alt="" 
@@ -501,25 +501,25 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
 
               {/* Live status overlay — mechanical relay stamp */}
               <div className="absolute top-4 left-4 z-30">
-                <div className="stamp-box inline-flex items-center gap-2 bg-[var(--good-cloud)] border-2 border-[var(--good-ink)] px-4 py-1.5 font-mono text-xs uppercase tracking-[0.16em]" role="status" aria-live="polite">
+                <div className="stamp-box inline-flex items-center gap-2 bg-[var(--paper)] border-2 border-[var(--ink)] px-4 py-1.5 font-mono text-xs uppercase tracking-[0.16em]" role="status" aria-live="polite">
                   {status === 'listening' && (
-                    <span className="text-[var(--good-coral)] stamp-relay font-bold">● LISTENING</span>
+                    <span className="text-[var(--coral)] stamp-relay font-bold">● LISTENING</span>
                   )}
                   {status === 'thinking' && (
-                    <span className="text-[var(--good-ink)] tracking-[0.3em]">THINKING…</span>
+                    <span className="text-[var(--ink)] tracking-[0.3em]">THINKING…</span>
                   )}
                   {status === 'speaking' && (
-                    <span className="flex items-center gap-1.5 text-[var(--good-teal)] font-medium">
+                    <span className="flex items-center gap-1.5 text-[var(--navy)] font-medium">
                       <Volume2 size={15} /> SPEAKING
                     </span>
                   )}
-                  {status === 'idle' && <span className="text-[var(--good-ink)]/70">READY</span>}
+                  {status === 'idle' && <span className="text-[var(--ink)]/70">READY</span>}
                   {status === 'error' && <span className="text-[var(--warn)] font-bold">ISSUE</span>}
                 </div>
               </div>
 
               {/* Mode controls — SSOT StampButton (paper variant) with engaged + focus die ring, keyboard parity. Grouped segmented. */}
-              <div className="absolute bottom-4 right-4 z-30 flex border-2 border-[var(--good-ink)] bg-[var(--good-cloud)] text-[10px] font-mono uppercase font-bold overflow-hidden shadow-[2px_2px_0_var(--good-ink)]" role="group" aria-label="Visualizer mode">
+              <div className="absolute bottom-4 right-4 z-30 flex border-2 border-[var(--ink)] bg-[var(--paper)] text-[10px] font-mono uppercase font-bold overflow-hidden shadow-[2px_2px_0_var(--ink)]" role="group" aria-label="Visualizer mode">
                 {(['avatar', 'wave'] as const).map((m) => (
                   <StampButton
                     key={m}
@@ -528,7 +528,7 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
                     engaged={viewMode === m}
                     onClick={() => setViewMode(m)}
                     aria-pressed={viewMode === m}
-                    className={`px-5 py-2 text-[10px] border-r-2 border-[var(--good-ink)] last:border-r-0 ${viewMode === m ? 'bg-[var(--good-ink)] text-[var(--good-cloud)]' : ''}`}
+                    className={`px-5 py-2 text-[10px] border-r-2 border-[var(--ink)] last:border-r-0 ${viewMode === m ? 'bg-[var(--ink)] text-[var(--paper)]' : ''}`}
                   >
                     {m}
                   </StampButton>
@@ -537,51 +537,51 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
             </div>
 
             {/* Transcript + Response area */}
-            <div className="border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)] p-6 space-y-5 min-h-[140px]">
+            <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] p-6 space-y-5 min-h-[140px]">
               <AnimatePresence mode="wait">
                 {userTranscript && (
                   <motion.div
-                    initial={{ opacity: 0, y: -1, scale: 0.94, boxShadow: '1px 1px 0 var(--good-ink)' }}
+                    initial={{ opacity: 0, y: -1, scale: 0.94, boxShadow: '1px 1px 0 var(--ink)' }}
                     animate={{ 
                       opacity: 1, 
                       y: 0, 
                       scale: [1.02, 1], 
-                      boxShadow: '4px 4px 0 var(--good-ink)'
+                      boxShadow: '4px 4px 0 var(--ink)'
                     }}
                     transition={{ duration: 0.12, ease: STAMP_EASE, delay: 0.01 }}
                     className="pl-1"
                   >
-                    <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-ink)]/60 mb-1">YOU SAID</div>
-                    <p className="text-[var(--good-ink)] text-lg leading-snug">“{userTranscript}”</p>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mb-1">YOU SAID</div>
+                    <p className="text-[var(--ink)] text-lg leading-snug">“{userTranscript}”</p>
                   </motion.div>
                 )}
                 {agentResponse && (
                   <motion.div
-                    initial={{ opacity: 0, y: 1, scale: 0.96, boxShadow: '1px 1px 0 var(--good-ink)' }}
+                    initial={{ opacity: 0, y: 1, scale: 0.96, boxShadow: '1px 1px 0 var(--ink)' }}
                     animate={{ 
                       opacity: 1, 
                       y: 0, 
                       scale: 1, 
-                      boxShadow: '3px 3px 0 var(--good-ink)'
+                      boxShadow: '3px 3px 0 var(--ink)'
                     }}
                     transition={{ duration: 0.1, ease: STAMP_EASE }}
                     className="pl-1"
                   >
-                    <div className="font-mono text-[10px] tracking-[0.16em] text-[var(--good-teal)]/70 mb-1">Good<span className="text-[var(--good-coral)]">&rsquo;</span>ai</div>
-                    <p className="text-[var(--good-ink)] text-[15px] leading-snug">“{agentResponse}”</p>
-                    <button onClick={replayLastResponse} className="mt-1 text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--good-teal)]/60 hover:text-[var(--good-teal)] underline decoration-1 underline-offset-2">Replay voice</button>
+                    <div className="font-mono text-[10px] tracking-[0.16em] text-[var(--navy)]/70 mb-1">Good<span className="text-[var(--coral)]">&rsquo;</span>ai</div>
+                    <p className="text-[var(--ink)] text-[15px] leading-snug">“{agentResponse}”</p>
+                    <button onClick={replayLastResponse} className="mt-1 text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--navy)]/60 hover:text-[var(--navy)] underline decoration-1 underline-offset-2">Replay voice</button>
                   </motion.div>
                 )}
               </AnimatePresence>
               {!userTranscript && !agentResponse && (
-                <div className="text-[var(--good-ink)]/60 text-sm pl-1">Press the button and speak naturally. The browser will transcribe your voice locally.</div>
+                <div className="text-[var(--ink)]/60 text-sm pl-1">Press the button and speak naturally. The browser will transcribe your voice locally.</div>
               )}
               {error && (
                 <div className="text-[var(--warn)] text-sm pl-1 font-medium">{error}</div>
               )}
             </div>
 
-            <div className="border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)] px-5 py-2 flex justify-end">
+            <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-2 flex justify-end">
               <StampButton
                 variant="paper"
                 size="sm"
@@ -595,8 +595,8 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
             </div>
             {showLab && (
               <>
-                <div className="border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)] px-5 py-3 flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-ink)]/60 mr-1">Backend</span>
+                <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-3 flex flex-wrap items-center gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">Backend</span>
                   {modelOptions.map((m) => (
                     <StampButton
                       key={m.id}
@@ -610,8 +610,8 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
                     </StampButton>
                   ))}
                 </div>
-                <div className="border-t-2 border-[var(--good-ink)] bg-[var(--good-cloud)] px-5 py-3 flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--good-ink)]/60 mr-1">Voice</span>
+                <div className="border-t-2 border-[var(--ink)] bg-[var(--paper)] px-5 py-3 flex flex-wrap items-center gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60 mr-1">Voice</span>
                   {voiceOptions.map((v) => (
                     <StampButton
                       key={v.id}
@@ -647,13 +647,14 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
                     <input
                       type="text"
                       placeholder="Voice ID…"
+                      aria-label="Voice ID…"
                       value={customVoiceId}
                       onChange={(e) => {
                         const val = e.target.value.trim();
                         setCustomVoiceId(val);
                         setSelectedVoiceId(val);
                       }}
-                      className="font-mono text-[10px] bg-[var(--paper-deep)] border-2 border-[var(--good-ink)] px-2 py-1 max-w-[200px] text-[var(--good-ink)] focus:outline-none"
+                      className="font-mono text-[10px] bg-[var(--paper-deep)] border-2 border-[var(--ink)] px-2 py-1 max-w-[200px] text-[var(--ink)] focus:outline-none"
                     />
                   )}
                 </div>
@@ -661,7 +662,7 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
             )}
 
             {/* Big red stamp CTA — one red per surface, full physics */}
-            <div className="border-t-2 border-[var(--good-ink)] bg-[var(--gold-tint)] p-5 flex justify-center">
+            <div className="border-t-2 border-[var(--ink)] bg-[var(--gold-tint)] p-5 flex justify-center">
               <StampButton
                 variant="red"
                 size="lg"
@@ -685,7 +686,7 @@ export function VoiceAgentHero({ onMailFiled, embedded = false }: VoiceAgentHero
           </motion.div>
 
           {!embedded && (
-            <p className="text-center mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--good-ink)]/50">
+            <p className="text-center mt-4 text-xs font-mono uppercase tracking-[0.16em] text-[var(--ink)]/50">
               Built in Perth · Voice intake demo
             </p>
           )}
