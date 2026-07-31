@@ -39,9 +39,6 @@
 /* -------- Fonts -------- */
 
 
-/* Fraunces — local variable file with SOFT + WONK axes (in addition to opsz + wght) */
-
-
 
 :root {
   /* ---------------------------------------------------------
@@ -136,8 +133,8 @@
   /* ---------------------------------------------------------
      TYPE — Families
      --------------------------------------------------------- */
-  --font-sans:    "DM Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Fraunces", Georgia, serif;
+  --font-sans:    var(--font-lato), "Lato", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
   --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* ---------------------------------------------------------
