@@ -9,3 +9,7 @@
 ## 2024-12-07 - Chat Thread ARIA Updates
 **Learning:** For chat interfaces (like Vercel AI SDK chat flows) where conversational text flows continuously and state updates rapidly (e.g. typing, incoming streaming tokens, submission errors), screen readers fail to announce these changes without explicit ARIA roles.
 **Action:** Always wrap the incoming chat stream container with `role="log"` and `aria-live="polite"`. Add `role="status"` to typing indicators and `role="alert" aria-live="assertive"` to chat submission error messages.
+
+## 2024-08-01 - Brand Font Implementation
+**Learning:** The brand typography uses DM Sans for body and Fraunces for display text. Loading them via Next.js `next/font` needs the font variables appropriately mapped and injected in the root HTML to avoid CSS cyclic dependencies in global CSS mappings. Also, Tailwind's v4 `@import` syntax expects all URL imports to be placed before `@import "tailwindcss";` or else it fails.
+**Action:** When integrating Next.js font variables with global CSS vars and Tailwind v4, ensure distinct variable names are injected, mappings reflect these inside the CSS `:root`, and module `@import` dependencies are correctly ordered at the top.

@@ -1,18 +1,26 @@
 import type { Metadata } from "next";
-import { Lato, Playfair_Display } from 'next/font/google';
+import { DM_Sans } from 'next/font/google';
+import localFont from 'next/font/local';
 import "./globals.css";
 
-const lato = Lato({
-  weight: ['400', '700'],
+const dmSans = DM_Sans({
   subsets: ['latin'],
-  variable: '--font-lato',
+  variable: '--font-dm-sans',
   display: 'swap',
 });
 
-const playfairDisplay = Playfair_Display({
-  subsets: ['latin'],
-  style: ['normal', 'italic'],
-  variable: '--font-playfair',
+const fraunces = localFont({
+  src: [
+    {
+      path: '../../public/fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.ttf',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/Fraunces-Italic-VariableFont_SOFT_WONK_opsz_wght.ttf',
+      style: 'italic',
+    }
+  ],
+  variable: '--font-fraunces',
   display: 'swap',
 });
 
@@ -29,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfairDisplay.variable} ${lato.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${dmSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--fg)] font-sans">{children}</body>
     </html>
