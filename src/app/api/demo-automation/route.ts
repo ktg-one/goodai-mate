@@ -270,11 +270,13 @@ export async function POST(req: NextRequest) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout
         
+        // 🛡️ Sentinel: Set redirect to 'error' to prevent redirect-based SSRF bypasses
         const n8nRes = await fetch(targetUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
-          signal: controller.signal
+          signal: controller.signal,
+          redirect: 'error'
         });
         
         clearTimeout(timeoutId);
