@@ -1,2 +1,3 @@
 - [x] Added aria-label to Custom Voice ID inputs in VoiceAgentHero and gem-voice components for accessibility.
 - [x] Integrated design token imports to globals.css.
+- [x] Fixed input type and added autoComplete attribute to URL input in WebsiteAnalyzer component for accessibility.
