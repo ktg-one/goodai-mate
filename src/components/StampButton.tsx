@@ -53,6 +53,8 @@ const StampButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Stam
 
     const engagedClass = engaged ? 'is-engaged' : '';
     const widthClass = fullWidth ? 'w-full' : '';
+    const focusRingClass = variant === 'red' ? 'focus-visible:ring-[var(--red)]' : 'focus-visible:ring-[var(--ink)]';
+    const focusBaseClass = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)]';
 
     // Compose exactly — no arbitrary values inside component
     const classes = [
@@ -61,6 +63,8 @@ const StampButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Stam
       sizeClass,
       engagedClass,
       widthClass,
+      focusBaseClass,
+      focusRingClass,
       className,
     ]
       .filter(Boolean)
