@@ -28,10 +28,24 @@ export async function isSafeUrl(urlString: string): Promise<boolean> {
       const lowerAddr = address.toLowerCase();
       if (lowerAddr.startsWith('fc') || lowerAddr.startsWith('fd')) return false;
       if (lowerAddr.startsWith('fe80')) return false;
+
+      // 🛡️ Sentinel: Prevent IPv4-mapped IPv6 SSRF bypasses
+      if (lowerAddr.startsWith('::ffff:')) {
+        const ipv4Part = lowerAddr.substring(7);
+        if (net.isIPv4(ipv4Part)) {
+          const parts = ipv4Part.split('.').map(Number);
+          if (parts[0] === 10) return false;
+          if (parts[0] === 127) return false;
+          if (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) return false;
+          if (parts[0] === 192 && parts[1] === 168) return false;
+          if (parts[0] === 169 && parts[1] === 254) return false;
+          if (parts[0] === 0) return false;
+        }
+      }
     }
 
     return true;
-  } catch (error) {
+  } catch (error: unknown) {
     return false;
   }
 }
