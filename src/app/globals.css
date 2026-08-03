@@ -754,3 +754,107 @@ button { font-family: inherit; }
 @media (max-width: 760px) {
   .gai-hero-mark { width: 140px; }
 }
+
+/* ─── Stamp Button Primitive ─────────────────── */
+.stamp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 120ms, box-shadow 120ms;
+  text-align: center;
+  white-space: nowrap;
+  outline: none;
+  /* Default md padding */
+  font-size: 14px;
+  padding: 10px 16px;
+}
+.stamp-btn-sm {
+  font-size: 13px;
+  padding: 6px 12px;
+}
+.stamp-btn-lg {
+  font-size: 16px;
+  padding: 12px 24px;
+}
+.stamp-btn:disabled,
+.stamp-btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Physics: hover / active / engaged */
+.stamp-btn:not(:disabled):not([aria-disabled="true"]):hover {
+  transform: translate(-1px, -1px);
+}
+.stamp-btn:not(:disabled):not([aria-disabled="true"]):active,
+.stamp-btn.is-engaged {
+  transform: translate(2px, 2px);
+  box-shadow: none !important;
+}
+
+/* Variants */
+.stamp-btn-red {
+  background: var(--red);
+  color: var(--paper);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.stamp-btn-red:not(:disabled):not([aria-disabled="true"]):hover {
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.stamp-btn-red:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--red);
+}
+
+.stamp-btn-gold {
+  background: var(--gold);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.stamp-btn-gold:not(:disabled):not([aria-disabled="true"]):hover {
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.stamp-btn-gold:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--ink);
+}
+
+.stamp-btn-navy {
+  background: var(--navy);
+  color: var(--paper);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.stamp-btn-navy:not(:disabled):not([aria-disabled="true"]):hover {
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.stamp-btn-navy:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--navy);
+}
+
+.stamp-btn-ink {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 3px 3px 0 var(--gold);
+}
+.stamp-btn-ink:not(:disabled):not([aria-disabled="true"]):hover {
+  box-shadow: 4px 4px 0 var(--gold);
+}
+.stamp-btn-ink:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--ink);
+}
+
+.stamp-btn-paper {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.stamp-btn-paper:not(:disabled):not([aria-disabled="true"]):hover {
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.stamp-btn-paper:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--ink);
+}

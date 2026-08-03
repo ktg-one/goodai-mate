@@ -21,3 +21,7 @@
 ## 2026-08-02 - Typographical Brand Update
 **Learning:** Implementing custom brand fonts requires resolving global CSS variables specifically through Next.js font variables rather than direct imports, to avoid layout cyclic dependency errors.
 **Action:** Use `next/font` to generate CSS variables (like `--font-fraunces`), and proxy these in a dedicated token file (`fonts.css`) to globally recognized semantic keys (`--font-display`).
+
+## 2026-08-03 - Brutalist Stamp Button Styling Primitive
+**Learning:** Hardcoded classes across UI components for styling custom buttons fail to create a cohesive brutalist experience (e.g. strict physics, hover shadows, flat aesthetics) without centralized primitive declarations.
+**Action:** When creating a primitive interaction (like `stamp-btn`), define its core physics and color variants globally in `globals.css` rather than spreading the utility classes inline across multiple component files, ensuring consistent behavior across different button components.
