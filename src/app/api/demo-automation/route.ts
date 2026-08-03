@@ -270,21 +270,43 @@ export async function POST(req: NextRequest) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout
         
-        const n8nRes = await fetch(targetUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          signal: controller.signal
-        });
+        let n8nRes;
+        let currentUrl = targetUrl;
+        let redirectCount = 0;
+        const MAX_REDIRECTS = 5;
+
+        while (redirectCount < MAX_REDIRECTS) {
+          n8nRes = await fetch(currentUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            signal: controller.signal,
+            redirect: 'manual'
+          });
+
+          if (n8nRes.status >= 300 && n8nRes.status < 400) {
+            const location = n8nRes.headers.get('location');
+            if (!location) break;
+
+            const nextUrl = new URL(location, currentUrl).toString();
+            if (!(await isSafeUrl(nextUrl))) {
+              throw new Error('Redirected to restricted or invalid URL');
+            }
+            currentUrl = nextUrl;
+            redirectCount++;
+          } else {
+            break;
+          }
+        }
         
         clearTimeout(timeoutId);
         
-        if (n8nRes.ok) {
+        if (n8nRes && n8nRes.ok) {
           logs.push(`[SYSTEM] Webhook trigger success! Response: ${n8nRes.status} ${n8nRes.statusText}`);
           results.n8nStatus = 'Success';
         } else {
-          logs.push(`[WARNING] Webhook URL returned status ${n8nRes.status}. Check your n8n workflow.`);
-          results.n8nStatus = `Returned ${n8nRes.status}`;
+          logs.push(`[WARNING] Webhook URL returned status ${n8nRes ? n8nRes.status : 'Unknown'}. Check your n8n workflow.`);
+          results.n8nStatus = `Returned ${n8nRes ? n8nRes.status : 'Unknown'}`;
         }
       } catch (err: unknown) {
         const errorObject = err as { name?: string; message?: string };

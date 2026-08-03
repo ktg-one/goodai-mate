@@ -17,3 +17,13 @@
 **Vulnerability:** The TTS route (`src/app/api/tts/route.ts`) constructed the external ElevenLabs API URL by interpolating a user-provided `voiceId` without validation. A malicious user could supply a crafted string (e.g., `../../some-other-endpoint`) leading to Path Traversal against the ElevenLabs API, or abuse the server's configured API key for unintended requests.
 **Learning:** Never interpolate unvalidated user inputs directly into external API request URLs, especially when server-side credentials are used. This can result in unauthorized API usage or exploiting unexpected downstream endpoints.
 **Prevention:** Always strictly validate user inputs meant to be part of an API path (like `voiceId`) against a strict regex whitelist (e.g., `/^[a-zA-Z0-9_-]+$/`) before making the outbound request.
+
+## 2024-05-24 - Fix SSRF bypass via HTTP Redirects
+**Vulnerability:** The outbound `fetch` requests in the API routes (`analyze-website` and `demo-automation`) did not disable following redirects, potentially allowing attackers to bypass the initial SSRF validation (`isSafeUrl`) by providing a URL that redirects to a restricted local/private IP address.
+**Learning:** Node.js `fetch` automatically follows HTTP redirects (e.g., 301, 302) by default, creating a TOCTOU (Time-of-Check to Time-of-Use) condition where the initial URL passes validation but the final destination is restricted.
+**Prevention:** Always use `redirect: 'error'` or `redirect: 'manual'` in the `fetch` options when making outbound requests to user-provided URLs.
+
+## 2024-05-24 - SSRF HTTP Redirect Safe Handling
+**Vulnerability:** Setting `redirect: 'error'` in `fetch` to prevent SSRF bypasses via HTTP redirects broke core functionality for endpoints that legitimately need to follow redirects (e.g., website scrapers encountering `http` to `https` redirects).
+**Learning:** You cannot simply disable redirects for features that depend on them. You must manually follow the redirect chain.
+**Prevention:** Implement a manual redirect loop (`redirect: 'manual'`) that intercepts `3xx` responses, extracts the `Location` header, validates the new URL against the SSRF rules (`isSafeUrl`), and only proceeds with the next `fetch` if safe.

@@ -78,17 +78,39 @@ export async function POST(req: NextRequest) {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s scrape timeout
       
-      const fetchRes = await fetch(targetUrl, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
-        },
-        signal: controller.signal
-      });
+      let fetchRes;
+      let currentUrl = targetUrl;
+      let redirectCount = 0;
+      const MAX_REDIRECTS = 5;
+
+      while (redirectCount < MAX_REDIRECTS) {
+        fetchRes = await fetch(currentUrl, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+          },
+          signal: controller.signal,
+          redirect: 'manual'
+        });
+
+        if (fetchRes.status >= 300 && fetchRes.status < 400) {
+          const location = fetchRes.headers.get('location');
+          if (!location) break;
+
+          const nextUrl = new URL(location, currentUrl).toString();
+          if (!(await isSafeUrl(nextUrl))) {
+            throw new Error('Redirected to restricted or invalid URL');
+          }
+          currentUrl = nextUrl;
+          redirectCount++;
+        } else {
+          break;
+        }
+      }
       
       clearTimeout(timeoutId);
 
-      if (fetchRes.ok) {
+      if (fetchRes && fetchRes.ok) {
         const html = await fetchRes.text();
         
         // Extract email address via regex from the original HTML (catches mailto: links)
@@ -124,7 +146,7 @@ export async function POST(req: NextRequest) {
           .slice(0, 4000); // Limit to first 4000 chars to avoid token bloat
         logs.push(`[ANALYZER] Successfully extracted HTML content (${scrapedText.length} chars).`);
       } else {
-        logs.push(`[WARNING] Scraping returned status ${fetchRes.status}. Using domain metadata.`);
+        logs.push(`[WARNING] Scraping returned status ${fetchRes ? fetchRes.status : 'Unknown'}. Using domain metadata.`);
       }
     } catch (err: unknown) {
       const errorObject = err as { message?: string };
