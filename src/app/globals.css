@@ -607,6 +607,30 @@ button { font-family: inherit; }
 }
 .gai-btn-primary:active { transform: translate(2px,2px); box-shadow: none; }
 
+/* ─── Inputs ────────────────────────── */
+.gai-input {
+  font-family: var(--font-sans);
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 10px 14px;
+  outline: none;
+  transition: box-shadow 120ms ease-out, transform 120ms ease-out;
+}
+.gai-input::placeholder {
+  color: var(--ink-faint);
+}
+.gai-input:focus-visible {
+  outline: none;
+  box-shadow: 3px 3px 0 var(--red);
+  transform: translate(-1px, -1px);
+}
+.gai-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* ─── Wordmark ──────────────────────── */
 .gai-wordmark {
   font-family: var(--font-display);
