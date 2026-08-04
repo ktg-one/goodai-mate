@@ -27,3 +27,8 @@
 **Vulnerability:** Setting `redirect: 'error'` in `fetch` to prevent SSRF bypasses via HTTP redirects broke core functionality for endpoints that legitimately need to follow redirects (e.g., website scrapers encountering `http` to `https` redirects).
 **Learning:** You cannot simply disable redirects for features that depend on them. You must manually follow the redirect chain.
 **Prevention:** Implement a manual redirect loop (`redirect: 'manual'`) that intercepts `3xx` responses, extracts the `Location` header, validates the new URL against the SSRF rules (`isSafeUrl`), and only proceeds with the next `fetch` if safe.
+
+## 2025-05-14 - SSRF IPv4-mapped IPv6 Bypass
+**Vulnerability:** The `isSafeUrl` function failed to block IPv4-mapped IPv6 addresses accurately. When a domain resolves to an address like `::ffff:7f00:1` or `::ffff:127.0.0.1`, `net.isIPv6` returns true, but the previous checks only looked for `::1`, `fc`, `fd`, and `fe80` prefixes. Attackers could map an internal IP address inside an IPv6 prefix `::ffff:` bypassing validation, but Node.js `fetch` would successfully connect to the internal IP address.
+**Learning:** `net.isIPv6` does not automatically filter out or parse IPv4-mapped IPv6 addresses for security purposes. An explicit check is required to verify if the string starts with `::ffff:` and, if so, whether the rest of the string is an internal IPv4 address or an obfuscated hex string.
+**Prevention:** Implement strict prefix checks (`lowerAddr.startsWith('::ffff:')`) inside the IPv6 validation block, extract the trailing portion, and reject it if it represents a local IPv4 address or is a non-standard mapped representation (like hex obfuscation) that might sneak past.
