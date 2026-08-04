@@ -37,3 +37,7 @@
 ## 2025-02-13 - CI Lockfile Syncing
 **Learning:** The GitHub actions CI pipelines rely on pnpm/action-setup which requires a valid `pnpm-lock.yaml` file. Previous runs were using `npm ci` and failing because there was no `package-lock.json` kept in sync with the package.json file.
 **Action:** Commit `pnpm-lock.yaml` to source control to fix the action setup.
+
+## 2024-08-04 - [React Performance] Throttling State Updates in Animation Loops
+**Learning:** In high-frequency animation loops (like `requestAnimationFrame`), calling a React state setter (like `setFrame`) on every tick forces the React dispatcher to queue an update, even if the new value is identical to the old value. While React's bailout mechanism prevents a full DOM re-render, the repeated dispatching still carries significant overhead in a 60fps loop.
+**Action:** Always track the current state value using a `useRef` (e.g., `frameRef`) in high-frequency loops. Only invoke the state setter when the target value strictly differs from the ref value to prevent unnecessary React update queueing.
