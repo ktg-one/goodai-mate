@@ -406,6 +406,97 @@ button { font-family: inherit; }
 }
 
 /* ─── Intake (high-contrast coloured card — white on ink) ─── */
+/* ─── Brutalist Primitives ───────────── */
+.stamp-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  white-space: nowrap;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: transform 120ms, box-shadow 120ms;
+  outline: none;
+}
+.stamp-btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.stamp-btn:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+}
+.stamp-btn:active, .stamp-btn.is-engaged {
+  transform: translate(2px, 2px);
+  box-shadow: none !important;
+}
+.stamp-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.stamp-btn-red {
+  background: var(--red);
+  color: var(--paper);
+  box-shadow: var(--shadow-stamp-deep);
+}
+.stamp-btn-red:hover:not(:disabled) {
+  background: var(--red-deep);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.stamp-btn-red:focus-visible {
+  outline-color: var(--red);
+}
+
+.stamp-btn-gold {
+  background: var(--gold);
+  color: var(--ink);
+  box-shadow: var(--shadow-stamp);
+}
+.stamp-btn-gold:hover:not(:disabled) {
+  background: var(--gold-deep);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.stamp-btn-navy {
+  background: var(--navy);
+  color: var(--paper);
+  box-shadow: var(--shadow-stamp-deep);
+}
+.stamp-btn-navy:hover:not(:disabled) {
+  background: var(--navy-deep);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.stamp-btn-ink {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: var(--shadow-stamp-deep);
+}
+.stamp-btn-ink:hover:not(:disabled) {
+  background: var(--ink-soft);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.stamp-btn-paper {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: var(--shadow-stamp);
+}
+.stamp-btn-paper:hover:not(:disabled) {
+  background: var(--paper-deep);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.stamp-btn-lg {
+  padding: 12px 24px;
+  font-size: 18px;
+}
+.stamp-btn-sm {
+  padding: 4px 8px;
+  font-size: 14px;
+}
+
 .gai-intake {
   width: 100%; max-width: 640px;
 }
