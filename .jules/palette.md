@@ -9,3 +9,7 @@
 ## 2024-12-07 - Chat Thread ARIA Updates
 **Learning:** For chat interfaces (like Vercel AI SDK chat flows) where conversational text flows continuously and state updates rapidly (e.g. typing, incoming streaming tokens, submission errors), screen readers fail to announce these changes without explicit ARIA roles.
 **Action:** Always wrap the incoming chat stream container with `role="log"` and `aria-live="polite"`. Add `role="status"` to typing indicators and `role="alert" aria-live="assertive"` to chat submission error messages.
+
+## 2024-12-07 - Brutalist Focus Outline Preservation
+**Learning:** Default browser focus rings often overwrite or visually conflict with brutalist aesthetic details, such as structural box-shadows used for depth and variant coloring. Relying on default focus rings disrupts the cohesive look of custom button primitives.
+**Action:** When implementing interactive elements like brutalist buttons, explicitly disable the default browser outline (`outline: none;`) and implement custom, native focus outlines using `focus-visible` (e.g., `outline: 2px solid var(--ink); outline-offset: 2px;`) to maintain accessibility while preserving the custom design aesthetic.
