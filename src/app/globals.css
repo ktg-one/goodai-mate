@@ -607,6 +607,90 @@ button { font-family: inherit; }
 }
 .gai-btn-primary:active { transform: translate(2px,2px); box-shadow: none; }
 
+/* ─── Stamp Button Primitives ───────── */
+.stamp-btn {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 120ms, box-shadow 120ms;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  outline: none;
+}
+.stamp-btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.stamp-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Base Variants */
+.stamp-btn-red {
+  background: var(--red);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.stamp-btn-red:focus-visible {
+  outline-color: var(--red);
+}
+
+.stamp-btn-gold {
+  background: var(--gold);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.stamp-btn-navy {
+  background: var(--navy);
+  color: var(--paper);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.stamp-btn-ink {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 3px 3px 0 var(--gold);
+}
+
+.stamp-btn-paper {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+/* Hover States (not disabled) */
+.stamp-btn:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.stamp-btn-ink:hover:not(:disabled) {
+  box-shadow: 4px 4px 0 var(--gold);
+}
+
+/* Active / Engaged States */
+.stamp-btn:active,
+.stamp-btn.is-engaged {
+  transform: translate(2px, 2px);
+  box-shadow: none !important;
+}
+
+/* Sizes */
+.stamp-btn-sm {
+  font-size: 12px;
+  padding: 6px 12px;
+}
+.stamp-btn-lg {
+  font-size: 18px;
+  padding: 14px 24px;
+}
+
 /* ─── Wordmark ──────────────────────── */
 .gai-wordmark {
   font-family: var(--font-display);

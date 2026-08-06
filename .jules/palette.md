@@ -9,3 +9,7 @@
 ## 2024-12-07 - Chat Thread ARIA Updates
 **Learning:** For chat interfaces (like Vercel AI SDK chat flows) where conversational text flows continuously and state updates rapidly (e.g. typing, incoming streaming tokens, submission errors), screen readers fail to announce these changes without explicit ARIA roles.
 **Action:** Always wrap the incoming chat stream container with `role="log"` and `aria-live="polite"`. Add `role="status"` to typing indicators and `role="alert" aria-live="assertive"` to chat submission error messages.
+
+## 2026-08-06 - Centralize stamp-btn classes in global CSS
+**Learning:** Component specific interactions and base styling for repeated ui like CTA buttons (`stamp-btn`) when implemented via inline tailwind classes lead to inconsistency and hard to maintain code (for example lacking focus states).
+**Action:** Define base primitive interactions (`.stamp-btn`, `.stamp-btn-red` etc.) globally in `globals.css` ensuring full state management (hover, active, disabled, focus-visible) with the core design variables.
