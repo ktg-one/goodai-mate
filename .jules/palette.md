@@ -9,3 +9,7 @@
 ## 2024-12-07 - Chat Thread ARIA Updates
 **Learning:** For chat interfaces (like Vercel AI SDK chat flows) where conversational text flows continuously and state updates rapidly (e.g. typing, incoming streaming tokens, submission errors), screen readers fail to announce these changes without explicit ARIA roles.
 **Action:** Always wrap the incoming chat stream container with `role="log"` and `aria-live="polite"`. Add `role="status"` to typing indicators and `role="alert" aria-live="assertive"` to chat submission error messages.
+
+## 2024-08-07 - Refactor design tokens for Good'AI
+**Learning:** Modularizing CSS tokens into multiple physical files ensures easier maintenance and satisfies bundler expectations when external files are imported, rather than leaving empty stubs.
+**Action:** Extract specific token blocks from the global CSS into their appropriate files (colors.css, typography.css, spacing.css, effects.css, fonts.css) when the design requires them to be individually requested.
