@@ -27,3 +27,8 @@
 **Vulnerability:** Setting `redirect: 'error'` in `fetch` to prevent SSRF bypasses via HTTP redirects broke core functionality for endpoints that legitimately need to follow redirects (e.g., website scrapers encountering `http` to `https` redirects).
 **Learning:** You cannot simply disable redirects for features that depend on them. You must manually follow the redirect chain.
 **Prevention:** Implement a manual redirect loop (`redirect: 'manual'`) that intercepts `3xx` responses, extracts the `Location` header, validates the new URL against the SSRF rules (`isSafeUrl`), and only proceeds with the next `fetch` if safe.
+
+## 2026-08-07 - SSRF Bypass via IPv4-mapped IPv6 Addresses
+**Vulnerability:** Node.js `dns.lookup` and URL parsing handle IPv4-mapped IPv6 addresses (e.g., `::ffff:127.0.0.1`, `::ffff:7f00:1`), which allows bypassing naive `net.isIPv4` checks while still successfully resolving to internal networks via `fetch`.
+**Learning:** Checking `net.isIPv4(address)` is insufficient for SSRF protection because `net.isIPv6(address)` will return true for IPv4-mapped IPv6 addresses, completely bypassing private IPv4 blocklists.
+**Prevention:** When validating IP addresses for SSRF protection, explicitly parse out and validate embedded IPv4 addresses from IPv4-mapped IPv6 strings (both decimal and hex representations) against private IP lists.
