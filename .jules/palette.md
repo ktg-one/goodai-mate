@@ -9,3 +9,6 @@
 ## 2024-12-07 - Chat Thread ARIA Updates
 **Learning:** For chat interfaces (like Vercel AI SDK chat flows) where conversational text flows continuously and state updates rapidly (e.g. typing, incoming streaming tokens, submission errors), screen readers fail to announce these changes without explicit ARIA roles.
 **Action:** Always wrap the incoming chat stream container with `role="log"` and `aria-live="polite"`. Add `role="status"` to typing indicators and `role="alert" aria-live="assertive"` to chat submission error messages.
+## 2025-01-20 - Populate design token CSS files
+**Learning:** Empty CSS imports used as placeholder files will crash builds or warning bundlers; specific variables must be migrated. External font imports using `@import url` must also be at the very top of `globals.css` (before `@import "tailwindcss"`).
+**Action:** Always move the variables mapping to their dedicated respective `.css` file rather than just leaving the file empty, and ensure external imports are properly grouped.

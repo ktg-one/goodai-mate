@@ -1,3 +1,4 @@
 - [x] Added aria-label to Custom Voice ID inputs in VoiceAgentHero and gem-voice components for accessibility.
 - [x] Integrated design token imports to globals.css.
 - [x] Updated layout to use brand fonts (Fraunces and DM Sans) and mapped them to global CSS variables.
+- [x] Moved CSS design tokens out of globals.css to their respective dedicated files in tokens/ and fixed typography mappings to use correct brand fonts.
