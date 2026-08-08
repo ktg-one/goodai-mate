@@ -1,0 +1,18 @@
+:root {
+/* ---------------------------------------------------------
+     SPACING / RADIUS / SHADOW
+     --------------------------------------------------------- */
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+  --radius-xl:   26px;
+  --radius-pill: 999px;
+
+  /* ---------------------------------------------------------
+     SHADOW — flat "stamp" only. No blurs.
+     --------------------------------------------------------- */
+  --shadow-stamp:        3px 3px 0 var(--ink);
+  --shadow-stamp-orange: 3px 3px 0 var(--orange);
+  --shadow-stamp-deep:   4px 4px 0 var(--ink);
+}
