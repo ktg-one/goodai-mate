@@ -2,3 +2,4 @@
 - [x] Integrated design token imports to globals.css.
 - [x] Updated layout to use brand fonts (Fraunces and DM Sans) and mapped them to global CSS variables.
 - [x] Populated `src/app/tokens` CSS files with design system variables extracted from `globals.css` and ensured they are properly imported.
+- [x] Updated design system palette with the new core brand colors (Navy #202b3d, Coral #ff6f61, Neutral #d9d9d9, and Teal #1cabb0).

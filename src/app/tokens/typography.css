@@ -2,8 +2,6 @@
   /* ---------------------------------------------------------
      TYPE — Families
      --------------------------------------------------------- */
-  --font-sans:    var(--font-lato), "Lato", ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
   --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* ---------------------------------------------------------
