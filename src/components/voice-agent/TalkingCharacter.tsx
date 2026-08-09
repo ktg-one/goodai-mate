@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { CHARACTER_ASSETS } from '@/lib/brand-assets';
 
 interface TalkingCharacterProps {
@@ -15,8 +15,16 @@ interface TalkingCharacterProps {
  */
 export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterProps) {
   const [frame, setFrame] = useState(1);
+  const frameRef = useRef(1);
   const animationRef = useRef<number>(null);
   const statusRef = useRef(status);
+
+  const applyFrame = useCallback((next: number) => {
+    if (frameRef.current !== next) {
+      frameRef.current = next;
+      setFrame(next);
+    }
+  }, []);
 
   useEffect(() => {
     statusRef.current = status;
@@ -26,7 +34,7 @@ export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterPr
     // If not active, reset to closed mouth (Frame 1)
     if (!analyser || (status !== 'speaking' && status !== 'listening')) {
       const timer = setTimeout(() => {
-        setFrame(1);
+        applyFrame(1);
       }, 0);
       return () => clearTimeout(timer);
     }
@@ -61,7 +69,7 @@ export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterPr
         } else {
           targetFrame = 1;
         }
-        setFrame(targetFrame);
+        applyFrame(targetFrame);
       }
       // Handle listening reaction (slight micro-jitter to show alertness)
       else if (statusRef.current === 'listening') {
@@ -72,9 +80,9 @@ export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterPr
         
         // Slight alert response if user is making sound
         if (avg > 15) {
-          setFrame(now % 300 < 150 ? 2 : 1);
+          applyFrame(now % 300 < 150 ? 2 : 1);
         } else {
-          setFrame(1);
+          applyFrame(1);
         }
       }
 
@@ -88,7 +96,7 @@ export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterPr
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [analyser, status]);
+  }, [analyser, status, applyFrame]);
 
   // Handle subtle processing animation during 'thinking' state (slow breathing/blinking)
   useEffect(() => {
@@ -96,11 +104,11 @@ export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterPr
 
     const interval = setInterval(() => {
       // Toggle between closed mouth and tiny open mouth to simulate humming/thinking
-      setFrame(prev => (prev === 1 ? 2 : 1));
+      applyFrame(frameRef.current === 1 ? 2 : 1);
     }, 450);
 
     return () => clearInterval(interval);
-  }, [status]);
+  }, [status, applyFrame]);
 
   const getAssetPath = (f: number) => {
     if (agent === 'darl') {
