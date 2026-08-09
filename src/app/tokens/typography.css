@@ -1,0 +1,18 @@
+:root {
+  /* ---------------------------------------------------------
+     TYPE — Families
+     --------------------------------------------------------- */
+  --font-sans:    var(--font-lato), "Lato", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* ---------------------------------------------------------
+     TYPE — Scale
+     --------------------------------------------------------- */
+  --fs-12: 0.75rem;    /* eyebrow */
+  --fs-16: 1rem;       /* body */
+  --fs-20: 1.25rem;    /* lede */
+  --fs-24: 1.5rem;     /* h3 */
+  --fs-36: 2.25rem;    /* h2 */
+  --fs-64: 4rem;       /* h1 */
+}
