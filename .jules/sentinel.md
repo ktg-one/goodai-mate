@@ -27,3 +27,7 @@
 **Vulnerability:** Setting `redirect: 'error'` in `fetch` to prevent SSRF bypasses via HTTP redirects broke core functionality for endpoints that legitimately need to follow redirects (e.g., website scrapers encountering `http` to `https` redirects).
 **Learning:** You cannot simply disable redirects for features that depend on them. You must manually follow the redirect chain.
 **Prevention:** Implement a manual redirect loop (`redirect: 'manual'`) that intercepts `3xx` responses, extracts the `Location` header, validates the new URL against the SSRF rules (`isSafeUrl`), and only proceeds with the next `fetch` if safe.
+## 2025-02-14 - SSRF Bypass via IPv4-mapped IPv6 Addresses
+**Vulnerability:** The `isSafeUrl` function failed to properly extract and validate the embedded IPv4 address within an IPv4-mapped IPv6 address (e.g., `::ffff:127.0.0.1` or `::ffff:7f00:1`). This allowed attackers to bypass the blocklist and resolve a domain to an internal loopback interface, establishing an SSRF vulnerability.
+**Learning:** `net.isIPv6` returns true for IPv4-mapped addresses, but `net.isIPv4` returns false. Any custom SSRF check that validates IPv4 blocks must also parse and apply the same rules to the underlying IPv4 address inside mapped IPv6 formats.
+**Prevention:** Always parse and explicitly extract the IPv4 portion of an IPv4-mapped IPv6 address before running loopback/private network validations to prevent bypasses.
