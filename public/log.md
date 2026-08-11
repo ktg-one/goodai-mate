@@ -3,3 +3,4 @@
 - [x] Updated layout to use brand fonts (Fraunces and DM Sans) and mapped them to global CSS variables.
 - [x] Populated modular design token files in src/app/tokens/.
 - [x] Added accessible Brutalist focus states to buttons (.gai-btn, .gai-tool).
+- [x] Defined `.gai-input` class globally for consistent brutalist form inputs and focus states.

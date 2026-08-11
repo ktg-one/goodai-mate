@@ -15,17 +15,9 @@ interface TalkingCharacterProps {
  */
 export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterProps) {
   const [frame, setFrame] = useState(1);
-  const frameRef = useRef(1);
   const animationRef = useRef<number>(null);
   const statusRef = useRef(status);
   const frameRef = useRef(1);
-
-  const applyFrame = useCallback((next: number) => {
-    if (frameRef.current !== next) {
-      frameRef.current = next;
-      setFrame(next);
-    }
-  }, []);
 
   const applyFrame = useCallback((next: number) => {
     if (frameRef.current !== next) {
