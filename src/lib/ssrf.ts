@@ -15,26 +15,42 @@ function isPrivateIPv4(ip: string): boolean {
 
 function parseIPv4MappedIPv6(address: string): string | null {
   const lowerAddr = address.toLowerCase();
-  if (lowerAddr.startsWith('::ffff:')) {
-    const parts = lowerAddr.split(':');
-    const lastPart = parts[parts.length - 1];
+  const parts = lowerAddr.split(':');
 
-    if (lastPart.includes('.')) {
-      return lastPart;
-    }
+  if (parts.length < 3) return null;
 
-    if (parts.length >= 3) {
-      const p1Str = parts[parts.length - 2] || '0';
-      const p2Str = parts[parts.length - 1] || '0';
+  const isDotted = parts[parts.length - 1].includes('.');
+  const ffffIndex = isDotted ? parts.length - 2 : parts.length - 3;
 
-      const p1 = parseInt(p1Str, 16);
-      const p2 = parseInt(p2Str, 16);
+  // Verify 'ffff' is at the correct index for a mapped IPv4
+  if (parts[ffffIndex] !== 'ffff') return null;
 
-      if (!isNaN(p1) && !isNaN(p2)) {
-          return `${(p1 >> 8) & 0xff}.${p1 & 0xff}.${(p2 >> 8) & 0xff}.${p2 & 0xff}`;
+  // All preceding parts must be mathematically zero (empty for '::', '0', '0000', etc)
+  for (let i = 0; i < ffffIndex; i++) {
+    if (parts[i] !== '') {
+      const parsed = parseInt(parts[i], 16);
+      if (isNaN(parsed) || parsed !== 0) {
+        return null;
       }
     }
   }
+
+  const lastPart = parts[parts.length - 1];
+
+  if (isDotted) {
+    return lastPart;
+  }
+
+  const p1Str = parts[parts.length - 2] || '0';
+  const p2Str = parts[parts.length - 1] || '0';
+
+  const p1 = parseInt(p1Str, 16);
+  const p2 = parseInt(p2Str, 16);
+
+  if (!isNaN(p1) && !isNaN(p2)) {
+      return `${(p1 >> 8) & 0xff}.${p1 & 0xff}.${(p2 >> 8) & 0xff}.${p2 & 0xff}`;
+  }
+
   return null;
 }
 
