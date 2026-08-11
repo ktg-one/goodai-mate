@@ -12,3 +12,7 @@
 ## 2024-08-09 - Accessible Brutalist Focus States
 **Learning:** To align with Brutalist aesthetics while preserving custom structural box-shadows on buttons, default browser outlines must be explicitly disabled (`outline: none;`) and custom native focus outlines (`outline: 2px solid var(--ink); outline-offset: 2px;`) applied rather than using `box-shadow`, which overwrites existing variant shadows.
 **Action:** Always use `outline` for focus states when `box-shadow` is already utilized for structural button depth in Brutalist designs.
+
+## 2026-08-11 - Global Brutalist Styles
+**Learning:** Hardcoding utility classes inline across multiple component files for primitive interaction classes like `.gai-input` causes inconsistency.
+**Action:** Define primitive interaction classes globally in `globals.css` to maintain a cohesive brutalist design system across the app.
