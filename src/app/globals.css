@@ -451,6 +451,34 @@ button { font-family: inherit; }
   color: var(--paper); opacity: 0.7;
 }
 
+/* ─── Form Inputs ───────────────────── */
+.gai-input {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 10px 14px;
+  outline: none;
+  transition: box-shadow 120ms, transform 120ms;
+}
+.gai-input::placeholder {
+  color: var(--ink-faint);
+}
+.gai-input:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: translate(-1px, -1px);
+}
+.gai-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* ─── Buttons ───────────────────────── */
 .gai-btn {
   outline: none;
