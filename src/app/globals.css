@@ -625,3 +625,25 @@ button { font-family: inherit; }
 @media (max-width: 760px) {
   .gai-hero-mark { width: 140px; }
 }
+
+.gai-input {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  padding: 10px 14px;
+  border-radius: 0;
+  outline: none;
+  transition: transform 120ms, box-shadow 120ms;
+}
+
+.gai-input:focus {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.gai-input::placeholder {
+  color: var(--ink-faint);
+}
