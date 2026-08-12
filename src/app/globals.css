@@ -625,3 +625,111 @@ button { font-family: inherit; }
 @media (max-width: 760px) {
   .gai-hero-mark { width: 140px; }
 }
+
+/* ─── Stamp Button Primitive ───────────────────────── */
+.stamp-btn {
+  outline: none;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  transition: transform 120ms, box-shadow 120ms;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  white-space: nowrap;
+  border-radius: 4px;
+  padding: 11px 20px; /* Base 4pt scale */
+  font-size: 14px;
+}
+
+.stamp-btn-sm { font-size: 12px; padding: 6px 12px; }
+.stamp-btn-lg { font-size: 18px; padding: 14px 36px; }
+
+.stamp-btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.stamp-btn-red:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+.stamp-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Physics */
+.stamp-btn:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+}
+.stamp-btn:active, .stamp-btn.is-engaged {
+  transform: translate(2px, 2px) !important;
+  box-shadow: none !important;
+}
+
+/* Variants */
+.stamp-btn-red { background: var(--red); color: var(--ink); box-shadow: var(--shadow-stamp); }
+.stamp-btn-red:hover:not(:disabled) { box-shadow: var(--shadow-stamp-deep); }
+
+.stamp-btn-gold { background: var(--gold); color: var(--ink); box-shadow: var(--shadow-stamp); }
+.stamp-btn-gold:hover:not(:disabled) { box-shadow: var(--shadow-stamp-deep); }
+
+.stamp-btn-navy { background: var(--navy); color: var(--paper); box-shadow: var(--shadow-stamp); border-color: var(--navy); }
+.stamp-btn-navy:hover:not(:disabled) { box-shadow: var(--shadow-stamp-deep); border-color: var(--ink); }
+
+.stamp-btn-ink { background: var(--ink); color: var(--paper); box-shadow: var(--shadow-stamp); }
+.stamp-btn-ink:hover:not(:disabled) { box-shadow: var(--shadow-stamp-deep); }
+
+.stamp-btn-paper { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-stamp); }
+.stamp-btn-paper:hover:not(:disabled) { box-shadow: var(--shadow-stamp-deep); }
+
+
+/* ─── Stamp Card Primitive ───────────────────────── */
+.stamp-card {
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 22px; /* Exact 22px padding */
+  transition: transform 120ms, box-shadow 120ms;
+}
+
+.stamp-card.interactive:hover {
+  transform: translate(-2px, -2px);
+}
+
+.stamp-card.interactive:active, .stamp-card.is-engaged {
+  transform: translate(2px, 2px) !important;
+  box-shadow: none !important;
+}
+
+.stamp-card.pinned-notice {
+  /* Requires GSAP or CSS vars to work, just setting base */
+  position: relative;
+}
+
+/* Variants */
+.stamp-card-paper { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-stamp); }
+.stamp-card-paper.interactive:hover { box-shadow: var(--shadow-stamp-deep); }
+
+.stamp-card-navy { background: var(--navy); color: var(--paper); box-shadow: var(--shadow-stamp); border-color: var(--navy); }
+.stamp-card-navy.interactive:hover { box-shadow: var(--shadow-stamp-deep); border-color: var(--ink); }
+
+.stamp-card-gold { background: var(--gold); color: var(--ink); box-shadow: var(--shadow-stamp); }
+.stamp-card-gold.interactive:hover { box-shadow: var(--shadow-stamp-deep); }
+
+.stamp-card-ink { background: var(--ink); color: var(--paper); box-shadow: var(--shadow-stamp); }
+.stamp-card-ink.interactive:hover { box-shadow: var(--shadow-stamp-deep); }
+
+.stamp-card-red { background: var(--red); color: var(--paper); box-shadow: var(--shadow-stamp); }
+.stamp-card-red.interactive:hover { box-shadow: var(--shadow-stamp-deep); }
+
+/* Highlight Keyword */
+.hl, .hl-red, .hl-navy {
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding: 0.02em 0.24em;
+  border-radius: 0.06em;
+  box-shadow: 0.06em 0.06em 0 var(--ink);
+  font-style: normal;
+  white-space: nowrap;
+}
+.hl      { background: var(--gold); color: var(--ink); }
+.hl-red  { background: var(--red);  color: var(--paper); }
+.hl-navy { background: var(--navy); color: var(--paper); }
