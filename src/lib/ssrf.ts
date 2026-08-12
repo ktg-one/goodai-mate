@@ -15,27 +15,41 @@ function isPrivateIPv4(ip: string): boolean {
 
 function parseIPv4MappedIPv6(address: string): string | null {
   const lowerAddr = address.toLowerCase();
-  if (lowerAddr.startsWith('::ffff:')) {
-    const parts = lowerAddr.split(':');
-    const lastPart = parts[parts.length - 1];
+  const parts = lowerAddr.split(':');
 
-    if (lastPart.includes('.')) {
-      return lastPart;
+  if (parts.length < 3) return null;
+
+  const lastPart = parts[parts.length - 1];
+  let ip4Str: string | null = null;
+  let prefixParts: string[];
+
+  if (lastPart.includes('.')) {
+    ip4Str = lastPart;
+    prefixParts = parts.slice(0, -1);
+  } else {
+    const p1Str = parts[parts.length - 2] || '0';
+    const p2Str = parts[parts.length - 1] || '0';
+    const p1 = parseInt(p1Str, 16);
+    const p2 = parseInt(p2Str, 16);
+    if (!isNaN(p1) && !isNaN(p2)) {
+      ip4Str = `${(p1 >> 8) & 0xff}.${p1 & 0xff}.${(p2 >> 8) & 0xff}.${p2 & 0xff}`;
     }
+    prefixParts = parts.slice(0, -2);
+  }
 
-    if (parts.length >= 3) {
-      const p1Str = parts[parts.length - 2] || '0';
-      const p2Str = parts[parts.length - 1] || '0';
+  if (!ip4Str || prefixParts.length === 0) return null;
 
-      const p1 = parseInt(p1Str, 16);
-      const p2 = parseInt(p2Str, 16);
+  const lastPrefix = prefixParts[prefixParts.length - 1];
+  if (lastPrefix !== 'ffff') return null;
 
-      if (!isNaN(p1) && !isNaN(p2)) {
-          return `${(p1 >> 8) & 0xff}.${p1 & 0xff}.${(p2 >> 8) & 0xff}.${p2 & 0xff}`;
-      }
+  for (let i = 0; i < prefixParts.length - 1; i++) {
+    const p = prefixParts[i];
+    if (p !== '' && !/^0+$/.test(p)) {
+      return null;
     }
   }
-  return null;
+
+  return ip4Str;
 }
 
 export async function isSafeUrl(urlString: string): Promise<boolean> {
