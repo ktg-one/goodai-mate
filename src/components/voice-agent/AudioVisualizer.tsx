@@ -126,18 +126,25 @@ export function AudioVisualizer({ analyser, active, status }: AudioVisualizerPro
       io = new IntersectionObserver(
         (entries) => {
           const vis = entries[0]?.isIntersecting ?? true;
+          const wasPaused = isPaused;
           isPaused = !vis || document.hidden;
+          // ⚡ Bolt: Restart the render loop only when unpaused, saving CPU when offscreen
+          if (wasPaused && !isPaused) render();
         },
         { threshold: 0.05 },
       );
       io.observe(canvas);
     }
-    const onVis = () => { isPaused = document.hidden; };
+    const onVis = () => {
+      const wasPaused = isPaused;
+      isPaused = document.hidden;
+      // ⚡ Bolt: Restart the render loop only when the tab becomes visible again
+      if (wasPaused && !isPaused) render();
+    };
     document.addEventListener('visibilitychange', onVis, { passive: true });
 
     const render = () => {
       if (isPaused) {
-        animationRef.current = requestAnimationFrame(render);
         return;
       }
 

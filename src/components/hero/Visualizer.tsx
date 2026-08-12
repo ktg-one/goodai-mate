@@ -384,11 +384,19 @@ export function Visualizer({
     if (!prefersReduced && typeof window !== 'undefined' && 'IntersectionObserver' in window) {
       io = new IntersectionObserver((entries) => {
         const vis = entries[0]?.isIntersecting ?? true;
+        const wasPaused = isPaused;
         isPaused = !vis || document.hidden;
+        // ⚡ Bolt: Restart the render loop only when unpaused, saving CPU when offscreen
+        if (wasPaused && !isPaused) render();
       }, { threshold: 0.08 });
       io.observe(canvas);
     }
-    const onVis = () => { isPaused = document.hidden; };
+    const onVis = () => {
+      const wasPaused = isPaused;
+      isPaused = document.hidden;
+      // ⚡ Bolt: Restart the render loop only when the tab becomes visible again
+      if (wasPaused && !isPaused) render();
+    };
     document.addEventListener('visibilitychange', onVis, { passive: true });
 
     const render = () => {
@@ -398,7 +406,6 @@ export function Visualizer({
         // Static brutalist fallback (no RAF burn, no motion). Still shows the paper-ribbon identity when offscreen or reduced.
         const centerY = LOGICAL_H / 2;
         drawStaticFallback(ctx, centerY);
-        animationRef.current = requestAnimationFrame(render);
         return;
       }
 
