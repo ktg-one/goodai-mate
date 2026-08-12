@@ -282,6 +282,34 @@ button { font-family: inherit; }
   box-shadow: 5px 5px 0 var(--orange);
   transform: translate(-1px, -1px);
 }
+.gai-input {
+  font-family: var(--font-sans);
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 8px 12px;
+  box-shadow: 3px 3px 0 var(--ink);
+  outline: none;
+  transition: transform 120ms, box-shadow 120ms;
+}
+.gai-input::placeholder {
+  color: var(--ink-faint);
+}
+.gai-input:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.gai-input:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.gai-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
 .gai-intake-input {
   width: 100%;
   font-family: var(--font-sans);
