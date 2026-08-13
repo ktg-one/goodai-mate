@@ -108,7 +108,8 @@ export default function WebsiteAnalyzer() {
               <div className="relative flex-1">
                 <input
                   id="website-url"
-                  type="text"
+                  type="url"
+                  autoComplete="url"
                   className="gai-input w-full pr-10 text-sm"
                   placeholder="e.g. www.perthplumbing.com.au"
                   required
