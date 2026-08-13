@@ -14,27 +14,71 @@ function isPrivateIPv4(ip: string): boolean {
 }
 
 function parseIPv4MappedIPv6(address: string): string | null {
-  const lowerAddr = address.toLowerCase();
-  if (lowerAddr.startsWith('::ffff:')) {
-    const parts = lowerAddr.split(':');
-    const lastPart = parts[parts.length - 1];
+  let lowerAddr = address.toLowerCase();
 
-    if (lastPart.includes('.')) {
-      return lastPart;
-    }
+  if (lowerAddr.startsWith('[') && lowerAddr.endsWith(']')) {
+      lowerAddr = lowerAddr.slice(1, -1);
+  }
 
-    if (parts.length >= 3) {
-      const p1Str = parts[parts.length - 2] || '0';
-      const p2Str = parts[parts.length - 1] || '0';
+  if (!net.isIPv6(lowerAddr)) return null;
 
-      const p1 = parseInt(p1Str, 16);
-      const p2 = parseInt(p2Str, 16);
+  let parts = lowerAddr.split(':');
+  let ipv4Str: string | null = null;
 
+  const lastPart = parts[parts.length - 1];
+  if (lastPart.includes('.')) {
+      if (!net.isIPv4(lastPart)) return null;
+      ipv4Str = lastPart;
+      parts.pop();
+  }
+
+  let hexSegments = parts.filter(p => p !== '');
+
+  const hasDoubleColon = parts.includes('');
+  const expectedLength = ipv4Str ? 6 : 8;
+
+  if (hasDoubleColon) {
+      const missing = expectedLength - hexSegments.length;
+      const zeros = new Array(Math.max(0, missing)).fill('0');
+
+      let insertIndex = 0;
+      for (let i = 0; i < parts.length; i++) {
+          if (parts[i] === '') {
+              let countBefore = 0;
+              for (let j = 0; j < i; j++) {
+                  if (parts[j] !== '') countBefore++;
+              }
+              insertIndex = countBefore;
+              break;
+          }
+      }
+
+      hexSegments.splice(insertIndex, 0, ...zeros);
+  } else {
+      hexSegments = hexSegments.map(p => p || '0');
+  }
+
+  if (ipv4Str) {
+      if (hexSegments.length !== 6) return null;
+      for (let i = 0; i < 5; i++) {
+          if (parseInt(hexSegments[i], 16) !== 0) return null;
+      }
+      if (parseInt(hexSegments[5], 16) !== 0xffff) return null;
+      return ipv4Str;
+  } else {
+      if (hexSegments.length !== 8) return null;
+      for (let i = 0; i < 5; i++) {
+          if (parseInt(hexSegments[i], 16) !== 0) return null;
+      }
+      if (parseInt(hexSegments[5], 16) !== 0xffff) return null;
+
+      const p1 = parseInt(hexSegments[6], 16);
+      const p2 = parseInt(hexSegments[7], 16);
       if (!isNaN(p1) && !isNaN(p2)) {
           return `${(p1 >> 8) & 0xff}.${p1 & 0xff}.${(p2 >> 8) & 0xff}.${p2 & 0xff}`;
       }
-    }
   }
+
   return null;
 }
 

@@ -31,3 +31,8 @@
 **Vulnerability:** The `isSafeUrl` function failed to properly extract and validate the embedded IPv4 address within an IPv4-mapped IPv6 address (e.g., `::ffff:127.0.0.1` or `::ffff:7f00:1`). This allowed attackers to bypass the blocklist and resolve a domain to an internal loopback interface, establishing an SSRF vulnerability.
 **Learning:** `net.isIPv6` returns true for IPv4-mapped addresses, but `net.isIPv4` returns false. Any custom SSRF check that validates IPv4 blocks must also parse and apply the same rules to the underlying IPv4 address inside mapped IPv6 formats.
 **Prevention:** Always parse and explicitly extract the IPv4 portion of an IPv4-mapped IPv6 address before running loopback/private network validations to prevent bypasses.
+
+## 2025-02-14 - SSRF Bypass via IPv4-mapped IPv6 Zero Compressions and Uncompressed Formats
+**Vulnerability:** The `parseIPv4MappedIPv6` function inside `src/lib/ssrf.ts` was naively checking for `::ffff:` string prefix, allowing attackers to bypass SSRF validation by using uncompressed representations (e.g. `0:0:0:0:0:ffff:127.0.0.1`) or hex-encoded IPv4 (e.g. `::ffff:7f00:1`).
+**Learning:** Checking string prefixes on network IP formats is inherently insecure due to zero-compression, alternate representations, and Node URL normalization translating dotted-decimal mapped addresses into pure hex (e.g., `::ffff:7f00:1`).
+**Prevention:** IP validators must properly parse IPv6 segments, resolving zero compressions (`::`) and explicitly checking the binary bit patterns (80 bits of 0 followed by 16 bits of FFFF) rather than relying on string `.startsWith` matching.
