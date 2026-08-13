@@ -103,6 +103,89 @@ html, body {
   color: var(--fg-soft);
 }
 
+/* ─── Brutalist Primitives ──────────────── */
+
+.gai-input {
+  width: 100%;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  outline: none;
+  padding: 8px 12px;
+  transition: box-shadow 150ms, transform 150ms;
+}
+.gai-input:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.gai-input:focus-within {
+  box-shadow: 5px 5px 0 var(--red);
+  transform: translate(-1px, -1px);
+}
+.gai-input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.stamp-btn {
+  outline: none;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  transition: transform 120ms, box-shadow 120ms;
+  white-space: nowrap;
+}
+.stamp-btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.stamp-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.stamp-btn:active { transform: translate(2px,2px); box-shadow: none; }
+
+/* Stamp btn sizes */
+.stamp-btn-lg { font-size: 16px; padding: 12px 24px; border-radius: 4px; }
+.stamp-btn-sm { font-size: 13px; padding: 6px 12px; border-radius: 4px; }
+
+/* Stamp btn variants */
+.stamp-btn-navy {
+  background: var(--navy); color: var(--paper);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.stamp-btn-navy:hover:not(:disabled) {
+  background: var(--navy-deep);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.stamp-btn-red {
+  background: var(--red); color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.stamp-btn-red:hover:not(:disabled) {
+  background: var(--red-deep);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.stamp-btn-paper {
+  background: var(--paper); color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.stamp-btn-paper:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.stamp-btn-gold {
+  background: var(--gold); color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.stamp-btn-gold:hover:not(:disabled) {
+  background: var(--gold-deep);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
 .eyebrow {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
