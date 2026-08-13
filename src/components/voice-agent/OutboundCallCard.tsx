@@ -174,6 +174,7 @@ export default function OutboundCallCard() {
             <input
               id="callback-phone"
               type="tel"
+              autoComplete="tel"
               className="gai-input w-full pr-12 text-sm"
               placeholder="+61 400 000 000"
               required
