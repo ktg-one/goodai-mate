@@ -380,27 +380,37 @@ export function Visualizer({
       ctx.globalCompositeOperation = 'source-over';
     };
 
+    const handlePauseState = () => {
+      if (isPaused || prefersReduced) {
+        if (ctx) drawStaticFallback(ctx, LOGICAL_H / 2);
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+          animationRef.current = null;
+        }
+      } else if (!animationRef.current) {
+        render();
+      }
+    };
+
     // Wire pause observers (once, no re-runs)
     if (!prefersReduced && typeof window !== 'undefined' && 'IntersectionObserver' in window) {
       io = new IntersectionObserver((entries) => {
         const vis = entries[0]?.isIntersecting ?? true;
         isPaused = !vis || document.hidden;
+        handlePauseState();
       }, { threshold: 0.08 });
       io.observe(canvas);
     }
-    const onVis = () => { isPaused = document.hidden; };
+    const onVis = () => {
+      isPaused = document.hidden;
+      handlePauseState();
+    };
     document.addEventListener('visibilitychange', onVis, { passive: true });
 
     const render = () => {
       if (!ctx || !canvas) return;
 
-      if (isPaused || prefersReduced) {
-        // Static brutalist fallback (no RAF burn, no motion). Still shows the paper-ribbon identity when offscreen or reduced.
-        const centerY = LOGICAL_H / 2;
-        drawStaticFallback(ctx, centerY);
-        animationRef.current = requestAnimationFrame(render);
-        return;
-      }
+      if (isPaused || prefersReduced) return;
 
       ctx.clearRect(0, 0, LOGICAL_W, LOGICAL_H); // logical after scale
 
@@ -506,7 +516,7 @@ export function Visualizer({
       animationRef.current = requestAnimationFrame(render);
     };
 
-    render();
+    handlePauseState();
 
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);

@@ -119,6 +119,17 @@ export function AudioVisualizer({ analyser, active, status }: AudioVisualizerPro
       return; // no RAF, no observers
     }
 
+    const handlePauseState = () => {
+      if (isPaused) {
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+          animationRef.current = null;
+        }
+      } else if (!animationRef.current) {
+        render();
+      }
+    };
+
     // Pause when offscreen / tab hidden (perf), mirrors hero/Visualizer.tsx.
     let isPaused = false;
     let io: IntersectionObserver | null = null;
@@ -127,19 +138,20 @@ export function AudioVisualizer({ analyser, active, status }: AudioVisualizerPro
         (entries) => {
           const vis = entries[0]?.isIntersecting ?? true;
           isPaused = !vis || document.hidden;
+          handlePauseState();
         },
         { threshold: 0.05 },
       );
       io.observe(canvas);
     }
-    const onVis = () => { isPaused = document.hidden; };
+    const onVis = () => {
+      isPaused = document.hidden;
+      handlePauseState();
+    };
     document.addEventListener('visibilitychange', onVis, { passive: true });
 
     const render = () => {
-      if (isPaused) {
-        animationRef.current = requestAnimationFrame(render);
-        return;
-      }
+      if (isPaused) return;
 
       const st = statusRef.current;
 

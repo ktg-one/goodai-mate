@@ -41,3 +41,7 @@
 ## 2024-08-04 - [React Performance] Throttling State Updates in Animation Loops
 **Learning:** In high-frequency animation loops (like `requestAnimationFrame`), calling a React state setter (like `setFrame`) on every tick forces the React dispatcher to queue an update, even if the new value is identical to the old value. While React's bailout mechanism prevents a full DOM re-render, the repeated dispatching still carries significant overhead in a 60fps loop.
 **Action:** Always track the current state value using a `useRef` (e.g., `frameRef`) in high-frequency loops. Only invoke the state setter when the target value strictly differs from the ref value to prevent unnecessary React update queueing.
+
+## 2025-05-18 - [React Performance] Cancelling Paused requestAnimationFrame Loops
+**Learning:** In canvas visualizer components (like `Visualizer.tsx` and `AudioVisualizer.tsx`), relying on an early return (`if (isPaused) { requestAnimationFrame(render); return; }`) inside a `requestAnimationFrame` loop creates a busy-wait cycle. It forces the browser to continually enqueue empty frames even when the component is offscreen or the tab is hidden, wasting CPU/GPU resources and battery.
+**Action:** Always explicitly call `cancelAnimationFrame` when pausing a visualizer, and only restart the `render()` loop when transitioning from a paused to unpaused state. Ensure the logic also handles initial rendering for users with `prefers-reduced-motion` enabled.
