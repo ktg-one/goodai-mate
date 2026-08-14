@@ -14,27 +14,45 @@ function isPrivateIPv4(ip: string): boolean {
 }
 
 function parseIPv4MappedIPv6(address: string): string | null {
+  if (!net.isIPv6(address)) return null;
+
   const lowerAddr = address.toLowerCase();
-  if (lowerAddr.startsWith('::ffff:')) {
-    const parts = lowerAddr.split(':');
-    const lastPart = parts[parts.length - 1];
+  let expanded = lowerAddr;
 
-    if (lastPart.includes('.')) {
-      return lastPart;
-    }
+  if (expanded.includes('::')) {
+    const parts = expanded.split('::');
+    const isIPv4Embedded = expanded.includes('.');
+    const expectedGroups = isIPv4Embedded ? 7 : 8;
 
-    if (parts.length >= 3) {
-      const p1Str = parts[parts.length - 2] || '0';
-      const p2Str = parts[parts.length - 1] || '0';
+    const leftGroups = parts[0] ? parts[0].split(':').length : 0;
+    const rightGroups = parts[1] ? parts[1].split(':').length : 0;
 
-      const p1 = parseInt(p1Str, 16);
-      const p2 = parseInt(p2Str, 16);
+    const missingGroups = expectedGroups - (leftGroups + rightGroups);
+    const zeroes = new Array(missingGroups).fill('0').join(':');
 
-      if (!isNaN(p1) && !isNaN(p2)) {
-          return `${(p1 >> 8) & 0xff}.${p1 & 0xff}.${(p2 >> 8) & 0xff}.${p2 & 0xff}`;
+    expanded = (parts[0] ? parts[0] + ':' : '') + zeroes + (parts[1] ? ':' + parts[1] : '');
+  }
+
+  const parts = expanded.split(':');
+
+  if (parts.length >= 7) {
+    const isMapped = parts.slice(0, 5).every(p => p === '' || parseInt(p, 16) === 0) && parts[5] === 'ffff';
+    if (isMapped) {
+      const lastPart = parts[parts.length - 1];
+      if (lastPart.includes('.')) {
+        return lastPart;
+      } else {
+        const secondToLast = parts[parts.length - 2];
+        const p1 = parseInt(secondToLast, 16);
+        const p2 = parseInt(lastPart, 16);
+
+        if (!isNaN(p1) && !isNaN(p2)) {
+            return `${(p1 >> 8) & 0xff}.${p1 & 0xff}.${(p2 >> 8) & 0xff}.${p2 & 0xff}`;
+        }
       }
     }
   }
+
   return null;
 }
 
