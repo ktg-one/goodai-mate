@@ -1,0 +1,16 @@
+ WARN  Unsupported engine: wanted: {"node":">=20.9.0 <21"} (current: {"node":"v22.22.1","pnpm":"10.30.3"})
+
+> nextjs@0.1.0 dev /app
+> next dev
+
+   ▲ Next.js 15.5.22
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.2:3000
+
+ ✓ Starting...
+ ✓ Ready in 1986ms
+ ○ Compiling / ...
+ ✓ Compiled / in 9.9s (709 modules)
+ GET / 200 in 11744ms
+ GET / 200 in 127ms
+ GET / 200 in 108ms
