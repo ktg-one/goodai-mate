@@ -625,3 +625,31 @@ button { font-family: inherit; }
 @media (max-width: 760px) {
   .gai-hero-mark { width: 140px; }
 }
+
+/* ─── Forms / Inputs ────────────────── */
+.gai-input {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 10px 14px;
+  width: 100%;
+  outline: none;
+  transition: transform 150ms, box-shadow 150ms, border-color 150ms;
+}
+.gai-input::placeholder {
+  color: var(--ink-faint);
+}
+.gai-input:focus {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  box-shadow: var(--shadow-stamp);
+  transform: translate(-1px, -1px);
+}
+.gai-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--paper-deep);
+}
