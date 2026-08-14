@@ -478,6 +478,57 @@ button { font-family: inherit; }
 }
 .gai-btn-primary:active { transform: translate(2px,2px); box-shadow: none; }
 
+/* ─── Brutalist Base Inputs ─────────── */
+.gai-input {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  padding: 10px 14px;
+  border-radius: 0;
+  box-shadow: inset 2px 2px 0 rgba(17, 17, 17, 0.05);
+  outline: none;
+  transition: border-color 150ms, box-shadow 150ms;
+}
+.gai-input:focus {
+  border-color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.gai-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(255, 240, 208, 0.5); /* var(--paper) with opacity */
+}
+
+/* ─── Brutalist Stamp Buttons ───────── */
+.stamp-btn {
+  outline: none;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  transition: transform 120ms, box-shadow 120ms;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  white-space: nowrap;
+  border-radius: 0;
+  padding: 8px 16px;
+}
+.stamp-btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.stamp-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.stamp-btn-paper { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-stamp); }
+.stamp-btn-red { background: var(--red); color: var(--ink); box-shadow: var(--shadow-stamp); }
+.stamp-btn-navy { background: var(--navy); color: var(--paper); box-shadow: var(--shadow-stamp); }
+.stamp-btn-gold { background: var(--gold); color: var(--ink); box-shadow: var(--shadow-stamp); }
+.stamp-btn-lg { font-size: 18px; padding: 12px 24px; }
+.stamp-btn-sm { font-size: 13px; padding: 6px 12px; }
+.stamp-btn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: var(--shadow-stamp-deep); }
+.stamp-btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: none; }
+.stamp-btn.is-engaged { background: var(--ink); color: var(--paper); box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5); transform: translate(2px, 2px); }
+
 /* ─── Wordmark ──────────────────────── */
 .gai-wordmark {
   font-family: var(--font-display);
