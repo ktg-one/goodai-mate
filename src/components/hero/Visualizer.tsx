@@ -380,17 +380,6 @@ export function Visualizer({
       ctx.globalCompositeOperation = 'source-over';
     };
 
-    // Wire pause observers (once, no re-runs)
-    if (!prefersReduced && typeof window !== 'undefined' && 'IntersectionObserver' in window) {
-      io = new IntersectionObserver((entries) => {
-        const vis = entries[0]?.isIntersecting ?? true;
-        isPaused = !vis || document.hidden;
-      }, { threshold: 0.08 });
-      io.observe(canvas);
-    }
-    const onVis = () => { isPaused = document.hidden; };
-    document.addEventListener('visibilitychange', onVis, { passive: true });
-
     const render = () => {
       if (!ctx || !canvas) return;
 
@@ -398,7 +387,7 @@ export function Visualizer({
         // Static brutalist fallback (no RAF burn, no motion). Still shows the paper-ribbon identity when offscreen or reduced.
         const centerY = LOGICAL_H / 2;
         drawStaticFallback(ctx, centerY);
-        animationRef.current = requestAnimationFrame(render);
+        animationRef.current = null;
         return;
       }
 
@@ -505,6 +494,27 @@ export function Visualizer({
 
       animationRef.current = requestAnimationFrame(render);
     };
+
+    // Wire pause observers (once, no re-runs)
+    if (!prefersReduced && typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+      io = new IntersectionObserver((entries) => {
+        const vis = entries[0]?.isIntersecting ?? true;
+        const wasPaused = isPaused;
+        isPaused = !vis || document.hidden;
+        if (wasPaused && !isPaused && !animationRef.current) {
+          render();
+        }
+      }, { threshold: 0.08 });
+      io.observe(canvas);
+    }
+    const onVis = () => {
+      const wasPaused = isPaused;
+      isPaused = document.hidden;
+      if (wasPaused && !isPaused && !animationRef.current) {
+        render();
+      }
+    };
+    document.addEventListener('visibilitychange', onVis, { passive: true });
 
     render();
 

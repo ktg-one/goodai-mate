@@ -122,22 +122,10 @@ export function AudioVisualizer({ analyser, active, status }: AudioVisualizerPro
     // Pause when offscreen / tab hidden (perf), mirrors hero/Visualizer.tsx.
     let isPaused = false;
     let io: IntersectionObserver | null = null;
-    if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
-      io = new IntersectionObserver(
-        (entries) => {
-          const vis = entries[0]?.isIntersecting ?? true;
-          isPaused = !vis || document.hidden;
-        },
-        { threshold: 0.05 },
-      );
-      io.observe(canvas);
-    }
-    const onVis = () => { isPaused = document.hidden; };
-    document.addEventListener('visibilitychange', onVis, { passive: true });
 
     const render = () => {
       if (isPaused) {
-        animationRef.current = requestAnimationFrame(render);
+        animationRef.current = null;
         return;
       }
 
@@ -198,6 +186,29 @@ export function AudioVisualizer({ analyser, active, status }: AudioVisualizerPro
 
       animationRef.current = requestAnimationFrame(render);
     };
+
+    if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+      io = new IntersectionObserver(
+        (entries) => {
+          const vis = entries[0]?.isIntersecting ?? true;
+          const wasPaused = isPaused;
+          isPaused = !vis || document.hidden;
+          if (wasPaused && !isPaused && !animationRef.current) {
+            render();
+          }
+        },
+        { threshold: 0.05 },
+      );
+      io.observe(canvas);
+    }
+    const onVis = () => {
+      const wasPaused = isPaused;
+      isPaused = document.hidden;
+      if (wasPaused && !isPaused && !animationRef.current) {
+        render();
+      }
+    };
+    document.addEventListener('visibilitychange', onVis, { passive: true });
 
     render();
 

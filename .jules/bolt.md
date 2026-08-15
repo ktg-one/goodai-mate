@@ -41,3 +41,7 @@
 ## 2024-08-04 - [React Performance] Throttling State Updates in Animation Loops
 **Learning:** In high-frequency animation loops (like `requestAnimationFrame`), calling a React state setter (like `setFrame`) on every tick forces the React dispatcher to queue an update, even if the new value is identical to the old value. While React's bailout mechanism prevents a full DOM re-render, the repeated dispatching still carries significant overhead in a 60fps loop.
 **Action:** Always track the current state value using a `useRef` (e.g., `frameRef`) in high-frequency loops. Only invoke the state setter when the target value strictly differs from the ref value to prevent unnecessary React update queueing.
+
+## 2025-05-18 - [React Performance] Stopping requestAnimationFrame CPU Burn
+**Learning:** In canvas visualizers and animation loops, it is common to skip drawing when paused (e.g., when offscreen). However, simply returning early and calling `requestAnimationFrame(render)` again creates a perpetual empty 60fps loop that still burns CPU and keeps the main thread unnecessarily active.
+**Action:** When pausing an animation loop due to visibility or reduced motion, explicitly stop calling `requestAnimationFrame` (and clear the `animationRef`). Use event listeners like `IntersectionObserver` or `visibilitychange` to capture the previous state and manually restart the `render()` loop only when transitioning from paused to unpaused.
