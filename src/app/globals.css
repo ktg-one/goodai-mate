@@ -45,6 +45,11 @@
    BASE
    ============================================================ */
 
+::selection {
+  background: var(--gold);
+  color: var(--ink);
+}
+
 html, body {
   background: var(--bg);
   color: var(--fg);
