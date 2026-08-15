@@ -55,6 +55,15 @@ html, body {
   text-rendering: optimizeLegibility;
 }
 
+::-moz-selection {
+  background: var(--gold);
+  color: var(--ink);
+}
+::selection {
+  background: var(--gold);
+  color: var(--ink);
+}
+
 /* ============================================================
    TYPE CLASSES
    ============================================================ */
