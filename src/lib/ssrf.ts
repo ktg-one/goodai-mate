@@ -15,26 +15,71 @@ function isPrivateIPv4(ip: string): boolean {
 
 function parseIPv4MappedIPv6(address: string): string | null {
   const lowerAddr = address.toLowerCase();
-  if (lowerAddr.startsWith('::ffff:')) {
-    const parts = lowerAddr.split(':');
-    const lastPart = parts[parts.length - 1];
 
-    if (lastPart.includes('.')) {
-      return lastPart;
+  let cleanAddr = lowerAddr;
+  if (cleanAddr.startsWith('[') && cleanAddr.endsWith(']')) {
+    cleanAddr = cleanAddr.slice(1, -1);
+  }
+
+  let parts = cleanAddr.split(':');
+
+  const hasIPv4 = parts[parts.length - 1].includes('.');
+  const totalExpectedGroups = hasIPv4 ? 7 : 8;
+
+  const doubleColonIdx = parts.indexOf('');
+  if (doubleColonIdx !== -1) {
+    let leftGroups = 0;
+    for (let i = 0; i < doubleColonIdx; i++) {
+      if (parts[i] !== '') leftGroups++;
     }
 
-    if (parts.length >= 3) {
-      const p1Str = parts[parts.length - 2] || '0';
-      const p2Str = parts[parts.length - 1] || '0';
+    let rightGroups = 0;
+    let rightIdx = doubleColonIdx;
+    while (rightIdx < parts.length && parts[rightIdx] === '') {
+      rightIdx++;
+    }
+    for (let i = rightIdx; i < parts.length; i++) {
+      if (parts[i] !== '') rightGroups++;
+    }
 
-      const p1 = parseInt(p1Str, 16);
-      const p2 = parseInt(p2Str, 16);
+    const missing = Math.max(0, totalExpectedGroups - (leftGroups + rightGroups));
+    const zeros = Array(missing).fill('0');
 
+    parts = [
+      ...parts.slice(0, doubleColonIdx).filter(p => p !== ''),
+      ...zeros,
+      ...parts.slice(rightIdx).filter(p => p !== '')
+    ];
+  }
+
+  if (parts.length !== totalExpectedGroups) return null;
+
+  const isZero = (p: string) => {
+    if (!p) return false;
+    const val = parseInt(p, 16);
+    return !isNaN(val) && val === 0;
+  };
+
+  const isFfff = (p: string) => {
+    if (!p) return false;
+    const val = parseInt(p, 16);
+    return !isNaN(val) && val === 0xffff;
+  };
+
+  if (hasIPv4 && parts.length === 7) {
+    if (parts.slice(0, 5).every(isZero) && isFfff(parts[5])) {
+      return parts[6];
+    }
+  } else if (!hasIPv4 && parts.length === 8) {
+    if (parts.slice(0, 5).every(isZero) && isFfff(parts[5])) {
+      const p1 = parseInt(parts[6], 16);
+      const p2 = parseInt(parts[7], 16);
       if (!isNaN(p1) && !isNaN(p2)) {
-          return `${(p1 >> 8) & 0xff}.${p1 & 0xff}.${(p2 >> 8) & 0xff}.${p2 & 0xff}`;
+        return `${(p1 >> 8) & 0xff}.${p1 & 0xff}.${(p2 >> 8) & 0xff}.${p2 & 0xff}`;
       }
     }
   }
+
   return null;
 }
 

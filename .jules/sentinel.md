@@ -31,3 +31,8 @@
 **Vulnerability:** The `isSafeUrl` function failed to properly extract and validate the embedded IPv4 address within an IPv4-mapped IPv6 address (e.g., `::ffff:127.0.0.1` or `::ffff:7f00:1`). This allowed attackers to bypass the blocklist and resolve a domain to an internal loopback interface, establishing an SSRF vulnerability.
 **Learning:** `net.isIPv6` returns true for IPv4-mapped addresses, but `net.isIPv4` returns false. Any custom SSRF check that validates IPv4 blocks must also parse and apply the same rules to the underlying IPv4 address inside mapped IPv6 formats.
 **Prevention:** Always parse and explicitly extract the IPv4 portion of an IPv4-mapped IPv6 address before running loopback/private network validations to prevent bypasses.
+
+## 2024-05-18 - [Fix SSRF bypass via IPv6 zero-compression]
+**Vulnerability:** The SSRF validation utility `isSafeUrl` in `src/lib/ssrf.ts` was vulnerable to IPv4-mapped IPv6 address bypasses when formatted without zero-compression (e.g. `0:0:0:0:0:ffff:127.0.0.1` instead of `::ffff:127.0.0.1`).
+**Learning:** `net.isIPv6` returns true for these addresses, but the custom extraction logic solely relied on strict prefix matching (`.startsWith('::ffff:')`), failing to extract the private IPv4 suffix from non-compressed representations.
+**Prevention:** Explicitly expand and parse all colon-separated segments of IPv4-mapped IPv6 addresses to ensure the leading groups accurately evaluate to `0` and the 6th group evaluates to `ffff`, independent of formatting shorthands.
