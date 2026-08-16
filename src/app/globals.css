@@ -527,12 +527,12 @@ button { font-family: inherit; }
   display: flex; flex-direction: column; gap: 14px;
   padding: 22px 20px;
   border-right: 1px solid var(--ink);
-  background: var(--paper);
+  background: var(--paper-deep);
   text-align: left;
   position: relative;
 }
 .gai-feature:last-child { border-right: 0; }
-.gai-feature:nth-child(1) { background: var(--paper); }
+.gai-feature:nth-child(1) { background: var(--paper-deep); }
 .gai-feature:nth-child(2) { background: var(--hi-yellow); }
 .gai-feature:nth-child(3) { background: var(--orange); color: var(--ink); }
 .gai-feature:nth-child(4) { background: var(--ocean-400); color: var(--paper); }
