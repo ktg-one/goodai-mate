@@ -93,6 +93,14 @@ export async function POST(req: NextRequest) {
         // Append header row + lead row
         logs.push('Executing: gws sheets spreadsheets values append...');
         const timestamp = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Perth' });
+
+        // 🛡️ Sentinel: Sanitize user input to prevent Spreadsheet Formula Injection (CSV Injection)
+        const sanitizeCell = (val: string) => {
+          if (!val) return '—';
+          // Prefix with a single quote if the cell starts with a formula trigger character
+          return /^[=+\-@\t\r]/.test(val) ? `'${val}` : val;
+        };
+
         await runGwsCommand([
           'sheets', 'spreadsheets', 'values', 'append',
           '--params', JSON.stringify({
@@ -103,7 +111,7 @@ export async function POST(req: NextRequest) {
         ], {
           values: [
             ['Timestamp', 'Name', 'Business', 'Phone', 'Email', 'Problem'],
-            [timestamp, name, business || '—', phone, email || '—', problem]
+            [timestamp, sanitizeCell(name), sanitizeCell(business), sanitizeCell(phone), sanitizeCell(email), sanitizeCell(problem)]
           ]
         });
         logs.push('Lead successfully appended to spreadsheet.');
