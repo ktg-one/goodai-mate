@@ -3,7 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
 import { Send } from 'lucide-react';
-import { useEffect, useRef, useState, memo, useCallback } from 'react';
+import { useEffect, useRef, useState, memo, useCallback, useMemo } from 'react';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
 
 type TextPart = UIMessage['parts'][number] & { type: 'text'; text: string };
@@ -61,6 +61,15 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   });
 
   const isBusy = status === 'submitted' || status === 'streaming';
+
+  // ⚡ Bolt: Memoize the rendered message list.
+  // Without useMemo, typing a single character forces the O(N) array mapping
+  // to run again on the entire chat history, causing input lag.
+  const memoizedMessages = useMemo(
+    () => messages.map((message) => <ChatMessage key={message.id} message={message} />),
+    [messages]
+  );
+
   const getConversationTranscript = useCallback(
     () => messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n'),
     [messages],
@@ -116,9 +125,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
             </div>
           </div>
 
-          {messages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
-          ))}
+          {memoizedMessages}
 
           {isBusy && (
             <div className="gai-bubble-row">
