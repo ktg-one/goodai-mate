@@ -634,3 +634,99 @@ button { font-family: inherit; }
 @media (max-width: 760px) {
   .gai-hero-mark { width: 140px; }
 }
+
+/* ─── Form Elements (.gai-input) ─── */
+.gai-input {
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  padding: 8px 12px;
+  border-radius: 0;
+  outline: none;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: box-shadow 150ms, transform 150ms;
+}
+
+.gai-input:focus {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: translate(-1px, -1px);
+}
+
+.gai-input::placeholder {
+  color: var(--ink-faint);
+}
+
+.gai-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ─── Buttons (.stamp-btn) ─── */
+.stamp-btn {
+  outline: none;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  transition: transform 120ms, box-shadow 120ms;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  border-radius: 4px;
+}
+.stamp-btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.stamp-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none !important; transform: none !important; }
+
+/* Sizes */
+.stamp-btn-sm { font-size: 13px; padding: 8px 12px; }
+.stamp-btn-md { font-size: 14px; padding: 11px 20px; }
+.stamp-btn-lg { font-size: 18px; padding: 14px 28px; }
+
+/* Variants */
+.stamp-btn-navy {
+  background: var(--navy); color: var(--paper);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.stamp-btn-navy:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.stamp-btn-navy:active { transform: translate(2px,2px); box-shadow: none; }
+
+.stamp-btn-red {
+  background: var(--red); color: var(--paper);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.stamp-btn-red:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.stamp-btn-red:active { transform: translate(2px,2px); box-shadow: none; }
+
+.stamp-btn-paper {
+  background: var(--paper); color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.stamp-btn-paper:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.stamp-btn-paper:active { transform: translate(2px,2px); box-shadow: none; }
+
+.stamp-btn-gold {
+  background: var(--gold); color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.stamp-btn-gold:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.stamp-btn-gold:active { transform: translate(2px,2px); box-shadow: none; }
