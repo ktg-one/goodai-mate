@@ -4,3 +4,4 @@
 - [x] Populated modular design token files in src/app/tokens/.
 - [x] Added accessible Brutalist focus states to buttons (.gai-btn, .gai-tool).
 - [x] Added brand-aligned text selection styling
+- [x] Fixed 'white cards on white background' forbidden directive by changing the first feature card's background to a raised cream tone (var(--paper-deep)).
