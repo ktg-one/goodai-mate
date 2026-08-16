@@ -1,5 +1,19 @@
 {
   "effort": "high",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/verify-gate.sh\"",
+            "timeout": 15,
+            "statusMessage": "Verify gate: checking for unverified in-flight changes"
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
     "allow": [
       "Read",
