@@ -4,3 +4,4 @@
 - [x] Populated modular design token files in src/app/tokens/.
 - [x] Added accessible Brutalist focus states to buttons (.gai-btn, .gai-tool).
 - [x] Added brand-aligned text selection styling
+- [x] Added Brutalist scrollbar styling
