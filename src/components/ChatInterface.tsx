@@ -3,7 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
 import { Send } from 'lucide-react';
-import { useEffect, useRef, useState, memo, useCallback } from 'react';
+import { useEffect, useRef, useState, memo, useCallback, useMemo } from 'react';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
 
 type TextPart = UIMessage['parts'][number] & { type: 'text'; text: string };
@@ -67,6 +67,16 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   );
   const errorMessage = error?.message?.trim() || 'Something went sideways. Try again in a moment.';
 
+  // ⚡ Bolt Performance Optimization:
+  // Memoizing the message mapping operation prevents the entire chat thread
+  // from re-rendering and re-reconciling every time the user types in the input form
+  // (which causes the parent ChatInterface component to re-render).
+  const renderedMessages = useMemo(() => {
+    return messages.map((message) => (
+      <ChatMessage key={message.id} message={message} />
+    ));
+  }, [messages]);
+
   useEffect(() => {
     if (!initialMessage || initialSent.current) return;
     initialSent.current = true;
@@ -116,9 +126,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
             </div>
           </div>
 
-          {messages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
-          ))}
+          {renderedMessages}
 
           {isBusy && (
             <div className="gai-bubble-row">
