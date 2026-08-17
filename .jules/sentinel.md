@@ -36,3 +36,7 @@
 **Vulnerability:** The SSRF validation utility `isSafeUrl` in `src/lib/ssrf.ts` was vulnerable to IPv4-mapped IPv6 address bypasses when formatted without zero-compression (e.g. `0:0:0:0:0:ffff:127.0.0.1` instead of `::ffff:127.0.0.1`).
 **Learning:** `net.isIPv6` returns true for these addresses, but the custom extraction logic solely relied on strict prefix matching (`.startsWith('::ffff:')`), failing to extract the private IPv4 suffix from non-compressed representations.
 **Prevention:** Explicitly expand and parse all colon-separated segments of IPv4-mapped IPv6 addresses to ensure the leading groups accurately evaluate to `0` and the 6th group evaluates to `ffff`, independent of formatting shorthands.
+## 2024-05-24 - Spreadsheet Formula Injection (CWE-1236)
+**Vulnerability:** User inputs (`name`, `business`, `phone`, `email`, `problem`) were appended directly to Google Sheets using the Google Workspace CLI with `valueInputOption: 'USER_ENTERED'`, allowing potential execution of arbitrary formulas if a user submitted a payload starting with `=`, `+`, `-`, or `@`.
+**Learning:** Google Sheets evaluates inputs dynamically when using `USER_ENTERED`. Without sanitization, this feature can be exploited to exfiltrate data or execute malicious macros.
+**Prevention:** Prefix any string input starting with formula trigger characters (`=`, `+`, `-`, `@`, `\t`, `\r`) with a single quote (`'`), which forces spreadsheet applications to treat the cell's contents as literal text rather than an executable formula.
