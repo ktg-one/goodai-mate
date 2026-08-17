@@ -4,3 +4,5 @@
 - [x] Populated modular design token files in src/app/tokens/.
 - [x] Added accessible Brutalist focus states to buttons (.gai-btn, .gai-tool).
 - [x] Added brand-aligned text selection styling
+- [x] Converted all typography imports to use `next/font/google` directly avoiding external requests.
+- [x] Switched manual rgba instances in globals.css to strict brand tokens using `color-mix`.

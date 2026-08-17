@@ -3,13 +3,12 @@
 @import url('tokens/spacing.css');
 @import url('tokens/effects.css');
 @import url('tokens/fonts.css');
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
 @import "tailwindcss";
 
 @theme {
   --font-sans:    var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-display), Georgia, serif;
-  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-mono:    var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
 
   --color-gold:        var(--gold);
   --color-gold-deep:   var(--gold-deep);
@@ -170,7 +169,7 @@ html, body {
 html, body { margin: 0; padding: 0; }
 body {
   background:
-    repeating-linear-gradient(0deg, rgba(11,11,11,0.025) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--ink) 2.5%, transparent) 0 1px, transparent 1px 4px),
     var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);
@@ -303,12 +302,12 @@ button { font-family: inherit; }
   padding: 4px 4px;
   min-height: 80px;
 }
-.gai-intake-input::placeholder { color: rgba(248,248,246,0.5); }
+.gai-intake-input::placeholder { color: color-mix(in srgb, var(--paper) 50%, transparent); }
 
 .gai-intake-toolbar {
   display: flex; align-items: center; gap: 8px;
   margin-top: 10px; padding-top: 12px;
-  border-top: 1px dashed rgba(248,248,246,0.3);
+  border-top: 1px dashed color-mix(in srgb, var(--paper) 30%, transparent);
 }
 .gai-intake-spacer { flex: 1; }
 
@@ -414,7 +413,7 @@ button { font-family: inherit; }
   display: flex; align-items: center; gap: 8px;
   margin-bottom: 12px;
   padding-bottom: 12px;
-  border-bottom: 1px dashed rgba(248,248,246,0.3);
+  border-bottom: 1px dashed color-mix(in srgb, var(--paper) 30%, transparent);
 }
 .gai-answer-tag {
   display: inline-flex; align-items: center; gap: 8px;
@@ -452,7 +451,7 @@ button { font-family: inherit; }
 .gai-answer-cta {
   display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
   padding-top: 12px;
-  border-top: 1px dashed rgba(248,248,246,0.3);
+  border-top: 1px dashed color-mix(in srgb, var(--paper) 30%, transparent);
 }
 .gai-answer-cta-help {
   font-family: var(--font-mono);
@@ -505,7 +504,7 @@ button { font-family: inherit; }
   display: inline-flex; align-items: center; justify-content: center;
   border: 2px dashed var(--ink);
   border-radius: 2px;
-  background: repeating-linear-gradient(45deg, transparent 0 7px, rgba(17,17,17,0.05) 7px 9px);
+  background: repeating-linear-gradient(45deg, transparent 0 7px, color-mix(in srgb, var(--ink) 5%, transparent) 7px 9px);
   font-family: var(--font-mono);
   font-size: 9px; font-weight: 700;
   letter-spacing: 0.18em; text-transform: uppercase;

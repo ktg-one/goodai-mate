@@ -4,5 +4,5 @@
      --------------------------------------------------------- */
   --font-sans:    var(--font-dm-sans), "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fraunces), "Fraunces", Georgia, serif;
-  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-mono:    var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }

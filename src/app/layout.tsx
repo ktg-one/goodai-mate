@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
-import { DM_Sans, Fraunces } from 'next/font/google';
+import { DM_Sans, Fraunces, JetBrains_Mono } from 'next/font/google';
 import "./globals.css";
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
+});
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -29,7 +35,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${dmSans.variable} ${jetBrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--fg)] font-sans">{children}</body>
     </html>
