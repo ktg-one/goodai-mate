@@ -5,3 +5,4 @@
 - [x] Added accessible Brutalist focus states to buttons (.gai-btn, .gai-tool).
 - [x] Added brand-aligned text selection styling
 - [x] Replaced raw rgba() values with CSS color-mix() to strictly adhere to design tokens.
+- [x] Added custom brutalist scrollbar and text caret styling for cohesive micro-UX.
