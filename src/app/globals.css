@@ -634,3 +634,28 @@ button { font-family: inherit; }
 @media (max-width: 760px) {
   .gai-hero-mark { width: 140px; }
 }
+
+/* ─── Micro-UX: Scrollbar & Caret ────── */
+* {
+  caret-color: var(--red);
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+::-webkit-scrollbar-track {
+  background: var(--paper);
+  border-left: 2px solid var(--ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--red);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--red-deep);
+}
+::-webkit-scrollbar-corner {
+  background: var(--ink);
+}
