@@ -12,3 +12,9 @@
 ## 2024-08-09 - Accessible Brutalist Focus States
 **Learning:** To align with Brutalist aesthetics while preserving custom structural box-shadows on buttons, default browser outlines must be explicitly disabled (`outline: none;`) and custom native focus outlines (`outline: 2px solid var(--ink); outline-offset: 2px;`) applied rather than using `box-shadow`, which overwrites existing variant shadows.
 **Action:** Always use `outline` for focus states when `box-shadow` is already utilized for structural button depth in Brutalist designs.
+
+## 2024-08-18 - Dark Theme Adoption and Background SVG Rules
+**Learning:** The brand identity has shifted away from the "warm cream" (paper) and "near-black" (ink) aesthetic to a dark-themed scheme featuring Navy (`#202B3D`), Coral (`#F66F61`), Teal (`#1CABB0`), Silver (`#D9D9D9`), and Slate (`#282C2D`). Additionally, the design language requires large SVG shapes from `public/assets/shapes/` to break up empty space.
+**Action:**
+1. Maintain the `colors.css` global theme to use `--bg: var(--navy)` and `--fg: var(--paper)`. **CRITICAL INSTRUCTION FOR SCHEDULED AGENTS:** Do not revert the theme back to the legacy "ink and paper" (cream/black) scheme. The dark palette is now the official source of truth.
+2. Apply `public/assets/shapes/shape-big-*.svg` (orange, blue, silver, or teal depending on context) as decorative background layers for every 2nd viewport and within "bare" cards. Implement this using absolute positioning `z-index: -1` behind the primary content.

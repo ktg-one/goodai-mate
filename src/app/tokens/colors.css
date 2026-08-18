@@ -2,44 +2,47 @@
   /* ---------------------------------------------------------
      COLOUR — the five core brand colours
      --------------------------------------------------------- */
-  --gold:        #F3A62A;   /* mustard-gold — coloured panels / blocks */
-  --gold-deep:   #D98E1C;   /* gold hover / depth */
-  --gold-tint:   #FBDFA6;   /* soft gold surface */
+    --teal:        #1CABB0;   /* teal accent */
 
-  --red:         #F4442E;   /* coral-red — primary CTA / shout accent */
-  --red-deep:    #D8331F;   /* red hover / depth */
-  --red-tint:    #FBC9C1;   /* soft red surface */
+  --red:         #F66F61;   /* coral-red — primary CTA / shout accent */
+  --red-deep:    #D8331F;
+  --red-tint:    #FBC9C1;
 
-  --navy:        #202C59;   /* deep navy — dark surfaces / headlines / dark cards */
-  --navy-deep:   #161E3D;   /* navy depth / stamp shadow */
-  --navy-tint:   #C9CEDD;   /* soft navy surface */
+  --navy:        #202B3D;   /* deep navy — primary background */
+  --navy-deep:   #161E3D;
+  --navy-tint:   #C9CEDD;
 
   /* ---------------------------------------------------------
-     COLOUR — Neutrals (WARM cream canvas + true black)
+     COLOUR — Neutrals
      --------------------------------------------------------- */
-  --paper:        #FFF0D0;   /* page canvas — warm cream */
-  --paper-deep:   #F6E2B8;   /* raised / sunken cream surface */
-  --paper-3:      #ECD49A;   /* deeper cream divider tone */
-  --cream-line:   #E0C690;   /* cream hairline border */
+  --paper:        #D9D9D9;   /* silver / light grey — primary text on dark bg */
+  --paper-deep:   #C0C0C0;
+  --paper-3:      #A9A9A9;
+  --cream-line:   #E0C690;   /* legacy border */
 
-  --ink:          #111111;   /* near-black — text, borders, hard edges */
-  --ink-soft:     #1C1C1C;   /* body text */
-  --ink-mute:     #6B6452;   /* secondary / labels (warm grey) */
-  --ink-faint:    #A0967C;   /* placeholder / disabled (warm) */
+  --ink:          #282C2D;   /* slate / near-black */
+  --ink-soft:     #424647;
+  --ink-mute:     #6B6452;
+  --ink-faint:    #A0967C;
 
   /* ---------------------------------------------------------
      COLOUR — Supporting (used sparingly)
      --------------------------------------------------------- */
-  --hi-yellow:    #F3A62A;   /* sticker label = gold */
-  --trust-blue:   #202C59;   /* links = navy */
-  --ok:           #2E6E3E;   /* success */
-  --warn:         #D8331F;   /* error = deep red */
+  --hi-yellow:    #F3A62A;
+  --trust-blue:   #202B3D;
+  --ok:           #2E6E3E;
+  --warn:         #D8331F;
   --danger:       #D8331F;
+
 
   /* ---------------------------------------------------------
      LEGACY ALIASES — keep old token names working
-     (orange → red, ocean → navy) so existing files don't break
      --------------------------------------------------------- */
+  --gold:         var(--teal);
+  --gold-deep:    #168F94; /* accent-hover */
+  --gold-tint:    #BCE9EA; /* accent-soft */
+  --hi-yellow:    var(--teal);
+
   --orange:       var(--red);
   --orange-deep:  var(--red-deep);
   --orange-tint:  var(--red-tint);
@@ -57,28 +60,28 @@
   /* ---------------------------------------------------------
      COLOUR — Semantic tokens
      --------------------------------------------------------- */
-  --bg:            var(--paper);
-  --bg-raised:     #FFFAEC;
-  --bg-sunken:     var(--paper-deep);
+  --bg:            var(--navy);
+  --bg-raised:     var(--navy-deep);
+  --bg-sunken:     var(--ink);
   --bg-brand:      var(--navy);
   --bg-accent:     var(--red);
   --bg-gold:       var(--gold);
   --bg-ocean:      var(--navy);
 
-  --fg:            var(--ink);
-  --fg-soft:       var(--ink-soft);
-  --fg-mute:       var(--ink-mute);
+  --fg:            var(--paper);
+  --fg-soft:       var(--paper-deep);
+  --fg-mute:       var(--paper-3);
   --fg-faint:      var(--ink-faint);
   --fg-on-brand:   var(--paper);
   --fg-on-ocean:   var(--paper);
 
-  --border:        var(--cream-line);
-  --border-strong: #C9A961;
+  --border:        var(--paper-3);
+  --border-strong: var(--paper-deep);
 
-  --accent:        var(--red);
-  --accent-hover:  var(--red-deep);
-  --accent-soft:   var(--red-tint);
+  --accent:        var(--teal); /* Setting the primary accent to Teal as requested */
+  --accent-hover:  #168F94; /* Darker teal */
+  --accent-soft:   #BCE9EA; /* Lighter teal */
 
-  --highlight:     var(--gold);
+  --highlight:     var(--red); /* Secondary highlight is coral */
   --success:       var(--ok);
 }
