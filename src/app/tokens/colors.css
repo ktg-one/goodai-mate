@@ -2,8 +2,7 @@
   /* ---------------------------------------------------------
      COLOUR — the five core brand colours
      --------------------------------------------------------- */
-  --gold:        #F3A62A;   /* mustard-gold */
-  --teal:        #1CABB0;   /* teal accent */
+    --teal:        #1CABB0;   /* teal accent */
 
   --red:         #F66F61;   /* coral-red — primary CTA / shout accent */
   --red-deep:    #D8331F;
@@ -35,9 +34,15 @@
   --warn:         #D8331F;
   --danger:       #D8331F;
 
+
   /* ---------------------------------------------------------
      LEGACY ALIASES — keep old token names working
      --------------------------------------------------------- */
+  --gold:         var(--teal);
+  --gold-deep:    #168F94; /* accent-hover */
+  --gold-tint:    #BCE9EA; /* accent-soft */
+  --hi-yellow:    var(--teal);
+
   --orange:       var(--red);
   --orange-deep:  var(--red-deep);
   --orange-tint:  var(--red-tint);
