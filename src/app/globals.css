@@ -64,6 +64,31 @@ html, body {
   color: var(--ink);
 }
 
+/* ---------------------------------------------------------
+   SCROLLBAR — Brutalist theme
+   --------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+::-webkit-scrollbar-track {
+  background: var(--paper);
+  border-left: 2px solid var(--ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ink);
+  border: 2px solid var(--paper);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--red);
+}
+
+* {
+  scrollbar-width: auto;
+  scrollbar-color: var(--ink) var(--paper);
+}
+
 /* ============================================================
    TYPE CLASSES
    ============================================================ */
