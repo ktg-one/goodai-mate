@@ -634,3 +634,36 @@ button { font-family: inherit; }
 @media (max-width: 760px) {
   .gai-hero-mark { width: 140px; }
 }
+
+/* ─── Background SVGs for Dark Theme Adoption ─── */
+section:nth-of-type(even) {
+  position: relative;
+  z-index: 1;
+}
+section:nth-of-type(even)::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
+  background-image: url('/assets/shapes/shape-big-teal.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.15;
+}
+
+.stamp-card-paper {
+  position: relative;
+  z-index: 1;
+}
+.stamp-card-paper::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
+  background-image: url('/assets/shapes/shape-big-silver.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.15;
+}

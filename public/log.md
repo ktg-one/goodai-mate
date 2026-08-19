@@ -5,3 +5,4 @@
 - [x] Added accessible Brutalist focus states to buttons (.gai-btn, .gai-tool).
 - [x] Added brand-aligned text selection styling
 - [x] Replaced raw rgba() values with CSS color-mix() to strictly adhere to design tokens.
+- [x] Apply background SVG shapes to viewports and bare cards.
