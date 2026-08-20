@@ -104,9 +104,10 @@ export async function isSafeUrl(urlString: string): Promise<boolean> {
         if (isPrivateIPv4(hostname)) return false;
     } else if (net.isIPv6(hostname)) {
         if (hostname === '::1') return false;
+        if (hostname.replace(/[:0.]/g, '') === '') return false;
         const lowerAddr = hostname;
         if (lowerAddr.startsWith('fc') || lowerAddr.startsWith('fd')) return false;
-        if (lowerAddr.startsWith('fe80')) return false;
+        if (lowerAddr.startsWith('fe') || lowerAddr.startsWith('ff')) return false;
 
         const mappedIPv4 = parseIPv4MappedIPv6(hostname);
         if (mappedIPv4 && isPrivateIPv4(mappedIPv4)) return false;
@@ -119,9 +120,10 @@ export async function isSafeUrl(urlString: string): Promise<boolean> {
           if (isPrivateIPv4(address)) return false;
         } else if (net.isIPv6(address)) {
           if (address === '::1') return false;
+          if (address.replace(/[:0.]/g, '') === '') return false;
           const lowerAddr = address.toLowerCase();
           if (lowerAddr.startsWith('fc') || lowerAddr.startsWith('fd')) return false;
-          if (lowerAddr.startsWith('fe80')) return false;
+          if (lowerAddr.startsWith('fe') || lowerAddr.startsWith('ff')) return false;
 
           const mappedIPv4 = parseIPv4MappedIPv6(address);
           if (mappedIPv4 && isPrivateIPv4(mappedIPv4)) return false;
