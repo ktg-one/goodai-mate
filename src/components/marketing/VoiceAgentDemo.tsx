@@ -69,6 +69,7 @@ export default function VoiceAgentDemo() {
             <div className="flex border-2 border-[var(--ink)] rounded-xs bg-[var(--paper-deep)] p-1.5 shadow-[2px_2px_0_var(--ink)]">
               <button
                 onClick={() => setActiveTab('mic')}
+                aria-pressed={activeTab === 'mic'}
                 className={`flex-1 py-2 font-mono text-xs font-bold uppercase tracking-[0.12em] transition-all cursor-pointer rounded-xs ${
                   activeTab === 'mic'
                     ? 'bg-[var(--ink)] text-[var(--paper)] shadow-[inset_1px_1px_2px_rgba(0,0,0,0.5)]'
@@ -79,6 +80,7 @@ export default function VoiceAgentDemo() {
               </button>
               <button
                 onClick={() => setActiveTab('phone')}
+                aria-pressed={activeTab === 'phone'}
                 className={`flex-1 py-2 font-mono text-xs font-bold uppercase tracking-[0.12em] transition-all cursor-pointer rounded-xs ${
                   activeTab === 'phone'
                     ? 'bg-[var(--ink)] text-[var(--paper)] shadow-[inset_1px_1px_2px_rgba(0,0,0,0.5)]'

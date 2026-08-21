@@ -130,6 +130,7 @@ export default function OutboundCallCard() {
                 <button
                   key={agent.id}
                   type="button"
+                  aria-pressed={isSelected}
                   onClick={() => setSelectedAgent(agent.id)}
                   className={`border-2 p-3 text-left rounded-xs cursor-pointer select-none transition-all flex flex-col justify-between h-28 relative focus-visible:outline-2 focus-visible:outline-[var(--ink)] ${
                     isSelected
