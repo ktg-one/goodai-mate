@@ -6,3 +6,4 @@
 - [x] Added brand-aligned text selection styling
 - [x] Replaced raw rgba() values with CSS color-mix() to strictly adhere to design tokens.
 - [x] Apply background SVG shapes to viewports and bare cards.
+- [x] Set default background to Navy and foreground to Silver.
