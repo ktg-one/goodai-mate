@@ -24,6 +24,7 @@ function GemTalkingCharacter({ analyser, status }: { analyser: AnalyserNode | nu
   const animationRef = useRef<number>(null);
   const statusRef = useRef(status);
   const frameRef = useRef(1);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Only touches React state when the frame actually changes, so the rAF
   // loop below doesn't force a re-render (VDOM diff + <img> src decode) on
@@ -50,7 +51,21 @@ function GemTalkingCharacter({ analyser, status }: { analyser: AnalyserNode | nu
 
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
+    // Initialize visibility state properly
+    let isVisible = typeof document !== 'undefined' ? !document.hidden : true;
+    let isIntersecting = true;
+    let io: IntersectionObserver | null = null;
+    const container = containerRef.current;
+
+    // ⚡ Bolt Performance Optimization:
+    // Determine pause state based on tab visibility and screen intersection.
+    const getIsPaused = () => !isVisible || !isIntersecting;
+
     const updateFrame = () => {
+      if (getIsPaused()) {
+        animationRef.current = null;
+        return;
+      }
       const now = Date.now();
       
       // Handle speaking lip-sync based on real audio frequencies
@@ -96,12 +111,39 @@ function GemTalkingCharacter({ analyser, status }: { analyser: AnalyserNode | nu
       animationRef.current = requestAnimationFrame(updateFrame);
     };
 
+    if (typeof window !== 'undefined' && 'IntersectionObserver' in window && container) {
+      io = new IntersectionObserver(
+        (entries) => {
+          const wasPaused = getIsPaused();
+          isIntersecting = entries[0]?.isIntersecting ?? true;
+          const isNowPaused = getIsPaused();
+          if (wasPaused && !isNowPaused && !animationRef.current) {
+            updateFrame();
+          }
+        },
+        { threshold: 0.05 }
+      );
+      io.observe(container);
+    }
+
+    const onVis = () => {
+      const wasPaused = getIsPaused();
+      isVisible = !document.hidden;
+      const isNowPaused = getIsPaused();
+      if (wasPaused && !isNowPaused && !animationRef.current) {
+        updateFrame();
+      }
+    };
+    document.addEventListener('visibilitychange', onVis, { passive: true });
+
     updateFrame();
 
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
+      if (io) io.disconnect();
+      document.removeEventListener('visibilitychange', onVis);
     };
   }, [analyser, status, applyFrame]);
 
@@ -117,7 +159,7 @@ function GemTalkingCharacter({ analyser, status }: { analyser: AnalyserNode | nu
   }, [status, applyFrame]);
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center bg-[var(--paper)] p-4 select-none">
+    <div id="gem-talking-char" ref={containerRef} className="relative w-full h-full flex items-center justify-center bg-[var(--paper)] p-4 select-none">
       {/* Outer brutalist frame for the avatar */}
       <div className="relative w-[340px] h-[340px] border-2 border-[var(--ink)] bg-[var(--gold-tint)] overflow-hidden shadow-[3px_3px_0_var(--ink)] flex items-center justify-center rounded-sm">
         {/* Decorative Grid Lines */}
