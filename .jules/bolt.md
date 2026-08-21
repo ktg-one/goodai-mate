@@ -49,3 +49,7 @@
 ## 2024-05-24 - [React Performance] Memoizing list maps alongside text input state updates
 **Learning:** In chat interfaces using the Vercel AI SDK, computing a derived list like `messages.map(...)` without memoization forces the entire message list to re-map on every single re-render of the parent component (e.g. when typing or streaming).
 **Action:** Wrap the array mapping operation in a `useMemo` hook with the array as a dependency to optimize rendering performance, avoiding unnecessary object allocations and DOM reconciliation complexity.
+
+## 2025-05-18 - [React Performance] Stopping requestAnimationFrame CPU Burn
+**Learning:** In canvas visualizers and animation loops, it is common to skip drawing when paused (e.g., when offscreen). However, simply returning early and calling `requestAnimationFrame(render)` again creates a perpetual empty 60fps loop that still burns CPU and keeps the main thread unnecessarily active.
+**Action:** When pausing an animation loop due to visibility or reduced motion, explicitly stop calling `requestAnimationFrame` (and clear the `animationRef`). Use event listeners like `IntersectionObserver` or `visibilitychange` to capture the previous state and manually restart the `render()` loop only when transitioning from paused to unpaused.
