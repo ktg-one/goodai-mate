@@ -61,9 +61,13 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   });
 
   const isBusy = status === 'submitted' || status === 'streaming';
+  // ⚡ Bolt Performance Optimization: Lazy-evaluate chat transcript
+  // This prevents an O(N) string concatenation operation on every single token
+  // streamed by the AI SDK during the initial response. We only need this string
+  // when the stream finishes and showLeadCard becomes true.
   const conversationTranscript = useMemo(
-    () => messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n'),
-    [messages],
+    () => showLeadCard ? messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n') : '',
+    [messages, showLeadCard],
   );
   const errorMessage = error?.message?.trim() || 'Something went sideways. Try again in a moment.';
 

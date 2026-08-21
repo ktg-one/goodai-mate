@@ -70,7 +70,7 @@ export default function HomeClient() {
     // === PHYSICAL RIBBON "TEAR SNAP" ON NEW DOCKET (stamp clack impulse) ===
     // Real tape: slow pull then quick release shear + flutter decay. Not smooth.
     // Mirrors award-config "tearing forward with shear, flutter, and lag variance".
-    const snap = (ref: React.RefObject<HTMLDivElement>, baseShear: number) => {
+    const snap = (ref: React.RefObject<HTMLDivElement | null>, baseShear: number) => {
       if (!ref.current) return;
       gsap.to(ref.current, {
         '--tape-shear': baseShear * 2.6,
@@ -521,7 +521,7 @@ export default function HomeClient() {
       </section>
 
       {/* POWERFUL CLOSING RITUAL — final thick ink navy stamped footer docket */}
-      {/* Contains core promise + minimal contact + "we'll sort the boring stuff" in Fraunces WONK */}
+      {/* Contains core promise + minimal contact + "we'll sort the boring stuff" in display type */}
       <footer
         ref={footerRef}
         className="mail-docket-footer border-t-4 border-[var(--ink)] py-14 px-6 text-[var(--paper)]"
@@ -535,7 +535,7 @@ export default function HomeClient() {
             You didn&apos;t start this to do admin.<br />We&apos;ll sort the boring stuff.
           </div>
 
-          {/* The ritual line — Fraunces WONK axis, gold-tint, thick ink stamp feel */}
+          {/* The ritual line — display type, gold-tint, thick ink stamp feel */}
           <div className="wonk-line text-3xl md:text-[42px] tracking-[-0.01em] mb-8">
             we&apos;ll sort the boring stuff
           </div>
