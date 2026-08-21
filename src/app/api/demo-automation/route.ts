@@ -21,6 +21,20 @@ interface AutomationPayload {
   n8nUrl?: string;
 }
 
+function sanitizeSheetInput(input: string): string {
+  if (!input) return '';
+  const str = String(input);
+  if (/^[=+\-@\t\r]/.test(str)) {
+    return `'${str}`;
+  }
+  return str;
+}
+
+function sanitizeHeader(input: string): string {
+  if (!input) return '';
+  return String(input).replace(/[\r\n]/g, '');
+}
+
 async function runGwsCommand(args: string[], jsonInput?: unknown): Promise<unknown> {
   const fullArgs = [
     GWS_PATH,
@@ -85,7 +99,14 @@ export async function POST(req: NextRequest) {
       ], {
         values: [
           ['Timestamp', 'Name', 'Business', 'Phone', 'Email', 'Problem'],
-          [timestamp, name, business || '—', phone, email || '—', problem]
+          [
+            timestamp,
+            sanitizeSheetInput(name),
+            sanitizeSheetInput(business || '—'),
+            sanitizeSheetInput(phone),
+            sanitizeSheetInput(email || '—'),
+            sanitizeSheetInput(problem)
+          ]
         ]
       });
       logs.push('Lead successfully appended to spreadsheet.');
@@ -148,8 +169,8 @@ export async function POST(req: NextRequest) {
       const timestamp = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Perth' });
       
       const rawEmail = 
-        `To: ${email}\r\n` +
-        `Subject: Good'ai Automation Received - Hello ${name}\r\n` +
+        `To: ${sanitizeHeader(email)}\r\n` +
+        `Subject: Good'ai Automation Received - Hello ${sanitizeHeader(name)}\r\n` +
         `Content-Type: text/plain; charset="utf-8"\r\n` +
         `\r\n` +
         `Hi ${name},\r\n\r\n` +
