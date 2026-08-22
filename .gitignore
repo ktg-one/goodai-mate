@@ -114,3 +114,8 @@ feature_list.json
 .antigravitycli/
 .understand-anything/
 .githooks/
+
+# Local agent scratch directories
+.agent_context/
+.multica/
+.serena/

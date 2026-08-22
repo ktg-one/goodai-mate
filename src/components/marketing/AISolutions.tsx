@@ -21,36 +21,40 @@ export default function AISolutions() {
       title: 'Voice Agent Intake',
       desc: 'Speak your problems. We turn them into real automations. No forms, no jargon.',
       variant: 'navy' as const,
-      accent: 'text-[var(--gold)]',
+      sticker: 'PILOT',
+      stickerClass: 'sticker-label sticker-label-gold',
     },
     {
       title: 'Admin & Invoicing Systems',
       desc: 'Quotes, jobs, invoices and follow-ups that run themselves after you speak them once.',
       variant: 'gold' as const,
-      accent: 'text-[var(--red)]', // single red shout inside this gold surface (one per card)
+      sticker: 'STICKER · SALE',
+      stickerClass: 'sticker-label sticker-label-red',
     },
     {
       title: 'Workflow Automation',
       desc: 'Xero, MYOB, ServiceM8, Tradify, Cliniko — we connect the tools you already use.',
       variant: 'ink' as const,
-      accent: 'text-[var(--gold)]',
+      sticker: 'LIVE',
+      stickerClass: 'sticker-label sticker-label-gold',
     },
     {
       title: 'Ongoing Relief',
       desc: 'Not a one-off setup. A partner that keeps the boring stuff off your plate every week.',
       variant: 'gold' as const,
-      accent: 'text-[var(--red)]',
+      sticker: 'PERTH MATE',
+      stickerClass: 'sticker-label sticker-label-navy',
     },
   ];
 
   return (
-    <section ref={sectionRef} className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+    <section ref={sectionRef} className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
       {/* Unified physical ribbon bridge (GSAP .mail-ribbon) + non-uniform pinned variance now controlled from HomeClient mailBoard.
           This section participates as coloured docket layers on the single brutalist mail artifact. */}
 
       <div className="mx-auto max-w-5xl px-6">
         <ScrollReveal className="mb-10">
-          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">THE SYSTEMS</span>
+          <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">THE SYSTEMS</span>
           <h2 className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-3">
             Real <span className="hl">systems</span>.<br />Not another app.
           </h2>
@@ -73,9 +77,7 @@ export default function AISolutions() {
                 '--oy': `${[2, -3, 4, -2][index % 4]}px`,
               } as React.CSSProperties}
             >
-              <div className={`font-mono text-xs uppercase tracking-[0.16em] mb-3 ${sol.accent}`}>
-                0{index + 1}
-              </div>
+              <span className={`${sol.stickerClass} mb-3`}>{sol.sticker}</span>
               <h3 className="font-bold text-3xl mb-4 tracking-[-0.015em]">{sol.title}</h3>
               <p className="opacity-90 text-lg leading-snug">{sol.desc}</p>
             </StampCard>

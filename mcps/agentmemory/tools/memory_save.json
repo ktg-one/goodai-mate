@@ -1,0 +1,32 @@
+{
+  "name": "memory_save",
+  "description": "Explicitly save an important insight, decision, or pattern to long-term memory.",
+  "inputSchema": {
+    "properties": {
+      "concepts": {
+        "description": "Comma-separated key concepts",
+        "type": "string"
+      },
+      "content": {
+        "description": "The insight or decision to remember",
+        "type": "string"
+      },
+      "files": {
+        "description": "Comma-separated relevant file paths",
+        "type": "string"
+      },
+      "project": {
+        "description": "Stable canonical project identifier this memory belongs to (e.g. a slug, UUID, or registry key). Must match the value used when the session was started. Do not use filesystem paths or ad-hoc display names — those change across machines and will silently break project scoping.",
+        "type": "string"
+      },
+      "type": {
+        "description": "Memory type: pattern, preference, architecture, bug, workflow, or fact",
+        "type": "string"
+      }
+    },
+    "required": [
+      "content"
+    ],
+    "type": "object"
+  }
+}

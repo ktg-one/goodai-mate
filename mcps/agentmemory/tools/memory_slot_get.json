@@ -1,0 +1,16 @@
+{
+  "name": "memory_slot_get",
+  "description": "Read a single slot by label.",
+  "inputSchema": {
+    "properties": {
+      "label": {
+        "description": "Slot label (e.g. 'persona', 'pending_items')",
+        "type": "string"
+      }
+    },
+    "required": [
+      "label"
+    ],
+    "type": "object"
+  }
+}

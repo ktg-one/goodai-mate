@@ -3,31 +3,46 @@ import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { generateText } from 'ai';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
+import path from 'path';
+import fs from 'fs';
+import { isSafeUrl } from '@/lib/ssrf';
 
 const execFileAsync = promisify(execFile);
-const GWS_PATH = 'D:\\packages\\npm-global\\node_modules\\@googleworkspace\\cli\\run.js';
+
+// Helper to resolve GWS CLI path dynamically
+function getGwsCliPath(): string {
+  if (process.env.GWS_CLI_PATH) {
+    return process.env.GWS_CLI_PATH;
+  }
+  const localPath = path.join(process.cwd(), 'node_modules', '@googleworkspace', 'cli', 'run.js');
+  if (fs.existsSync(localPath)) {
+    return localPath;
+  }
+  return 'D:\\packages\\npm-global\\node_modules\\@googleworkspace\\cli\\run.js';
+}
+
+const GWS_PATH = getGwsCliPath();
 
 interface AnalyzePayload {
   url: string;
 }
 
 async function runGwsCommand(args: string[], jsonInput?: unknown): Promise<unknown> {
-  const fullArgs = [
-    GWS_PATH,
-    ...args,
-    '--format', 'json'
-  ];
+  const isJs = GWS_PATH.endsWith('.js');
+  const command = isJs ? 'node' : GWS_PATH;
+  const fullArgs = isJs ? [GWS_PATH, ...args] : [...args];
+  fullArgs.push('--format', 'json');
   
   if (jsonInput) {
     fullArgs.push('--json', JSON.stringify(jsonInput));
   }
   
   try {
-    const { stdout } = await execFileAsync('node', fullArgs);
+    const { stdout } = await execFileAsync(command, fullArgs);
     return JSON.parse(stdout.trim());
   } catch (error: unknown) {
     const err = error as { stdout?: string; stderr?: string; message?: string };
-    console.error(`GWS execution failed: node ${fullArgs.map(a => `"${a}"`).join(' ')}`, err);
+    console.error(`GWS execution failed: ${command} ${fullArgs.map(a => `"${a}"`).join(' ')}`, err);
     return null; // Return null so GWS failures don't block the core analysis service
   }
 }
@@ -44,6 +59,15 @@ export async function POST(req: NextRequest) {
     }
 
     const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
+
+    // SSRF Protection: Validate targetUrl before fetching
+    if (!(await isSafeUrl(targetUrl))) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid or restricted website URL' },
+        { status: 400 }
+      );
+    }
+
     const logs: string[] = [`[SYSTEM] Initializing Website Analysis for: ${targetUrl}`];
     let extractedEmail = '';
 
@@ -54,17 +78,39 @@ export async function POST(req: NextRequest) {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s scrape timeout
       
-      const fetchRes = await fetch(targetUrl, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
-        },
-        signal: controller.signal
-      });
+      let fetchRes;
+      let currentUrl = targetUrl;
+      let redirectCount = 0;
+      const MAX_REDIRECTS = 5;
+
+      while (redirectCount < MAX_REDIRECTS) {
+        fetchRes = await fetch(currentUrl, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+          },
+          signal: controller.signal,
+          redirect: 'manual'
+        });
+
+        if (fetchRes.status >= 300 && fetchRes.status < 400) {
+          const location = fetchRes.headers.get('location');
+          if (!location) break;
+
+          const nextUrl = new URL(location, currentUrl).toString();
+          if (!(await isSafeUrl(nextUrl))) {
+            throw new Error('Redirected to restricted or invalid URL');
+          }
+          currentUrl = nextUrl;
+          redirectCount++;
+        } else {
+          break;
+        }
+      }
       
       clearTimeout(timeoutId);
 
-      if (fetchRes.ok) {
+      if (fetchRes && fetchRes.ok) {
         const html = await fetchRes.text();
         
         // Extract email address via regex from the original HTML (catches mailto: links)
@@ -100,7 +146,7 @@ export async function POST(req: NextRequest) {
           .slice(0, 4000); // Limit to first 4000 chars to avoid token bloat
         logs.push(`[ANALYZER] Successfully extracted HTML content (${scrapedText.length} chars).`);
       } else {
-        logs.push(`[WARNING] Scraping returned status ${fetchRes.status}. Using domain metadata.`);
+        logs.push(`[WARNING] Scraping returned status ${fetchRes ? fetchRes.status : 'Unknown'}. Using domain metadata.`);
       }
     } catch (err: unknown) {
       const errorObject = err as { message?: string };
@@ -176,9 +222,13 @@ Only output the raw JSON object. Do not wrap in markdown code blocks or add addi
       logs.push(`[GWS] Sending website audit lead details to: ${destination}...`);
       const timestamp = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Perth' });
       
+      // 🛡️ Sentinel: Sanitize AI output to prevent Email Header Injection (CRLF) if output is manipulated
+      const sanitizeHeader = (val: unknown) => String(val || '').replace(/[\r\n]/g, '');
+      const safeBusinessType = sanitizeHeader(analysisResult.businessType || '');
+
       const rawEmail = 
         `To: ${destination}\r\n` +
-        `Subject: Good'ai Web Audit Lead - ${analysisResult.businessType}\r\n` +
+        `Subject: Good'ai Web Audit Lead - ${safeBusinessType}\r\n` +
         `Content-Type: text/plain; charset="utf-8"\r\n` +
         `\r\n` +
         `Good'ai Team / Darl,\r\n\r\n` +

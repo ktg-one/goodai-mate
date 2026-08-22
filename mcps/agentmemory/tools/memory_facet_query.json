@@ -1,0 +1,21 @@
+{
+  "name": "memory_facet_query",
+  "description": "Query targets by facet tags with AND/OR logic. Find all actions tagged priority:urgent AND team:backend.",
+  "inputSchema": {
+    "properties": {
+      "matchAll": {
+        "description": "Comma-separated dimension:value pairs (AND logic)",
+        "type": "string"
+      },
+      "matchAny": {
+        "description": "Comma-separated dimension:value pairs (OR logic)",
+        "type": "string"
+      },
+      "targetType": {
+        "description": "Filter by type: action, memory, or observation",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  }
+}

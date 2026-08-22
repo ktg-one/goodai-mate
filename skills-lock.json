@@ -13,6 +13,12 @@
       "skillPath": "skills/awwwards/SKILL.md",
       "computedHash": "10e497f6aa44ed7907ab69acfcd03ba386bf147d07f9982616282d67a0bd4c7c"
     },
+    "design-taste-frontend": {
+      "source": "Leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/taste-skill/SKILL.md",
+      "computedHash": "6d838b246d0e35d0b53f4f23f98ba7a1dd561937e64f7d0c7553b0928e376c3e"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",

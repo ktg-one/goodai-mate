@@ -1,0 +1,16 @@
+{
+  "name": "memory_claude_bridge_sync",
+  "description": "Sync memory state to/from Claude Code's native MEMORY.md file.",
+  "inputSchema": {
+    "properties": {
+      "direction": {
+        "description": "'read' to import from MEMORY.md, 'write' to export to MEMORY.md",
+        "type": "string"
+      }
+    },
+    "required": [
+      "direction"
+    ],
+    "type": "object"
+  }
+}

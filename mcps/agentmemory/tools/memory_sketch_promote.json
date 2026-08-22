@@ -1,0 +1,20 @@
+{
+  "name": "memory_sketch_promote",
+  "description": "Promote a sketch's ephemeral actions to permanent actions. Makes the exploratory work official.",
+  "inputSchema": {
+    "properties": {
+      "project": {
+        "description": "Override project for promoted actions",
+        "type": "string"
+      },
+      "sketchId": {
+        "description": "Sketch ID to promote",
+        "type": "string"
+      }
+    },
+    "required": [
+      "sketchId"
+    ],
+    "type": "object"
+  }
+}

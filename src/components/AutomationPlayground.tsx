@@ -1,8 +1,11 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { Sparkles, Terminal, FileText, Calendar, Mail, FileSpreadsheet, Check, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
+
+const CHECKBOX_LABEL_CLASSES = "flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--coral)] has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50";
+const CHECKBOX_INPUT_CLASSES = "accent-[var(--coral)] outline-none focus-visible:outline-none";
 
 export default function AutomationPlayground() {
   const [name, setName] = useState('');
@@ -37,6 +40,21 @@ export default function AutomationPlayground() {
   const toggleAction = (key: keyof typeof actions) => {
     setActions(prev => ({ ...prev, [key]: !prev[key] }));
   };
+
+  // ⚡ Bolt: Memoize expensive array mapping
+  // This array map is in the same component as multiple controlled inputs.
+  // Without useMemo, typing a single character forces the O(N) array mapping
+  // and DOM recreation to run again, causing input lag.
+  const memoizedLogs = useMemo(() => logs.map((log, index) => {
+    let colorClass = 'text-[var(--paper)]/90';
+    if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--coral)] font-bold';
+    if (log.startsWith('[SYSTEM]')) colorClass = 'text-[var(--gold-tint)] font-bold';
+    return (
+      <div key={index} className={colorClass}>
+        {log}
+      </div>
+    );
+  }), [logs]);
 
   const runAutomation = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,8 +106,8 @@ export default function AutomationPlayground() {
   };
 
   return (
-    <div className="gai-leadcard border-2 border-[var(--ink)] bg-[var(--paper-raised)] p-6 md:p-8 rounded-sm shadow-[4px_4px_0_var(--ink)] w-full">
-      <div className="gai-leadcard-eyebrow flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--red)] mb-3">
+    <div className="stamp-card stamp-card-gold p-6 md:p-8 w-full">
+      <div className="gai-leadcard-eyebrow flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--coral)] mb-3">
         <Sparkles size={14} /> Live Workspace Playground
       </div>
       
@@ -97,30 +115,39 @@ export default function AutomationPlayground() {
         Run real <span className="hl">Workspace Automations</span>.
       </h3>
       <p className="text-sm md:text-base text-[var(--ink)]/80 mb-6 max-w-2xl leading-relaxed">
-        Test our integration pipeline. Since the Google Workspace CLI is now fully authenticated on your machine, you can run actual Sheets, Docs, Calendar, and Gmail scripts directly from this dashboard.
+        Run a live Workspace demo — Sheets, Docs, Calendar, and Gmail wired into one intake docket.
       </p>
 
       <div className="grid lg:grid-cols-12 gap-8">
         {/* Form Column */}
         <form onSubmit={runAutomation} className="lg:col-span-5 flex flex-col gap-5">
           <div className="flex flex-col gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">1. ENTER DEMO DETAILS</span>
+            <span className="sticker-label sticker-label-navy">CONTACT</span>
             <input
               className="gai-input w-full"
+              type="text"
+              autoComplete="name"
               placeholder="Demo Contact Name"
+              aria-label="Demo Contact Name"
               required
               value={name}
               onChange={e => setName(e.target.value)}
             />
             <input
               className="gai-input w-full"
+              type="text"
+              autoComplete="organization"
               placeholder="Business Name (Optional)"
+              aria-label="Business Name (Optional)"
               value={business}
               onChange={e => setBusiness(e.target.value)}
             />
             <input
               className="gai-input w-full"
+              type="tel"
+              autoComplete="tel"
               placeholder="Phone Number"
+              aria-label="Phone Number"
               required
               value={phone}
               onChange={e => setPhone(e.target.value)}
@@ -128,23 +155,29 @@ export default function AutomationPlayground() {
             <input
               className="gai-input w-full"
               placeholder="Email (Required for Gmail demo)"
+              aria-label="Email (Required for Gmail demo)"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
             />
             <input
               className="gai-input w-full"
+              type="url"
+              autoComplete="url"
               placeholder="n8n Webhook URL (Optional)"
+              aria-label="n8n Webhook URL (Optional)"
               value={n8nUrl}
               onChange={e => setN8nUrl(e.target.value)}
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">2. DESCRIBE AUTOMATION JOB</span>
+            <span className="sticker-label sticker-label-navy">THE CHORE</span>
             <textarea
               className="gai-input w-full min-h-[70px] text-sm resize-y"
               placeholder="Define a chore or task..."
+              aria-label="Define a chore or task..."
               value={problem}
               onChange={e => setProblem(e.target.value)}
               required
@@ -153,55 +186,55 @@ export default function AutomationPlayground() {
 
           {/* Checklist of actions */}
           <div className="flex flex-col gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">3. SELECT GOOGLE SERVICES</span>
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+            <span id="services-group-label" className="sticker-label sticker-label-navy">SERVICES</span>
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono" role="group" aria-labelledby="services-group-label">
+              <label className={CHECKBOX_LABEL_CLASSES}>
                 <input
                   type="checkbox"
                   checked={actions.sheet}
                   onChange={() => toggleAction('sheet')}
-                  className="accent-[var(--red)]"
+                  className={CHECKBOX_INPUT_CLASSES}
                 />
                 <span>Append Sheet</span>
               </label>
               
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+              <label className={CHECKBOX_LABEL_CLASSES}>
                 <input
                   type="checkbox"
                   checked={actions.doc}
                   onChange={() => toggleAction('doc')}
-                  className="accent-[var(--red)]"
+                  className={CHECKBOX_INPUT_CLASSES}
                 />
                 <span>Generate Doc</span>
               </label>
               
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+              <label className={CHECKBOX_LABEL_CLASSES} title={!email ? 'Email address required' : undefined}>
                 <input
                   type="checkbox"
                   checked={actions.emailNotification}
                   onChange={() => toggleAction('emailNotification')}
                   disabled={!email}
-                  className="accent-[var(--red)]"
+                  className={CHECKBOX_INPUT_CLASSES}
                 />
-                <span className={!email ? 'opacity-40' : ''}>Gmail Send</span>
+                <span>Gmail Send</span>
               </label>
               
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+              <label className={CHECKBOX_LABEL_CLASSES}>
                 <input
                   type="checkbox"
                   checked={actions.calendar}
                   onChange={() => toggleAction('calendar')}
-                  className="accent-[var(--red)]"
+                  className={CHECKBOX_INPUT_CLASSES}
                 />
                 <span>Schedule Call</span>
               </label>
 
-              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+              <label className={CHECKBOX_LABEL_CLASSES}>
                 <input
                   type="checkbox"
                   checked={actions.n8n}
                   onChange={() => toggleAction('n8n')}
-                  className="accent-[var(--red)]"
+                  className={CHECKBOX_INPUT_CLASSES}
                 />
                 <span>n8n Webhook</span>
               </label>
@@ -225,21 +258,12 @@ export default function AutomationPlayground() {
             <Terminal size={12} /> Live execution log
           </span>
           
-          <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-4 font-mono text-xs h-[240px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
+          <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-4 font-mono text-xs h-[240px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]" role="log" aria-live="polite">
             <div className="space-y-2">
               {logs.length === 0 && (
                 <div className="text-[var(--paper)]/40 italic">Waiting to trigger pipeline... Details will compile here in real time.</div>
               )}
-              {logs.map((log, index) => {
-                let colorClass = 'text-[var(--paper)]/90';
-                if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--red)] font-bold';
-                if (log.startsWith('[SYSTEM]')) colorClass = 'text-[var(--gold)] font-bold';
-                return (
-                  <div key={index} className={colorClass}>
-                    {log}
-                  </div>
-                );
-              })}
+              {memoizedLogs}
               {isRunning && (
                 <div className="flex items-center gap-1.5 text-[var(--paper)]/50 animate-pulse mt-1">
                   <span>●</span><span>Executing GWS scripts...</span>
@@ -251,8 +275,8 @@ export default function AutomationPlayground() {
 
           {/* Results dashboard */}
           {results && (
-            <div className="border-2 border-[var(--ink)] bg-[var(--paper)] p-4 rounded-xs shadow-[2px_2px_0_var(--ink)]">
-              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--red)] font-bold mb-3 flex items-center gap-1">
+            <div className="stamp-card stamp-card-navy p-4">
+              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--coral)] font-bold mb-3 flex items-center gap-1">
                 <Check size={12} /> LIVE WORKSPACE DOCKETS FILED:
               </div>
               <div className="grid sm:grid-cols-2 gap-2 text-xs font-mono">
@@ -261,9 +285,9 @@ export default function AutomationPlayground() {
                     href={results.sheetUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 border border-[var(--ink)]/20 hover:border-[var(--ink)] bg-[var(--paper-raised)] p-2 hover:bg-[var(--gold-tint)] hover:translate-y-[-1px] transition-all"
+                    className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--paper)] hover:translate-y-[-1px] transition-all"
                   >
-                    <FileSpreadsheet size={16} className="text-emerald-700" />
+                    <FileSpreadsheet size={16} className="text-[var(--ok)]" />
                     <span className="underline truncate">Google Sheet Lead Board</span>
                   </a>
                 )}
@@ -272,15 +296,15 @@ export default function AutomationPlayground() {
                     href={results.docUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 border border-[var(--ink)]/20 hover:border-[var(--ink)] bg-[var(--paper-raised)] p-2 hover:bg-[var(--gold-tint)] hover:translate-y-[-1px] transition-all"
+                    className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--paper)] hover:translate-y-[-1px] transition-all"
                   >
-                    <FileText size={16} className="text-blue-700" />
+                    <FileText size={16} className="text-[var(--navy)]" />
                     <span className="underline truncate">Google Doc Proposal</span>
                   </a>
                 )}
                 {results.emailId && (
-                  <div className="flex items-center gap-2 border border-[var(--ink)]/20 bg-[var(--paper-raised)] p-2">
-                    <Mail size={16} className="text-[var(--red)]" />
+                  <div className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2">
+                    <Mail size={16} className="text-[var(--coral)]" />
                     <span className="truncate">Email Sent (ID: {results.emailId.slice(0,8)}...)</span>
                   </div>
                 )}
@@ -289,15 +313,15 @@ export default function AutomationPlayground() {
                     href={results.calendarUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 border border-[var(--ink)]/20 hover:border-[var(--ink)] bg-[var(--paper-raised)] p-2 hover:bg-[var(--gold-tint)] hover:translate-y-[-1px] transition-all"
+                    className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--paper)] hover:translate-y-[-1px] transition-all"
                   >
-                    <Calendar size={16} className="text-amber-700" />
+                    <Calendar size={16} className="text-[var(--gold-tint)]" />
                     <span className="underline truncate">Scheduled Calendar Call</span>
                   </a>
                 )}
                 {results.n8nStatus && (
-                  <div className="flex items-center gap-2 border border-[var(--ink)]/20 bg-[var(--paper-raised)] p-2">
-                    <Sparkles size={16} className="text-purple-700" />
+                  <div className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2">
+                    <Sparkles size={16} className="text-[var(--navy)]" />
                     <span className="truncate">n8n Webhook: {results.n8nStatus}</span>
                   </div>
                 )}

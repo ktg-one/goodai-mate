@@ -21,3 +21,31 @@
 ## 2025-05-14 - [Optimize Array Reversal in Streaming Context]
 **Learning:** In Next.js / React apps using Vercel AI SDK, array spreading and reversing `[...messages].reverse()` on every render or effect during text streaming creates unnecessary object allocations and GC overhead.
 **Action:** Use a backwards `for` loop to search the array backwards instead of making a reversed copy.
+
+## 2025-05-18 - [React Performance] Lazy Evaluating Derived State During Streaming
+**Learning:** In chat interfaces using the Vercel AI SDK, computing derived state like `messages.map(...).join('\n')` inside a `useMemo` that depends on `messages` causes O(N) string concatenation on every single streaming token, destroying performance and causing input lag.
+**Action:** Always lazy-evaluate expensive derived state. If the derived state is only needed when a specific component (like a lead capture form) is visible, add those visibility flags to the `useMemo` dependencies and return early (e.g., return `''` if the form is hidden) to bypass the computation during the heavy streaming phase.
+
+## 2025-05-18 - [React Performance] Memoizing list maps alongside controlled inputs
+**Learning:** The React AutomationPlayground component contained a `logs.map(...)` operation inline with multiple controlled inputs (like `name`, `business`, `phone`). Because it wasn't memoized, typing a single character forced the entire logs array mapping and DOM element recreation to run again, causing input lag.
+**Action:** Always wrap derived lists or array mappings (e.g., `logs.map()`) in a `useMemo` hook when they reside in the same component as a controlled text input to prevent O(N) recomputations on every keystroke.
+
+## 2026-07-13 - [Package Manager Strictness] Dependency Management during Fixes
+**Learning:** When executing `pnpm install --config.engine-strict=false` to resolve local linting environment errors (like missing `@eslint/eslintrc`), the package manager will modify `package.json` and generate `pnpm-lock.yaml`. If these auto-generated modifications are blindly staged and committed, it violates the strict instruction to *never* modify `package.json` or `tsconfig.json` without explicit instruction, causing the PR to fail review.
+**Action:** Always run `git status` after executing package manager commands for local setup. Use `git checkout -- package.json` and delete the `pnpm-lock.yaml` file (or simply do not stage them) to ensure only the intended performance optimization files are committed.
+
+## 2025-02-13 - CI Lockfile Syncing
+**Learning:** The GitHub actions CI pipelines rely on pnpm/action-setup which requires a valid `pnpm-lock.yaml` file. Previous runs were using `npm ci` and failing because there was no `package-lock.json` kept in sync with the package.json file.
+**Action:** Commit `pnpm-lock.yaml` to source control to fix the action setup.
+
+## 2024-08-04 - [React Performance] Throttling State Updates in Animation Loops
+**Learning:** In high-frequency animation loops (like `requestAnimationFrame`), calling a React state setter (like `setFrame`) on every tick forces the React dispatcher to queue an update, even if the new value is identical to the old value. While React's bailout mechanism prevents a full DOM re-render, the repeated dispatching still carries significant overhead in a 60fps loop.
+**Action:** Always track the current state value using a `useRef` (e.g., `frameRef`) in high-frequency loops. Only invoke the state setter when the target value strictly differs from the ref value to prevent unnecessary React update queueing.
+
+## 2025-05-18 - [React Performance] Stopping requestAnimationFrame CPU Burn
+**Learning:** In canvas visualizers and animation loops, it is common to skip drawing when paused (e.g., when offscreen). However, simply returning early and calling `requestAnimationFrame(render)` again creates a perpetual empty 60fps loop that still burns CPU and keeps the main thread unnecessarily active.
+**Action:** When pausing an animation loop due to visibility or reduced motion, explicitly stop calling `requestAnimationFrame` (and clear the `animationRef`). Use event listeners like `IntersectionObserver` or `visibilitychange` to capture the previous state and manually restart the `render()` loop only when transitioning from paused to unpaused.
+
+## 2024-05-24 - [React Performance] Memoizing list maps alongside text input state updates
+**Learning:** In chat interfaces using the Vercel AI SDK, computing a derived list like `messages.map(...)` without memoization forces the entire message list to re-map on every single re-render of the parent component (e.g. when typing or streaming).
+**Action:** Wrap the array mapping operation in a `useMemo` hook with the array as a dependency to optimize rendering performance, avoiding unnecessary object allocations and DOM reconciliation complexity.

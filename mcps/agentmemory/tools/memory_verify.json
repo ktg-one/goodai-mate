@@ -1,0 +1,16 @@
+{
+  "name": "memory_verify",
+  "description": "Verify a memory or observation by tracing its citation chain back to source observations and session context. Returns provenance information including confidence scores.",
+  "inputSchema": {
+    "properties": {
+      "id": {
+        "description": "Memory ID or observation ID to verify",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id"
+    ],
+    "type": "object"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "memory_team_share",
+  "description": "Share a memory or observation with team members.",
+  "inputSchema": {
+    "properties": {
+      "itemId": {
+        "description": "ID of memory or observation to share",
+        "type": "string"
+      },
+      "itemType": {
+        "description": "Type: observation, memory, or pattern",
+        "type": "string"
+      }
+    },
+    "required": [
+      "itemId",
+      "itemType"
+    ],
+    "type": "object"
+  }
+}

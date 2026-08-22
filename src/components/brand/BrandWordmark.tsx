@@ -1,96 +1,76 @@
 'use client';
 
 import React from 'react';
+import { BRAND_ASSETS, type WordmarkTone, wordmarkSrc } from '@/lib/brand-assets';
 
-/**
- * BrandWordmark
- * Uses the new brand assets from /public/assets/ (SSOT: public/design-system-new + good-ai-design-final.html)
- * Prefers vector for sharpness and correct apostrophe treatment.
- * One of the core "ink on paper" artifacts. Used in hero bar + Why section.
- */
-export function BrandWordmark({ className = '' }: { className?: string }) {
+/** BrandWordmark — Figma-exported SVG wordmark. tone='dark' = for light/cream bg. tone='light' = for navy bg. */
+export function BrandWordmark({
+  className = '',
+  tone = 'dark',
+}: {
+  className?: string;
+  tone?: WordmarkTone;
+}) {
   return (
     <img
-      src="/assets/wordmark.svg"
+      src={wordmarkSrc(tone)}
       alt="Good'ai"
       className={`h-8 w-auto ${className}`}
-      style={{ imageRendering: 'crisp-edges' }}
     />
   );
 }
 
-/**
- * BrandMark
- * The icon / swan mark from the new brand kit.
- * (Variants exist: logo-mark-dark.svg, logo-mark-nomouth.svg, wordmark-mark.svg — use when context demands)
- */
-export function BrandMark({ className = '' }: { className?: string }) {
+/** Icon mark only — use variant='dark' on dark/navy surfaces */
+export function BrandMark({
+  className = '',
+  variant = 'default',
+}: {
+  className?: string;
+  variant?: 'default' | 'dark';
+}) {
+  const src =
+    variant === 'dark' ? BRAND_ASSETS.logo.dark : BRAND_ASSETS.logo.default;
   return (
     <img
-      src="/assets/logo-mark.svg"
+      src={src}
       alt="Good'ai mark"
       className={`h-8 w-auto ${className}`}
     />
   );
 }
 
-/**
- * Full lockup (mark + wordmark)
- */
+/** Full wordmark lockup */
 export function BrandLogo({ className = '' }: { className?: string }) {
   return (
     <img
-      src="/assets/logo-full.svg"
+      src={BRAND_ASSETS.logo.default}
       alt="Good'ai"
       className={`h-9 w-auto ${className}`}
     />
   );
 }
 
-/**
- * StampLetter / ModularLetter
- * Integrates the under-used modular letter SVGs (letter-a.svg, letter-good.svg, letter-i.svg, letter-swan.svg)
- * from public/assets/ for richer wordmark treatments + mail metaphor micro-details.
- * These are hand-drawn ink forms (swan = the bird, good/a/i = custom letterforms). Not font.
- * Use as rubber-stamp imprints on dockets, in-tray filed mail, or accent "filed" moments.
- * Serves the 1978 corkboard: real stamp die hits, slight rot/offset, low-opacity ink transfer.
- * One red accent rule: default to low opacity ink; wrap in .stamp-press-red container for shout.
- * Reduced-motion: static, fully visible tactile imprint (no animation lost).
- * Direct import only.
- */
-export function StampLetter({
-  which = 'swan',
+/** Decorative swirl vector — teal+navy. Use as corner/background ornament. */
+export function BrandShapesStamp({
   className = '',
   style,
+  theme = 'teal',
 }: {
-  which?: 'a' | 'good' | 'i' | 'swan';
   className?: string;
   style?: React.CSSProperties;
+  theme?: 'teal' | 'orange' | 'silver';
 }) {
-  const src = `/assets/letter-${which}.svg`;
+  const src =
+    theme === 'orange' ? BRAND_ASSETS.shapesOrange :
+    theme === 'silver' ? BRAND_ASSETS.shapesSilver :
+    BRAND_ASSETS.shapes;
   return (
     <img
       src={src}
       alt=""
       aria-hidden
       className={`w-auto select-none ${className}`}
-      style={{ imageRendering: 'crisp-edges', ...style }}
-    />
-  );
-}
-
-/**
- * WordmarkMark
- * Compact mark asset (wordmark-mark.svg) for tight spaces or docket imprints.
- */
-export function WordmarkMark({ className = '' }: { className?: string }) {
-  return (
-    <img
-      src="/assets/wordmark-mark.svg"
-      alt=""
-      aria-hidden
-      className={`h-auto w-auto ${className}`}
-      style={{ imageRendering: 'crisp-edges' }}
+      style={style}
     />
   );
 }

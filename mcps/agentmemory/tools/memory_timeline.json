@@ -1,0 +1,28 @@
+{
+  "name": "memory_timeline",
+  "description": "Chronological observations around an anchor point.",
+  "inputSchema": {
+    "properties": {
+      "after": {
+        "description": "Observations after anchor (default 5)",
+        "type": "number"
+      },
+      "anchor": {
+        "description": "Anchor point: ISO date or keyword",
+        "type": "string"
+      },
+      "before": {
+        "description": "Observations before anchor (default 5)",
+        "type": "number"
+      },
+      "project": {
+        "description": "Filter by project path",
+        "type": "string"
+      }
+    },
+    "required": [
+      "anchor"
+    ],
+    "type": "object"
+  }
+}

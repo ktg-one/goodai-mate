@@ -3,7 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
 import { Send } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState, memo, useCallback } from 'react';
+import { useEffect, useRef, useState, memo, useCallback, useMemo } from 'react';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
 
 type TextPart = UIMessage['parts'][number] & { type: 'text'; text: string };
@@ -61,11 +61,21 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   });
 
   const isBusy = status === 'submitted' || status === 'streaming';
-  const conversationTranscript = useMemo(
+  const getConversationTranscript = useCallback(
     () => messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n'),
     [messages],
   );
   const errorMessage = error?.message?.trim() || 'Something went sideways. Try again in a moment.';
+
+  // ⚡ Bolt Performance Optimization:
+  // Memoizing the message mapping operation prevents the entire chat thread
+  // from re-rendering and re-reconciling every time the user types in the input form
+  // (which causes the parent ChatInterface component to re-render).
+  const renderedMessages = useMemo(() => {
+    return messages.map((message) => (
+      <ChatMessage key={message.id} message={message} />
+    ));
+  }, [messages]);
 
   useEffect(() => {
     if (!initialMessage || initialSent.current) return;
@@ -98,7 +108,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
     <div className="gai-chat">
       {/* Header bar */}
       <div className="border-b border-[var(--ink)] bg-[var(--paper)] px-4 py-3">
-        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--ocean-600)]">
+        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--navy-deep)]">
           Good&apos;ai intake
         </p>
         <h2 className="mt-1 text-[17px] font-bold leading-tight text-[var(--ink)]">
@@ -108,7 +118,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
 
       {/* Scrollable thread */}
       <div className="gai-chat-scroll">
-        <div className="gai-chat-inner">
+        <div className="gai-chat-inner" role="log" aria-live="polite">
           {/* Initial prompt bubble */}
           <div className="gai-bubble-row">
             <div className="gai-bubble gai-bubble-ai">
@@ -116,27 +126,25 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
             </div>
           </div>
 
-          {messages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
-          ))}
+          {renderedMessages}
 
           {isBusy && (
             <div className="gai-bubble-row">
-              <div className="gai-bubble gai-bubble-ai gai-typing">
+              <div className="gai-bubble gai-bubble-ai gai-typing" role="status">
                 <span key="a" /><span key="b" /><span key="c" />
               </div>
             </div>
           )}
 
           {error && (
-            <div className="gai-error">{errorMessage}</div>
+            <div className="gai-error" role="alert" aria-live="assertive">{errorMessage}</div>
           )}
 
           {showLeadCard && !leadDismissed && firstMessage && (
             <div ref={leadCardRef}>
               <LeadCaptureCard
                 firstMessage={firstMessage}
-                conversationTranscript={conversationTranscript}
+                conversationTranscript={getConversationTranscript}
                 onDismiss={() => setLeadDismissed(true)}
               />
             </div>

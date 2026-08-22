@@ -1,0 +1,20 @@
+{
+  "name": "memory_file_history",
+  "description": "Get past observations about specific files.",
+  "inputSchema": {
+    "properties": {
+      "files": {
+        "description": "Comma-separated file paths",
+        "type": "string"
+      },
+      "sessionId": {
+        "description": "Current session ID to exclude",
+        "type": "string"
+      }
+    },
+    "required": [
+      "files"
+    ],
+    "type": "object"
+  }
+}

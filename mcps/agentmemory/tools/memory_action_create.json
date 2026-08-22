@@ -1,0 +1,40 @@
+{
+  "name": "memory_action_create",
+  "description": "Create an actionable work item with typed dependencies. Actions track what agents need to do and how work items relate to each other.",
+  "inputSchema": {
+    "properties": {
+      "description": {
+        "description": "Detailed description of the work",
+        "type": "string"
+      },
+      "parentId": {
+        "description": "Parent action ID for hierarchical actions",
+        "type": "string"
+      },
+      "priority": {
+        "description": "Priority 1-10 (10 highest)",
+        "type": "number"
+      },
+      "project": {
+        "description": "Project path",
+        "type": "string"
+      },
+      "requires": {
+        "description": "Comma-separated action IDs that must complete before this",
+        "type": "string"
+      },
+      "tags": {
+        "description": "Comma-separated tags",
+        "type": "string"
+      },
+      "title": {
+        "description": "Action title",
+        "type": "string"
+      }
+    },
+    "required": [
+      "title"
+    ],
+    "type": "object"
+  }
+}

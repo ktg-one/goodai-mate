@@ -1,0 +1,13 @@
+{
+  "name": "memory_patterns",
+  "description": "Detect recurring patterns across sessions.",
+  "inputSchema": {
+    "properties": {
+      "project": {
+        "description": "Project path to analyze",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  }
+}

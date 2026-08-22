@@ -1,0 +1,21 @@
+{
+  "name": "memory_commits",
+  "description": "List recent commits linked to agent sessions, optionally filtered by branch or repo.",
+  "inputSchema": {
+    "properties": {
+      "branch": {
+        "description": "Filter by branch name",
+        "type": "string"
+      },
+      "limit": {
+        "description": "Max results (default 100, max 500)",
+        "type": "number"
+      },
+      "repo": {
+        "description": "Filter by remote URL",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  }
+}

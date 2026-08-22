@@ -6,7 +6,7 @@ import StampButton from '@/components/StampButton';
 
 interface LeadCaptureCardProps {
   firstMessage: string;
-  conversationTranscript: string;
+  conversationTranscript: string | (() => string);
   onDismiss?: () => void;
 }
 
@@ -25,6 +25,9 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
     setIsSubmitting(true);
 
     try {
+      const resolvedConversationTranscript =
+        typeof conversationTranscript === 'function' ? conversationTranscript() : conversationTranscript;
+
       // 1. Submit to Google Apps Script Webhook (if defined)
       const gwsUrl = process.env.NEXT_PUBLIC_GWS_SCRIPT_URL;
       if (gwsUrl) {
@@ -38,7 +41,7 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
             phone: phone.trim(),
             email: email.trim() || '(not provided)',
             problem: firstMessage,
-            conversation: conversationTranscript,
+            conversation: resolvedConversationTranscript,
             timestamp: new Date().toISOString(),
           }),
         });
@@ -53,7 +56,7 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
           business: business.trim(),
           phone: phone.trim(),
           email: email.trim(),
-          problem: `Client Admin Problem from Chat:\n"${firstMessage}"\n\nFull Chat History:\n${conversationTranscript}`,
+          problem: `Client Admin Problem from Chat:\n"${firstMessage}"\n\nFull Chat History:\n${resolvedConversationTranscript}`,
           actions: {
             sheet: true,
             doc: true,
@@ -115,16 +118,20 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
           <div className="gai-leadcard-row">
             <input
               className="gai-input"
+              type="text"
               placeholder="Your name"
               aria-label="Your name"
+              autoComplete="name"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
             <input
               className="gai-input"
+              type="text"
               placeholder="Business name"
               aria-label="Business name"
+              autoComplete="organization"
               value={business}
               onChange={(e) => setBusiness(e.target.value)}
             />
@@ -132,16 +139,20 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
           <div className="gai-leadcard-row">
             <input
               className="gai-input"
+              type="tel"
               placeholder="Phone"
               aria-label="Phone"
+              autoComplete="tel"
               required
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
             <input
               className="gai-input"
+              type="email"
               placeholder="Email"
               aria-label="Email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />

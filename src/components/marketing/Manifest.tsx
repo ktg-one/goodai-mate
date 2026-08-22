@@ -6,7 +6,7 @@ import { motion } from 'motion/react';
 /**
  * Manifest
  * Hard stamp-in reveal for the core promise — brutalist, no easing softness.
- * From design-system-new specimens. One .hl + one .hl-red per surface max.
+ * From design system specimens. One .hl + one .hl-red per surface max.
  * Participates in mail board via parent ribbons (no local motion competing).
  */
 export default function Manifest() {
@@ -22,11 +22,11 @@ export default function Manifest() {
   } as const;
 
   return (
-    <section ref={sectionRef} className="min-h-screen flex items-center py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+    <section ref={sectionRef} className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
       {/* Ribbon bridge above owned by HomeClient GSAP mailBoard */}
 
       <div className="mx-auto max-w-5xl px-6 text-center">
-        <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">THE PROMISE</span>
+        <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">THE PROMISE</span>
 
         <motion.h2
           className="font-display text-5xl md:text-6xl tracking-[-0.03em] leading-none mt-3 mb-8"

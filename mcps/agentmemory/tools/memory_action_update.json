@@ -1,0 +1,28 @@
+{
+  "name": "memory_action_update",
+  "description": "Update an action's status, priority, or details. Set status to 'done' to complete it and unblock dependent actions.",
+  "inputSchema": {
+    "properties": {
+      "actionId": {
+        "description": "Action ID to update",
+        "type": "string"
+      },
+      "priority": {
+        "description": "New priority 1-10",
+        "type": "number"
+      },
+      "result": {
+        "description": "Outcome description (when completing)",
+        "type": "string"
+      },
+      "status": {
+        "description": "New status: pending, active, done, blocked, cancelled",
+        "type": "string"
+      }
+    },
+    "required": [
+      "actionId"
+    ],
+    "type": "object"
+  }
+}

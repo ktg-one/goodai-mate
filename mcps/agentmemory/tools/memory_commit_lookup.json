@@ -1,0 +1,16 @@
+{
+  "name": "memory_commit_lookup",
+  "description": "Look up the agent session(s) that produced a specific git commit, given its SHA. Returns the commit metadata and linked sessions.",
+  "inputSchema": {
+    "properties": {
+      "sha": {
+        "description": "Full git commit SHA",
+        "type": "string"
+      }
+    },
+    "required": [
+      "sha"
+    ],
+    "type": "object"
+  }
+}

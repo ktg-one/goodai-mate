@@ -1,0 +1,33 @@
+{
+  "name": "memory_signal_send",
+  "description": "Send a message to another agent or broadcast. Supports threading, typed messages, and TTL expiration.",
+  "inputSchema": {
+    "properties": {
+      "content": {
+        "description": "Message content",
+        "type": "string"
+      },
+      "from": {
+        "description": "Sender agent ID",
+        "type": "string"
+      },
+      "replyTo": {
+        "description": "Signal ID to reply to (auto-threads)",
+        "type": "string"
+      },
+      "to": {
+        "description": "Recipient agent ID (omit for broadcast)",
+        "type": "string"
+      },
+      "type": {
+        "description": "Message type: info, request, response, alert, handoff",
+        "type": "string"
+      }
+    },
+    "required": [
+      "from",
+      "content"
+    ],
+    "type": "object"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "memory_compress_file",
+  "description": "Compress a markdown file to reduce token usage while preserving headings, URLs, and code blocks. Creates a .original.md backup before writing.",
+  "inputSchema": {
+    "properties": {
+      "filePath": {
+        "description": "Path to the markdown file to compress",
+        "type": "string"
+      }
+    },
+    "required": [
+      "filePath"
+    ],
+    "type": "object"
+  }
+}
