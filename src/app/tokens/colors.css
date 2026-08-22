@@ -1,0 +1,47 @@
+:root {
+  /* New Color Palette (19-08-2026) */
+  --navy: #202B3D;
+  --coral: #F66F61;
+  --teal: #1CABB0;
+  --silver: #D9D9D9;
+  --slate: #282C2D;
+
+  /* Map new colors to functional semantic tokens */
+  --bg: var(--navy);
+  --fg: var(--silver);
+
+  --bg-raised: #28364D;
+  --bg-sunken: #18202D;
+  --bg-brand: var(--navy);
+  --bg-accent: var(--coral);
+  --bg-gold: var(--teal);
+  --bg-ocean: var(--navy);
+
+  --fg-soft: #A3AAB5;
+  --fg-mute: #828B99;
+  --fg-faint: #636A78;
+  --fg-on-brand: var(--silver);
+  --fg-on-ocean: var(--silver);
+
+  --border: var(--slate);
+  --border-strong: #404648;
+
+  --accent: var(--coral);
+  --accent-hover: #E35D4F;
+  --accent-soft: #FFB3AC;
+
+  --highlight: var(--teal);
+  --success: #2E6E3E;
+
+  --gold: var(--teal);
+  --red: var(--coral);
+  --paper: var(--silver);
+  --ink: var(--navy);
+
+  --shadow-stamp: 3px 3px 0 var(--slate);
+  --shadow-stamp-orange: 3px 3px 0 var(--coral);
+  --shadow-stamp-ocean: 3px 3px 0 var(--navy);
+  --shadow-stamp-deep: 4px 4px 0 var(--slate);
+
+  --navy-ink: #141A25;
+}
