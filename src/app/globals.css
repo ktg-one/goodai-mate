@@ -1,3 +1,8 @@
+@import url("./tokens/colors.css");
+@import url("./tokens/typography.css");
+@import url("./tokens/spacing.css");
+@import url("./tokens/effects.css");
+@import url("./tokens/fonts.css");
 @import "tailwindcss";
 
 @theme {
@@ -17,126 +22,6 @@
    --font-display resolves to the Fraunces variable for proper variation-settings support on .wonk-line, .font-display, h1/h2, .brand-wordmark. */
 
 :root {
-  /* COLOUR — the five core brand colours (verbatim from June 3 design book) */
-  --gold:        #F3A62A;
-  --gold-deep:   #D98E1C;
-  --gold-tint:   #FBDFA6;
-
-  --red:         #F4442E;
-  --red-deep:    #D8331F;
-  --red-tint:    #FBC9C1;
-
-  --navy:        #202C59;
-  --navy-deep:   #161E3D;
-  --navy-tint:   #C9CEDD;
-
-  /* Neutrals (WARM cream canvas + true black) */
-  --paper:        #FFF0D0;
-  --paper-deep:   #F6E2B8;
-  --paper-3:      #ECD49A;
-  --cream-line:   #E0C690;
-
-  --ink:          #111111;
-  --ink-soft:     #1C1C1C;
-  --ink-mute:     #6B6452;
-  --ink-faint:    #A0967C;
-
-  /* Supporting */
-  --hi-yellow:    #F3A62A;
-  --trust-blue:   #202C59;
-  --ok:           #2E6E3E;
-  --warn:         #D8331F;
-  --danger:       #D8331F;
-
-  /* LEGACY ALIASES */
-  --orange:       var(--red);
-  --orange-deep:  var(--red-deep);
-  --orange-tint:  var(--red-tint);
-  --orange-50:    #FDE9E5;
-  --orange-100:   #FBC9C1;
-
-  --ocean-50:    #E8EAF1;
-  --ocean-100:   #C9CEDD;
-  --ocean-200:   #8A93B4;
-  --ocean-300:   #4A5685;
-  --ocean-400:   var(--navy);
-  --ocean-500:   #1A2349;
-  --ocean-600:   var(--navy-deep);
-
-  /* Semantic tokens */
-  --bg:            var(--paper);
-  --bg-raised:     #FFFAEC;
-  --bg-sunken:     var(--paper-deep);
-  --bg-brand:      var(--navy);
-  --bg-accent:     var(--red);
-  --bg-gold:       var(--gold);
-  --bg-ocean:      var(--navy);
-
-  --fg:            var(--ink);
-  --fg-soft:       var(--ink-soft);
-  --fg-mute:       var(--ink-mute);
-  --fg-faint:      var(--ink-faint);
-  --fg-on-brand:   var(--paper);
-  --fg-on-ocean:   var(--paper);
-
-  --border:        var(--cream-line);
-  --border-strong: #C9A961;
-
-  --accent:        var(--red);
-  --accent-hover:  var(--red-deep);
-  --accent-soft:   var(--red-tint);
-
-  --highlight:     var(--gold);
-  --success:       var(--ok);
-
-  /* Stamp shadows — flat, participate on hover/press (verbatim) */
-  --shadow-stamp:        3px 3px 0 var(--ink);
-  --shadow-stamp-orange: 3px 3px 0 var(--red);
-  --shadow-stamp-ocean:  3px 3px 0 var(--navy);
-  --shadow-stamp-deep:   4px 4px 0 var(--ink);
-
-  /* Navy pile for hero stamp settle (deeper filing shadows) + docket */
-  --navy-ink: #0F162B;
-
-  /* TYPE — Families (verbatim from design in public/README.md and colors_and_type.css: Fraunces variable for display with SOFT + WONK + opsz + wght; DM Sans for sans; JetBrains for mono) */
-  --font-sans:    var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), Georgia, serif;
-  --font-mono:    var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
-
-  /* TYPE — Scale */
-  --fs-12: 0.75rem;
-  --fs-16: 1rem;
-  --fs-20: 1.25rem;
-  --fs-24: 1.5rem;
-  --fs-36: 2.25rem;
-  --fs-64: 4rem;
-
-  /* 4pt SPACING GRID */
-  --space-1:  4px;
-  --space-2:  8px;
-  --space-3:  12px;
-  --space-4:  16px;
-  --space-5:  20px;
-  --space-6:  24px;
-  --space-8:  32px;
-  --space-10: 40px;
-  --space-12: 48px;
-  --space-16: 64px;
-  --space-20: 80px;
-  --space-24: 96px;
-
-  /* RADIUS / SHADOW */
-  --radius-xs:   4px;
-  --radius-sm:   8px;
-  --radius-md:   12px;
-  --radius-lg:   18px;
-  --radius-xl:   26px;
-  --radius-pill: 999px;
-
-  /* Hard mechanical easings (kept from prior brutalist work) */
-  --ease-brutal: cubic-bezier(0, 0, 0.2, 1);
-  --ease-hard-out: cubic-bezier(0.2, 0, 0, 1);
-  --ease-stamp-press: cubic-bezier(0.23, 1, 0.32, 1); /* design 90-160ms cubic */
 }
 
 /* HL / WONK emphasis (verbatim from design, exactly one per major surface) */
@@ -211,7 +96,7 @@ html, body {
 .stamp-btn-ink:hover:not(:disabled) { background: #000; transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
 .stamp-btn-ink:active:not(:disabled), .stamp-btn-ink.is-engaged { background: #000; transform: translate(2px, 2px); box-shadow: none; }
 
-.stamp-btn-paper { background: var(--paper); color: var(--ink); border-color: var(--ink); }
+.stamp-btn-paper { background: var(--paper) url("/assets/shapes/shape-big-1.svg") no-repeat center center / cover; background-blend-mode: multiply; color: var(--ink); border-color: var(--ink); }
 .stamp-btn-paper:hover:not(:disabled) { background: var(--paper-deep); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
 .stamp-btn-paper:active:not(:disabled), .stamp-btn-paper.is-engaged { background: var(--paper-deep); transform: translate(2px, 2px); box-shadow: none; }
 
@@ -237,7 +122,7 @@ html, body {
 
 /* Variant Backgrounds & Foregrounds */
 .stamp-card-paper {
-  background: var(--paper);
+  background: var(--paper) url("/assets/shapes/shape-big-1.svg") no-repeat center center / cover; background-blend-mode: multiply;
   color: var(--ink);
   box-shadow: 3px 3px 0 var(--ink);
 }
@@ -512,7 +397,7 @@ h1, h2,
   max-height: 380px;
   overflow-y: auto;
   padding: 16px;
-  background: var(--paper);
+  background: var(--paper) url("/assets/shapes/shape-big-1.svg") no-repeat center center / cover; background-blend-mode: multiply;
 }
 
 .gai-chat-inner {
@@ -696,7 +581,7 @@ h1, h2,
   font-family: var(--font-sans);
   font-size: 15px;
   color: var(--ink);
-  background: var(--paper);
+  background: var(--paper) url("/assets/shapes/shape-big-1.svg") no-repeat center center / cover; background-blend-mode: multiply;
   border: 2px solid var(--ink);
   border-radius: var(--radius-xs);
   padding: 10px 14px;
@@ -739,4 +624,13 @@ h1, h2,
 .gai-iconbtn-send:active {
   transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 var(--ink);
+}
+
+/* Viewport shapes pattern */
+section:nth-of-type(2n) {
+  background-image: url('/assets/shapes/shape-big-1.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-blend-mode: multiply;
 }

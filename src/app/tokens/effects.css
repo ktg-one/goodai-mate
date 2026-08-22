@@ -1,0 +1,13 @@
+/* Moved from globals.css */
+:root {
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+  --radius-xl:   26px;
+  --radius-pill: 999px;
+
+  --ease-brutal: cubic-bezier(0, 0, 0.2, 1);
+  --ease-hard-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-stamp-press: cubic-bezier(0.23, 1, 0.32, 1);
+}
