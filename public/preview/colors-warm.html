@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Colors · Gold + Red</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 28px; background: var(--paper); display: grid; gap: 22px; }
+  .block { display: grid; gap: 8px; }
+  .ttl {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--ink); font-weight: 700;
+  }
+  .scale { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; height: 96px; border: 2px solid var(--ink); box-shadow: var(--shadow-stamp); }
+  .step {
+    padding: 8px 10px; display: flex; flex-direction: column; justify-content: space-between;
+    border-right: 2px solid var(--ink);
+  }
+  .step:last-child { border-right: 0; }
+  .name { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; }
+  .hex  { font-family: var(--font-mono); font-size: 11px; opacity: 0.85; }
+</style>
+</head>
+<body>
+  <div class="block">
+    <div class="ttl">Coral-red — primary CTA / shout accent</div>
+    <div class="scale">
+      <div class="step" style="background: var(--red-tint); color: var(--red-deep);"><span class="name">tint</span><span class="hex">#FBC9C1</span></div>
+      <div class="step" style="background: var(--red); color: var(--paper);"><span class="name">red ★</span><span class="hex">#F4442E</span></div>
+      <div class="step" style="background: var(--red-deep); color: var(--paper);"><span class="name">deep</span><span class="hex">#D8331F</span></div>
+      <div class="step" style="background: var(--ink); color: var(--red);"><span class="name">on ink</span><span class="hex">stamp</span></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="ttl">Mustard-gold — coloured panels / sticker labels</div>
+    <div class="scale">
+      <div class="step" style="background: var(--gold-tint); color: var(--gold-deep);"><span class="name">tint</span><span class="hex">#FBDFA6</span></div>
+      <div class="step" style="background: var(--gold); color: var(--ink);"><span class="name">gold ★</span><span class="hex">#F3A62A</span></div>
+      <div class="step" style="background: var(--gold-deep); color: var(--paper);"><span class="name">deep</span><span class="hex">#D98E1C</span></div>
+      <div class="step" style="background: var(--ink); color: var(--gold);"><span class="name">on ink</span><span class="hex">stamp</span></div>
+    </div>
+  </div>
+</body>
+</html>

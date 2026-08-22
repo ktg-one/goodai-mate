@@ -1,16 +1,28 @@
 'use client';
 
 import { useRef } from 'react';
+<<<<<<< HEAD
+import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
+=======
 import { motion } from 'motion/react';
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
 import { BrandWordmark } from '@/components/brand/BrandWordmark';
 
 /**
  * Why GoodAI?
+<<<<<<< HEAD
+ * Section from the new design system (design-system-new)
+=======
  * Section from the new design system (public/ directory)
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
  * Purposeful hard reveal on the core pain + promise.
  */
 export default function WhyGoodAI() {
   const sectionRef = useRef<HTMLElement>(null);
+<<<<<<< HEAD
+  const prefersReducedMotion = useReducedMotion();
+=======
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
 
   // NOTE: Ribbon bridges are now owned exclusively by HomeClient GSAP mailBoard
   // (aggressive .mail-ribbon + shear/tear). This section is pure content participant
@@ -28,12 +40,19 @@ export default function WhyGoodAI() {
   } as const;
 
   return (
+<<<<<<< HEAD
+    <section ref={sectionRef} className="min-h-screen flex items-center py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
+      {/* Unified physical ribbon bridge handled by parent mailBoard GSAP — no competing motion here */}
+
+      <div className="mx-auto max-w-5xl px-6">
+=======
     <section ref={sectionRef} className="py-20 md:py-28 border-t-2 border-[var(--ink)] bg-[var(--paper)] relative overflow-hidden">
       {/* Decorative swirl shape — bottom-right corner */}
       <img src="/assets/shapes/vec-teal.svg" alt="" aria-hidden className="pointer-events-none select-none absolute -bottom-24 -right-24 w-72 opacity-10" />
       {/* Unified physical ribbon bridge handled by parent mailBoard GSAP — no competing motion here */}
 
       <div className="mx-auto max-w-5xl px-6 relative z-10">
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
         <div className="flex items-center gap-4 mb-6">
           <BrandWordmark className="h-7" />
           <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--ink)]/60">

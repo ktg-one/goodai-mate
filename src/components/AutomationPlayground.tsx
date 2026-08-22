@@ -1,5 +1,11 @@
 'use client';
 
+<<<<<<< HEAD
+import { useState, useRef } from 'react';
+import { Sparkles, Terminal, FileText, Calendar, Mail, FileSpreadsheet, Check, AlertCircle } from 'lucide-react';
+import StampButton from '@/components/StampButton';
+
+=======
 import { useState, useRef, useMemo } from 'react';
 import { Sparkles, Terminal, FileText, Calendar, Mail, FileSpreadsheet, Check, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
@@ -7,6 +13,7 @@ import StampButton from '@/components/StampButton';
 const CHECKBOX_LABEL_CLASSES = "flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--coral)] has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50";
 const CHECKBOX_INPUT_CLASSES = "accent-[var(--coral)] outline-none focus-visible:outline-none";
 
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
 export default function AutomationPlayground() {
   const [name, setName] = useState('');
   const [business, setBusiness] = useState('');
@@ -41,6 +48,8 @@ export default function AutomationPlayground() {
     setActions(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
+<<<<<<< HEAD
+=======
   // ⚡ Bolt: Memoize expensive array mapping
   // This array map is in the same component as multiple controlled inputs.
   // Without useMemo, typing a single character forces the O(N) array mapping
@@ -56,6 +65,7 @@ export default function AutomationPlayground() {
     );
   }), [logs]);
 
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
   const runAutomation = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !phone.trim() || isRunning) return;
@@ -106,8 +116,13 @@ export default function AutomationPlayground() {
   };
 
   return (
+<<<<<<< HEAD
+    <div className="gai-leadcard border-2 border-[var(--ink)] bg-[var(--paper-raised)] p-6 md:p-8 rounded-sm shadow-[4px_4px_0_var(--ink)] w-full">
+      <div className="gai-leadcard-eyebrow flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--red)] mb-3">
+=======
     <div className="stamp-card stamp-card-gold p-6 md:p-8 w-full">
       <div className="gai-leadcard-eyebrow flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--coral)] mb-3">
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
         <Sparkles size={14} /> Live Workspace Playground
       </div>
       
@@ -115,13 +130,23 @@ export default function AutomationPlayground() {
         Run real <span className="hl">Workspace Automations</span>.
       </h3>
       <p className="text-sm md:text-base text-[var(--ink)]/80 mb-6 max-w-2xl leading-relaxed">
+<<<<<<< HEAD
+        Test our integration pipeline. Since the Google Workspace CLI is now fully authenticated on your machine, you can run actual Sheets, Docs, Calendar, and Gmail scripts directly from this dashboard.
+=======
         Run a live Workspace demo — Sheets, Docs, Calendar, and Gmail wired into one intake docket.
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
       </p>
 
       <div className="grid lg:grid-cols-12 gap-8">
         {/* Form Column */}
         <form onSubmit={runAutomation} className="lg:col-span-5 flex flex-col gap-5">
           <div className="flex flex-col gap-2">
+<<<<<<< HEAD
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">1. ENTER DEMO DETAILS</span>
+            <input
+              className="gai-input w-full"
+              placeholder="Demo Contact Name"
+=======
             <span className="sticker-label sticker-label-navy">CONTACT</span>
             <input
               className="gai-input w-full"
@@ -129,25 +154,34 @@ export default function AutomationPlayground() {
               autoComplete="name"
               placeholder="Demo Contact Name"
               aria-label="Demo Contact Name"
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               required
               value={name}
               onChange={e => setName(e.target.value)}
             />
             <input
               className="gai-input w-full"
+<<<<<<< HEAD
+              placeholder="Business Name (Optional)"
+=======
               type="text"
               autoComplete="organization"
               placeholder="Business Name (Optional)"
               aria-label="Business Name (Optional)"
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               value={business}
               onChange={e => setBusiness(e.target.value)}
             />
             <input
               className="gai-input w-full"
+<<<<<<< HEAD
+              placeholder="Phone Number"
+=======
               type="tel"
               autoComplete="tel"
               placeholder="Phone Number"
               aria-label="Phone Number"
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               required
               value={phone}
               onChange={e => setPhone(e.target.value)}
@@ -155,29 +189,44 @@ export default function AutomationPlayground() {
             <input
               className="gai-input w-full"
               placeholder="Email (Required for Gmail demo)"
+<<<<<<< HEAD
+              type="email"
+=======
               aria-label="Email (Required for Gmail demo)"
               type="email"
               autoComplete="email"
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               value={email}
               onChange={e => setEmail(e.target.value)}
             />
             <input
               className="gai-input w-full"
+<<<<<<< HEAD
+              placeholder="n8n Webhook URL (Optional)"
+=======
               type="url"
               autoComplete="url"
               placeholder="n8n Webhook URL (Optional)"
               aria-label="n8n Webhook URL (Optional)"
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               value={n8nUrl}
               onChange={e => setN8nUrl(e.target.value)}
             />
           </div>
 
           <div className="flex flex-col gap-2">
+<<<<<<< HEAD
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">2. DESCRIBE AUTOMATION JOB</span>
+            <textarea
+              className="gai-input w-full min-h-[70px] text-sm resize-y"
+              placeholder="Define a chore or task..."
+=======
             <span className="sticker-label sticker-label-navy">THE CHORE</span>
             <textarea
               className="gai-input w-full min-h-[70px] text-sm resize-y"
               placeholder="Define a chore or task..."
               aria-label="Define a chore or task..."
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               value={problem}
               onChange={e => setProblem(e.target.value)}
               required
@@ -186,55 +235,98 @@ export default function AutomationPlayground() {
 
           {/* Checklist of actions */}
           <div className="flex flex-col gap-2">
+<<<<<<< HEAD
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">3. SELECT GOOGLE SERVICES</span>
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+=======
             <span id="services-group-label" className="sticker-label sticker-label-navy">SERVICES</span>
             <div className="grid grid-cols-2 gap-2 text-xs font-mono" role="group" aria-labelledby="services-group-label">
               <label className={CHECKBOX_LABEL_CLASSES}>
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                 <input
                   type="checkbox"
                   checked={actions.sheet}
                   onChange={() => toggleAction('sheet')}
+<<<<<<< HEAD
+                  className="accent-[var(--red)]"
+=======
                   className={CHECKBOX_INPUT_CLASSES}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                 />
                 <span>Append Sheet</span>
               </label>
               
+<<<<<<< HEAD
+              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+=======
               <label className={CHECKBOX_LABEL_CLASSES}>
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                 <input
                   type="checkbox"
                   checked={actions.doc}
                   onChange={() => toggleAction('doc')}
+<<<<<<< HEAD
+                  className="accent-[var(--red)]"
+=======
                   className={CHECKBOX_INPUT_CLASSES}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                 />
                 <span>Generate Doc</span>
               </label>
               
+<<<<<<< HEAD
+              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+=======
               <label className={CHECKBOX_LABEL_CLASSES} title={!email ? 'Email address required' : undefined}>
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                 <input
                   type="checkbox"
                   checked={actions.emailNotification}
                   onChange={() => toggleAction('emailNotification')}
                   disabled={!email}
+<<<<<<< HEAD
+                  className="accent-[var(--red)]"
+                />
+                <span className={!email ? 'opacity-40' : ''}>Gmail Send</span>
+              </label>
+
+              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+=======
                   className={CHECKBOX_INPUT_CLASSES}
                 />
                 <span>Gmail Send</span>
               </label>
               
               <label className={CHECKBOX_LABEL_CLASSES}>
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                 <input
                   type="checkbox"
                   checked={actions.calendar}
                   onChange={() => toggleAction('calendar')}
+<<<<<<< HEAD
+                  className="accent-[var(--red)]"
+=======
                   className={CHECKBOX_INPUT_CLASSES}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                 />
                 <span>Schedule Call</span>
               </label>
 
+<<<<<<< HEAD
+              <label className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--paper)] p-2 rounded-xs cursor-pointer select-none">
+=======
               <label className={CHECKBOX_LABEL_CLASSES}>
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                 <input
                   type="checkbox"
                   checked={actions.n8n}
                   onChange={() => toggleAction('n8n')}
+<<<<<<< HEAD
+                  className="accent-[var(--red)]"
+=======
                   className={CHECKBOX_INPUT_CLASSES}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                 />
                 <span>n8n Webhook</span>
               </label>
@@ -258,12 +350,29 @@ export default function AutomationPlayground() {
             <Terminal size={12} /> Live execution log
           </span>
           
+<<<<<<< HEAD
+          <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-4 font-mono text-xs h-[240px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
+=======
           <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-4 font-mono text-xs h-[240px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]" role="log" aria-live="polite">
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
             <div className="space-y-2">
               {logs.length === 0 && (
                 <div className="text-[var(--paper)]/40 italic">Waiting to trigger pipeline... Details will compile here in real time.</div>
               )}
+<<<<<<< HEAD
+              {logs.map((log, index) => {
+                let colorClass = 'text-[var(--paper)]/90';
+                if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--red)] font-bold';
+                if (log.startsWith('[SYSTEM]')) colorClass = 'text-[var(--gold)] font-bold';
+                return (
+                  <div key={index} className={colorClass}>
+                    {log}
+                  </div>
+                );
+              })}
+=======
               {memoizedLogs}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               {isRunning && (
                 <div className="flex items-center gap-1.5 text-[var(--paper)]/50 animate-pulse mt-1">
                   <span>●</span><span>Executing GWS scripts...</span>
@@ -275,8 +384,13 @@ export default function AutomationPlayground() {
 
           {/* Results dashboard */}
           {results && (
+<<<<<<< HEAD
+            <div className="border-2 border-[var(--ink)] bg-[var(--paper)] p-4 rounded-xs shadow-[2px_2px_0_var(--ink)]">
+              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--red)] font-bold mb-3 flex items-center gap-1">
+=======
             <div className="stamp-card stamp-card-navy p-4">
               <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--coral)] font-bold mb-3 flex items-center gap-1">
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                 <Check size={12} /> LIVE WORKSPACE DOCKETS FILED:
               </div>
               <div className="grid sm:grid-cols-2 gap-2 text-xs font-mono">
@@ -285,9 +399,15 @@ export default function AutomationPlayground() {
                     href={results.sheetUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+<<<<<<< HEAD
+                    className="flex items-center gap-2 border border-[var(--ink)]/20 hover:border-[var(--ink)] bg-[var(--paper-raised)] p-2 hover:bg-[var(--gold-tint)] hover:translate-y-[-1px] transition-all"
+                  >
+                    <FileSpreadsheet size={16} className="text-emerald-700" />
+=======
                     className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--paper)] hover:translate-y-[-1px] transition-all"
                   >
                     <FileSpreadsheet size={16} className="text-[var(--ok)]" />
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                     <span className="underline truncate">Google Sheet Lead Board</span>
                   </a>
                 )}
@@ -296,15 +416,26 @@ export default function AutomationPlayground() {
                     href={results.docUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+<<<<<<< HEAD
+                    className="flex items-center gap-2 border border-[var(--ink)]/20 hover:border-[var(--ink)] bg-[var(--paper-raised)] p-2 hover:bg-[var(--gold-tint)] hover:translate-y-[-1px] transition-all"
+                  >
+                    <FileText size={16} className="text-blue-700" />
+=======
                     className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--paper)] hover:translate-y-[-1px] transition-all"
                   >
                     <FileText size={16} className="text-[var(--navy)]" />
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                     <span className="underline truncate">Google Doc Proposal</span>
                   </a>
                 )}
                 {results.emailId && (
+<<<<<<< HEAD
+                  <div className="flex items-center gap-2 border border-[var(--ink)]/20 bg-[var(--paper-raised)] p-2">
+                    <Mail size={16} className="text-[var(--red)]" />
+=======
                   <div className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2">
                     <Mail size={16} className="text-[var(--coral)]" />
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                     <span className="truncate">Email Sent (ID: {results.emailId.slice(0,8)}...)</span>
                   </div>
                 )}
@@ -313,15 +444,26 @@ export default function AutomationPlayground() {
                     href={results.calendarUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+<<<<<<< HEAD
+                    className="flex items-center gap-2 border border-[var(--ink)]/20 hover:border-[var(--ink)] bg-[var(--paper-raised)] p-2 hover:bg-[var(--gold-tint)] hover:translate-y-[-1px] transition-all"
+                  >
+                    <Calendar size={16} className="text-amber-700" />
+=======
                     className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2 hover:bg-[var(--paper)] hover:translate-y-[-1px] transition-all"
                   >
                     <Calendar size={16} className="text-[var(--gold-tint)]" />
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                     <span className="underline truncate">Scheduled Calendar Call</span>
                   </a>
                 )}
                 {results.n8nStatus && (
+<<<<<<< HEAD
+                  <div className="flex items-center gap-2 border border-[var(--ink)]/20 bg-[var(--paper-raised)] p-2">
+                    <Sparkles size={16} className="text-purple-700" />
+=======
                   <div className="flex items-center gap-2 border-2 border-[var(--ink)] bg-[var(--gold-tint)] p-2">
                     <Sparkles size={16} className="text-[var(--navy)]" />
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                     <span className="truncate">n8n Webhook: {results.n8nStatus}</span>
                   </div>
                 )}

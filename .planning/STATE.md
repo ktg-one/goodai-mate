@@ -1,23 +1,57 @@
 ---
 gsd_state_version: 1.0
+<<<<<<< HEAD
+milestone: v1-refactored
+milestone_name: "Voice + Mail Docket (award-refactored)"
+status: "maintained"
+stopped_at: "Post-refactor docs + gsd skills hygiene (gsd-health, gsd-docs-update, gsd-progress alignment)"
+last_updated: "2026-06-04"
+=======
 milestone: v1.1-leadgen-automation
 milestone_name: "Lead-gen + Automation layer (on the refactored Voice + mail-docket site)"
 status: "active"
 stopped_at: "PRODUCTION WAS DOWN 2026-06-17 through 2026-07-08: 19 of 20 consecutive Vercel deploys failed (see Build Health incident below). Root cause fixed and verified in PR #64 (branch claude/webdev-eval-migration-ppyy9p), awaiting merge. Once merged, remaining work is still deploy-side only per prior state: set Vercel env vars + host ASR/n8n."
 last_updated: "2026-07-08"
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
 progress:
   total_phases: 0
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
+<<<<<<< HEAD
+  percent: 100
+=======
   percent: 0
   note: "Feature work since 2026-06-04 shipped outside formal gsd phases (direct commits + bolt/ultracode branches). percent tracks formal phases only; the site itself has materially advanced."
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
 ---
 
 # Project State
 
 ## Project Reference
 
+<<<<<<< HEAD
+See: .planning/PROJECT.md (updated 2026-06-04)
+
+**Core value:** Give small business owners their time back. Voice Agent hero demonstrates the product; physical mail dockets (ribbons, pins, tray, footer ritual) tell the "we'll sort the boring stuff" story. Built for Perth tradies who want relief, not another dashboard.
+
+**Current focus:** gsd health/docs alignment after the award-configuration brutalist refactor. Skills (gsd-health etc.) added from .claude/.agents. Pre-refactor phases archived.
+
+## Current Position
+
+- No active numbered phases in .planning/phases/ (clean after archive).
+- The delivered v1 is the refactored VoiceAgentHero + GSAP mail-board site (see goodai-award-configuration SKILL.md for the exact 5-skill swarm that shipped the mechanical 1978 direct-mail feel).
+- gsd-* skills (health, progress, docs-update, plan-phase, cleanup, etc.) now resident in local .agents/skills and .claude/skills for in-project use of /gsd-health etc.
+- PRODUCT.md + public/ remain the SSOT for brand, motion rules, stamp physics.
+
+## Performance Metrics
+
+**Post-refactor hygiene pass (2026-06-04):**
+- gsd-health: healthy (only pre-archive I001 infos on missing SUMMARYs for old plans; now resolved by archive).
+- Old phases (01-foundation through 05-*) moved to .planning/milestones/v0.9-pre-refactor-phases/.
+- PROJECT.md, ROADMAP.md, STATE.md, docs/agents/* rewritten for actual shipped site + current skill usage.
+- skills added: gsd-health + core gsd family (docs-update, progress, manager, do, help, next, plan-phase, verify-work, cleanup, stats, audit-milestone, discuss/execute/explore, ingest, import).
+=======
 See: .planning/PROJECT.md (re-validated 2026-06-24)
 
 **Core value:** Give Perth SMEs / tradies their time back. The Voice Agent hero demonstrates the product; the brutalist 1978 mail-docket flow tells the "we'll sort the boring stuff" story. v1.1 adds the lead-generation + automation machinery behind it (website audit tool, outbound callback, n8n/GWS pipeline).
@@ -40,10 +74,29 @@ See: .planning/PROJECT.md (re-validated 2026-06-24)
 **Newest (committed 2026-06-17, `423628e`):** dynamic model selection + voice-agent selectors, brand CSS theme, eslint fix.
 
 **Working tree (2026-06-24):** clean. The 2026-06-16 "in-flight" set (Vite `public/voice-feature/*` removal, `globals.css` + `HomeClient.tsx` edits, new `public/assets/` audit images) is all committed. Only untracked items are local tooling dirs `.agent_context/`, `.multica/`, `.serena/` — not part of the app; gitignore them (the `.multica/` dir is local agent-runtime scratch, NOT a build/runtime dependency).
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
 
 ## Accumulated Context
 
 ### Decisions (key recent)
+<<<<<<< HEAD
+
+- Archive pre-refactor planning (superseded by award-refactored Voice + docket site).
+- Add gsd-health (and supporting gsd skills) from global .claude/.agents into project-local copies so /gsd-* commands and GSD synthesis for future award runs are always available in context.
+- Treat goodai-award-configuration + goodai-agent-team as first-class for any further high-craft updates (inject full PRODUCT.md + public/ design system + live state + mechanical rules).
+- Keep .planning/ and docs/ accurate via gsd-docs-update / gsd-health loops rather than letting them drift again.
+
+### Blockers/Concerns
+
+- None critical. Health clean. Docs now match reality.
+- Future: when doing new surfaces or voice prod work, re-run full award config + optional gsd planner agent, then gsd-plan-phase to capture as proper phase.
+
+## Session Continuity
+
+Last hygiene: 2026-06-04 — gsd skills added + PROJECT/ROADMAP/STATE/docs/agents updated + phases archived. Ready for normal gsd progress / discuss / plan flows.
+
+*Run `gsd health` or `gsd progress` at start of any session.*
+=======
 - Pivot the site from a pure brand/demo piece into a working lead-gen + automation funnel (audit tool → outbound call → n8n/GWS pipeline) while keeping the brutalist mail-docket language.
 - Route AI through an AI Gateway (`AI_GATEWAY_API_KEY`) rather than a direct provider SDK.
 - Use the Google Workspace CLI as the automation/email-dispatch backend.
@@ -85,3 +138,4 @@ Per the 2026-06-24 owner note ("ensure Multica isn't required to continue the de
 Last validation: 2026-06-24 (run 3) — re-verified against `src/` + git on branch `goo-47-verify`. Confirmed all three prior P0 fixes are committed (`7c47a55`) and the SSOT comment drift cleared (`3b92089`): 0 `D:\packages` refs, 0 `design-system-new` refs, ASR + n8n trigger-call env-driven. Working tree clean. New residual logged: `demo-automation` localhost demo-webhook default (P1). Pre-refactor phases remain archived under `.planning/milestones/v0.9-pre-refactor-phases/`.
 
 *Run `gsd health` / `gsd progress` at session start. **See `.planning/TODO.md`** for the get-to-production checklist; the remaining gate is deploy-side env wiring, not code.*
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)

@@ -380,6 +380,20 @@ export function Visualizer({
       ctx.globalCompositeOperation = 'source-over';
     };
 
+<<<<<<< HEAD
+    // Wire pause observers (once, no re-runs)
+    if (!prefersReduced && typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+      io = new IntersectionObserver((entries) => {
+        const vis = entries[0]?.isIntersecting ?? true;
+        isPaused = !vis || document.hidden;
+      }, { threshold: 0.08 });
+      io.observe(canvas);
+    }
+    const onVis = () => { isPaused = document.hidden; };
+    document.addEventListener('visibilitychange', onVis, { passive: true });
+
+=======
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
     const render = () => {
       if (!ctx || !canvas) return;
 
@@ -387,7 +401,11 @@ export function Visualizer({
         // Static brutalist fallback (no RAF burn, no motion). Still shows the paper-ribbon identity when offscreen or reduced.
         const centerY = LOGICAL_H / 2;
         drawStaticFallback(ctx, centerY);
+<<<<<<< HEAD
+        animationRef.current = requestAnimationFrame(render);
+=======
         animationRef.current = null;
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
         return;
       }
 
@@ -427,7 +445,11 @@ export function Visualizer({
       const currentBurst = stampBurstRef.current;
       const currentVoice = voicePressure;
 
+<<<<<<< HEAD
+      // Layered ribbons — now using canonical design-system-new tokens (brutalist ink + gold/red accents)
+=======
       // Layered ribbons — now using canonical design system tokens (brutalist ink + gold/red accents)
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
       // Paper-ink base layers (mechanical, non-decorative)
       // ALL ribbons receive currentSettle for full hero descent filing physics (P0 fix: dead settleProgress activated)
       // Ribbons lose amplitude/turbulence/windGust/tension as stamp "sinks into the mail stack" — real physical, no float.
@@ -495,6 +517,8 @@ export function Visualizer({
       animationRef.current = requestAnimationFrame(render);
     };
 
+<<<<<<< HEAD
+=======
     // Wire pause observers (once, no re-runs)
     if (!prefersReduced && typeof window !== 'undefined' && 'IntersectionObserver' in window) {
       io = new IntersectionObserver((entries) => {
@@ -516,6 +540,7 @@ export function Visualizer({
     };
     document.addEventListener('visibilitychange', onVis, { passive: true });
 
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
     render();
 
     return () => {

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Components · Badges + Chips</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 24px; background: var(--paper); display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-sans); font-weight: 600; font-size: 12px; padding: 5px 12px; border-radius: 999px; }
+  .b-brand { background: var(--ocean-400); color: var(--paper); }
+  .b-sun { background: var(--hi-yellow); color: var(--ink); }
+  .b-success { background: var(--ocean-50); color: var(--ocean-600); border: 1px solid var(--ocean-200); }
+  .b-warn { background: var(--orange-50); color: var(--orange-deep); border: 1px solid var(--orange-100); }
+  .b-danger { background: #fdecec; color: var(--danger); border: 1px solid #f3c5c5; }
+  .b-out { background: transparent; color: var(--ink-soft); border: 1px solid var(--border-strong); }
+  .b-mono { font-family: var(--font-mono); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; padding: 4px 10px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+</style>
+</head>
+<body>
+  <span class="badge b-brand">Sorted</span>
+  <span class="badge b-sun">New</span>
+  <span class="badge b-success"><span class="dot"></span>Live</span>
+  <span class="badge b-warn"><span class="dot"></span>Needs you</span>
+  <span class="badge b-danger"><span class="dot"></span>Failed</span>
+  <span class="badge b-out">Optional</span>
+  <span class="badge b-mono b-out">Perth · WA</span>
+  <span class="badge b-mono" style="background: var(--ocean-50); color: var(--ocean-600);">Pilot</span>
+</body>
+</html>

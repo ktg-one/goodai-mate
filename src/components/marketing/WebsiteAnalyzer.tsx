@@ -1,6 +1,10 @@
 'use client';
 
+<<<<<<< HEAD
+import { useState, useRef, useEffect } from 'react';
+=======
 import { useState, useRef, useEffect, useMemo } from 'react';
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
 import { Search, Terminal, ClipboardCheck, Sparkles, AlertCircle } from 'lucide-react';
 import StampButton from '@/components/StampButton';
 
@@ -17,6 +21,8 @@ export default function WebsiteAnalyzer() {
 
   const consoleEndRef = useRef<HTMLDivElement>(null);
 
+<<<<<<< HEAD
+=======
   const memoizedLogs = useMemo(() => logs.map((log, index) => {
     let colorClass = 'text-[var(--paper)]/80';
     if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--coral-tint)] font-bold';
@@ -28,6 +34,7 @@ export default function WebsiteAnalyzer() {
     );
   }), [logs]);
 
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
   useEffect(() => {
     if (consoleEndRef.current) {
       consoleEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -87,8 +94,13 @@ export default function WebsiteAnalyzer() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12 border-t-2 border-dashed border-[var(--ink)]/30">
       <div className="text-center mb-6">
+<<<<<<< HEAD
+        <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--red)]">
+          BIG BOY AUTOMATION DEMO
+=======
         <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--coral)]">
           SITE AUDIT
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
         </span>
         <h2 className="font-display text-4xl md:text-5xl tracking-[-0.025em] leading-none mt-2 mb-2">
           Try our <span className="hl">Website Analyzer</span>.
@@ -98,11 +110,19 @@ export default function WebsiteAnalyzer() {
         </p>
       </div>
 
+<<<<<<< HEAD
+      <div className="stamp-card stamp-card-paper p-6 md:p-8 rounded-sm shadow-[4px_4px_0_var(--ink)] bg-[var(--paper-raised)] border-2 border-[var(--ink)] relative">
+        <form onSubmit={handleAnalyze} className="space-y-4">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="website-url" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink)]/60">
+              1. Enter Website Link
+=======
       <div className="stamp-card stamp-card-navy p-6 md:p-8 relative">
         <form onSubmit={handleAnalyze} className="space-y-4">
           <div className="flex flex-col gap-1.5">
             <label htmlFor="website-url" className="sticker-label sticker-label-gold">
               YOUR SITE
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
             </label>
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="relative flex-1">
@@ -131,7 +151,11 @@ export default function WebsiteAnalyzer() {
               </StampButton>
             </div>
             <p id="url-help" className="text-[9px] font-mono text-[var(--ink)]/50">
+<<<<<<< HEAD
+              Paste your business URL. The AI will scan your landing page, find your contact email, and send the audit report.
+=======
               Paste your business URL. The system will scan your landing page, find your contact email, and send the audit report.
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
             </p>
           </div>
         </form>
@@ -142,6 +166,20 @@ export default function WebsiteAnalyzer() {
             <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--ink)]/60 flex items-center gap-1.5">
               <Terminal size={12} /> Crawl logs
             </span>
+<<<<<<< HEAD
+            <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-xs h-[120px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]">
+              <div className="space-y-1">
+                {logs.map((log, index) => {
+                  let colorClass = 'text-[var(--paper)]/80';
+                  if (log.startsWith('[ERROR]')) colorClass = 'text-[var(--red-tint)] font-bold';
+                  if (log.startsWith('[SERVER]')) colorClass = 'text-[var(--gold-tint)]';
+                  return (
+                    <div key={index} className={colorClass}>
+                      {log}
+                    </div>
+                  );
+                })}
+=======
             <div className="border-2 border-[var(--ink)] bg-[var(--navy)] text-[var(--paper)] rounded-xs p-3 font-mono text-xs h-[120px] overflow-y-auto shadow-[inset_1px_1px_0_rgba(0,0,0,0.5)]" role="log" aria-live="polite">
               <div className="space-y-1">
                 {/* ⚡ Bolt: Memoize expensive array mapping
@@ -149,6 +187,7 @@ export default function WebsiteAnalyzer() {
                     Without useMemo, typing a single character forces the O(N) array mapping
                     and DOM recreation to run again, causing input lag. */}
                 {memoizedLogs}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                 {isAnalyzing && (
                   <div className="text-[var(--paper)]/40 animate-pulse">● Mapping sitemap elements...</div>
                 )}
@@ -160,9 +199,15 @@ export default function WebsiteAnalyzer() {
 
         {/* Audit Report Docket Results */}
         {result && (
+<<<<<<< HEAD
+          <div className="mt-6 border-2 border-[var(--ink)] bg-[var(--paper)] p-5 rounded-xs shadow-[2px_2px_0_var(--ink)] space-y-4 text-left animate-in fade-in slide-in-from-top-4 duration-300">
+            <div className="flex items-center justify-between border-b border-[var(--ink)]/20 pb-2">
+              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--red)] font-bold flex items-center gap-1">
+=======
           <div className="mt-6 stamp-card stamp-card-gold p-5 space-y-4 text-left animate-in fade-in slide-in-from-top-4 duration-300">
             <div className="flex items-center justify-between border-b border-[var(--ink)]/20 pb-2">
               <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--coral)] font-bold flex items-center gap-1">
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                 <ClipboardCheck size={14} /> CUSTOM SYSTEMS AUDIT
               </div>
               <span className="text-[9px] font-mono bg-[var(--navy-tint)] text-[var(--navy-deep)] px-2 py-0.5 rounded-sm">
@@ -177,8 +222,13 @@ export default function WebsiteAnalyzer() {
               <ul className="space-y-2.5 text-xs leading-relaxed">
                 {result.automations.map((item, idx) => (
                   <li key={idx} className="flex gap-2.5 items-start">
+<<<<<<< HEAD
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-[var(--ink)] bg-[var(--gold-tint)] font-mono text-[10px] font-bold text-[var(--ink)]">
+                      {idx + 1}
+=======
                     <span className="sticker-label sticker-label-navy shrink-0 text-[9px] py-0.5">
                       {['INTAKE', 'CHASE', 'FILE'][idx] ?? 'TASK'}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                     </span>
                     <span className="text-[var(--ink)]/90">{item}</span>
                   </li>
@@ -198,7 +248,11 @@ export default function WebsiteAnalyzer() {
         )}
 
         {error && (
+<<<<<<< HEAD
+          <div className="mt-5 border-2 border-[var(--ink)] bg-[var(--warn)]/10 text-[var(--warn)] p-3 rounded-xs flex items-start gap-2 text-xs font-mono">
+=======
           <div className="mt-5 border-2 border-[var(--ink)] bg-[var(--warn)]/10 text-[var(--warn)] p-3 rounded-xs flex items-start gap-2 text-xs font-mono" role="alert" aria-live="assertive">
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
             <AlertCircle size={16} className="shrink-0" />
             <div>
               <strong>Audit failed:</strong>

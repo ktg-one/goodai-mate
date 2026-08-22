@@ -6,7 +6,11 @@ import StampButton from '@/components/StampButton';
 
 interface LeadCaptureCardProps {
   firstMessage: string;
+<<<<<<< HEAD
+  conversationTranscript: string;
+=======
   conversationTranscript: string | (() => string);
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
   onDismiss?: () => void;
 }
 
@@ -25,9 +29,12 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
     setIsSubmitting(true);
 
     try {
+<<<<<<< HEAD
+=======
       const resolvedConversationTranscript =
         typeof conversationTranscript === 'function' ? conversationTranscript() : conversationTranscript;
 
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
       // 1. Submit to Google Apps Script Webhook (if defined)
       const gwsUrl = process.env.NEXT_PUBLIC_GWS_SCRIPT_URL;
       if (gwsUrl) {
@@ -41,7 +48,11 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
             phone: phone.trim(),
             email: email.trim() || '(not provided)',
             problem: firstMessage,
+<<<<<<< HEAD
+            conversation: conversationTranscript,
+=======
             conversation: resolvedConversationTranscript,
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
             timestamp: new Date().toISOString(),
           }),
         });
@@ -56,7 +67,11 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
           business: business.trim(),
           phone: phone.trim(),
           email: email.trim(),
+<<<<<<< HEAD
+          problem: `Client Admin Problem from Chat:\n"${firstMessage}"\n\nFull Chat History:\n${conversationTranscript}`,
+=======
           problem: `Client Admin Problem from Chat:\n"${firstMessage}"\n\nFull Chat History:\n${resolvedConversationTranscript}`,
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
           actions: {
             sheet: true,
             doc: true,
@@ -118,20 +133,30 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
           <div className="gai-leadcard-row">
             <input
               className="gai-input"
+<<<<<<< HEAD
+              placeholder="Your name"
+              aria-label="Your name"
+=======
               type="text"
               placeholder="Your name"
               aria-label="Your name"
               autoComplete="name"
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
             <input
               className="gai-input"
+<<<<<<< HEAD
+              placeholder="Business name"
+              aria-label="Business name"
+=======
               type="text"
               placeholder="Business name"
               aria-label="Business name"
               autoComplete="organization"
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               value={business}
               onChange={(e) => setBusiness(e.target.value)}
             />
@@ -139,20 +164,30 @@ export default function LeadCaptureCard({ firstMessage, conversationTranscript, 
           <div className="gai-leadcard-row">
             <input
               className="gai-input"
+<<<<<<< HEAD
+              placeholder="Phone"
+              aria-label="Phone"
+=======
               type="tel"
               placeholder="Phone"
               aria-label="Phone"
               autoComplete="tel"
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               required
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
             <input
               className="gai-input"
+<<<<<<< HEAD
+              placeholder="Email"
+              aria-label="Email"
+=======
               type="email"
               placeholder="Email"
               aria-label="Email"
               autoComplete="email"
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />

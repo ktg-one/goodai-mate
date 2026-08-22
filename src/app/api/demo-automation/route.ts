@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
+<<<<<<< HEAD
+
+const execFileAsync = promisify(execFile);
+const GWS_PATH = 'D:\\packages\\npm-global\\node_modules\\@googleworkspace\\cli\\run.js';
+=======
 import path from 'path';
 import fs from 'fs';
 import { isSafeUrl } from '@/lib/ssrf';
@@ -20,6 +25,7 @@ function getGwsCliPath(): string {
 }
 
 const GWS_PATH = getGwsCliPath();
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
 
 interface AutomationPayload {
   name: string;
@@ -38,16 +44,42 @@ interface AutomationPayload {
 }
 
 async function runGwsCommand(args: string[], jsonInput?: unknown): Promise<unknown> {
+<<<<<<< HEAD
+  const fullArgs = [
+    GWS_PATH,
+    ...args,
+    '--format', 'json'
+  ];
+=======
   const isJs = GWS_PATH.endsWith('.js');
   const command = isJs ? 'node' : GWS_PATH;
   const fullArgs = isJs ? [GWS_PATH, ...args] : [...args];
   fullArgs.push('--format', 'json');
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
   
   if (jsonInput) {
     fullArgs.push('--json', JSON.stringify(jsonInput));
   }
   
   try {
+<<<<<<< HEAD
+    const { stdout } = await execFileAsync('node', fullArgs);
+    return JSON.parse(stdout.trim());
+  } catch (error: unknown) {
+    const err = error as { stdout?: string; stderr?: string; message?: string };
+    console.error(`GWS execution failed: node ${fullArgs.map(a => `"${a}"`).join(' ')}`, err);
+    let errMsg = err.stdout || err.stderr || err.message || '';
+    try {
+      if (err.stdout) {
+        // Check if stdout was a JSON error response
+        const jsonErr = JSON.parse(err.stdout.trim());
+        if (jsonErr?.error?.message) {
+          errMsg = jsonErr.error.message;
+        }
+      }
+    } catch {}
+    throw new Error(errMsg || 'GWS CLI execution returned an error');
+=======
     const { stdout } = await execFileAsync(command, fullArgs);
     return JSON.parse(stdout.trim());
   } catch (error: unknown) {
@@ -55,6 +87,7 @@ async function runGwsCommand(args: string[], jsonInput?: unknown): Promise<unkno
     console.error(`GWS execution failed: ${command} ${fullArgs.map(a => `"${a}"`).join(' ')}`, err);
     // Instead of throwing, we return null to allow graceful simulation degradation
     return null;
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
   }
 }
 
@@ -62,6 +95,8 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as AutomationPayload;
     const { name, business, phone, email, problem, actions, n8nUrl } = body;
+<<<<<<< HEAD
+=======
 
     // SSRF Protection: Validate user-provided webhook URL before executing any actions
     if (n8nUrl && n8nUrl.trim()) {
@@ -72,6 +107,7 @@ export async function POST(req: NextRequest) {
         );
       }
     }
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
     
     const logs: string[] = [];
     const results: Record<string, string> = {};
@@ -82,6 +118,31 @@ export async function POST(req: NextRequest) {
       // Create a spreadsheet named "Good'ai Leads Board"
       const sheetResult = (await runGwsCommand(['sheets', 'spreadsheets', 'create'], {
         properties: { title: "Good'ai Leads Board" }
+<<<<<<< HEAD
+      })) as { spreadsheetId: string; spreadsheetUrl: string };
+      const spreadsheetId = sheetResult.spreadsheetId;
+      const sheetUrl = sheetResult.spreadsheetUrl;
+      results.sheetUrl = sheetUrl;
+      logs.push(`Spreadsheet created: ID ${spreadsheetId}`);
+
+      // Append header row + lead row
+      logs.push('Executing: gws sheets spreadsheets values append...');
+      const timestamp = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Perth' });
+      await runGwsCommand([
+        'sheets', 'spreadsheets', 'values', 'append',
+        '--params', JSON.stringify({
+          spreadsheetId,
+          range: 'Sheet1!A1',
+          valueInputOption: 'USER_ENTERED'
+        })
+      ], {
+        values: [
+          ['Timestamp', 'Name', 'Business', 'Phone', 'Email', 'Problem'],
+          [timestamp, name, business || '—', phone, email || '—', problem]
+        ]
+      });
+      logs.push('Lead successfully appended to spreadsheet.');
+=======
       })) as { spreadsheetId?: string; spreadsheetUrl?: string } | null;
       
       if (sheetResult && sheetResult.spreadsheetId) {
@@ -125,6 +186,7 @@ export async function POST(req: NextRequest) {
         logs.push('[SIMULATED] Sheets: Created spreadsheet and appended lead (GWS CLI not available)');
         results.sheetUrl = '#simulated';
       }
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
     }
 
     // 2. Google Docs Automation
@@ -133,6 +195,51 @@ export async function POST(req: NextRequest) {
       const docTitle = `Good'ai Scope - ${name}`;
       const docResult = (await runGwsCommand(['docs', 'documents', 'create'], {
         title: docTitle
+<<<<<<< HEAD
+      })) as { documentId: string };
+      const documentId = docResult.documentId;
+      const docUrl = `https://docs.google.com/document/d/${documentId}/edit`;
+      results.docUrl = docUrl;
+      logs.push(`Document created: ID ${documentId}`);
+
+      // Insert scope headers and body text
+      logs.push('Executing: gws docs documents batchUpdate...');
+      const timestamp = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Perth' });
+      const docText = `GOOD'AI AUTOMATION DOCKET\n` +
+                      `========================================\n` +
+                      `Generated At: ${timestamp}\n` +
+                      `Client Name:  ${name}\n` +
+                      `Business:     ${business || '—'}\n` +
+                      `Phone:        ${phone}\n` +
+                      `Email:        ${email || '—'}\n` +
+                      `\n` +
+                      `THE PROBLEM DESCRIPTION:\n` +
+                      `"${problem}"\n` +
+                      `\n` +
+                      `PREMIUM BRUTALIST SERVICE PROPOSAL:\n` +
+                      `1. Intake Setup: Deploy a bidirectional local voice agent via Supertonic.\n` +
+                      `2. Core Pipeline: Sync incoming client logs to Google Sheets with real-time alerts.\n` +
+                      `3. Final Settle: Implement automatic Google Docs docket generation and scheduling.\n` +
+                      `\n` +
+                      `Good'ai — Sorted.\n`;
+
+      await runGwsCommand([
+        'docs', 'documents', 'batchUpdate',
+        '--params', JSON.stringify({ documentId })
+      ], {
+        requests: [
+          {
+            insertText: {
+              location: {
+                index: 1
+              },
+              text: docText
+            }
+          }
+        ]
+      });
+      logs.push('Scope description successfully written to document.');
+=======
       })) as { documentId?: string } | null;
       
       if (docResult && docResult.documentId) {
@@ -182,6 +289,7 @@ export async function POST(req: NextRequest) {
         logs.push(`[SIMULATED] Docs: Created scope document for ${name} (GWS CLI not available)`);
         results.docUrl = '#simulated';
       }
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
     }
 
     // 3. Gmail Notification Automation
@@ -189,6 +297,11 @@ export async function POST(req: NextRequest) {
       logs.push('Executing: gws gmail users messages send...');
       const timestamp = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Perth' });
       
+<<<<<<< HEAD
+      const rawEmail =
+        `To: ${email}\r\n` +
+        `Subject: Good'ai Automation Received - Hello ${name}\r\n` +
+=======
       // 🛡️ Sentinel: Sanitize user inputs to prevent Email Header Injection (CRLF)
       const sanitizeHeader = (val: unknown) => String(val || '').replace(/[\r\n]/g, '');
       const safeEmail = sanitizeHeader(email);
@@ -197,6 +310,7 @@ export async function POST(req: NextRequest) {
       const rawEmail = 
         `To: ${safeEmail}\r\n` +
         `Subject: Good'ai Automation Received - Hello ${safeName}\r\n` +
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
         `Content-Type: text/plain; charset="utf-8"\r\n` +
         `\r\n` +
         `Hi ${name},\r\n\r\n` +
@@ -219,6 +333,11 @@ export async function POST(req: NextRequest) {
         '--params', JSON.stringify({ userId: 'me' })
       ], {
         raw: base64UrlEmail
+<<<<<<< HEAD
+      })) as { id: string };
+      results.emailId = emailResult.id;
+      logs.push(`Email notification sent successfully! ID: ${emailResult.id}`);
+=======
       })) as { id?: string } | null;
       
       if (emailResult && emailResult.id) {
@@ -228,6 +347,7 @@ export async function POST(req: NextRequest) {
         logs.push(`[SIMULATED] Gmail: Sent email notification to ${email} (GWS CLI not available)`);
         results.emailId = 'simulated-id';
       }
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
     } else if (actions.emailNotification) {
       logs.push('Skipping Gmail: No email address provided.');
     }
@@ -257,6 +377,12 @@ export async function POST(req: NextRequest) {
           dateTime: endIso,
           timeZone: 'Australia/Perth'
         }
+<<<<<<< HEAD
+      })) as { htmlLink: string; summary: string };
+
+      results.calendarUrl = eventResult.htmlLink;
+      logs.push(`Calendar Event scheduled: "${eventResult.summary}"`);
+=======
       })) as { htmlLink?: string; summary?: string } | null;
       
       if (eventResult && eventResult.htmlLink) {
@@ -266,12 +392,17 @@ export async function POST(req: NextRequest) {
         logs.push(`[SIMULATED] Calendar: Scheduled discovery call (GWS CLI not available)`);
         results.calendarUrl = '#simulated';
       }
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
     }
 
     // 5. n8n Webhook Pipeline Automation
     if (actions.n8n) {
       logs.push('Executing: n8n Webhook Pipeline Trigger...');
+<<<<<<< HEAD
+      const targetUrl = n8nUrl?.trim() || 'http://localhost:5678/webhook/goodai-demo';
+=======
       const targetUrl = n8nUrl?.trim() || process.env.N8N_DEMO_WEBHOOK_URL || process.env.N8N_CALL_WEBHOOK_URL || 'http://localhost:5678/webhook/goodai-demo';
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
       logs.push(`Sending lead payload to webhook URL: ${targetUrl}`);
       
       try {
@@ -284,6 +415,23 @@ export async function POST(req: NextRequest) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout
         
+<<<<<<< HEAD
+        const n8nRes = await fetch(targetUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (n8nRes.ok) {
+          logs.push(`[SYSTEM] Webhook trigger success! Response: ${n8nRes.status} ${n8nRes.statusText}`);
+          results.n8nStatus = 'Success';
+        } else {
+          logs.push(`[WARNING] Webhook URL returned status ${n8nRes.status}. Check your n8n workflow.`);
+          results.n8nStatus = `Returned ${n8nRes.status}`;
+=======
         let n8nRes;
         let currentUrl = targetUrl;
         let redirectCount = 0;
@@ -321,6 +469,7 @@ export async function POST(req: NextRequest) {
         } else {
           logs.push(`[WARNING] Webhook URL returned status ${n8nRes ? n8nRes.status : 'Unknown'}. Check your n8n workflow.`);
           results.n8nStatus = `Returned ${n8nRes ? n8nRes.status : 'Unknown'}`;
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
         }
       } catch (err: unknown) {
         const errorObject = err as { name?: string; message?: string };

@@ -40,6 +40,8 @@ CONVERSATION FLOW:
 - IMPORTANT: After your first reply, a contact form automatically appears below your message. You do NOT need to ask for their details — the form handles that. Just focus on being useful and showing you understand their problem. If they keep chatting after the form appears, keep helping — don't push the form
 
 If they mention a specific tool (Xero, MYOB, ServiceM8, Tradify, Cliniko, Square, etc.), acknowledge you know it — these are common in Perth SMEs and you've likely worked with them.`;
+<<<<<<< HEAD
+=======
 
 export const ROBOKEV_PROMPT = `You are RoboKev, the custom voice clone and AI assistant of Kev, the founder of Good'ai. You are based in Perth, Western Australia.
 You help small-to-medium business owners (typically $1M–$30M turnover) figure out how automations and voice agents can save them time.
@@ -73,3 +75,4 @@ export function getSystemPrompt(agent: string): string {
   }
   return SYSTEM_PROMPT;
 }
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
