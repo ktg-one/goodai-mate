@@ -4,7 +4,7 @@ import { useState } from 'react';
 import StampButton from '@/components/StampButton';
 import StampCard from '@/components/StampCard';
 import { ScrollReveal } from '@/components/ScrollReveal';
-import { VoiceAgentHero } from '@/components/voice-agent/VoiceAgentHero';
+import { ElevenLabsWidget } from '@/components/voice-agent/ElevenLabsWidget';
 import OutboundCallCard from '@/components/voice-agent/OutboundCallCard';
 
 /**
@@ -91,7 +91,7 @@ export default function VoiceAgentDemo() {
             </div>
 
             {activeTab === 'mic' ? (
-              <VoiceAgentHero embedded />
+              <ElevenLabsWidget />
             ) : (
               <OutboundCallCard />
             )}

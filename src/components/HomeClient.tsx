@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 // CRITICAL (AGENTS.md): direct imports, no barrels
-import { GemVoice } from '@/components/voice-agent/gem-voice';
+import { ElevenLabsWidget } from '@/components/voice-agent/ElevenLabsWidget';
 import ChatInterface from '@/components/ChatInterface';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
 // Direct imports (AGENTS.md) — stamp primitives for mail docket surfaces
@@ -355,7 +355,7 @@ export default function HomeClient() {
   return (
     <div ref={mailBoardRef} className="mail-board overflow-x-hidden">
       {/* HERO - TTS feature (the Voice Agent as the product) — descent files into the stack */}
-      <GemVoice 
+      <ElevenLabsWidget
         onMailFiled={handleMailFiled}
       />
 
