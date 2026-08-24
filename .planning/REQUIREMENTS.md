@@ -1,39 +1,79 @@
-# Requirements: Good'ai (current post-refactor)
+# Requirements: Good'ai — v2.0 Design system + hero
 
-**Defined / last aligned:** 2026-06-04 (after gsd-health + docs update)
-**Note:** Original v1 requirements (shader, old lead capture, cursor etc.) were for the pre-refactor site. See .planning/milestones/v0.9-pre-refactor-phases/ for the archived detailed reqs (FOUND-*, SHDR-*, CHAT-*, LEAD-*, RESP-*, DEPL-*). They are superseded.
+**Defined:** 2026-08-24
+**Core Value:** Give small business owners their time back. The new homepage hero + `public/` design system must make a Perth tradie want to drop a line. Voice stays a real product surface — on its own page.
 
-## Current Core (Voice + Brutalist Mail Docket v1 — shipped)
+## Milestone v2.0 Requirements
 
-See PRODUCT.md for full brand/product spec. This is the minimal executable set that the award-refactored site delivers.
+Requirements for this milestone. Each maps to roadmap phases.
 
-- Voice Agent hero is the product demo and primary experience (local Supertonic for dev, real transcript + response capture).
-- Conversation state "files" as physical mail into in-tray and drives the narrative sections (Docket Flow).
-- Full mechanical brutalist mail aesthetic: ribbons (perforated tape shear + flutter via GSAP), non-uniform pinned dockets (rot/offset/wear, stamp shadows participate), heavy footer clack ritual.
-- One red accent maximum per surface. Exactly one Fraunces WONK emphasis phrase per major block.
-- Reduced-motion fully static but still sells the 1978 docket board (all stamps, pins, rots, perforations, imprints visible).
-- PRODUCT.md + public/ (and good-ai-design-final.html) are the single source of truth — every creative change must be injected with them.
-- Agent skills: goodai-agent-team + goodai-award-configuration (the 5: impeccable, awwwards-animations, awwwards-ui-skills, gsap-awwwards-website, gsap-framer-scroll-animation) + gsd-* (health, docs-update, progress, plan-phase...) now locally present in .agents/skills and .claude/skills.
-- Direct imports, no barrels. 60fps (refs + transform/opacity/filter only). Hard 90-160ms stamp clacks. No floaty easings.
-- Brand voice: "we", short sentences, practical/warm/direct, "we'll sort the boring stuff", zero hype/AI jargon.
-- Footer + contact: minimal, real human handoff path.
+### Hero
 
-## Ongoing / Gaps
+- [ ] **HERO-01**: Visitor landing on `/` sees `src/components/hero/Hero.tsx` as the first surface, not `VoiceAgentHero`
 
-- Prod voice endpoint + Supertonic tuning / latency.
-- Real lead intake from voice convos (context + contact form/mailto).
-- Additional pages/sections in exact same brutalist language.
-- Lighthouse / perf / a11y on the GSAP heavy flow.
-- gsd hygiene loop (this pass + future /gsd-health before ship).
+### Design system
 
-## Verification (use with gsd-verify-work or manual)
+- [ ] **DS-01**: Visitor sees live UI driven by `public/` tokens (`public/colors_and_type.css` — cream `#FFF0D0`, navy, gold, red, black; Fraunces + DM Sans)
 
-- Open / , speak (or type) a problem → hero captures → filed mail appears in tray.
-- Scroll: ribbons advance with shear/flutter, dockets pin with individual variance, footer clacks and pins.
-- Reduced motion (OS or devtools): everything static, all physical artifacts (stamps, tape, pins, rots) still present and legible.
-- Brand: check one-red, WONK usage, copy tone against PRODUCT.md.
-- Skills present: ls .agents/skills/gsd-health .claude/skills/gsd-health (and siblings).
+### Voice
+
+- [ ] **VOICE-01**: Visitor can use the Voice Agent on a dedicated page (e.g. `/voice`); it is not the homepage hero
+
+### Homepage
+
+- [ ] **HOME-01**: Visitor scrolling past the hero sees remaining homepage sections styled with the `public/` design system
+
+## Future Requirements
+
+Deferred. Tracked but not in this milestone's roadmap.
+
+### Hero
+
+- **HERO-02**: Hero matches `public/` tokens and type (stamp shadows, sharp corners, SKILL.md craft)
+- **HERO-03**: Hero remains readable with reduced motion (static fallback)
+
+### Design system
+
+- **DS-02**: PRODUCT.md rewritten to match `public/`, not the v1 mail-board-as-hero brief
+- **DS-03**: Agents building UI read `public/SKILL.md` as the craft brief
+
+### Voice
+
+- **VOICE-02**: Existing Voice Agent wiring preserved (Supertonic / local transcribe path; no rewrite of the agent)
+- **VOICE-03**: Homepage does not file mail from voice (`onMailFiled` / docket leak is not the homepage story)
+
+### Homepage
+
+- **HOME-02**: Mail-board GSAP (ribbons, pins, tray) can come off `/`
+- **HOME-03**: Visitor can still reach contact (mailto or form)
+
+## Out of Scope
+
+Explicitly excluded. Documented to prevent scope creep.
+
+| Feature | Reason |
+|---------|--------|
+| Rewrite the Voice Agent itself | Keep existing config; only move it off `/` |
+| Wipe `.planning/PROJECT.md` via `$gsd-new-project` | Brownfield: v2 updates PROJECT.md, does not delete history |
+| Auth / dashboards / multi-page app chrome | Still not the product |
+| Old shader + custom cursor + shadcn lead-card v1 | Superseded in v1-refactored; stays dead |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| HERO-01 | — | Pending |
+| DS-01 | — | Pending |
+| VOICE-01 | — | Pending |
+| HOME-01 | — | Pending |
+
+**Coverage:**
+- v2.0 requirements: 4 total
+- Mapped to phases: 0
+- Unmapped: 4
 
 ---
-
-*Old detailed 175-line v1 reqs archived with the phases. Current site was delivered outside the original phase plan via the award configuration swarm. Future work captured with gsd-plan-phase after award runs.*
+*Requirements defined: 2026-08-24*
+*Last updated: 2026-08-24 after milestone v2.0 scoping*
