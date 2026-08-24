@@ -114,11 +114,7 @@ feature_list.json
 .antigravitycli/
 .understand-anything/
 .githooks/
-<<<<<<< HEAD
-=======
 
-# Local agent scratch directories
-.agent_context/
-.multica/
-.serena/
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
+# in-memoria local data
+.in-memoria/
+in-memoria-vectors.db/

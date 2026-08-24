@@ -161,7 +161,7 @@ export function Hero() {
             Brand treatment follows the design system.
           */}
           <span className="brand-wordmark text-[1.9rem]">
-            Good<span className="apos">&apos;</span>ai
+            Good<span className="wordmark-ai">&apos;ai</span>
           </span>
 =======
             WORDMARK — using Fraunces from the design (public/fonts/ matching public/fonts/ verbatim).

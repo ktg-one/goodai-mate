@@ -1,4 +1,8 @@
-<<<<<<< HEAD
+@import url("./tokens/colors.css");
+@import url("./tokens/typography.css");
+@import url("./tokens/spacing.css");
+@import url("./tokens/effects.css");
+@import url("./tokens/fonts.css");
 @import "tailwindcss";
 
 @theme {
@@ -18,285 +22,15 @@
    --font-display resolves to the Fraunces variable for proper variation-settings support on .wonk-line, .font-display, h1/h2, .brand-wordmark. */
 
 :root {
-  /* COLOUR — the five core brand colours (verbatim from June 3 design book) */
-  --gold:        #F3A62A;
-  --gold-deep:   #D98E1C;
-  --gold-tint:   #FBDFA6;
-
-  --red:         #F4442E;
-  --red-deep:    #D8331F;
-  --red-tint:    #FBC9C1;
-
-  --navy:        #202C59;
-  --navy-deep:   #161E3D;
-  --navy-tint:   #C9CEDD;
-
-  /* Neutrals (WARM cream canvas + true black) */
-  --paper:        #FFF0D0;
-  --paper-deep:   #F6E2B8;
-  --paper-3:      #ECD49A;
-  --cream-line:   #E0C690;
-
-  --ink:          #111111;
-  --ink-soft:     #1C1C1C;
-  --ink-mute:     #6B6452;
-  --ink-faint:    #A0967C;
-
-  /* Supporting */
-  --hi-yellow:    #F3A62A;
-  --trust-blue:   #202C59;
-  --ok:           #2E6E3E;
-  --warn:         #D8331F;
-  --danger:       #D8331F;
-
-  /* LEGACY ALIASES */
-  --orange:       var(--red);
-  --orange-deep:  var(--red-deep);
-  --orange-tint:  var(--red-tint);
-  --orange-50:    #FDE9E5;
-  --orange-100:   #FBC9C1;
-
-  --ocean-50:    #E8EAF1;
-  --ocean-100:   #C9CEDD;
-  --ocean-200:   #8A93B4;
-  --ocean-300:   #4A5685;
-  --ocean-400:   var(--navy);
-  --ocean-500:   #1A2349;
-  --ocean-600:   var(--navy-deep);
-
-  /* Semantic tokens */
-  --bg:            var(--paper);
-  --bg-raised:     #FFFAEC;
-  --bg-sunken:     var(--paper-deep);
-  --bg-brand:      var(--navy);
-  --bg-accent:     var(--red);
-  --bg-gold:       var(--gold);
-  --bg-ocean:      var(--navy);
-
-  --fg:            var(--ink);
-  --fg-soft:       var(--ink-soft);
-  --fg-mute:       var(--ink-mute);
-  --fg-faint:      var(--ink-faint);
-  --fg-on-brand:   var(--paper);
-  --fg-on-ocean:   var(--paper);
-
-  --border:        var(--cream-line);
-  --border-strong: #C9A961;
-
-  --accent:        var(--red);
-  --accent-hover:  var(--red-deep);
-  --accent-soft:   var(--red-tint);
-
-  --highlight:     var(--gold);
-  --success:       var(--ok);
-
-  /* Stamp shadows — flat, participate on hover/press (verbatim) */
-  --shadow-stamp:        3px 3px 0 var(--ink);
-  --shadow-stamp-orange: 3px 3px 0 var(--red);
-  --shadow-stamp-ocean:  3px 3px 0 var(--navy);
-  --shadow-stamp-deep:   4px 4px 0 var(--ink);
-
-  /* Navy pile for hero stamp settle (deeper filing shadows) + docket */
-  --navy-ink: #0F162B;
-
-  /* TYPE — Families (verbatim from design in public/README.md and colors_and_type.css: Fraunces variable for display with SOFT + WONK + opsz + wght; DM Sans for sans; JetBrains for mono) */
-  --font-sans:    var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), Georgia, serif;
-  --font-mono:    var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
-
-  /* TYPE — Scale */
-  --fs-12: 0.75rem;
-  --fs-16: 1rem;
-  --fs-20: 1.25rem;
-  --fs-24: 1.5rem;
-  --fs-36: 2.25rem;
-  --fs-64: 4rem;
-
-  /* 4pt SPACING GRID */
-  --space-1:  4px;
-  --space-2:  8px;
-  --space-3:  12px;
-  --space-4:  16px;
-  --space-5:  20px;
-  --space-6:  24px;
-  --space-8:  32px;
-  --space-10: 40px;
-  --space-12: 48px;
-  --space-16: 64px;
-  --space-20: 80px;
-  --space-24: 96px;
-
-  /* RADIUS / SHADOW */
-  --radius-xs:   4px;
-  --radius-sm:   8px;
-  --radius-md:   12px;
-  --radius-lg:   18px;
-  --radius-xl:   26px;
-  --radius-pill: 999px;
-
-  /* Hard mechanical easings (kept from prior brutalist work) */
-  --ease-brutal: cubic-bezier(0, 0, 0.2, 1);
-  --ease-hard-out: cubic-bezier(0.2, 0, 0, 1);
-  --ease-stamp-press: cubic-bezier(0.23, 1, 0.32, 1); /* design 90-160ms cubic */
 }
 
 /* HL / WONK emphasis (verbatim from design, exactly one per major surface) */
-=======
-@import url('tokens/colors.css');
-@import url('tokens/typography.css');
-@import url('tokens/spacing.css');
-@import url('tokens/effects.css');
-@import url('tokens/fonts.css');
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
-@import "tailwindcss";
-
-@theme {
-  --font-sans:    var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-display), Georgia, serif;
-  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
-
-  --color-gold:        var(--gold);
-  --color-gold-deep:   var(--gold-deep);
-  --color-gold-tint:   var(--gold-tint);
-  --color-red:         var(--red);
-  --color-navy:        var(--navy);
-  --color-paper:       var(--paper);
-  --color-ink:         var(--ink);
-
-  --color-bg:          var(--bg);
-  --color-raised:      var(--bg-raised);
-  --color-fg:          var(--fg);
-  --color-muted:       var(--fg-mute);
-  --color-accent:      var(--accent);
-  --color-line:        var(--border);
-}
-
-/* ============================================================
-   Good'AI — Colors & Type  (source of truth)
-   ------------------------------------------------------------
-   Palette: Mustard-gold + Coral-red + Navy + Warm cream + Black.
-   #F3A62A  #F4442E  #202C59  #FFF0D0  #111111
-   Direct-mail composition. Warm cream canvas,
-   high-contrast COLOURED cards, white-on-colour text.
-   ============================================================ */
-
-/* -------- Fonts -------- */
-
-
-
-
-/* ============================================================
-   BASE
-   ============================================================ */
-
-html, body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-sans);
-  font-size: var(--fs-16);
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-::-moz-selection {
-  background: var(--gold);
-  color: var(--ink);
-}
-::selection {
-  background: var(--gold);
-  color: var(--ink);
-}
-
-/* ============================================================
-   TYPE CLASSES
-   ============================================================ */
-
-.h1 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: var(--fs-64);
-  line-height: 0.95;
-  letter-spacing: -0.025em;
-  font-variation-settings: "opsz" 144;
-  color: var(--fg);
-}
-
-.h2 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: var(--fs-36);
-  line-height: 1.05;
-  letter-spacing: -0.015em;
-  font-variation-settings: "opsz" 72;
-  color: var(--fg);
-}
-
-.h3 {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: var(--fs-24);
-  line-height: 1.2;
-  color: var(--fg);
-}
-
-.lede {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: var(--fs-20);
-  line-height: 1.5;
-  color: var(--fg-soft);
-}
-
-.body {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: var(--fs-16);
-  line-height: 1.55;
-  color: var(--fg-soft);
-}
-
-.eyebrow {
-  font-family: var(--font-mono);
-  font-size: var(--fs-12);
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--fg-mute);
-}
-
-.mono {
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  letter-spacing: 0.02em;
-  color: var(--fg-soft);
-}
-
-.wordmark {
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  font-variation-settings: "opsz" 144;
-}
-.wordmark .apos { color: var(--orange); }
-
-/* ============================================================
-   KEYWORD HIGHLIGHT — coloured card behind a standout word.
-   Highlight as many keywords as the line needs; vary the colour
-   (gold / red / navy) so two highlights in one heading don't
-   read as the same beat. Metrics are em-based so it scales at
-   any heading size.
-   <h1><span class="hl">Knock off</span> early —
-       we'll sort the <span class="hl-red">boring stuff</span>.</h1>
-   ============================================================ */
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
 .hl,
 .hl-red,
 .hl-navy {
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
   padding: 0.02em 0.24em;
-<<<<<<< HEAD
   border-radius: 0.06em;
   box-shadow: 0.06em 0.06em 0 var(--ink);
   font-style: normal;
@@ -362,7 +96,7 @@ html, body {
 .stamp-btn-ink:hover:not(:disabled) { background: #000; transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
 .stamp-btn-ink:active:not(:disabled), .stamp-btn-ink.is-engaged { background: #000; transform: translate(2px, 2px); box-shadow: none; }
 
-.stamp-btn-paper { background: var(--paper); color: var(--ink); border-color: var(--ink); }
+.stamp-btn-paper { background: var(--paper) url("/assets/shapes/shape-big-1.svg") no-repeat center center / cover; background-blend-mode: multiply; color: var(--ink); border-color: var(--ink); }
 .stamp-btn-paper:hover:not(:disabled) { background: var(--paper-deep); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
 .stamp-btn-paper:active:not(:disabled), .stamp-btn-paper.is-engaged { background: var(--paper-deep); transform: translate(2px, 2px); box-shadow: none; }
 
@@ -388,7 +122,7 @@ html, body {
 
 /* Variant Backgrounds & Foregrounds */
 .stamp-card-paper {
-  background: var(--paper);
+  background: var(--paper) url("/assets/shapes/shape-big-1.svg") no-repeat center center / cover; background-blend-mode: multiply;
   color: var(--ink);
   box-shadow: 3px 3px 0 var(--ink);
 }
@@ -481,13 +215,13 @@ html, body {
   content: '';
   position: absolute;
   inset: 0;
-  background:
+  background: 
     linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.32) 38%, transparent 72%),
     url('/assets/wave-ribbon.png') repeat-x center / auto 100%;
   background-blend-mode: screen, multiply;
   opacity: 0.82;
-  transform:
-    translateX(calc(-100% + var(--tape-progress) * 235%))
+  transform: 
+    translateX(calc(-100% + var(--tape-progress) * 235%)) 
     translateY(var(--tape-flutter))
     skewX(calc(var(--tape-shear) * 2.2deg));
   transition: none;
@@ -499,7 +233,7 @@ html, body {
   content: '';
   position: absolute;
   inset: 2px 0;
-  background-image:
+  background-image: 
     radial-gradient(circle at 5px 50%, var(--ink) 1.6px, transparent 2.1px),
     radial-gradient(circle at calc(100% - 5px) 50%, var(--ink) 1.6px, transparent 2.1px);
   background-size: 26px 100%, 26px 100%;
@@ -527,11 +261,11 @@ html, body {
   content: '';
   position: absolute;
   inset: 0;
-  background:
+  background: 
     linear-gradient(90deg, transparent 0 18%, rgba(17,17,17,0.12) 22% 29%, transparent 34% 100%),
     repeating-linear-gradient(90deg, var(--ink) 0 1px, transparent 1px 5px);
-  transform:
-    translateX(calc(var(--tape-progress) * -38%))
+  transform: 
+    translateX(calc(var(--tape-progress) * -38%)) 
     translateY(calc(var(--tape-flutter) * 0.4))
     skewX(calc(var(--tape-shear) * 4.2deg));
   opacity: 0.5;
@@ -543,9 +277,9 @@ html, body {
   position: absolute;
   right: 14px;
   top: 50%;
-  transform:
-    translateY(-50%)
-    rotate(calc(var(--tape-progress) * 18deg - 9deg))
+  transform: 
+    translateY(-50%) 
+    rotate(calc(var(--tape-progress) * 18deg - 9deg)) 
     translateY(calc(var(--tape-flutter) * 0.7))
     scaleX(calc(1 + var(--tape-shear) * 0.08));
   font-size: 10px;
@@ -585,7 +319,7 @@ html, body {
   content: '';
   position: absolute;
   inset: 0;
-  background:
+  background: 
     radial-gradient(circle at 82% 21%, rgba(17,17,17,0.06) 0 22%, transparent 28%);
   pointer-events: none;
   z-index: 2;
@@ -642,6 +376,12 @@ h1, h2,
   font-variation-settings: "WONK" var(--wonk, 0.2), "SOFT" 60, "opsz" 120;
 }
 
+/* "ai" in Klarissa Contour — regular "Good" + script "ai" wordmark treatment */
+.wordmark-ai {
+  font-family: var(--font-contour);
+  font-size: 1.1em;
+}
+
 /* ============================================================
    CHAT INTERFACE & LEAD CAPTURE CARD STYLES
    Brutalist mechanical styling matching colors_and_type.css
@@ -663,7 +403,7 @@ h1, h2,
   max-height: 380px;
   overflow-y: auto;
   padding: 16px;
-  background: var(--paper);
+  background: var(--paper) url("/assets/shapes/shape-big-1.svg") no-repeat center center / cover; background-blend-mode: multiply;
 }
 
 .gai-chat-inner {
@@ -847,7 +587,7 @@ h1, h2,
   font-family: var(--font-sans);
   font-size: 15px;
   color: var(--ink);
-  background: var(--paper);
+  background: var(--paper) url("/assets/shapes/shape-big-1.svg") no-repeat center center / cover; background-blend-mode: multiply;
   border: 2px solid var(--ink);
   border-radius: var(--radius-xs);
   padding: 10px 14px;
@@ -890,521 +630,19 @@ h1, h2,
 .gai-iconbtn-send:active {
   transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 var(--ink);
-=======
-  border-radius: 0.06em;            /* stays sharp at scale */
-  box-shadow: 0.06em 0.06em 0 var(--ink);
-  font-style: normal;               /* upright even inside an italic line */
-  white-space: nowrap;
-}
-.hl      { background: var(--gold); color: var(--ink); }   /* default — gold sticker */
-.hl-red  { background: var(--red);  color: var(--paper); } /* loud — coral on the shout word */
-.hl-navy { background: var(--navy); color: var(--paper); } /* quiet — navy block */
-
-
-/* ============================================================
-   Good'ai — Landing (direct-mail)
-   Ink + brand orange + paper + ocean + sticker yellow.
-   ============================================================ */
-
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-body {
-  background:
-    repeating-linear-gradient(0deg, color-mix(in srgb, var(--ink) 2.5%, transparent) 0 1px, transparent 1px 4px),
-    var(--paper);
-  color: var(--ink);
-  font-family: var(--font-sans);
-  min-height: 100vh;
-}
-a { color: inherit; text-decoration: none; }
-button { font-family: inherit; }
-
-/* ─── Shell ─────────────────────────── */
-.gai-onepage {
-  position: relative;
-  min-height: 100vh;
-  padding: 0;
-}
-.gai-hero-bg { display: none; }
-
-/* ─── Top utility bar ───────────────── */
-.gai-onepage-top {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px clamp(20px, 5vw, 64px);
-  border-bottom: 2px solid var(--ink);
-  background: var(--paper);
-}
-.gai-perth-chip {
-  font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--ink);
-  background: var(--hi-yellow);
-  border: 2px solid var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
-  padding: 5px 12px;
-  border-radius: 999px;
-  font-weight: 700;
-}
-.gai-perth-chip span { color: var(--ink); padding: 0 4px; opacity: 0.6; }
-
-/* ─── Hero stacked, centered ─────── */
-.gai-onepage-inner {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: clamp(40px, 6vw, 72px) clamp(20px, 5vw, 64px) 56px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0;
-  text-align: left;
 }
 
-/* g-mark — empirical from logo, sits above the type */
-.gai-hero-mark {
-  width: 96px;
-  aspect-ratio: 1 / 1.18;
-  display: block;
-  position: relative;
-  margin-bottom: 24px;
-}
-.gai-hero-mark svg { width: 100%; height: 100%; display: block; }
-.gai-hero-mark img { display: none; }
-
-/* Eyebrow */
-.gai-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--ink);
-  margin-bottom: 18px;
-  display: inline-block;
-  padding: 4px 10px;
-  background: var(--ink);
-  color: var(--paper);
-  font-weight: 600;
-}
-
-/* Headline */
-.gai-hero-h1 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2.6rem, 7vw, 5.5rem);
-  line-height: 1.08;
-  letter-spacing: -0.035em;
-  margin: 4px 0 16px;
-  color: var(--ink);
-  font-variation-settings: "opsz" 144, "SOFT" 50;
-}
-.gai-hero-h1 em {
-  font-style: italic;
-  color: var(--ink);
-  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
-}
-
-.gai-hero-lede {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(1.15rem, 2vw, 1.5rem);
-  line-height: 1.3;
-  color: var(--ink-soft);
-  margin: 0 0 30px;
-  max-width: 40ch;
-  font-variation-settings: "opsz" 96, "SOFT" 60;
-}
-
-/* ─── Intake (high-contrast coloured card — white on ink) ─── */
-.gai-intake {
-  width: 100%; max-width: 640px;
-}
-.gai-intake-field {
-  background: var(--ink);
-  border: 2px solid var(--ink);
-  border-radius: 4px;
-  box-shadow: var(--shadow-stamp-orange);
-  padding: 18px 18px 12px;
-  text-align: left;
-  transition: box-shadow 150ms, transform 150ms;
-}
-.gai-intake-field:focus-within {
-  box-shadow: 5px 5px 0 var(--orange);
-  transform: translate(-1px, -1px);
-}
-.gai-intake-input {
-  width: 100%;
-  font-family: var(--font-sans);
-  font-size: 18px;
-  line-height: 1.45;
-  color: var(--paper);
-  background: transparent;
-  border: none; outline: none;
-  resize: none;
-  padding: 4px 4px;
-  min-height: 80px;
-}
-.gai-intake-input::placeholder { color: color-mix(in srgb, var(--paper) 50%, transparent); }
-
-.gai-intake-toolbar {
-  display: flex; align-items: center; gap: 8px;
-  margin-top: 10px; padding-top: 12px;
-  border-top: 1px dashed color-mix(in srgb, var(--paper) 30%, transparent);
-}
-.gai-intake-spacer { flex: 1; }
-
-.gai-tool {
-  outline: none;
-  display: inline-flex; align-items: center; gap: 7px;
-  font-family: var(--font-sans);
-  font-size: 13px; font-weight: 600;
-  color: var(--ink);
-  background: var(--paper);
-  border: 2px solid var(--ink);
-  box-shadow: 2px 2px 0 var(--ink);
-  padding: 8px 13px;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: transform 120ms, box-shadow 120ms;
-}
-.gai-tool:hover:not(:disabled) {
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0 var(--ink);
-}
-.gai-tool.is-on {
-  background: var(--orange);
-  color: var(--ink);
-  border-color: var(--ink);
-}
-.gai-tool:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 2px;
-}
-.gai-tool:disabled { opacity: 0.4; cursor: not-allowed; }
-
-.gai-tool-send {
-  background: var(--orange);
-  color: var(--ink);
-  border: 2px solid var(--ink);
-  box-shadow: 3px 3px 0 var(--paper);
-  padding: 10px 18px;
-  border-radius: 4px;
-}
-.gai-tool-send:hover:not(:disabled) {
-  background: var(--orange-deep);
-  color: var(--ink);
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--paper);
-}
-.gai-tool-send:active { transform: translate(2px,2px); box-shadow: none; }
-
-.gai-tool-mini {
-  font-size: 12px; padding: 6px 10px;
-}
-
-.gai-intake-hint {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin: 14px 0 0;
-  font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--ink-mute);
-}
-
-/* spinner */
-.gai-spinner {
-  width: 12px; height: 12px;
-  border: 2px solid currentColor;
-  border-right-color: transparent;
-  border-radius: 50%;
-  animation: gai-spin 0.7s linear infinite;
-}
-@keyframes gai-spin { to { transform: rotate(360deg); } }
-
-/* error */
-.gai-error {
-  margin-top: 14px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  color: var(--paper);
-  background: var(--warn);
-  border: 2px solid var(--ink);
-  box-shadow: var(--shadow-stamp);
-  padding: 10px 14px;
-  border-radius: 0;
-}
-
-/* ─── Answer panel ──────────────────── */
-.gai-answer {
-  width: 100%; max-width: 640px;
-  margin-top: 24px;
-  background: var(--ocean-400);
-  color: var(--paper);
-  border: 2px solid var(--ink);
-  border-radius: 4px;
-  box-shadow: var(--shadow-stamp);
-  padding: 22px 22px;
-  text-align: left;
-  animation: gai-pop 400ms cubic-bezier(0.23,1,0.32,1) both;
-}
-@keyframes gai-pop {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.gai-answer-head {
-  display: flex; align-items: center; gap: 8px;
-  margin-bottom: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px dashed color-mix(in srgb, var(--paper) 30%, transparent);
-}
-.gai-answer-tag {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--hi-yellow);
-  flex: 1;
-  font-weight: 700;
-}
-.gai-answer-dot {
-  width: 9px; height: 9px; border-radius: 50%;
-  background: var(--hi-yellow);
-  animation: gai-pulse 1.6s ease-in-out infinite;
-}
-@keyframes gai-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.45; }
-}
-.gai-answer .gai-tool {
-  outline: none;
-  background: var(--paper);
-  color: var(--ink);
-  border-color: var(--ink);
-  box-shadow: 2px 2px 0 var(--ink);
-}
-.gai-answer .gai-tool.is-on { background: var(--orange); }
-.gai-answer-text {
-  font-family: var(--font-sans);
-  font-size: 17px;
-  line-height: 1.5;
-  color: var(--paper);
-  margin: 0 0 18px;
-  white-space: pre-wrap;
-}
-.gai-answer-cta {
-  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-  padding-top: 12px;
-  border-top: 1px dashed color-mix(in srgb, var(--paper) 30%, transparent);
-}
-.gai-answer-cta-help {
-  font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--paper); opacity: 0.7;
-}
-
-/* ─── Buttons ───────────────────────── */
-.gai-btn {
-  outline: none;
-  font-family: var(--font-sans);
-  font-weight: 600;
-  border: 2px solid var(--ink);
-  cursor: pointer;
-  transition: transform 120ms, box-shadow 120ms;
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  white-space: nowrap;
-}
-.gai-btn:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 2px;
-}
-.gai-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.gai-btn-md { font-size: 14px; padding: 11px 20px; border-radius: 4px; }
-.gai-btn-primary {
-  background: var(--orange); color: var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
-}
-.gai-btn-primary:hover:not(:disabled) {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--ink);
-}
-.gai-btn-primary:active { transform: translate(2px,2px); box-shadow: none; }
-
-/* ─── Wordmark ──────────────────────── */
-.gai-wordmark {
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  font-variation-settings: "opsz" 144;
-  line-height: 1;
-}
-.gai-wordmark .apos { color: var(--orange); }
-
-/* ─── Logo ─── */
-.gai-logo { height: 30px; width: auto; display: block; }
-
-/* ─── Logo slot (drop your own logo here) ─── */
-.gai-logo-slot {
-  display: inline-flex; align-items: center; justify-content: center;
-  border: 2px dashed var(--ink);
-  border-radius: 2px;
-  background: repeating-linear-gradient(45deg, transparent 0 7px, color-mix(in srgb, var(--ink) 5%, transparent) 7px 9px);
-  font-family: var(--font-mono);
-  font-size: 9px; font-weight: 700;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--ink-mute);
-}
-
-/* ─── Feature panels (coloured cards) ─── */
-.gai-features {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0;
-  margin-top: 56px;
-  border-top: 2px solid var(--ink);
-  border-bottom: 2px solid var(--ink);
-}
-@media (max-width: 1000px) { .gai-features { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 520px) { .gai-features { grid-template-columns: 1fr; } }
-.gai-feature {
-  display: flex; flex-direction: column; gap: 14px;
-  padding: 22px 20px;
-  border-right: 1px solid var(--ink);
-  background: var(--paper);
-  text-align: left;
-  position: relative;
-}
-.gai-feature:last-child { border-right: 0; }
-.gai-feature:nth-child(1) { background: var(--paper); }
-.gai-feature:nth-child(2) { background: var(--hi-yellow); }
-.gai-feature:nth-child(3) { background: var(--orange); color: var(--ink); }
-.gai-feature:nth-child(4) { background: var(--ocean-400); color: var(--paper); }
-.gai-feature:nth-child(5) { background: var(--ink); color: var(--paper); }
-@media (max-width: 1000px) {
-  .gai-feature { border-right: none; border-bottom: 1px solid var(--ink); }
-  .gai-feature:nth-child(2), .gai-feature:nth-child(4) { border-right: 1px solid var(--ink); }
-  .gai-feature:nth-last-child(-n+2) { border-bottom: 0; }
-}
-@media (max-width: 520px) {
-  .gai-feature { border-right: 0; border-bottom: 1px solid var(--ink); }
-  .gai-feature:last-child { border-bottom: 0; }
-}
-
-.gai-feature-icon {
-  width: 36px; height: 36px;
-  background: var(--ink);
-  color: var(--paper);
-  display: inline-flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  border-radius: 0;
-}
-.gai-feature:nth-child(4) .gai-feature-icon,
-.gai-feature:nth-child(5) .gai-feature-icon { background: var(--paper); color: var(--ink); }
-.gai-feature:nth-child(3) .gai-feature-icon { background: var(--ink); color: var(--orange); }
-.gai-feature:nth-child(2) .gai-feature-icon { background: var(--ink); color: var(--hi-yellow); }
-
-.gai-feature-text {
-  display: flex; flex-direction: column; line-height: 1.2; text-align: left;
-}
-.gai-feature-text strong {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.015em;
-  font-variation-settings: "opsz" 96, "SOFT" 40;
-}
-.gai-feature-text span {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  margin-top: 4px;
-  opacity: 0.8;
-}
-
-/* ─── Marquee ───────────────────────── */
-.gai-marquee {
-  margin-top: 0;
-  overflow: hidden;
-  border-bottom: 2px solid var(--ink);
-  padding: 14px 0;
-  background: var(--ink);
-  color: var(--paper);
-}
-.gai-marquee-track {
-  display: flex; gap: 0; white-space: nowrap;
-  animation: gai-scroll 36s linear infinite;
-  width: max-content;
-}
-.gai-marquee-item {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--paper);
-  flex-shrink: 0;
-}
-.gai-marquee-sep { color: var(--orange); padding: 0 22px; font-weight: 700; }
-@keyframes gai-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-/* ─── Animations ────────────────────── */
-@keyframes gai-fade-up {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.gai-onepage-inner > * {
-  animation: gai-fade-up 600ms cubic-bezier(0.23,1,0.32,1) both;
-}
-.gai-onepage-inner > .gai-hero-mark { animation-delay: 0ms; }
-.gai-onepage-inner .gai-eyebrow { animation-delay: 80ms; }
-.gai-onepage-inner .gai-hero-h1 { animation-delay: 120ms; }
-.gai-onepage-inner .gai-hero-lede { animation-delay: 200ms; }
-.gai-onepage-inner .gai-intake { animation-delay: 260ms; }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
-/* Mobile */
-@media (max-width: 760px) {
-  .gai-hero-mark { width: 140px; }
-}
-
-/* ─── Background SVGs for Dark Theme Adoption ─── */
-section:nth-of-type(even) {
-  position: relative;
-  z-index: 1;
-}
-section:nth-of-type(even)::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: -1;
-  background-image: url('/assets/shapes/shape-big-teal.svg');
+/* Viewport shapes pattern */
+section:nth-of-type(2n) {
+  background-image: url('/assets/shapes/shape-big-1.svg');
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: center center;
   background-size: cover;
-  opacity: 0.15;
+  background-blend-mode: multiply;
 }
 
-.stamp-card-paper {
-  position: relative;
-  z-index: 1;
-}
-.stamp-card-paper::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: -1;
-  background-image: url('/assets/shapes/shape-big-silver.svg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  opacity: 0.15;
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
+/* Bare cards background pattern */
+[data-slot="card"] {
+  background: var(--paper) url('/assets/shapes/shape-big-1.svg') no-repeat center center / cover;
+  background-blend-mode: multiply;
 }

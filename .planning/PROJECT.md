@@ -2,18 +2,27 @@
 
 ## What This Is
 
-<<<<<<< HEAD
 Good'ai (goodai.au) is a Perth-based business automations service for SMEs (tradies, service businesses, $1M–$30M turnover). The site is the primary brand experience and lead generator. v1 is a single-page brutalist marketing site whose hero **is** the product: a functional local-first Voice Agent (Supertonic ASR + Good'ai persona + spoken replies during dev). Conversations "file" as physical mail dockets into an in-tray and drive the marketing narrative below (the "Docket Flow").
 
 The entire site below the hero is one cohesive 1978 direct-mail corkboard being rifled as you scroll: perforated paper-tape ribbons (shear/tear), non-uniform pinned stamp dockets, heavy final clack ritual in the footer. Built with Next.js 16 (App Router), React 19, Tailwind, GSAP + Framer Motion hybrid, custom stamp primitives.
 
 Development and craft heavily leverage local agent skills from `.agents/skills` and `.claude/skills` (goodai-award-configuration + awwwards/gsap/impeccable swarm for the mechanical brutalist execution).
 
+## Current Milestone: v2.0 Design system + hero
+
+**Goal:** Make `public/` the live design SSOT, ship the new homepage hero from `src/components/hero/`, and move the Voice Agent off the homepage onto its own page.
+
+**Target features:**
+- Adopt `public/colors_and_type.css` + `public/SKILL.md` + `public/preview/` as the design-system SSOT (tokens, type, components). Rewrite PRODUCT.md / planning to match what is already in `public/`.
+- Homepage hero is `src/components/hero/Hero.tsx` (the current hero work), not `VoiceAgentHero`.
+- Voice Agent stays configured if already wired; lives on a dedicated page, not the homepage.
+- Rest of the homepage restyles to the `public/` system as the new hero language takes over.
+
 ## Core Value
 
-A switched-on Perth tradie/business owner lands, speaks their admin mess (invoicing, follow-ups, quotes, the lot) into the Voice Agent, feels understood by a local mate who "gets it", and knows the boring stuff will be sorted so they can knock off early. No portals, no logins, no dashboards. Just relief.
+A switched-on Perth tradie/business owner lands, feels the Good'ai brand in the new hero, and knows the boring stuff will be sorted so they can knock off early. No portals, no logins, no dashboards. Just relief.
 
-If the voice + the physical docket story doesn't make them drop a line, nothing else matters.
+If the new hero + design system don't make them drop a line, nothing else matters. Voice remains a real product surface — on its own page.
 
 ## Requirements
 
@@ -30,10 +39,12 @@ If the voice + the physical docket story doesn't make them drop a line, nothing 
 
 ### Active / Ongoing
 
-- [ ] Voice quality / Supertonic prod endpoint + latency tuning
-- [ ] Lead capture via real contact (mailto + form) + conversation context handoff to ops
-- [ ] Additional surfaces (services, about, case studies) in same brutalist mail language
-- [ ] gsd health + docs alignment after refactor (this work)
+- [ ] Homepage ships `src/components/hero/` as the live hero (in progress now)
+- [ ] `public/` design system (colors, type, preview, ui kit, SKILL.md) is the SSOT for production UI
+- [ ] PRODUCT.md rewritten to match `public/`, not the v1 mail-board-as-hero brief
+- [ ] Voice Agent stays configured; moved to its own page (not homepage)
+- [ ] Remaining homepage sections restyle to the `public/` system
+- [ ] Lead capture via real contact (mailto + form)
 - [ ] Production deploy / domain + analytics
 
 ### Out of Scope (v1)
@@ -58,9 +69,10 @@ If the voice + the physical docket story doesn't make them drop a line, nothing 
 - Stamp clack timing: hard 90-160ms cubic-bezier(0.23,1,0.32,1) — no floaty easings
 - One red accent max per surface/block
 - Exactly one Fraunces WONK phrase per major surface
-- Reduced motion must not lose the 1978 docket artifact
+- Reduced motion must not lose meaning (static fallbacks for hero + any motion)
 - Zero "AI" hype language in UI or persona
-- Voice Agent remains pure functional product moment at top; everything else receives leaked convos as filed mail
+- Homepage hero is `src/components/hero/`; Voice Agent is a separate page
+- Design tokens and craft rules come from `public/` (`colors_and_type.css`, `SKILL.md`, preview, ui kit) — not from the v1 mail-board PRODUCT.md brief
 
 ## Key Decisions (post-refactor)
 
@@ -70,84 +82,27 @@ If the voice + the physical docket story doesn't make them drop a line, nothing 
 | Local .agents/.claude skills copies (goodai-*, gsd-*, awwwards/gsap) | Project-specific context + gsd planning tools always available when working in-repo | Added gsd-health + core set |
 | Archive pre-refactor phases | Old 01-05 plans described shader/cursor/old-lead v1 that was pivoted away in the refactor | Archived to milestones/v0.9-pre-refactor-phases/ |
 | gsd for health/docs/progress | Use /gsd-health, /gsd-docs-update, /gsd-progress etc. to keep .planning and docs/ in sync with actual shipped site | In progress (this task) |
-| PRODUCT.md + public/ design system as SSOT | Brand guardrails must be injected into every creative agent run | Enforced |
+| PRODUCT.md + public/ design system as SSOT | Brand guardrails must be injected into every creative agent run | Enforced (v1) |
+| v2: public/ is the live SSOT; homepage hero is src/components/hero/ | User is building the new hero now. Voice Agent stays configured on a dedicated page. Wipe v1-refactored planning cycle (phases from 1). | Active |
+| This repo is homepage intro + demos only | Railway Instatic (`BLOG` / `goodai.up.railway.app`) is backend + chic blog/services front. Do not build CMS routes in goodai-mate. | Locked |
+
+## Evolution
+
+This document evolves at phase transitions and milestone boundaries.
+
+**After each phase transition** (via `$gsd-transition`):
+1. Requirements invalidated? → Move to Out of Scope with reason
+2. Requirements validated? → Move to Validated with phase reference
+3. New requirements emerged? → Add to Active
+4. Decisions to log? → Add to Key Decisions
+5. "What This Is" still accurate? → Update if drifted
+
+**After each milestone** (via `$gsd-complete-milestone`):
+1. Full review of all sections
+2. Core Value check — still the right priority?
+3. Audit Out of Scope — reasons still valid?
+4. Update Context with current state
 
 ---
 
-*Last updated: 2026-06-04 after gsd-health + skills add + docs alignment for refactored site*
-*Pre-refactor planning archived; current reality is the Voice + mail-docket brutalist site delivered via award skills + gsd oversight.*
-=======
-Good'ai (goodai.au) is a Perth-based business-automations service for SMEs (tradies, service businesses, ~$1M–$30M turnover). The site is the primary brand experience **and** an active lead-generation funnel. It is a single-page brutalist 1978 direct-mail marketing site whose hero **is** the product: a functional Voice Agent (Supertonic ASR locally during dev). Conversations "file" as physical mail dockets into a sticky in-tray and drive the narrative below (the "Docket Flow").
-
-As of milestone **v1.1**, the site also runs the machinery that turns interest into leads: a website-audit tool, an outbound callback widget, and an n8n + Google Workspace automation pipeline.
-
-Built with Next.js 16 (App Router), React 19, Tailwind v4, GSAP/ScrollTrigger + Motion (motion/react) hybrid, custom stamp primitives. Direct imports only (no barrels, per AGENTS.md).
-
-## Core Value
-
-A switched-on Perth tradie/owner lands, speaks (or types) their admin mess into the Voice Agent, feels understood by a local mate who "gets it", and is then pulled into a real lead path — a free website audit, a callback from Darl/Robokev, or a captured conversation routed to ops via n8n/GWS. No portals, no logins, no dashboards. Just relief, then a tangible next step.
-
-## Requirements
-
-### Validated / Shipped — v1 refactor (mail-docket brand site)
-- [x] Voice Agent hero is the product (Supertonic local ASR, push-to-talk + transcript; `onMailFiled` leaks state into the in-tray)
-- [x] Brutalist mail-board: ribbons (GSAP shear/tear/flutter), Docket Flow (non-uniform pinned StampCards: rot/offset/wear), sticky in-tray (last-3 filed dockets), pinned footer clack ritual
-- [x] One red accent per surface, Fraunces WONK once per major block, participating stamp shadows, 60fps mechanical physics (90–160ms hard springs)
-- [x] Reduced-motion: fully static filed-paper layout, all artifacts visible
-- [x] Footer ritual: heavy stamped docket clack + wonk line + minimal contact (`mailto:hello@goodai.au`)
-
-### Validated / Shipped — v1.1 lead-gen + automation (verified in src/ 2026-06-16)
-- [x] **Website Analyzer**: scrape URL → AI Gateway audit → auto-extract business email → dispatch audit by email via GWS CLI
-- [x] **Outbound callback widget**: Darl / Robokev personas, phone-number prefill (`/api/trigger-call`)
-- [x] **n8n + Google Workspace lead-automation pipeline** (`/api/demo-automation`, LeadCaptureCard, VoiceAgentDemo, AutomationPlayground)
-- [x] **Chat** via AI Gateway + text fallback mode (`/api/chat`); **TTS** via ElevenLabs (`/api/tts`); **Interchangeable voices + backend models** (Gemini/Groq/Claude) in the VoiceAgentHero
-- [x] GSAP scroll reveals on VoiceAgentDemo + AISolutions; Fraunces font-loading fix; Vercel deploy fixes (physical font files, no symlinks)
-
-### Active / Ongoing (open — see ROADMAP §Open Workstreams)
-- [x] **[prod blocker — DONE 2026-06-17 `7c47a55`]** De-hardcode the GWS CLI path (`D:\packages\…`) → env-driven (`GWS_CLI_PATH` + node_modules fallback); 0 refs remain
-- [x] **[prod blocker — DONE 2026-06-17 `7c47a55`]** `api/trigger-call` n8n webhook now reads `N8N_CALL_WEBHOOK_URL`, no localhost default (throws/mocks if unset)
-- [x] **[prod blocker — DONE 2026-06-17 `7c47a55`]** Production ASR path now reads `NEXT_PUBLIC_ASR_URL`; localhost:8000 only as dev fallback/example
-- [x] **[DONE 2026-06-17 `3b92089`]** Resolve design SSOT — `public/design-system-new/` comment refs cleared (0 in src/); canonical = `public/` root + PRODUCT.md
-- [x] **[DONE 2026-06-17]** Commit in-flight work (Vite `public/voice-feature/*` removal, css/HomeClient edits, new audit assets) — working tree clean
-- [ ] **[deploy gate]** Set required env vars in Vercel + host ASR/n8n endpoints (see LAUNCH.md)
-- [ ] **[P1]** `api/demo-automation` demo webhook still defaults to `localhost:5678` — make env-driven for consistency
-- [ ] Lighthouse / perf / a11y pass on the GSAP-heavy flow
-- [ ] Additional surfaces (services, about, case studies) in the same brutalist language
-- [ ] Production deploy / domain + analytics
-
-### Out of Scope (current)
-- Old shader + custom cursor + old shadcn lead card (superseded)
-- Multi-page app chrome / dashboards / user accounts / auth
-
-## Context
-
-- **Refactor → v1.1**: original phase plan (shader/cursor/old-lead) was superseded by the v1 mechanical brutalist redesign (goodai-award-configuration swarm). Since 2026-06-04 a lead-gen + automation layer (v1.1) was added ad-hoc on top. Old `.planning/phases/` archived to `milestones/v0.9-pre-refactor-phases/`.
-- **Brand**: "Good'ai" (good eye, mate). "we'll sort the boring stuff." Practical, warm, direct. "We", never "I". No hype, no "AI-powered", no corporate.
-- **Design SSOT**: paper canvas, navy/gold/red, flat 3px participating stamp shadows, Fraunces var + WONK, 4px grid, mechanical motion only, one red per surface. Canonical source is `public/` root (`colors_and_type.css`, `fonts/`, `good-ai-design-final.html`, `README.md`) + PRODUCT.md, after the 2026-06-10 consolidation. The stale `public/design-system-new/` comment refs were cleared on 2026-06-17 (`3b92089`) — 0 remain in `src/`.
-- **Tech**: Next.js 16, React 19, Tailwind v4, GSAP/ScrollTrigger + @gsap/react + motion/react (hybrid), direct imports.
-- **Backends**: AI Gateway (`AI_GATEWAY_API_KEY`) for chat + audit; ElevenLabs (`ELEVEN_API_KEY`, `ELEVEN_DEFAULT_VOICE`) for TTS; Google Workspace CLI + n8n for automation/email dispatch; Supertonic local for dev ASR; `NEXT_PUBLIC_GWS_SCRIPT_URL` for lead capture.
-- **Skills in use**: local `.agents/skills` + `.claude/skills` (goodai-award-configuration + awwwards/gsap/impeccable swarm, next-best-practices, gsd-* family).
-
-## Constraints
-- 60fps hot paths (refs only; transform/opacity/filter; canvas DPR capped)
-- Stamp clack timing: hard 90–160ms cubic-bezier(0.23,1,0.32,1) — no floaty easings
-- One red accent max per surface/block; exactly one Fraunces WONK phrase per major surface
-- Reduced motion must not lose the 1978 docket artifact
-- Zero "AI" hype language in UI or persona
-- Voice Agent stays the pure functional product moment at top; everything else receives leaked convos as filed mail
-
-## Key Decisions
-
-| Decision | Rationale | Status |
-|----------|-----------|--------|
-| Award Configuration swarm for the v1 redesign | Delivered coordinated 60fps mechanical brutalist mail-board | Shipped (May 2026) |
-| Add a lead-gen + automation layer (v1.1) | Turn the brand demo into a working funnel (audit → call → pipeline) | Shipped 2026-06-09/10, work in flight |
-| AI Gateway for all model calls | Single keyed entry point vs per-provider SDKs | Shipped |
-| Google Workspace CLI + n8n as automation backend | Reuse existing GWS/n8n tooling for email + lead routing | Shipped; path de-hardcoded + env-driven 2026-06-17 |
-| Archive pre-refactor phases | Old 01–05 plans described the abandoned shader/cursor v1 | Archived |
-| Keep `.planning/` + repo self-contained (no Multica dependency) | Owner needs dev to continue via any AI CLI, not bound to the platform | Decided 2026-06-24 |
-
----
-
-*Last validated: 2026-06-24 against the live codebase + git (branch `goo-47-verify`). All P0 code blockers confirmed resolved & committed (`7c47a55`), SSOT comment drift cleared (`3b92089`), working tree clean. Remaining work is deploy-side only. Repo + `.planning/` confirmed self-sufficient — no Multica dependency for continued dev.*
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
+*Last updated: 2026-08-24 — start milestone v2.0 Design system + hero*

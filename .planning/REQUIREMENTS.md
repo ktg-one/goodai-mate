@@ -1,102 +1,80 @@
-<<<<<<< HEAD
-# Requirements: Good'ai (current post-refactor)
+# Requirements: Good'ai — v2.0 Design system + hero
 
-**Defined / last aligned:** 2026-06-04 (after gsd-health + docs update)
-**Note:** Original v1 requirements (shader, old lead capture, cursor etc.) were for the pre-refactor site. See .planning/milestones/v0.9-pre-refactor-phases/ for the archived detailed reqs (FOUND-*, SHDR-*, CHAT-*, LEAD-*, RESP-*, DEPL-*). They are superseded.
+**Defined:** 2026-08-24
+**Core Value:** Give small business owners their time back. The new homepage hero + `public/` design system must make a Perth tradie want to drop a line. Voice stays a real product surface — on its own page.
 
-## Current Core (Voice + Brutalist Mail Docket v1 — shipped)
+## Milestone v2.0 Requirements
 
-See PRODUCT.md for full brand/product spec. This is the minimal executable set that the award-refactored site delivers.
+Requirements for this milestone. Each maps to roadmap phases.
 
-- Voice Agent hero is the product demo and primary experience (local Supertonic for dev, real transcript + response capture).
-- Conversation state "files" as physical mail into in-tray and drives the narrative sections (Docket Flow).
-- Full mechanical brutalist mail aesthetic: ribbons (perforated tape shear + flutter via GSAP), non-uniform pinned dockets (rot/offset/wear, stamp shadows participate), heavy footer clack ritual.
-- One red accent maximum per surface. Exactly one Fraunces WONK emphasis phrase per major block.
-- Reduced-motion fully static but still sells the 1978 docket board (all stamps, pins, rots, perforations, imprints visible).
-- PRODUCT.md + public/ (and good-ai-design-final.html) are the single source of truth — every creative change must be injected with them.
-- Agent skills: goodai-agent-team + goodai-award-configuration (the 5: impeccable, awwwards-animations, awwwards-ui-skills, gsap-awwwards-website, gsap-framer-scroll-animation) + gsd-* (health, docs-update, progress, plan-phase...) now locally present in .agents/skills and .claude/skills.
-- Direct imports, no barrels. 60fps (refs + transform/opacity/filter only). Hard 90-160ms stamp clacks. No floaty easings.
-- Brand voice: "we", short sentences, practical/warm/direct, "we'll sort the boring stuff", zero hype/AI jargon.
-- Footer + contact: minimal, real human handoff path.
+### Hero
 
-## Ongoing / Gaps
+- [ ] **HERO-01**: Visitor landing on `/` sees `src/components/hero/Hero.tsx` as the first surface, not `VoiceAgentHero`
 
-- Prod voice endpoint + Supertonic tuning / latency.
-- Real lead intake from voice convos (context + contact form/mailto).
-- Additional pages/sections in exact same brutalist language.
-- Lighthouse / perf / a11y on the GSAP heavy flow.
-- gsd hygiene loop (this pass + future /gsd-health before ship).
+### Design system
 
-## Verification (use with gsd-verify-work or manual)
+- [ ] **DS-01**: Visitor sees live UI driven by `public/` tokens (`public/colors_and_type.css` — cream `#FFF0D0`, navy, gold, red, black; Fraunces + DM Sans)
 
-- Open / , speak (or type) a problem → hero captures → filed mail appears in tray.
-- Scroll: ribbons advance with shear/flutter, dockets pin with individual variance, footer clacks and pins.
-- Reduced motion (OS or devtools): everything static, all physical artifacts (stamps, tape, pins, rots) still present and legible.
-- Brand: check one-red, WONK usage, copy tone against PRODUCT.md.
-- Skills present: ls .agents/skills/gsd-health .claude/skills/gsd-health (and siblings).
+### Voice
 
----
+- [ ] **VOICE-01**: Visitor can use the Voice Agent on a dedicated page (e.g. `/voice`); it is not the homepage hero
 
-*Old detailed 175-line v1 reqs archived with the phases. Current site was delivered outside the original phase plan via the award configuration swarm. Future work captured with gsd-plan-phase after award runs.*
-=======
-# Requirements: Good'ai (current — v1.1 lead-gen + automation)
+### Homepage
 
-**Last validated:** 2026-06-24 (re-read against `src/` + git)
-**Note:** Original v1 phase requirements (shader, old lead capture, cursor) are superseded — see `.planning/milestones/v0.9-pre-refactor-phases/`. PRODUCT.md holds the full brand/product spec.
+- [ ] **HOME-01**: Visitor scrolling past the hero sees remaining homepage sections styled with the `public/` design system
 
-## Shipped & verified in code
+## Future Requirements
 
-### Voice + mail-docket experience (v1)
-- Voice Agent hero is the product demo (Supertonic local ASR for dev; transcript + response capture; `onMailFiled` leaks state into the in-tray).
-- Mail-board flow: ribbons (perforated tape shear + flutter via GSAP), non-uniform pinned Docket Flow (rot/offset/wear, participating stamp shadows), sticky in-tray (last-3 dockets), heavy pinned footer clack ritual.
-- One red accent max per surface; exactly one Fraunces WONK phrase per major block.
-- Reduced-motion: fully static, all physical artifacts (stamps, pins, rots, perforations) preserved.
+Deferred. Tracked but not in this milestone's roadmap.
 
-### Lead-gen + automation (v1.1)
-- Website Analyzer: scrape URL → AI Gateway audit → auto-extract business email → email audit via GWS CLI.
-- Outbound callback widget: Darl / Robokev personas, number prefill (`/api/trigger-call`).
-- n8n + GWS lead-automation pipeline (`/api/demo-automation`, LeadCaptureCard, AutomationPlayground).
-- Chat via AI Gateway + text fallback (`/api/chat`) supporting dynamic model backends (Gemini, Groq, Claude) and custom agents (Darl/Robokev); TTS via ElevenLabs (`/api/tts`) with interchangeable voices and custom voice IDs.
+### Hero
 
-### Engineering
-- Next.js 16 / React 19 / Tailwind v4; GSAP/ScrollTrigger + motion/react hybrid; direct imports (no barrels).
-- 60fps hot paths (refs + transform/opacity/filter only); hard 90–160ms stamp clacks.
-- Brand voice: "we", short sentences, practical/warm/direct, zero hype/AI jargon.
+- **HERO-02**: Hero matches `public/` tokens and type (stamp shadows, sharp corners, SKILL.md craft)
+- **HERO-03**: Hero remains readable with reduced motion (static fallback)
 
-## Open requirements / gaps (from 2026-06-24 validation)
+### Design system
 
-- [x] **[prod blocker — DONE `7c47a55`]** GWS CLI path de-hardcoded — env-driven via `GWS_CLI_PATH` + node_modules fallback across the 3 routes; 0 `D:\packages` refs remain.
-- [x] **[prod blocker — DONE `7c47a55`]** n8n trigger-call webhook reads `N8N_CALL_WEBHOOK_URL`, no localhost default (throws/mocks if unset).
-- [x] **[DONE `7c47a55`]** ASR endpoint reads `NEXT_PUBLIC_ASR_URL`; localhost:8000 only as dev fallback/comment.
-- [x] **[DONE `3b92089`]** Canonical design SSOT — `public/design-system-new/` comment refs cleared (0 in src/); canonical = `public/` root + PRODUCT.md.
-- [x] **[DONE 2026-06-17]** In-flight changes committed (Vite `public/voice-feature/*` removal, `globals.css` + `HomeClient.tsx` edits, new `public/assets/` audit images); working tree clean.
-- [ ] **[deploy gate]** Set required env vars in Vercel + host ASR/n8n (see LAUNCH.md).
-- [ ] **[P1]** `api/demo-automation:254` demo webhook still defaults to `localhost:5678` — make env-driven.
-- [ ] Lighthouse / perf / a11y on the GSAP-heavy flow + new sections.
-- [ ] Additional pages/sections in the same brutalist language.
+- **DS-02**: PRODUCT.md rewritten to match `public/`, not the v1 mail-board-as-hero brief
+- **DS-03**: Agents building UI read `public/SKILL.md` as the craft brief
 
-## Required environment
+### Voice
 
-| Var | Used by |
-|-----|---------|
-| `AI_GATEWAY_API_KEY` | chat + website-analyzer audit |
-| `ELEVEN_API_KEY`, `ELEVEN_DEFAULT_VOICE` | TTS |
-| `NEXT_PUBLIC_GWS_SCRIPT_URL` | lead capture (`LeadCaptureCard`) |
-| `N8N_CALL_WEBHOOK_URL` | trigger-call (env-driven, no localhost default; set to hosted n8n for prod) |
-| `GWS_CLI_PATH` | the 3 GWS routes (falls back to node_modules / dev path) |
-| `NEXT_PUBLIC_ASR_URL` | Voice Agent transcription endpoint |
+- **VOICE-02**: Existing Voice Agent wiring preserved (Supertonic / local transcribe path; no rewrite of the agent)
+- **VOICE-03**: Homepage does not file mail from voice (`onMailFiled` / docket leak is not the homepage story)
 
-## Verification (gsd-verify-work / manual)
+### Homepage
 
-- Open `/`, speak or type a problem → hero captures → filed docket appears in sticky in-tray.
-- Scroll: ribbons advance with shear/flutter, Docket Flow cards pin with individual variance, footer pins + clacks (wonk + red lock).
-- Website Analyzer: submit a URL → audit returns → business email extracted → audit dispatched.
-- Outbound widget: select Darl/Robokev, enter number → call triggered.
-- Reduced motion (OS/devtools): everything static, all physical artifacts present and legible.
-- Brand: verify one-red, single WONK per surface, copy tone vs PRODUCT.md.
-- Backends reachable: AI Gateway key set; ASR via `NEXT_PUBLIC_ASR_URL` (Supertonic `:8000` in dev); GWS CLI resolvable via `GWS_CLI_PATH` / node_modules; n8n via `N8N_CALL_WEBHOOK_URL`.
+- **HOME-02**: Mail-board GSAP (ribbons, pins, tray) can come off `/`
+- **HOME-03**: Visitor can still reach contact (mailto or form)
+
+## Out of Scope
+
+Explicitly excluded. Documented to prevent scope creep.
+
+| Feature | Reason |
+|---------|--------|
+| Rewrite the Voice Agent itself | Keep existing config; only move it off `/` |
+| Wipe `.planning/PROJECT.md` via `$gsd-new-project` | Brownfield: v2 updates PROJECT.md, does not delete history |
+| Auth / dashboards / multi-page app chrome | Still not the product |
+| Old shader + custom cursor + shadcn lead-card v1 | Superseded in v1-refactored; stays dead |
+| Next.js blog / services CMS in this repo | This app is intro + demos. Blog/services front and back: Instatic on Railway (`goodai.up.railway.app`) |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| HERO-01 | Phase 1 | Pending |
+| DS-01 | Phase 2 | Pending |
+| VOICE-01 | Phase 1 | Pending |
+| HOME-01 | Phase 2 | Pending |
+
+**Coverage:**
+- v2.0 requirements: 4 total
+- Mapped to phases: 4
+- Unmapped: 0
 
 ---
-
-*Old detailed v1 reqs archived with the phases. v1 + v1.1 features shipped outside the original phase plan; future work should be captured via gsd-plan-phase.*
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
+*Requirements defined: 2026-08-24*
+*Last updated: 2026-08-24 after v2.0 roadmap (traceability)*
