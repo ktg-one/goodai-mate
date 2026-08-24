@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
+import { SURVEY_URL } from "@/lib/links";
 
 const specs = [
     { label: "Best fit", value: "Busy service businesses" },
@@ -50,9 +51,9 @@ export function TechSpecs() {
                             <h3 className="text-2xl font-bold">Bring us one stuck workflow.</h3>
                             <p className="text-brand-paper/70">We&apos;ll tell you what is worth fixing and what is better left alone.</p>
                         </div>
-                        <button className="px-8 py-4 rounded-full bg-brand-coral text-brand-ink font-medium hover:bg-brand-paper focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-coral transition-colors">
+                        <a href={SURVEY_URL} className="px-8 py-4 rounded-full bg-brand-coral text-brand-ink font-medium hover:bg-brand-paper focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-coral transition-colors">
                             Tell us your problem
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>

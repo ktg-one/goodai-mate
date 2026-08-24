@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { SURVEY_URL } from "@/lib/links";
 
 export function Pricing() {
     return (
@@ -35,8 +36,8 @@ export function Pricing() {
                                 ))}
                             </ul>
                         </div>
-                        <Button variant="outline" className="w-full rounded-full py-6 border-brand-ink bg-brand-paper text-brand-ink hover:bg-brand-eucalyptus transition-colors">
-                            Tell us your problem
+                        <Button asChild variant="outline" className="w-full rounded-full py-6 border-brand-ink bg-brand-paper text-brand-ink hover:bg-brand-eucalyptus transition-colors">
+                            <a href={SURVEY_URL}>Tell us your problem</a>
                         </Button>
                     </div>
 
@@ -59,8 +60,8 @@ export function Pricing() {
                                 ))}
                             </ul>
                         </div>
-                        <Button className="w-full rounded-full py-6 bg-brand-coral text-brand-ink hover:bg-brand-paper transition-colors font-medium">
-                            Talk through a sprint
+                        <Button asChild className="w-full rounded-full py-6 bg-brand-coral text-brand-ink hover:bg-brand-paper transition-colors font-medium">
+                            <a href={SURVEY_URL}>Talk through a sprint</a>
                         </Button>
                     </div>
 
@@ -77,8 +78,8 @@ export function Pricing() {
                                 ))}
                             </ul>
                         </div>
-                        <Button variant="outline" className="w-full rounded-full py-6 border-brand-ink bg-brand-paper text-brand-ink hover:bg-brand-eucalyptus transition-colors">
-                            Talk to us
+                        <Button asChild variant="outline" className="w-full rounded-full py-6 border-brand-ink bg-brand-paper text-brand-ink hover:bg-brand-eucalyptus transition-colors">
+                            <a href={SURVEY_URL}>Talk to us</a>
                         </Button>
                     </div>
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SURVEY_URL } from "@/lib/links";
 
 export function Footer() {
     return (
@@ -25,7 +26,7 @@ export function Footer() {
                     <Link href="#story" className="text-sm text-brand-paper/65 hover:text-brand-coral">Our approach</Link>
                     <Link href="https://goodai.up.railway.app/" className="text-sm text-brand-paper/65 hover:text-brand-coral">Field notes</Link>
                     <Link href="#testimonials" className="text-sm text-brand-paper/65 hover:text-brand-coral">What we work on</Link>
-                    <Link href="#pricing" className="text-sm text-brand-paper/65 hover:text-brand-coral">Contact</Link>
+                    <Link href={SURVEY_URL} className="text-sm text-brand-paper/65 hover:text-brand-coral">Contact</Link>
                 </div>
 
                 <div className="flex flex-col gap-4">

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { SURVEY_URL } from "@/lib/links";
 
 export function CTA() {
     return (
@@ -32,8 +33,8 @@ export function CTA() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                 >
-                    <Button size="lg" className="rounded-full px-10 h-14 text-lg bg-brand-coral text-brand-ink hover:bg-brand-paper focus-visible:outline-brand-coral transition-colors shadow-[4px_4px_0_var(--brand-paper)]">
-                        Tell us your problem <ArrowRight className="ml-2 w-5 h-5" />
+                    <Button asChild size="lg" className="rounded-full px-10 h-14 text-lg bg-brand-coral text-brand-ink hover:bg-brand-paper focus-visible:outline-brand-coral transition-colors shadow-[4px_4px_0_var(--brand-paper)]">
+                        <a href={SURVEY_URL}>Tell us your problem <ArrowRight className="ml-2 w-5 h-5" /></a>
                     </Button>
                 </motion.div>
             </div>

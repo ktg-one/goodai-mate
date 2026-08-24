@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetClose } from "@/components/ui/sheet";
+import { SURVEY_URL } from "@/lib/links";
 
 const navLinks = [
     { name: "Features", href: "#features" },
@@ -84,10 +85,11 @@ export function Navbar() {
 
                 {/* Actions */}
                 <div className="hidden md:flex items-center gap-4 ml-8">
-                    <Link href="#pricing" className={cn("text-lg lg:text-xl font-normal text-current opacity-75 hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current transition-opacity", isScrolled ? "hidden lg:block" : "")}>
+                    <Link href={SURVEY_URL} className={cn("text-lg lg:text-xl font-normal text-current opacity-75 hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current transition-opacity", isScrolled ? "hidden lg:block" : "")}>
                         Survey
                     </Link>
                     <Button
+                        asChild
                         size="sm"
                         className={cn(
                             "h-10 rounded-full px-7 text-base lg:text-lg transition-colors font-normal",
@@ -96,13 +98,14 @@ export function Navbar() {
                                 : "bg-brand-paper text-brand-ink hover:bg-brand-coral"
                         )}
                     >
-                        Quick Chat
+                        <Link href={SURVEY_URL}>Quick Chat</Link>
                     </Button>
                 </div>
 
                 {/* Mobile Menu */}
                 <div className="md:hidden flex items-center">
                     <Button
+                        asChild
                         size="sm"
                         className={cn(
                             "rounded-full px-4 transition-colors font-medium mr-2",
@@ -111,7 +114,7 @@ export function Navbar() {
                                 : "bg-brand-paper text-brand-ink hover:bg-brand-coral"
                         )}
                     >
-                        Cuppa?
+                        <Link href={SURVEY_URL}>Cuppa?</Link>
                     </Button>
                     <Sheet>
                         <SheetTrigger asChild>

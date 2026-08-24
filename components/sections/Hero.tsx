@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { TextScramble } from "@/components/ui/TextScramble";
+import { SURVEY_URL } from "@/lib/links";
 
 export function Hero() {
     return (
@@ -51,10 +52,10 @@ export function Hero() {
                     transition={{ duration: 1.2, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
                     className="flex flex-col sm:flex-row items-center gap-6"
                 >
-                    <MagneticButton className="rounded-full px-10 h-14 text-sm uppercase tracking-widest bg-brand-paper text-brand-ink hover:bg-brand-paper/90 transition-colors">
+                    <MagneticButton onClick={() => window.location.assign(SURVEY_URL)} className="rounded-full px-10 h-14 text-sm uppercase tracking-widest bg-brand-paper text-brand-ink hover:bg-brand-paper/90 transition-colors">
                         Repetitive Admin?
                     </MagneticButton>
-                    <MagneticButton className="flex items-center text-sm uppercase tracking-widest text-brand-paper/75 hover:text-brand-paper transition-colors group px-6 py-4">
+                    <MagneticButton onClick={() => window.location.assign(SURVEY_URL)} className="flex items-center text-sm uppercase tracking-widest text-brand-paper/75 hover:text-brand-paper transition-colors group px-6 py-4">
                         Let us sort it <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                     </MagneticButton>
                 </motion.div>
