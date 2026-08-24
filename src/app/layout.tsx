@@ -31,6 +31,12 @@ const fraunces = localFont({
   display: "swap",
 });
 
+const klarissaContour = localFont({
+  src: "../../public/fonts/KlarissaContour.ttf",
+  variable: "--font-contour",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Good'ai — Business Automations, Sorted",
   description: "Perth-based business automations for SMEs. Tell us your problem, we'll figure out how to fix it.",
@@ -57,7 +63,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${jetbrainsMono.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${dmSans.variable} ${jetbrainsMono.variable} ${fraunces.variable} ${klarissaContour.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

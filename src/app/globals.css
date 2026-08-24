@@ -376,6 +376,12 @@ h1, h2,
   font-variation-settings: "WONK" var(--wonk, 0.2), "SOFT" 60, "opsz" 120;
 }
 
+/* "ai" in Klarissa Contour — regular "Good" + script "ai" wordmark treatment */
+.wordmark-ai {
+  font-family: var(--font-contour);
+  font-size: 1.1em;
+}
+
 /* ============================================================
    CHAT INTERFACE & LEAD CAPTURE CARD STYLES
    Brutalist mechanical styling matching colors_and_type.css
