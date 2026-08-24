@@ -1,47 +1,87 @@
 :root {
-  /* New Color Palette (19-08-2026) */
-  --navy: #202B3D;
-  --coral: #F66F61;
-  --teal: #1CABB0;
-  --silver: #D9D9D9;
-  --slate: #282C2D;
+  /* ---------------------------------------------------------
+     COLOUR — the five core brand colours
+     --------------------------------------------------------- */
+    --teal:        #1CABB0;   /* teal accent */
 
-  /* Map new colors to functional semantic tokens */
-  --bg: var(--navy);
-  --fg: var(--silver);
+  --red:         #F66F61;   /* coral-red — primary CTA / shout accent */
+  --red-deep:    #D8331F;
+  --red-tint:    #FBC9C1;
 
-  --bg-raised: #28364D;
-  --bg-sunken: #18202D;
-  --bg-brand: var(--navy);
-  --bg-accent: var(--coral);
-  --bg-gold: var(--teal);
-  --bg-ocean: var(--navy);
+  --navy:        #202B3D;   /* deep navy — primary background */
+  --navy-deep:   #161E3D;
+  --navy-tint:   #C9CEDD;
 
-  --fg-soft: #A3AAB5;
-  --fg-mute: #828B99;
-  --fg-faint: #636A78;
-  --fg-on-brand: var(--silver);
-  --fg-on-ocean: var(--silver);
+  /* ---------------------------------------------------------
+     COLOUR — Neutrals
+     --------------------------------------------------------- */
+  --paper:        #D9D9D9;   /* silver / light grey — primary text on dark bg */
+  --paper-deep:   #C0C0C0;
+  --paper-3:      #A9A9A9;
+  --cream-line:   #E0C690;   /* legacy border */
 
-  --border: var(--slate);
-  --border-strong: #404648;
+  --ink:          #282C2D;   /* slate / near-black */
+  --ink-soft:     #424647;
+  --ink-mute:     #6B6452;
+  --ink-faint:    #A0967C;
 
-  --accent: var(--coral);
-  --accent-hover: #E35D4F;
-  --accent-soft: #FFB3AC;
+  /* ---------------------------------------------------------
+     COLOUR — Supporting (used sparingly)
+     --------------------------------------------------------- */
+  --hi-yellow:    #F3A62A;
+  --trust-blue:   #202B3D;
+  --ok:           #2E6E3E;
+  --warn:         #D8331F;
+  --danger:       #D8331F;
 
-  --highlight: var(--teal);
-  --success: #2E6E3E;
 
-  --gold: var(--teal);
-  --red: var(--coral);
-  --paper: var(--silver);
-  --ink: var(--navy);
+  /* ---------------------------------------------------------
+     LEGACY ALIASES — keep old token names working
+     --------------------------------------------------------- */
+  --gold:         var(--teal);
+  --gold-deep:    #168F94; /* accent-hover */
+  --gold-tint:    #BCE9EA; /* accent-soft */
+  --hi-yellow:    var(--teal);
 
-  --shadow-stamp: 3px 3px 0 var(--slate);
-  --shadow-stamp-orange: 3px 3px 0 var(--coral);
-  --shadow-stamp-ocean: 3px 3px 0 var(--navy);
-  --shadow-stamp-deep: 4px 4px 0 var(--slate);
+  --orange:       var(--red);
+  --orange-deep:  var(--red-deep);
+  --orange-tint:  var(--red-tint);
+  --orange-100:   #FBC9C1;
+  --orange-50:    #FDE9E5;
 
-  --navy-ink: #141A25;
+  --ocean-50:    #E8EAF1;
+  --ocean-100:   #C9CEDD;
+  --ocean-200:   #8A93B4;
+  --ocean-300:   #4A5685;
+  --ocean-400:   var(--navy);
+  --ocean-500:   #1A2349;
+  --ocean-600:   var(--navy-deep);
+
+  /* ---------------------------------------------------------
+     COLOUR — Semantic tokens
+     --------------------------------------------------------- */
+  --bg:            var(--navy);
+  --bg-raised:     var(--navy-deep);
+  --bg-sunken:     var(--ink);
+  --bg-brand:      var(--navy);
+  --bg-accent:     var(--red);
+  --bg-gold:       var(--gold);
+  --bg-ocean:      var(--navy);
+
+  --fg:            var(--paper);
+  --fg-soft:       var(--paper-deep);
+  --fg-mute:       var(--paper-3);
+  --fg-faint:      var(--ink-faint);
+  --fg-on-brand:   var(--paper);
+  --fg-on-ocean:   var(--paper);
+
+  --border:        var(--paper-3);
+  --border-strong: var(--paper-deep);
+
+  --accent:        var(--teal); /* Setting the primary accent to Teal as requested */
+  --accent-hover:  #168F94; /* Darker teal */
+  --accent-soft:   #BCE9EA; /* Lighter teal */
+
+  --highlight:     var(--red); /* Secondary highlight is coral */
+  --success:       var(--ok);
 }

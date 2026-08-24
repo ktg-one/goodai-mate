@@ -6,11 +6,7 @@ import React from 'react';
  * StampCard / ColouredSurface — production brutalist coloured block primitive
  *
  * - Variant-aware stamp shadows (navy/gold/ink/red/paper) that fully participate on hover/press
-<<<<<<< HEAD
- * - Exact 22px padding (4pt scale, matches design-system-new card specimens)
-=======
  * - Exact 22px padding (4pt scale, matches design system card specimens)
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
  * - 4px radii, 2px ink borders
  * - Hover: translate(-2px,-2px) + shadow grow. Active/press: collapse.
  * - engaged: sunk/letterpress state for pinned dockets.

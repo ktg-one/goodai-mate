@@ -1,15 +1,4 @@
 import { defineConfig, globalIgnores } from "eslint/config";
-<<<<<<< HEAD
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
-
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-=======
 import { FlatCompat } from "@eslint/eslintrc";
 import { fileURLToPath } from "node:url";
 
@@ -20,18 +9,11 @@ const compat = new FlatCompat({ baseDirectory: fileURLToPath(new URL(".", import
 const eslintConfig = defineConfig([
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   globalIgnores([
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
     ".next/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
     "public/**",
-<<<<<<< HEAD
-  ]),
-]);
-
-export default eslintConfig;
-=======
     ".agent_context/**",
     ".agents/**",
     ".understand-anything/**",
@@ -90,4 +72,3 @@ export default eslintConfig;
 ]);
 
 export default eslintConfig;
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)

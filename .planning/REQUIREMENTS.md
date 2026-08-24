@@ -1,80 +1,60 @@
-# Requirements: Good'ai — v2.0 Design system + hero
+# Requirements: Good'ai (current — v1.1 lead-gen + automation)
 
-**Defined:** 2026-08-24
-**Core Value:** Give small business owners their time back. The new homepage hero + `public/` design system must make a Perth tradie want to drop a line. Voice stays a real product surface — on its own page.
+**Last validated:** 2026-06-24 (re-read against `src/` + git)
+**Note:** Original v1 phase requirements (shader, old lead capture, cursor) are superseded — see `.planning/milestones/v0.9-pre-refactor-phases/`. PRODUCT.md holds the full brand/product spec.
 
-## Milestone v2.0 Requirements
+## Shipped & verified in code
 
-Requirements for this milestone. Each maps to roadmap phases.
+### Voice + mail-docket experience (v1)
+- Voice Agent hero is the product demo (Supertonic local ASR for dev; transcript + response capture; `onMailFiled` leaks state into the in-tray).
+- Mail-board flow: ribbons (perforated tape shear + flutter via GSAP), non-uniform pinned Docket Flow (rot/offset/wear, participating stamp shadows), sticky in-tray (last-3 dockets), heavy pinned footer clack ritual.
+- One red accent max per surface; exactly one Fraunces WONK phrase per major block.
+- Reduced-motion: fully static, all physical artifacts (stamps, pins, rots, perforations) preserved.
 
-### Hero
+### Lead-gen + automation (v1.1)
+- Website Analyzer: scrape URL → AI Gateway audit → auto-extract business email → email audit via GWS CLI.
+- Outbound callback widget: Darl / Robokev personas, number prefill (`/api/trigger-call`).
+- n8n + GWS lead-automation pipeline (`/api/demo-automation`, LeadCaptureCard, AutomationPlayground).
+- Chat via AI Gateway + text fallback (`/api/chat`) supporting dynamic model backends (Gemini, Groq, Claude) and custom agents (Darl/Robokev); TTS via ElevenLabs (`/api/tts`) with interchangeable voices and custom voice IDs.
 
-- [ ] **HERO-01**: Visitor landing on `/` sees `src/components/hero/Hero.tsx` as the first surface, not `VoiceAgentHero`
+### Engineering
+- Next.js 16 / React 19 / Tailwind v4; GSAP/ScrollTrigger + motion/react hybrid; direct imports (no barrels).
+- 60fps hot paths (refs + transform/opacity/filter only); hard 90–160ms stamp clacks.
+- Brand voice: "we", short sentences, practical/warm/direct, zero hype/AI jargon.
 
-### Design system
+## Open requirements / gaps (from 2026-06-24 validation)
 
-- [ ] **DS-01**: Visitor sees live UI driven by `public/` tokens (`public/colors_and_type.css` — cream `#FFF0D0`, navy, gold, red, black; Fraunces + DM Sans)
+- [x] **[prod blocker — DONE `7c47a55`]** GWS CLI path de-hardcoded — env-driven via `GWS_CLI_PATH` + node_modules fallback across the 3 routes; 0 `D:\packages` refs remain.
+- [x] **[prod blocker — DONE `7c47a55`]** n8n trigger-call webhook reads `N8N_CALL_WEBHOOK_URL`, no localhost default (throws/mocks if unset).
+- [x] **[DONE `7c47a55`]** ASR endpoint reads `NEXT_PUBLIC_ASR_URL`; localhost:8000 only as dev fallback/comment.
+- [x] **[DONE `3b92089`]** Canonical design SSOT — `public/design-system-new/` comment refs cleared (0 in src/); canonical = `public/` root + PRODUCT.md.
+- [x] **[DONE 2026-06-17]** In-flight changes committed (Vite `public/voice-feature/*` removal, `globals.css` + `HomeClient.tsx` edits, new `public/assets/` audit images); working tree clean.
+- [ ] **[deploy gate]** Set required env vars in Vercel + host ASR/n8n (see LAUNCH.md).
+- [ ] **[P1]** `api/demo-automation:254` demo webhook still defaults to `localhost:5678` — make env-driven.
+- [ ] Lighthouse / perf / a11y on the GSAP-heavy flow + new sections.
+- [ ] Additional pages/sections in the same brutalist language.
 
-### Voice
+## Required environment
 
-- [ ] **VOICE-01**: Visitor can use the Voice Agent on a dedicated page (e.g. `/voice`); it is not the homepage hero
+| Var | Used by |
+|-----|---------|
+| `AI_GATEWAY_API_KEY` | chat + website-analyzer audit |
+| `ELEVEN_API_KEY`, `ELEVEN_DEFAULT_VOICE` | TTS |
+| `NEXT_PUBLIC_GWS_SCRIPT_URL` | lead capture (`LeadCaptureCard`) |
+| `N8N_CALL_WEBHOOK_URL` | trigger-call (env-driven, no localhost default; set to hosted n8n for prod) |
+| `GWS_CLI_PATH` | the 3 GWS routes (falls back to node_modules / dev path) |
+| `NEXT_PUBLIC_ASR_URL` | Voice Agent transcription endpoint |
 
-### Homepage
+## Verification (gsd-verify-work / manual)
 
-- [ ] **HOME-01**: Visitor scrolling past the hero sees remaining homepage sections styled with the `public/` design system
-
-## Future Requirements
-
-Deferred. Tracked but not in this milestone's roadmap.
-
-### Hero
-
-- **HERO-02**: Hero matches `public/` tokens and type (stamp shadows, sharp corners, SKILL.md craft)
-- **HERO-03**: Hero remains readable with reduced motion (static fallback)
-
-### Design system
-
-- **DS-02**: PRODUCT.md rewritten to match `public/`, not the v1 mail-board-as-hero brief
-- **DS-03**: Agents building UI read `public/SKILL.md` as the craft brief
-
-### Voice
-
-- **VOICE-02**: Existing Voice Agent wiring preserved (Supertonic / local transcribe path; no rewrite of the agent)
-- **VOICE-03**: Homepage does not file mail from voice (`onMailFiled` / docket leak is not the homepage story)
-
-### Homepage
-
-- **HOME-02**: Mail-board GSAP (ribbons, pins, tray) can come off `/`
-- **HOME-03**: Visitor can still reach contact (mailto or form)
-
-## Out of Scope
-
-Explicitly excluded. Documented to prevent scope creep.
-
-| Feature | Reason |
-|---------|--------|
-| Rewrite the Voice Agent itself | Keep existing config; only move it off `/` |
-| Wipe `.planning/PROJECT.md` via `$gsd-new-project` | Brownfield: v2 updates PROJECT.md, does not delete history |
-| Auth / dashboards / multi-page app chrome | Still not the product |
-| Old shader + custom cursor + shadcn lead-card v1 | Superseded in v1-refactored; stays dead |
-| Next.js blog / services CMS in this repo | This app is intro + demos. Blog/services front and back: Instatic on Railway (`goodai.up.railway.app`) |
-
-## Traceability
-
-Which phases cover which requirements. Updated during roadmap creation.
-
-| Requirement | Phase | Status |
-|-------------|-------|--------|
-| HERO-01 | Phase 1 | Pending |
-| DS-01 | Phase 2 | Pending |
-| VOICE-01 | Phase 1 | Pending |
-| HOME-01 | Phase 2 | Pending |
-
-**Coverage:**
-- v2.0 requirements: 4 total
-- Mapped to phases: 4
-- Unmapped: 0
+- Open `/`, speak or type a problem → hero captures → filed docket appears in sticky in-tray.
+- Scroll: ribbons advance with shear/flutter, Docket Flow cards pin with individual variance, footer pins + clacks (wonk + red lock).
+- Website Analyzer: submit a URL → audit returns → business email extracted → audit dispatched.
+- Outbound widget: select Darl/Robokev, enter number → call triggered.
+- Reduced motion (OS/devtools): everything static, all physical artifacts present and legible.
+- Brand: verify one-red, single WONK per surface, copy tone vs PRODUCT.md.
+- Backends reachable: AI Gateway key set; ASR via `NEXT_PUBLIC_ASR_URL` (Supertonic `:8000` in dev); GWS CLI resolvable via `GWS_CLI_PATH` / node_modules; n8n via `N8N_CALL_WEBHOOK_URL`.
 
 ---
-*Requirements defined: 2026-08-24*
-*Last updated: 2026-08-24 after v2.0 roadmap (traceability)*
+
+*Old detailed v1 reqs archived with the phases. v1 + v1.1 features shipped outside the original phase plan; future work should be captured via gsd-plan-phase.*

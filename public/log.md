@@ -1,3 +1,8 @@
-# Palette Execution Log
-- [x] Check that New color palette (Navy #202B3D, Coral #F66F61, Teal #1CABB0, Silver #D9D9D9, Slate #282C2D) and set the default background (--bg) to Navy and foreground (--fg) to Silver.
-- [x] Apply `public/assets/shapes/shape-big-*.svg` background to every 2nd viewport and bare cards.
+- [x] Added aria-label to Custom Voice ID inputs in VoiceAgentHero and gem-voice components for accessibility.
+- [x] Integrated design token imports to globals.css.
+- [x] Updated layout to use brand fonts (Fraunces and DM Sans) and mapped them to global CSS variables.
+- [x] Populated modular design token files in src/app/tokens/.
+- [x] Added accessible Brutalist focus states to buttons (.gai-btn, .gai-tool).
+- [x] Added brand-aligned text selection styling
+- [x] Replaced raw rgba() values with CSS color-mix() to strictly adhere to design tokens.
+- [x] Apply background SVG shapes to viewports and bare cards.

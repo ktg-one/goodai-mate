@@ -1,122 +1,73 @@
----
-last_mapped_commit: 499a6fa1425d928d77d272e4bc4eb0e029745c14
----
-# External Integrations
+# Integrations
 
-**Analysis Date:** 2026-08-24
+Mapped: 2026-05-25
 
-## APIs & External Services
+## Product Assumption
 
-**Payment Processing:**
-- Not detected
+The intended integration surface is the Next.js site.
+The Gemini Live integration under `public/voice-feature/` is documented only as a stray prototype/reference, not as the current site direction.
 
-**Email/SMS:**
-- Gmail via Google Workspace CLI (`gws gmail users messages send`) — demo lead notification in `src/app/api/demo-automation/route.ts`
-  - SDK/Client: local Node CLI `@googleworkspace/cli` (`GWS_PATH` hardcoded)
-  - Auth: CLI login on the developer machine (not env-based in this repo)
-- Google Apps Script `MailApp` — `google-apps-script.js` notifies `NOTIFY_EMAIL` (`kevinktg@goodai.au`) when a lead POSTs
-- ElevenLabs TTS — streaming speech for Voice Agent hero
-  - Integration: `fetch` in `src/app/api/tts/route.ts` to `https://api.elevenlabs.io/v1/text-to-speech/{voiceId}/stream`
-  - Auth: `ELEVEN_API_KEY` (header `xi-api-key`); optional `ELEVEN_DEFAULT_VOICE`
-  - Model: `eleven_turbo_v2_5`; client voice picker in `src/components/voice-agent/VoiceAgentHero.tsx`
+## Vercel Hosting
 
-**External APIs:**
-- Vercel AI Gateway (OpenAI-compatible) — chat + website analysis
-  - SDK: `@ai-sdk/openai-compatible` + `ai` (`streamText` / `generateText`)
-  - Auth: `AI_GATEWAY_API_KEY`
-  - Base URL: `https://ai-gateway.vercel.sh/v1`
-  - Model id: `anthropic/claude-sonnet-4-20250514`
-  - Routes: `src/app/api/chat/route.ts` (UI stream + one-shot `{ message }`), `src/app/api/analyze-website/route.ts`
-  - Client: `useChat` + `DefaultChatTransport` in `src/components/ChatInterface.tsx`; Voice hero POSTs `/api/chat`
-- Target websites (unauthenticated HTML fetch) — analyzer scrapes user-supplied URL in `src/app/api/analyze-website/route.ts` (4s timeout, browser UA)
-- n8n — workflow webhooks
-  - Outbound call: `N8N_CALL_WEBHOOK_URL` or default `http://localhost:5678/webhook/goodai-call` (`src/app/api/trigger-call/route.ts`)
-  - Lead pipeline: request `n8nUrl` or default `http://localhost:5678/webhook/goodai-demo` (`src/app/api/demo-automation/route.ts`)
-  - Events: `voice_callback_requested`, `goodai_lead_captured`
-- Supertonic (local ASR) — Voice Agent hero transcription
-  - Integration: `POST` FormData `file` + `language=en` in `src/lib/voice/supertonic.ts`
-  - Default: `http://localhost:8000/transcribe` (`VoiceAgentHero` prop `supertonicUrl`)
-  - Auth: none in adapter
-- Google Workspace (Sheets, Docs, Calendar, Gmail) via `gws` CLI — `src/app/api/demo-automation/route.ts`, optional GWS side-calls in `analyze-website/route.ts` and `trigger-call/route.ts`
-- Nested prototypes only (not Next production): Google GenAI (`GEMINI_API_KEY`) in `public/hero/server.ts` and `public/voice-feature/server.ts`
+- `vercel.json` declares the framework as Next.js.
+- `src/app/layout.tsx` exports `dynamic = 'force-dynamic'`.
+- `src/app/page.tsx` also exports `dynamic = 'force-dynamic'`.
+- `src/app/api/chat/route.ts` exports `maxDuration = 60`, which is relevant to Vercel route execution limits.
 
-## Data Storage
+## Vercel AI Gateway
 
-**Databases:**
-- Not applicable for the marketing app — no Prisma/Supabase/DB client in `src/`
-- `DATABASE_URL` appears only in `src/types/env.d.ts` (unused)
-- Local agent-memory binaries (`data/state_store.db/`, `in-memoria.db`) are tooling artifacts, not application storage
+- `src/app/api/chat/route.ts` creates an OpenAI-compatible client through `createOpenAICompatible`.
+- The base URL is `https://ai-gateway.vercel.sh/v1`.
+- The API key comes from `process.env.AI_GATEWAY_API_KEY`.
+- The selected model is `anthropic/claude-sonnet-4-20250514`.
+- The route streams output using `streamText` and returns `toUIMessageStreamResponse()`.
+- The system prompt comes from `src/lib/chatPersona.ts`.
 
-**File Storage:**
-- Local filesystem / `public/` static assets (`public/assets/`, `public/fonts/`, `public/hero/`)
-- No S3/Supabase Storage SDK
+## Chat API Contract
 
-**Caching:**
-- None (Redis not present). Next layout is `force-dynamic` (`src/app/layout.tsx`)
+- Endpoint: `POST /api/chat` from `src/app/api/chat/route.ts`.
+- Expected body shape: `{ messages: UIMessage[] }`.
+- Invalid or empty `messages` returns `{ error: 'Messages array required' }` with status 400.
+- Valid requests are converted with `convertToModelMessages(messages)`.
+- Output token cap is currently `maxOutputTokens: 300`.
 
-## Authentication & Identity
+## Web3Forms Lead Capture
 
-**Auth Provider:**
-- Not detected — no login, sessions, or JWT in `src/`
-- `AUTH_SECRET` in `src/types/env.d.ts` only
+- `src/components/LeadCaptureCard.tsx` posts to `https://api.web3forms.com/submit`.
+- It sends `access_key`, `subject`, `from_name`, contact fields, the first visitor message, and the conversation transcript.
+- The access key is read from `process.env.NEXT_PUBLIC_WEB3FORMS_KEY`.
+- Provider errors are swallowed intentionally so the visitor is not blocked.
+- The current form marks success after the fetch attempt regardless of provider response content.
 
-**OAuth Integrations:**
-- Google Workspace CLI OAuth lives on the local machine running `gws` (outside this repo)
-- Google Apps Script runs as the spreadsheet owner (`google-apps-script.js`)
+## Fonts
 
-## Monitoring & Observability
+- `src/app/layout.tsx` uses `next/font/google` for DM Sans and JetBrains Mono.
+- `src/app/layout.tsx` uses `next/font/local` for two Fraunces files under `public/fonts/`.
+- Current concern: both Fraunces files in `public/fonts/` are zero-byte files, so font loading/build behavior is likely broken.
 
-**Error Tracking:**
-- None (no Sentry/Datadog SDK)
+## Images And Brand Assets
 
-**Analytics:**
-- None. `NEXT_PUBLIC_ENABLE_ANALYTICS` is typed in `src/types/env.d.ts` but unused
+- `src/components/HeroSection.tsx` uses `next/image`.
+- It references `/assets/logo-mark.svg`.
+- Current concern: `public/assets/logo-mark.svg` is not present in the current file list.
+- Current concern: `public/assets/` now only contains `public/assets/goodai/uploads/G.jpg`, so the active hero asset path must be repointed or restored.
 
-**Logs:**
-- `console.error` / `console.log` in API routes (`src/app/api/*/route.ts`)
-- Production: Vercel function logs (stdout)
-- `src/app/global-error.tsx` — client error UI, not a third-party reporter
+## No Current Database
 
-## CI/CD & Deployment
+- `DATABASE_URL` exists in `.env.example`.
+- No database client, ORM, migrations, or data access layer were found in `src/`.
+- No server action or API route currently persists lead data.
 
-**Hosting:**
-- Vercel — `vercel.json` `{ "framework": "nextjs" }`
-- Deployment: standard Vercel Git integration (no workflow YAML in `.github/workflows/`)
-- Env vars: set in Vercel project settings (`AI_GATEWAY_API_KEY`, `ELEVEN_API_KEY`, etc.)
+## No Current Auth Provider
 
-**CI Pipeline:**
-- None — `.github/` contains `prompts/` only (`mrrug.prompt.md`), no Actions workflows
+- `AUTH_SECRET` exists in `.env.example`.
+- No auth library or authenticated route group was found.
+- No middleware file was found.
 
-## Environment Configuration
+## Voice Feature Prototype
 
-**Development:**
-- Required for full Voice + chat: `AI_GATEWAY_API_KEY`, `ELEVEN_API_KEY` (optional `ELEVEN_DEFAULT_VOICE`)
-- Optional: `NEXT_PUBLIC_GWS_SCRIPT_URL` (Apps Script web app URL), `N8N_CALL_WEBHOOK_URL`
-- Secrets location: `.env.local` (gitignored) — existence only; never commit values
-- Local stubs: n8n on `:5678`, Supertonic on `:8000`, `gws` CLI at `D:\packages\npm-global\node_modules\@googleworkspace\cli\run.js`
-- Nested Vite demos: `GEMINI_API_KEY` if running `public/hero` or `public/voice-feature`
-
-**Staging:**
-- Not detected (single Vercel project assumed)
-
-**Production:**
-- Secrets management: Vercel environment variables
-- Do not rely on local `gws` `execFile` or `localhost` n8n/Supertonic on Vercel
-- Failover: chat returns 503 if `AI_GATEWAY_API_KEY` missing (`src/app/api/chat/route.ts`); TTS 500 if `ELEVEN_API_KEY` missing (`src/app/api/tts/route.ts`)
-
-## Webhooks & Callbacks
-
-**Incoming:**
-- None in the Next app (no `/api/webhooks/*`)
-- Google Apps Script `doPost` in `google-apps-script.js` — deployed as a Google web app; client POSTs from `LeadCaptureCard` with `mode: 'no-cors'`
-
-**Outgoing:**
-- n8n `POST` JSON — `src/app/api/trigger-call/route.ts` (3.5s abort), `src/app/api/demo-automation/route.ts` (4s abort); timeout treated as simulated success for demos
-- ElevenLabs stream proxy — `src/app/api/tts/route.ts`
-- AI Gateway HTTPS — chat/analyze routes
-- Apps Script URL when `NEXT_PUBLIC_GWS_SCRIPT_URL` is set
-
----
-
-*Integration audit: 2026-08-24*
-*Update when adding/removing external services*
+- `public/voice-feature/server.ts` uses `@google/genai`, Express, and `ws`.
+- It expects `GEMINI_API_KEY`.
+- It opens a WebSocket endpoint at `/ws/live`.
+- It uses model `gemini-3.1-flash-live-preview`.
+- Because the product is meant to be the Next site, this folder should not drive architecture until explicitly adopted.

@@ -1,39 +1,11 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
-<<<<<<< HEAD
-import { convertToModelMessages, streamText, generateText, UIMessage } from 'ai';
-import { SYSTEM_PROMPT } from '@/lib/chatPersona';
-=======
 import { convertToModelMessages, streamText, generateText } from 'ai';
 import { getSystemPrompt } from '@/lib/chatPersona';
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
 
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
   try {
-<<<<<<< HEAD
-    const { messages, message } = await req.json();
-
-    const gatewayApiKey = process.env.AI_GATEWAY_API_KEY;
-
-    if (!gatewayApiKey) {
-      return new Response(
-        "Chat is temporarily unavailable while the AI gateway is being configured. Leave your details and we'll get back to you.",
-        { status: 503 },
-      );
-    }
-
-    const gateway = createOpenAICompatible({
-      name: 'openai',
-      apiKey: gatewayApiKey,
-      baseURL: 'https://ai-gateway.vercel.sh/v1',
-    });
-
-    if (message) {
-      const result = await generateText({
-        model: gateway('anthropic/claude-sonnet-4-20250514'),
-        system: SYSTEM_PROMPT,
-=======
     const { messages, message, model, agent } = await req.json();
 
     const gatewayApiKey = process.env.AI_GATEWAY_API_KEY;
@@ -81,7 +53,6 @@ export async function POST(req: Request) {
       const result = await generateText({
         model: modelInstance,
         system: systemPrompt,
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
         prompt: message,
         maxOutputTokens: 300,
       });
@@ -93,13 +64,8 @@ export async function POST(req: Request) {
     }
 
     const result = streamText({
-<<<<<<< HEAD
-      model: gateway('anthropic/claude-sonnet-4-20250514'),
-      system: SYSTEM_PROMPT,
-=======
       model: modelInstance,
       system: systemPrompt,
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
       messages: await convertToModelMessages(messages),
       maxOutputTokens: 300,
     });

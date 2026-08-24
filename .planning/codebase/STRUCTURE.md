@@ -1,231 +1,90 @@
----
-last_mapped_commit: 499a6fa1425d928d77d272e4bc4eb0e029745c14
----
-# Codebase Structure
+# Structure
 
-**Analysis Date:** 2026-08-24
+Mapped: 2026-05-25
 
-## Directory Layout
+## Top-Level Layout
 
-```
-goodai-mate/
-├── src/
-│   ├── app/                    # App Router: layout, home, tokens, API
-│   │   ├── api/                # Route handlers (POST)
-│   │   │   ├── chat/
-│   │   │   ├── tts/
-│   │   │   ├── analyze-website/
-│   │   │   ├── demo-automation/
-│   │   │   └── trigger-call/
-│   │   ├── tokens/             # CSS design tokens
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   ├── globals.css
-│   │   ├── global-error.tsx
-│   │   └── not-found.tsx
-│   ├── components/             # All React UI
-│   │   ├── brand/              # Wordmark + legacy stamp re-export
-│   │   ├── hero/               # Visualizer + unused Hero
-│   │   ├── marketing/          # Why, Manifest, Solutions, Analyzer, Voice demo
-│   │   ├── voice-agent/        # VoiceAgentHero, OutboundCallCard
-│   │   ├── ui/                 # shadcn-style primitives
-│   │   ├── HomeClient.tsx      # Page composition
-│   │   ├── ChatInterface.tsx
-│   │   ├── LeadCaptureCard.tsx
-│   │   ├── AutomationPlayground.tsx
-│   │   ├── StampButton.tsx
-│   │   └── StampCard.tsx
-│   ├── lib/                    # cn, persona, ASR adapter
-│   │   └── voice/supertonic.ts
-│   ├── types/                  # api.d.ts, env.d.ts, glsl.d.ts
-│   └── capture.spec.js         # Playwright capture
-├── public/                     # Fonts, logos, design HTML kits
-│   ├── assets/
-│   ├── fonts/
-│   ├── hero/                   # Isolated Vite hero (excluded from tsc)
-│   ├── voice-feature/          # Isolated Vite voice demo
-│   ├── preview/                # Static design-system HTML
-│   └── ui_kits/
-├── docs/agents/                # Domain/issue tracker notes
-├── data/                       # Local memory/stream binaries (not app source)
-├── .planning/                  # GSD planning docs
-├── next.config.ts
-├── vercel.json
-├── package.json
-├── tsconfig.json
-├── eslint.config.mjs
-├── components.json             # shadcn/ui config
-└── google-apps-script.js       # GAS lead webhook script (companion)
-```
+- `src/` contains the intended Next.js application.
+- `public/` contains brand assets, design-system references, previews, and a stray voice prototype.
+- `.planning/` contains project planning and codebase maps.
+- `.agents/`, `.claude/`, `.codex/`, and `.mcp/` contain local agent/tooling configuration.
+- `docs/agents/` contains project notes for agent workflows.
+- `mcp-webdev/` appears to be local MCP/tooling material.
 
-## Directory Purposes
+## Runtime App
 
-**src/app/**
-- Purpose: Next.js App Router root. Only production routes live here.
-- Contains: `layout.tsx`, `page.tsx`, CSS, error/404, `api/*/route.ts`
-- Key files: `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/globals.css`
-- Subdirectories: `api/` (one folder per endpoint), `tokens/` (colors, type, spacing, effects, fonts)
+- `src/app/layout.tsx` defines global fonts, metadata, dynamic rendering, and the HTML/body shell.
+- `src/app/page.tsx` defines home-page metadata and renders `HomeClient`.
+- `src/app/not-found.tsx` defines the branded 404 page.
+- `src/app/globals.css` defines Tailwind imports, theme tokens, base styles, brand classes, and keyframes.
+- `src/app/api/chat/route.ts` defines the chat streaming API route.
 
-**src/app/api/**
-- Purpose: Server `POST` handlers. One `route.ts` per capability.
-- Contains: TypeScript route modules
-- Key files: `chat/route.ts`, `tts/route.ts`, `analyze-website/route.ts`, `demo-automation/route.ts`, `trigger-call/route.ts`
+## Components
 
-**src/components/**
-- Purpose: All React UI for the marketing site.
-- Contains: `*.tsx` feature files and feature folders
-- Key files: `HomeClient.tsx` (compose the page), `StampButton.tsx`, `StampCard.tsx`
-- Subdirectories:
-  - `marketing/` — scroll sections
-  - `voice-agent/` — hero product + outbound call card
-  - `hero/` — WebGL visualizer
-  - `brand/` — `BrandWordmark.tsx`
-  - `ui/` — badge, button, card, dialog, form, input, label, skeleton
+- `src/components/HomeClient.tsx` is a thin wrapper around `HeroSection`.
+- `src/components/HeroSection.tsx` contains most of the visible home page.
+- `src/components/ChatInterface.tsx` currently exists but is zero bytes.
+- `src/components/LeadCaptureCard.tsx` contains the lead-capture form and Web3Forms submit behavior.
+- `src/components/NoiseOverlay.tsx` contains a noise/vignette overlay but is not currently referenced by the home page.
+- `src/components/ui/` contains reusable shadcn-style primitives.
 
-**src/lib/**
-- Purpose: Shared non-UI helpers.
-- Contains: `utils.ts` (`cn`), `chatPersona.ts`, `voice/supertonic.ts`
-- Key files: `src/lib/chatPersona.ts` (imported only by chat route)
+## UI Primitives
 
-**src/types/**
-- Purpose: Ambient/shared TS types.
-- Contains: `api.d.ts`, `env.d.ts`, `glsl.d.ts`
+- `src/components/ui/button.tsx` exports `Button` and `buttonVariants`.
+- `src/components/ui/badge.tsx` exports badge primitives.
+- `src/components/ui/card.tsx` exports card primitives.
+- `src/components/ui/dialog.tsx` exports dialog primitives.
+- `src/components/ui/form.tsx` exports form helpers.
+- `src/components/ui/input.tsx` exports input primitives.
+- `src/components/ui/label.tsx` exports label primitives.
+- `src/components/ui/skeleton.tsx` exports skeleton primitives.
 
-**public/**
-- Purpose: Static assets and design-system dumps.
-- Contains: SVG/PNG logos, Fraunces/DM Sans fonts, HTML previews, nested Vite sketches
-- Key files: `public/assets/`, `public/fonts/`, `public/colors_and_type.css`
-- Do not treat `public/hero/` or `public/voice-feature/` as App Router source (`tsconfig.json` excludes them)
+## Libraries And Types
 
-**docs/agents/**
-- Purpose: Agent domain notes (`domain.md`, `issue-tracker.md`, `triage-labels.md`)
+- `src/lib/utils.ts` exports the `cn()` class merge helper.
+- `src/lib/chatPersona.ts` exports the Good'ai chat system prompt.
+- `src/types/api.d.ts`, `src/types/env.d.ts`, and `src/types/glsl.d.ts` contain ambient/project type declarations.
 
-**.planning/**
-- Purpose: GSD project/roadmap/codebase maps. Write maps to `.planning/codebase/`
+## Public Design System
 
-## Key File Locations
+- `public/README.md` documents the Good'ai brand system.
+- `public/SKILL.md` exposes the public design system as a skill-like artifact.
+- `public/colors_and_type.css` contains brand tokens and type utilities.
+- `public/ui_kits/web/` contains a static web UI kit.
+- `public/preview/` contains standalone design preview pages.
+- `public/assets/` currently contains only `goodai/uploads/G.jpg`.
+- `public/fonts/` is intended to contain local Fraunces font files.
 
-**Entry Points:**
-- `src/app/layout.tsx`: Root HTML, fonts, `force-dynamic`
-- `src/app/page.tsx`: Home metadata + `<HomeClient />`
-- `src/components/HomeClient.tsx`: Mail-board page body
-- `src/app/api/*/route.ts`: POST APIs
-- `src/app/global-error.tsx` / `src/app/not-found.tsx`: Fallback UIs
+## Stray Prototype
 
-**Configuration:**
-- `package.json`: Next 16, React 19, scripts (`dev`/`build`/`start`/`lint`)
-- `next.config.ts`: GLSL raw-loader (turbopack + webpack)
-- `tsconfig.json`: `@/*` → `./src/*`
-- `vercel.json`: `{ "framework": "nextjs" }`
-- `eslint.config.mjs`: ESLint 9 + next
-- `postcss.config.mjs`: Tailwind 4
-- `components.json`: shadcn
-- `.env.local` / `.env*`: present for secrets — **do not read or quote**
+- `public/voice-feature/` is a separate Vite/React/Express/Gemini Live project.
+- Its files include `public/voice-feature/package.json`, `public/voice-feature/server.ts`, `public/voice-feature/vite.config.ts`, and `public/voice-feature/src/App.tsx`.
+- `public/voice-feature.zip` is the archived copy of that prototype.
+- Because it lives under `public/`, it is structurally mixed into the static asset tree even though it is not the intended Next site.
+- Treat it as cleanup/future-reference unless the product direction changes again.
 
-**Core Logic:**
-- `src/lib/chatPersona.ts`: Intake system prompt
-- `src/lib/voice/supertonic.ts`: Local ASR
-- `src/components/voice-agent/VoiceAgentHero.tsx`: Voice product loop
-- `src/components/ChatInterface.tsx`: Text chat + lead reveal
-- `src/app/api/chat/route.ts`: LLM gateway
-- `src/app/api/tts/route.ts`: ElevenLabs
-- `src/app/api/demo-automation/route.ts`: GWS/n8n lead pipeline
+## Configuration Files
 
-**Testing:**
-- `src/capture.spec.js`: Playwright screenshot capture
-- `test-results/`: Playwright output (generated)
+- `package.json` defines root dependencies and scripts.
+- `package-lock.json` is a symbolic link to `C:\Users\kevin\projects2026\06-projects-code\nextjs\package-lock.json`.
+- `next.config.ts` configures Next and shader loaders.
+- `tsconfig.json` defines TypeScript settings and aliases.
+- `eslint.config.mjs` defines Next/TypeScript linting.
+- `postcss.config.mjs` configures Tailwind CSS v4 PostCSS support.
+- `components.json` configures shadcn-style component generation.
+- `vercel.json` identifies the project as a Next.js framework deployment.
 
-**Documentation:**
-- `README.md`, `PRODUCT.md`, `DESIGN-GAPS.md`, `design-fidelity-scope.md`
-- `public/README.md`, `public/SKILL.md`
+## Naming Conventions Observed
 
-## Naming Conventions
+- Component files in `src/components/` use PascalCase.
+- UI primitive files in `src/components/ui/` use lowercase names.
+- Utility files in `src/lib/` use camelCase.
+- API route files use `route.ts`.
+- Ambient type files use `.d.ts`.
 
-**Files:**
-- PascalCase `.tsx` for React components: `VoiceAgentHero.tsx`, `HomeClient.tsx`
-- kebab-case folders for features: `voice-agent/`, `analyze-website/`
-- `route.ts` for App Router handlers
-- `index.ts` barrels exist in `hero/`, `voice-agent/`, `brand/` — prefer **direct file imports** for stamps
-- CSS tokens: `src/app/tokens/*.css`
+## Current Structural Mismatch
 
-**Directories:**
-- kebab-case for API and feature folders
-- `ui/` for generic primitives; `marketing/` for page sections
-
-**Special Patterns:**
-- `'use client'` on every interactive component
-- Default export for page sections (`WhyGoodAI`, `WebsiteAnalyzer`)
-- Named export for `VoiceAgentHero`, `Visualizer`, `BrandWordmark`
-
-## Where to Add New Code
-
-**New marketing section:**
-- Primary: `src/components/marketing/YourSection.tsx`
-- Wire into `src/components/HomeClient.tsx` (import + place in mail-board order)
-- Tests: `src/` Playwright spec or co-located `*.spec.ts` if adding tests
-- Styles: reuse tokens in `src/app/tokens/` and classes in `src/app/globals.css`; do not invent a parallel palette
-
-**New page/route:**
-- Definition: `src/app/<segment>/page.tsx`
-- Shared layout already in `src/app/layout.tsx`
-- There is currently only `/`. Add a folder under `src/app/` for a second URL.
-
-**New API endpoint:**
-- Handler: `src/app/api/<name>/route.ts` exporting `POST`
-- Call from client with `fetch('/api/<name>')`
-- Keep secrets in env; never `NEXT_PUBLIC_` for gateway/ElevenLabs keys
-
-**New component:**
-- Implementation: `src/components/<Feature>.tsx` or `src/components/<feature-folder>/`
-- Stamp CTA: compose `src/components/StampButton.tsx` / `StampCard.tsx`
-- Generic form bits: `src/components/ui/`
-- Types: colocated or `src/types/`
-
-**New voice/TTS behavior:**
-- Client: `src/components/voice-agent/`
-- ASR adapter: `src/lib/voice/`
-- Server TTS: `src/app/api/tts/route.ts`
-
-**Utilities:**
-- Shared helpers: `src/lib/`
-- Class merge: `cn` from `src/lib/utils.ts`
-
-**New design token:**
-- Add to the matching file under `src/app/tokens/` and consume via CSS variables in `globals.css`
-
-**Do not add production app code in:**
-- `public/hero/`, `public/voice-feature/`, `public/preview/`, `public/ui_kits/`
-- `data/`, `in-memoria*.db`, root `audit-*.png`, `patch_chat*.diff`
-
-## Special Directories
-
-**.next/**
-- Purpose: Next build output
-- Generated: Yes
-- Committed: No
-
-**public/hero/ and public/voice-feature/**
-- Purpose: Standalone Vite brand/voice sketches
-- Generated: No
-- Committed: Yes
-- Excluded from TypeScript project in `tsconfig.json`
-
-**data/ and in-memoria*.db/**
-- Purpose: Local agent-memory binaries
-- Generated: Runtime
-- Committed: Treat as non-source
-
-**test-results/**
-- Purpose: Playwright artifacts
-- Generated: Yes
-- Committed: Typically no
-
-**.planning/**
-- Purpose: GSD docs
-- Generated: No (hand-written maps)
-- Committed: Yes
-
----
-
-*Structure analysis: 2026-08-24*
-*Update when directory structure changes*
+- `src/components/HeroSection.tsx` imports `/assets/logo-mark.svg`, but the only kept asset is `public/assets/goodai/uploads/G.jpg`.
+- `src/components/HeroSection.tsx` imports `src/components/ChatInterface.tsx`, but that file is empty.
+- `src/app/layout.tsx` imports local fonts that currently exist as zero-byte files.
+- Several public files are symlinks to paths outside this repo, which makes portability fragile.

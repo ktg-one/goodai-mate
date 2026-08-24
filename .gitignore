@@ -115,6 +115,7 @@ feature_list.json
 .understand-anything/
 .githooks/
 
-# in-memoria local data
-.in-memoria/
-in-memoria-vectors.db/
+# Local agent scratch directories
+.agent_context/
+.multica/
+.serena/
