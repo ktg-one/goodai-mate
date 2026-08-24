@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react';
 // CRITICAL (AGENTS.md): direct imports, no barrels
 import { VoiceAgentHero } from '@/components/voice-agent/VoiceAgentHero';
-import GoodAItHero from '@/components/goodai-film/GoodAItHero';
 import ChatInterface from '@/components/ChatInterface';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
 // Direct imports (AGENTS.md) — stamp primitives for mail docket surfaces
@@ -353,8 +352,6 @@ export default function HomeClient() {
   }
 
   return (
-    <>
-    <GoodAItHero />
     <div ref={mailBoardRef} className="mail-board overflow-x-hidden">
       {/* HERO - TTS feature (the Voice Agent as the product) — descent files into the stack */}
       <VoiceAgentHero 
@@ -566,6 +563,5 @@ export default function HomeClient() {
         </div>
       </footer>
     </div>
-    </>
   );
 }
