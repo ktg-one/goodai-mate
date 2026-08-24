@@ -65,7 +65,7 @@ export function Navbar() {
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2 group mr-8">
                     <span className="font-display text-4xl md:text-5xl font-normal leading-[0.75] tracking-tighter text-current group-hover:opacity-70 transition-opacity">
-                        Good&apos;ai
+                        Good&apos;Ai
                     </span>
                 </Link>
 

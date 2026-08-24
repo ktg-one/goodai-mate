@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Good'ai | We'll handle the boring stuff",
+  title: "Good'Ai | We'll handle the boring stuff",
   description: "Practical workflow fixes and business automation, built in Perth.",
 };
 

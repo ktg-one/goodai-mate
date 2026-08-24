@@ -1286,7 +1286,7 @@ export default function Carousel() {
 
   return (
     <section
-      aria-label="Good'ai work and services"
+      aria-label="Good'Ai work and services"
       className="relative isolate h-screen min-h-[640px] overflow-hidden bg-[var(--paper)]"
       style={{
         "--ink": "var(--brand-ink)",
@@ -1315,7 +1315,7 @@ export default function Carousel() {
           movement is reserved for the carousel drag. */}
       <div
         ref={containerRef}
-        aria-label="Interactive Good'ai services carousel"
+        aria-label="Interactive Good'Ai services carousel"
         className="absolute inset-0 touch-pan-y focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-[-4px] focus-visible:outline-[var(--red)]"
         role="group"
         tabIndex={0}
