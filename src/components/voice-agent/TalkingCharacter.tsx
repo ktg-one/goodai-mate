@@ -111,7 +111,7 @@ export function TalkingCharacter({ analyser, status, agent }: TalkingCharacterPr
 
   const getAssetPath = (f: number) => {
     if (agent === 'darl') {
-      return f > 2 ? CHARACTER_ASSETS.darl.closed : CHARACTER_ASSETS.darl.idle;
+      return f <= 2 ? CHARACTER_ASSETS.darl.closed : CHARACTER_ASSETS.darl.idle;
     }
     return CHARACTER_ASSETS.gemFrame(f);
   };
