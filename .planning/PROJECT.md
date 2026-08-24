@@ -84,6 +84,7 @@ If the new hero + design system don't make them drop a line, nothing else matter
 | gsd for health/docs/progress | Use /gsd-health, /gsd-docs-update, /gsd-progress etc. to keep .planning and docs/ in sync with actual shipped site | In progress (this task) |
 | PRODUCT.md + public/ design system as SSOT | Brand guardrails must be injected into every creative agent run | Enforced (v1) |
 | v2: public/ is the live SSOT; homepage hero is src/components/hero/ | User is building the new hero now. Voice Agent stays configured on a dedicated page. Wipe v1-refactored planning cycle (phases from 1). | Active |
+| This Next.js app is the homepage section, not blog/services | Blog + services area falls back to Instatic CMS on Railway. Do not build a CMS in goodai-mate. | Locked |
 
 ## Evolution
 

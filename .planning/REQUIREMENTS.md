@@ -57,6 +57,7 @@ Explicitly excluded. Documented to prevent scope creep.
 | Wipe `.planning/PROJECT.md` via `$gsd-new-project` | Brownfield: v2 updates PROJECT.md, does not delete history |
 | Auth / dashboards / multi-page app chrome | Still not the product |
 | Old shader + custom cursor + shadcn lead-card v1 | Superseded in v1-refactored; stays dead |
+| Next.js blog / services CMS in this repo | Homepage here is one site section. Blog + services fallback: Instatic CMS on Railway |
 
 ## Traceability
 
