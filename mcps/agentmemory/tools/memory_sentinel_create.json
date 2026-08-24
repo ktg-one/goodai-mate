@@ -1,0 +1,33 @@
+{
+  "name": "memory_sentinel_create",
+  "description": "Create an event-driven sentinel that watches for conditions (webhook, timer, threshold, pattern, approval) and auto-unblocks gated actions when triggered.",
+  "inputSchema": {
+    "properties": {
+      "config": {
+        "description": "JSON config (timer: {durationMs}, threshold: {metric,operator,value}, pattern: {pattern}, webhook: {path})",
+        "type": "string"
+      },
+      "expiresInMs": {
+        "description": "Auto-expire after ms",
+        "type": "number"
+      },
+      "linkedActionIds": {
+        "description": "Comma-separated action IDs to gate",
+        "type": "string"
+      },
+      "name": {
+        "description": "Sentinel name",
+        "type": "string"
+      },
+      "type": {
+        "description": "Type: webhook, timer, threshold, pattern, approval, custom",
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "type"
+    ],
+    "type": "object"
+  }
+}

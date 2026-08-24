@@ -1,0 +1,13 @@
+{
+  "name": "memory_snapshot_create",
+  "description": "Create a git-versioned snapshot of current memory state.",
+  "inputSchema": {
+    "properties": {
+      "message": {
+        "description": "Snapshot description",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  }
+}

@@ -15,7 +15,11 @@ export default function GlobalError({
     console.error(error);
   }, [error]);
 
+<<<<<<< HEAD
   // Ultra-minimal client component using only design tokens (paper/ink/red/stamp from public/design-system-new + globals.css).
+=======
+  // Ultra-minimal client component using only design tokens (paper/ink/red/stamp from public/ + globals.css).
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
   // No motion, no StampButton (which may register contexts), no GSAP — to minimize surface for the known
   // useContext null during Next 16 Turbopack isolated prerender of /_global-error (pre-existing, client-heavy tree).
   return (

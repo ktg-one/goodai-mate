@@ -8,18 +8,37 @@ export async function POST(req: NextRequest) {
       return new Response(JSON.stringify({ error: 'Text is required' }), { status: 400 });
     }
 
+<<<<<<< HEAD
     const apiKey = process.env.ELEVEN_API_KEY;
     if (!apiKey) {
       return new Response(
         JSON.stringify({ error: 'ElevenLabs API key not configured. Add ELEVEN_API_KEY=... to .env.local and to Vercel env vars.' }),
+=======
+    const apiKey = process.env.ELEVEN_API_KEY || process.env.ELEVENLABS_API_KEY;
+    if (!apiKey) {
+      return new Response(
+        JSON.stringify({ error: 'ElevenLabs API key not configured. Add ELEVENLABS_API_KEY=... to .env.local and to Vercel env vars.' }),
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
         { status: 500 }
       );
     }
 
+<<<<<<< HEAD
     const effectiveVoiceId = voiceId || process.env.ELEVEN_DEFAULT_VOICE || 'vr54y8Xovf4AEnfNrGqH';
 
     // Use the streaming endpoint for lower latency
     const url = `https://api.elevenlabs.io/v1/text-to-speech/${effectiveVoiceId}/stream`;
+=======
+    // 🛡️ Sentinel: Validate user-provided voiceId to prevent path traversal and API abuse
+    if (voiceId && !/^[a-zA-Z0-9_-]+$/.test(voiceId)) {
+      return new Response(JSON.stringify({ error: 'Invalid voiceId format' }), { status: 400 });
+    }
+
+    const effectiveVoiceId = voiceId || process.env.ELEVEN_DEFAULT_VOICE || 'vr54y8Xovf4AEnfNrGqH';
+
+    // Use the streaming endpoint with latency optimization query parameter
+    const url = `https://api.elevenlabs.io/v1/text-to-speech/${effectiveVoiceId}/stream?optimize_streaming_latency=4`;
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
 
     const response = await fetch(url, {
       method: 'POST',
@@ -30,12 +49,20 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         text,
+<<<<<<< HEAD
         model_id: 'eleven_turbo_v2_5', // fast, high quality for conversational
+=======
+        model_id: 'eleven_flash_v2_5', // Flash model for ultra-low latency conversational agents
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
         voice_settings: {
           stability: 0.55,
           similarity_boost: 0.75,
           style: 0.2,
+<<<<<<< HEAD
           use_speaker_boost: true,
+=======
+          use_speaker_boost: false, // Disabled to save server processing time and reduce latency
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
         },
         output_format: 'mp3_44100_128',
       }),

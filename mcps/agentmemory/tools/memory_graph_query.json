@@ -1,0 +1,25 @@
+{
+  "name": "memory_graph_query",
+  "description": "Query the knowledge graph for entities and relationships.",
+  "inputSchema": {
+    "properties": {
+      "maxDepth": {
+        "description": "Max BFS depth (default 3, max 5)",
+        "type": "number"
+      },
+      "nodeType": {
+        "description": "Filter by node type",
+        "type": "string"
+      },
+      "query": {
+        "description": "Search nodes by name",
+        "type": "string"
+      },
+      "startNodeId": {
+        "description": "Starting node ID for traversal",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  }
+}

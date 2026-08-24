@@ -1,0 +1,21 @@
+{
+  "name": "memory_insight_list",
+  "description": "List synthesized insights — higher-order observations derived from patterns across memories, lessons, and crystals.",
+  "inputSchema": {
+    "properties": {
+      "limit": {
+        "description": "Max results (default 50)",
+        "type": "number"
+      },
+      "minConfidence": {
+        "description": "Minimum confidence threshold (default 0)",
+        "type": "number"
+      },
+      "project": {
+        "description": "Filter by project",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  }
+}

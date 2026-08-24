@@ -7,7 +7,11 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
+<<<<<<< HEAD
         "flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm",
+=======
+        "flex flex-col gap-6 rounded-[var(--radius-xs)] border-2 border-ink bg-navy py-6 text-paper shadow-[3px_3px_0_var(--ink)]",
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
         className
       )}
       {...props}
@@ -42,7 +46,11 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
+<<<<<<< HEAD
       className={cn("text-sm text-muted-foreground", className)}
+=======
+      className={cn("text-sm text-ink-mute", className)}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
       {...props}
     />
   )

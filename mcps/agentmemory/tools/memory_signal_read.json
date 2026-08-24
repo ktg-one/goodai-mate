@@ -1,0 +1,28 @@
+{
+  "name": "memory_signal_read",
+  "description": "Read messages for an agent. Marks delivered messages as read.",
+  "inputSchema": {
+    "properties": {
+      "agentId": {
+        "description": "Agent to read messages for",
+        "type": "string"
+      },
+      "limit": {
+        "description": "Max messages (default 50)",
+        "type": "number"
+      },
+      "threadId": {
+        "description": "Filter by conversation thread",
+        "type": "string"
+      },
+      "unreadOnly": {
+        "description": "Set to 'true' for unread only",
+        "type": "string"
+      }
+    },
+    "required": [
+      "agentId"
+    ],
+    "type": "object"
+  }
+}

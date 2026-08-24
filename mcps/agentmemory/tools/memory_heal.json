@@ -1,0 +1,17 @@
+{
+  "name": "memory_heal",
+  "description": "Auto-fix all fixable issues found by diagnostics. Unblocks stuck actions, expires stale leases, cleans up orphaned data.",
+  "inputSchema": {
+    "properties": {
+      "categories": {
+        "description": "Comma-separated categories to heal (default all)",
+        "type": "string"
+      },
+      "dryRun": {
+        "description": "Set to 'true' for dry run (report but don't fix)",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  }
+}

@@ -156,12 +156,19 @@ export function Hero() {
       <header className="flex items-center justify-between relative z-20 mb-8 md:mb-16 pb-6 border-b-4 border-[var(--ink)]">
         <div className="flex items-center">
           {/* 
+<<<<<<< HEAD
             WORDMARK — using Fraunces from the design (public/fonts/ matching public/design-system-new/fonts/ verbatim).
             Brand treatment follows the design system.
           */}
           <span className="brand-wordmark text-[1.9rem]">
             Good<span className="wordmark-ai">&apos;ai</span>
           </span>
+=======
+            WORDMARK — using Fraunces from the design (public/fonts/ matching public/fonts/ verbatim).
+            Brand treatment follows the design system.
+          */}
+          <img src="/company-assets/brand-reference.png" alt="Good'ai" className="h-12 w-auto object-contain" />
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
         </div>
 
         <nav className="hidden md:flex items-center border-2 border-[var(--ink)] bg-paper-raised shadow-[3px_3px_0_var(--ink)]">
@@ -173,13 +180,21 @@ export function Hero() {
           </a>
           <a
             href="#systems"
+<<<<<<< HEAD
             className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] hover:bg-[var(--hi-yellow)] px-6 py-3 transition-colors border-x-2 border-[var(--ink)]"
+=======
+            className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] hover:bg-[var(--gold-tint)] px-6 py-3 transition-colors border-x-2 border-[var(--ink)]"
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
           >
             Systems
           </a>
           <a
             href="#pricing"
+<<<<<<< HEAD
             className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] hover:bg-[var(--hi-yellow)] px-6 py-3 transition-colors"
+=======
+            className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-[var(--ink)] hover:bg-[var(--gold-tint)] px-6 py-3 transition-colors"
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
           >
             Pricing
           </a>
@@ -190,7 +205,11 @@ export function Hero() {
         {/* Left column */}
         <div className="flex flex-col gap-8 w-full max-w-xl mx-auto lg:mx-0 order-2 lg:order-1">
           <div>
+<<<<<<< HEAD
             <span className="font-mono text-xs font-bold tracking-[0.16em] uppercase bg-[var(--hi-yellow)] text-[var(--ink)] px-3 py-1">
+=======
+            <span className="font-mono text-xs font-bold tracking-[0.16em] uppercase bg-[var(--gold-tint)] text-[var(--ink)] px-3 py-1">
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               Bidirectional Voice
             </span>
             <h1 className="font-display text-5xl md:text-[5.5rem] font-bold text-[var(--ink)] leading-[0.92] mt-6 mb-6 tracking-[-0.03em]">
@@ -250,7 +269,11 @@ export function Hero() {
               ) : (
                 <div className="stamp-box flex items-center gap-3 px-4 py-3 w-fit">
                   <Activity
+<<<<<<< HEAD
                     className={`h-4 w-4 ${isRecording ? 'text-[var(--orange)] animate-pulse' : 'text-[var(--border)]'}`}
+=======
+                    className={`h-4 w-4 ${isRecording ? 'text-[var(--coral)] animate-pulse' : 'text-[var(--border)]'}`}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                   />
                   <span className="font-mono text-xs font-bold uppercase tracking-widest text-[var(--ink)]/70">
                     {isRecording ? 'Go on — we\'re listening' : 'Ready when you are'}
@@ -290,36 +313,70 @@ export function Hero() {
 
           {/* Mode controls */}
           {/* Mode + Sensitivity controls — now stamp-btn physics + keyboard stamp focus */}
+<<<<<<< HEAD
           <div className="absolute bottom-4 left-4 z-40 flex border-2 border-[var(--ink)] bg-paper-raised text-[10px] font-mono uppercase font-bold overflow-hidden">
             <button
               onClick={() => setVisualMode('calm')}
+=======
+          <div className="absolute bottom-4 left-4 z-40 flex border-2 border-[var(--ink)] bg-paper-raised text-[10px] font-mono uppercase font-bold overflow-hidden" role="group" aria-label="Visualizer Mode">
+            <button
+              type="button"
+              onClick={() => setVisualMode('calm')}
+              aria-pressed={visualMode === 'calm'}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               className={`stamp-btn stamp-btn-paper px-4 py-1.5 text-[10px] border-r-2 border-[var(--ink)] ${visualMode === 'calm' ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               CALM
             </button>
             <button
+<<<<<<< HEAD
               onClick={() => setVisualMode('dynamic')}
+=======
+              type="button"
+              onClick={() => setVisualMode('dynamic')}
+              aria-pressed={visualMode === 'dynamic'}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               className={`stamp-btn stamp-btn-paper px-4 py-1.5 text-[10px] ${visualMode === 'dynamic' ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               DYNAMIC
             </button>
           </div>
 
+<<<<<<< HEAD
           <div className="absolute bottom-4 right-4 z-40 flex border-2 border-[var(--ink)] bg-paper-raised text-[10px] font-mono uppercase font-bold overflow-hidden">
             <button
               onClick={() => setSensitivity(0.5)}
+=======
+          <div className="absolute bottom-4 right-4 z-40 flex border-2 border-[var(--ink)] bg-paper-raised text-[10px] font-mono uppercase font-bold overflow-hidden" role="group" aria-label="Visualizer Sensitivity">
+            <button
+              type="button"
+              onClick={() => setSensitivity(0.5)}
+              aria-pressed={sensitivity === 0.5}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               className={`stamp-btn stamp-btn-paper px-3 py-1.5 text-[10px] border-r-2 border-[var(--ink)] ${sensitivity === 0.5 ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               STEADY
             </button>
             <button
+<<<<<<< HEAD
               onClick={() => setSensitivity(1)}
+=======
+              type="button"
+              onClick={() => setSensitivity(1)}
+              aria-pressed={sensitivity === 1}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               className={`stamp-btn stamp-btn-paper px-3 py-1.5 text-[10px] border-r-2 border-[var(--ink)] ${sensitivity === 1 ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               NORMAL
             </button>
             <button
+<<<<<<< HEAD
               onClick={() => setSensitivity(2.5)}
+=======
+              type="button"
+              onClick={() => setSensitivity(2.5)}
+              aria-pressed={sensitivity === 2.5}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
               className={`stamp-btn stamp-btn-paper px-3 py-1.5 text-[10px] ${sensitivity === 2.5 ? 'is-engaged bg-[var(--ink)] text-[var(--paper)]' : ''}`}
             >
               HIGH

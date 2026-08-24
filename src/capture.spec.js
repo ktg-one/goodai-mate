@@ -3,7 +3,7 @@ import path from 'path';
 
 test('capture screenshots', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 850 });
-  
+
   const logs = [];
   page.on('console', msg => {
     if (msg.type() === 'error' || msg.type() === 'warning') {
@@ -18,7 +18,7 @@ test('capture screenshots', async ({ page }) => {
     const bodyStyle = window.getComputedStyle(document.body);
     const heading = document.querySelector('h1') || document.querySelector('h2');
     const headingStyle = heading ? window.getComputedStyle(heading) : null;
-    
+
     return {
       bodyBg: bodyStyle.backgroundColor,
       bodyFontFamily: bodyStyle.fontFamily,
@@ -36,13 +36,13 @@ test('capture screenshots', async ({ page }) => {
   else logs.forEach(log => console.log(log));
 
   const scratchDir = 'C:\\Users\\kevin\\.gemini\\antigravity-cli\\brain\\1941f21f-2228-4e82-b875-216b4b79a45e';
-  
+
   await page.screenshot({ path: path.join(scratchDir, 'hero.png') });
   console.log('Saved hero.png');
-  
+
   const sections = page.locator('section');
   const count = await sections.count();
-  
+
   for (let i = 0; i < count; i++) {
     const section = sections.nth(i);
     await section.scrollIntoViewIfNeeded();

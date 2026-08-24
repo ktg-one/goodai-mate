@@ -1,0 +1,17 @@
+{
+  "name": "memory_mesh_sync",
+  "description": "Sync memories and actions with peer agentmemory instances for multi-agent collaboration.",
+  "inputSchema": {
+    "properties": {
+      "direction": {
+        "description": "push, pull, or both (default both)",
+        "type": "string"
+      },
+      "peerId": {
+        "description": "Specific peer ID (omit for all)",
+        "type": "string"
+      }
+    },
+    "type": "object"
+  }
+}

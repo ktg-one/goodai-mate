@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+<<<<<<< HEAD
 
 /**
  * BrandWordmark
@@ -15,10 +16,28 @@ export function BrandWordmark({ className = '' }: { className?: string }) {
       alt="Good'ai"
       className={`h-8 w-auto ${className}`}
       style={{ imageRendering: 'crisp-edges' }}
+=======
+import { BRAND_ASSETS, type WordmarkTone, wordmarkSrc } from '@/lib/brand-assets';
+
+/** BrandWordmark — Figma-exported SVG wordmark. tone='dark' = for light/cream bg. tone='light' = for navy bg. */
+export function BrandWordmark({
+  className = '',
+  tone = 'dark',
+}: {
+  className?: string;
+  tone?: WordmarkTone;
+}) {
+  return (
+    <img
+      src={wordmarkSrc(tone)}
+      alt="Good'ai"
+      className={`h-8 w-auto ${className}`}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
     />
   );
 }
 
+<<<<<<< HEAD
 /**
  * BrandMark
  * The icon / swan mark from the new brand kit.
@@ -28,12 +47,28 @@ export function BrandMark({ className = '' }: { className?: string }) {
   return (
     <img
       src="/assets/logo-mark.svg"
+=======
+/** Icon mark only — use variant='dark' on dark/navy surfaces */
+export function BrandMark({
+  className = '',
+  variant = 'default',
+}: {
+  className?: string;
+  variant?: 'default' | 'dark';
+}) {
+  const src =
+    variant === 'dark' ? BRAND_ASSETS.logo.dark : BRAND_ASSETS.logo.default;
+  return (
+    <img
+      src={src}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
       alt="Good'ai mark"
       className={`h-8 w-auto ${className}`}
     />
   );
 }
 
+<<<<<<< HEAD
 /**
  * Full lockup (mark + wordmark)
  */
@@ -41,12 +76,20 @@ export function BrandLogo({ className = '' }: { className?: string }) {
   return (
     <img
       src="/assets/logo-full.svg"
+=======
+/** Full wordmark lockup */
+export function BrandLogo({ className = '' }: { className?: string }) {
+  return (
+    <img
+      src={BRAND_ASSETS.logo.default}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
       alt="Good'ai"
       className={`h-9 w-auto ${className}`}
     />
   );
 }
 
+<<<<<<< HEAD
 /**
  * StampLetter / ModularLetter
  * Integrates the under-used modular letter SVGs (letter-a.svg, letter-good.svg, letter-i.svg, letter-swan.svg)
@@ -68,12 +111,29 @@ export function StampLetter({
   style?: React.CSSProperties;
 }) {
   const src = `/assets/letter-${which}.svg`;
+=======
+/** Decorative swirl vector — teal+navy. Use as corner/background ornament. */
+export function BrandShapesStamp({
+  className = '',
+  style,
+  theme = 'teal',
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+  theme?: 'teal' | 'orange' | 'silver';
+}) {
+  const src =
+    theme === 'orange' ? BRAND_ASSETS.shapesOrange :
+    theme === 'silver' ? BRAND_ASSETS.shapesSilver :
+    BRAND_ASSETS.shapes;
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
   return (
     <img
       src={src}
       alt=""
       aria-hidden
       className={`w-auto select-none ${className}`}
+<<<<<<< HEAD
       style={{ imageRendering: 'crisp-edges', ...style }}
     />
   );
@@ -91,6 +151,9 @@ export function WordmarkMark({ className = '' }: { className?: string }) {
       aria-hidden
       className={`h-auto w-auto ${className}`}
       style={{ imageRendering: 'crisp-edges' }}
+=======
+      style={style}
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
     />
   );
 }

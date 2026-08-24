@@ -4,6 +4,7 @@ import { Slot } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
+<<<<<<< HEAD
 const buttonVariants = cva(
   "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
@@ -29,6 +30,33 @@ const buttonVariants = cva(
         "icon-xs": "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
         "icon-sm": "size-8",
         "icon-lg": "size-10",
+=======
+// Canonical Good'ai brutalist button: sharp corners, 2px ink border, flat
+// stamp shadow, one red per surface. Built on the .stamp-btn / .stamp-btn-*
+// primitives in globals.css (no raw hex, no default tailwind tokens).
+const buttonVariants = cva(
+  "stamp-btn outline-none disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  {
+    variants: {
+      variant: {
+        default: "stamp-btn-navy",
+        destructive: "stamp-btn-red",
+        outline: "stamp-btn-paper",
+        secondary: "stamp-btn-gold",
+        ghost:
+          "!border-transparent !bg-transparent !shadow-none text-ink hover:!bg-[var(--paper-deep)]",
+        link: "!border-transparent !bg-transparent !shadow-none text-navy underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-9",
+        xs: "h-6 text-xs [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-8",
+        lg: "h-10 text-base",
+        icon: "size-9 !p-0",
+        "icon-xs": "size-6 !p-0 [&_svg:not([class*='size-'])]:size-3",
+        "icon-sm": "size-8 !p-0",
+        "icon-lg": "size-10 !p-0",
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
       },
     },
     defaultVariants: {

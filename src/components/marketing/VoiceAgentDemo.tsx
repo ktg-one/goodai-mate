@@ -4,7 +4,7 @@ import { useState } from 'react';
 import StampButton from '@/components/StampButton';
 import StampCard from '@/components/StampCard';
 import { ScrollReveal } from '@/components/ScrollReveal';
-import { VoiceAgentHero } from '@/components/voice-agent/VoiceAgentHero';
+import { ElevenLabsWidget } from '@/components/voice-agent/ElevenLabsWidget';
 
 /**
  * Voice demo — speak in the browser. Callback lives in CallLoopDemo (honest queue, no fake RINGING).
@@ -39,7 +39,7 @@ export default function VoiceAgentDemo() {
           </StampCard>
         ) : (
           <div className="space-y-6 max-w-3xl mx-auto">
-            <VoiceAgentHero supertonicUrl="http://localhost:8000/transcribe" />
+            <ElevenLabsWidget />
             <div className="text-center mt-4">
               <StampButton
                 variant="paper"

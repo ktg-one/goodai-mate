@@ -1,0 +1,28 @@
+{
+  "name": "memory_lesson_recall",
+  "description": "Search lessons by query. Returns lessons sorted by confidence and recency. Use to check what the agent has learned before making decisions.",
+  "inputSchema": {
+    "properties": {
+      "limit": {
+        "description": "Max results (default 10)",
+        "type": "number"
+      },
+      "minConfidence": {
+        "description": "Minimum confidence threshold (default 0.1)",
+        "type": "number"
+      },
+      "project": {
+        "description": "Filter by project",
+        "type": "string"
+      },
+      "query": {
+        "description": "Search query",
+        "type": "string"
+      }
+    },
+    "required": [
+      "query"
+    ],
+    "type": "object"
+  }
+}

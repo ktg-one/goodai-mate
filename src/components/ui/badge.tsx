@@ -5,6 +5,7 @@ import { Slot } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
+<<<<<<< HEAD
   "inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3",
   {
     variants: {
@@ -18,6 +19,19 @@ const badgeVariants = cva(
           "border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         ghost: "[a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         link: "text-primary underline-offset-4 [a&]:hover:underline",
+=======
+  "inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-xs border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ink focus-visible:ring-[3px] focus-visible:ring-navy/50 aria-invalid:border-red aria-invalid:ring-red/20 [&>svg]:pointer-events-none [&>svg]:size-3",
+  {
+    variants: {
+      variant: {
+        default: "bg-navy text-paper [a&]:hover:bg-navy-deep",
+        secondary: "bg-gold text-ink [a&]:hover:bg-gold-deep",
+        destructive:
+          "bg-red text-paper focus-visible:ring-red/40 [a&]:hover:bg-red-deep",
+        outline: "border-ink text-ink [a&]:hover:bg-gold-tint",
+        ghost: "text-ink [a&]:hover:bg-gold-tint",
+        link: "text-red underline-offset-4 [a&]:hover:underline",
+>>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
       },
     },
     defaultVariants: {
