@@ -1,48 +1,69 @@
-# Roadmap: Good'ai (refactored)
+# Roadmap: Good'ai
 
 ## Overview
 
-Good'ai site v1 was originally planned as 5 incremental phases (shader foundation → visual → chat → lead capture → deploy). After Phase 1 foundation, the site was **fully refactored** into its current form: a brutalist direct-mail marketing experience whose hero **is** the functional Voice Agent product (local Supertonic), with conversation state leaking as physical "filed mail" into ribbons, pinned dockets, and tray. The redesign was executed via the goodai-award-configuration (5 specialized agents: impeccable + awwwards-animations + awwwards-ui-skills + gsap-awwwards-website + gsap-framer-scroll-animation) coordinated by goodai-agent-team.
+v2.0 takes the shipped Voice + mail-board site and changes what a Perth tradie hits first. Today `HomeClient` still mounts `VoiceAgentHero` as the homepage hero. This milestone ships `src/components/hero/Hero.tsx` as that first surface, moves the Voice Agent onto a dedicated page so it stays a real product, and makes `public/` (`colors_and_type.css`, cream `#FFF0D0`, navy / gold / red / black, Fraunces + DM Sans) the live design language — including the rest of `/` below the hero.
 
-Pre-refactor phases (01-05) have been archived to `.planning/milestones/v0.9-pre-refactor-phases/`.
+`public/` already has the design system on disk. This is not a greenfield setup. Do not rewrite the Voice Agent. Do not revive the old shader / cursor / shadcn lead-card v1.
 
-Ongoing work uses gsd-* skills (now added locally: gsd-health, gsd-docs-update, gsd-progress, gsd-manager, gsd-do, gsd-plan-phase, etc.) + goodai skills for brand-compliant updates.
+## Milestones
 
-## Current State (post-refactor)
+- ✅ **v1.0 Voice + mail-board** — shipped (award-refactored; pre-refactor phases archived)
+- 🚧 **v2.0 Design system + hero** — Phases 1–2 (this roadmap; numbering reset)
 
-- **Delivered**: Voice Agent hero + full mail-board brutalist flow (ribbons, docket pins, in-tray, footer ritual). 60fps mechanical stamp physics, one-red discipline, WONK, reduced-motion static artifacts, PRODUCT.md + public/ design system as SSOT.
-- **Skills**: Local copies in .agents/skills/ and .claude/skills/ (goodai-*, gsd-*, gsap/awwwards/impeccable design skills, next best practices).
-- **Planning hygiene**: gsd-health now available in-project; docs/ + .planning/ aligned to actual shipped site (this milestone).
+## Phases
 
-## Phases (historical + current)
+**Phase Numbering:**
+- Integer phases (1, 2): Planned milestone work
+- Decimal phases (1.1, 1.2): Urgent insertions (marked with INSERTED)
 
-**Pre-refactor (archived)**:
-- Phase 1: Foundation (GLSL, tokens, fonts) — completed 2026-04-01, code artifacts may remain or have been adapted.
-- Phases 2-5: Visual Layer / Chat Core / Lead Capture / Polish — described old SDF shader + cursor + old lead card flow. Superseded by the award-refactored mail-docket site. Archived.
+Decimal phases appear between their surrounding integers in numeric order.
 
-**Current / Live**:
-The "v1" that shipped is the refactored Voice + physical docket site. No numbered phases currently active in .planning/phases/ (empty after archive + hygiene pass).
+- [ ] **Phase 1: New hero + Voice page** - Visitors land on `Hero.tsx`; Voice Agent lives on a dedicated page
+- [ ] **Phase 2: Design system on the homepage** - Live homepage uses `public/` tokens, including below the hero
 
-Future increments (voice prod, additional surfaces, ops handoff, full gsd milestone) will be planned with gsd-new-milestone / gsd-plan-phase using the goodai brand guardrails.
+## Phase Details
 
-## Phase Details (Pre-refactor — for reference only)
+### Phase 1: New hero + Voice page
+**Goal**: Visitors land on `/` into the new hero; the Voice Agent is still usable on its own page
+**Depends on**: Nothing (first phase)
+**Requirements**: HERO-01, VOICE-01
+**Success Criteria** (what must be TRUE):
+  1. Visitor opening `/` sees `src/components/hero/Hero.tsx` as the first surface
+  2. Visitor does not see `VoiceAgentHero` as the homepage hero
+  3. Visitor can open a dedicated Voice Agent page (e.g. `/voice`) and use the Voice Agent there
+**Plans**: TBD
+**UI hint**: yes
 
-See `.planning/milestones/v0.9-pre-refactor-phases/` for the old 01-01 through 05-02 PLAN.md files. They are no longer authoritative.
+### Phase 2: Design system on the homepage
+**Goal**: Visitors see the live homepage in the `public/` design system, including below the hero
+**Depends on**: Phase 1
+**Requirements**: DS-01, HOME-01
+**Success Criteria** (what must be TRUE):
+  1. Visitor sees cream `#FFF0D0` as the paper canvas, with navy `#202C59`, gold `#F3A62A`, red `#F4442E`, and black `#111111` as the live palette
+  2. Visitor sees Fraunces (display) and DM Sans (body) as live type on the homepage
+  3. Visitor scrolling past the hero sees remaining homepage sections styled with the same `public/` system
+**Plans**: TBD
+**UI hint**: yes
 
-## Progress & Hygiene
+## Progress
 
-- Old planning reported ~11% (only phase 1 complete).
-- Post archive + gsd-health + docs update: .planning/phases/ is clean; PROJECT.md / ROADMAP.md / STATE.md now describe the actual refactored site and skill usage.
-- Use `/gsd-health`, `/gsd-progress`, `/gsd-docs-update --verify-only` (or --force) going forward to keep docs in sync.
-- Use goodai-award-configuration + goodai-agent-team when doing further high-craft brutalist work.
+**Execution Order:**
+Phases execute in numeric order: 1 → 2
 
-## Next Actions (typical)
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 1. New hero + Voice page | 0/TBD | Not started | - |
+| 2. Design system on the homepage | 0/TBD | Not started | - |
 
-- Run `gsd health` or `gsd progress` to get current snapshot + routing.
-- For new work: gsd-discuss-phase / gsd-plan-phase (inject PRODUCT.md + public/ design system + current live state + mechanical rules).
-- For craft upgrades: dispatch via goodai-award-configuration (optionally + planning agent).
+<details>
+<summary>✅ v1.0 Voice + mail-board (shipped; not in this numbering)</summary>
+
+The shipped v1 is the award-refactored Voice Agent hero + mail-board site. Pre-refactor phases 01–05 live in `.planning/milestones/v0.9-pre-refactor-phases/` and are not authoritative. v2.0 resets numbering at Phase 1 (`--reset-phase-numbers`).
+
+</details>
 
 ---
-
-*Updated 2026-06-04 after adding gsd skills (incl. gsd-health) from .claude/.agents and running gsd-health alignment on the refactored site.*
-*Pre-refactor phases archived. Current site = award swarm brutalist mail execution + ongoing gsd-managed docs.*
+*Roadmap created: 2026-08-24 — milestone v2.0 Design system + hero*
+*Granularity: standard (4 requirements → 2 delivery boundaries; no padded phases)*
+*Research: skipped for v2.0; existing `.planning/research/` is v0.9 shader-era and is not a mandate*

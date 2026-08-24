@@ -64,16 +64,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| HERO-01 | — | Pending |
-| DS-01 | — | Pending |
-| VOICE-01 | — | Pending |
-| HOME-01 | — | Pending |
+| HERO-01 | Phase 1 | Pending |
+| DS-01 | Phase 2 | Pending |
+| VOICE-01 | Phase 1 | Pending |
+| HOME-01 | Phase 2 | Pending |
 
 **Coverage:**
 - v2.0 requirements: 4 total
-- Mapped to phases: 0
-- Unmapped: 4
+- Mapped to phases: 4
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-08-24*
-*Last updated: 2026-08-24 after milestone v2.0 scoping*
+*Last updated: 2026-08-24 after v2.0 roadmap (traceability)*
