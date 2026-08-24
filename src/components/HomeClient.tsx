@@ -17,8 +17,7 @@ import WhyGoodAI from '@/components/marketing/WhyGoodAI';
 import Manifest from '@/components/marketing/Manifest';
 import AISolutions from '@/components/marketing/AISolutions';
 import VoiceAgentDemo from '@/components/marketing/VoiceAgentDemo';
-import AutomationPlayground from '@/components/AutomationPlayground';
-import WebsiteAnalyzer from '@/components/marketing/WebsiteAnalyzer';
+import CallLoopDemo from '@/components/marketing/CallLoopDemo';
 
 
 // GSAP for mail-stack composition (per gsap-awwwards-website + gsap-scrolltrigger skills)
@@ -476,12 +475,7 @@ export default function HomeClient() {
       {/* Voice agent demo (enhanced) + strong CTA */}
       <VoiceAgentDemo />
 
-      {/* Live Workspace Automation Playground */}
-      <section className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
-        <div className="mx-auto max-w-5xl px-6">
-          <AutomationPlayground />
-        </div>
-      </section>
+      <CallLoopDemo />
 
       {/* Fallback text mode (temporary) */}
       <section className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
@@ -513,11 +507,6 @@ export default function HomeClient() {
             </div>
           )}
         </div>
-      </section>
-
-      {/* Website Analyzer — custom audit automation */}
-      <section className="min-h-screen py-16 border-t-2 border-[var(--ink)] bg-[var(--paper)]">
-        <WebsiteAnalyzer />
       </section>
 
       {/* POWERFUL CLOSING RITUAL — final thick ink navy stamped footer docket */}
