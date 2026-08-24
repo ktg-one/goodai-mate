@@ -1,19 +1,19 @@
-import type { Metadata } from 'next';
-import HomeClient from '@/components/HomeClient';
-
-export const metadata: Metadata = {
-  title: "Good'ai — Business Automations, Sorted",
-  description: "Perth-based business automations for SMEs. Tell us your problem, we'll fix it.",
-  openGraph: {
-    title: "Good'ai — Business Automations, Sorted",
-    description: "Stop working. Start living. Automated relief for Perth SMEs.",
-    url: 'https://goodai.au',
-    siteName: "Good'ai",
-    locale: 'en_AU',
-    type: 'website',
-  },
-};
-
+/**
+ * `/` is rewritten in middleware to public/index.html (the GoodAIt film).
+ * Iframe is the fallback if the rewrite is skipped — never mount HomeClient.
+ */
 export default function Home() {
-  return <HomeClient />;
+  return (
+    <iframe
+      src="/index.html"
+      title="good'Ai"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        width: '100%',
+        height: '100%',
+        border: 0,
+      }}
+    />
+  );
 }
