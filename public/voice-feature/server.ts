@@ -48,7 +48,7 @@ async function startServer() {
 
   wss.on("connection", async (ws) => {
     console.log("Client connected to Live API bridge");
-
+    
     let session: any;
 
     try {

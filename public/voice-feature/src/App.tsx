@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import {
-  Mic,
-  Square,
-  Volume2,
+import { 
+  Mic, 
+  Square, 
+  Volume2, 
   Loader2,
   Activity,
   Zap
@@ -58,12 +58,12 @@ const Logo = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const Visualizer = ({
-  analyzer,
+const Visualizer = ({ 
+  analyzer, 
   active,
   sensitivity = 1,
   mode = "dynamic"
-}: {
+}: { 
   analyzer: AnalyserNode | null;
   active: boolean;
   sensitivity?: number;
@@ -82,7 +82,7 @@ const Visualizer = ({
 
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+      
       const width = canvas.width;
       const height = canvas.height;
       const centerY = height / 2;
@@ -96,7 +96,7 @@ const Visualizer = ({
 
       // Draw Ribbon helper that simulates 3D paper twist with shading
       const drawPaperRibbon = (
-        colorMain: string,
+        colorMain: string, 
         colorDark: string,
         yBase: number,
         freq: number,
@@ -107,13 +107,13 @@ const Visualizer = ({
       ) => {
         const points: {x: number, y: number, twist: number, opacity: number}[] = [];
         const step = 4;
-
+        
         // Mode modifiers
         const isCalm = mode === "calm";
         const speedMult = isCalm ? 0.35 : 1.0;
         const freqMult = isCalm ? 0.6 : 1.0;
         const time = Date.now() * speed * speedMult;
-
+        
         // Calculate the average intensity for dynamic scaling
         let sum = 0;
         for(let i=0; i<dataArray.length; i++) sum += dataArray[i];
@@ -125,25 +125,25 @@ const Visualizer = ({
           const dataIdx = Math.floor((i / width) * dataArray.length * 0.4);
           const val = dataArray[dataIdx] / 255;
           const localFlurry = Math.min(1.5, val * scaleFactor);
-
+          
           const curFreq = freq * freqMult;
-
+          
           // Complex layered trigonometric functions for a "fluttering paper" effect
           const baseWave = Math.sin(i * curFreq + time + phase);
           const flutter1 = Math.sin(i * curFreq * 2.2 - time * 1.6 + phase) * (0.2 + turbulence * 0.3);
           const flutter2 = Math.cos(i * curFreq * 5.1 + time * 3.2) * (0.1 + localFlurry * (isCalm ? 0.05 : 0.4));
           const wave = baseWave + flutter1 + flutter2;
-
+          
           // Rapid twisting to simulate paper folding chaotically in the wind
           const baseTwist = Math.cos(i * curFreq * 0.5 + time * 0.7 + phase);
           const twistFlutter = Math.sin(i * curFreq * 3.2 - time * 2.8) * (isCalm ? 0.05 : (0.2 + turbulence * 0.4 + localFlurry * 0.2));
           const twist = Math.max(-1, Math.min(1, baseTwist + twistFlutter));
-
+          
           // Audio physically pushes the paper like dynamic gusts of wind
           const windGust = val * (isCalm ? 25 : 80) * scaleFactor * Math.sin(i * 0.05 - time * 4);
           const currentAmp = amplitude * (isCalm ? 0.5 : 1.0);
           const y = yBase + (wave * currentAmp * Math.min(2.5, (isCalm ? 0.8 : 0.5) + scaleFactor)) + windGust;
-
+          
           points.push({
             x: i,
             y: y,
@@ -158,15 +158,15 @@ const Visualizer = ({
           ctx.beginPath();
           ctx.lineCap = "round";
           ctx.lineJoin = "round";
-
+          
           for (let i = 0; i < points.length - 1; i++) {
             const p1 = points[i];
             const p2 = points[i+1];
-
+            
             // Twist factor determines width and face
             const w1 = Math.abs(p1.twist) * thickness;
             const isFront = p1.twist > 0;
-
+            
             // Shading
             if (isShadowPass) {
               if (isFront) {
@@ -186,7 +186,7 @@ const Visualizer = ({
             ctx.stroke();
           }
         }
-
+        
         // Grainy highlight pass
         ctx.globalCompositeOperation = "overlay";
         ctx.strokeStyle = "rgba(255,255,255,0.15)";
@@ -206,11 +206,11 @@ const Visualizer = ({
 
       // Draw ribbons in layered sets
       const isSpeaking = active && !analyzer; // If I were passing explicit state
-
+      
       // Ink Background Ribbons
       drawPaperRibbon("#333333", "#0B0B0B", centerY, 0.008, 0.0015, 24, 40, 0);
       drawPaperRibbon("#444444", "#111111", centerY + 10, 0.012, 0.002, 18, 30, Math.PI);
-
+      
       // Brand Orange Main Ribbons
       drawPaperRibbon("#F25C2B", "#D7591A", centerY, 0.015, 0.004, 32, 60, 2);
       drawPaperRibbon("#FF8A65", "#F25C2B", centerY - 5, 0.02, 0.005, 14, 50, 4);
@@ -235,7 +235,7 @@ export default function App() {
   const [isSynthesizing, setIsSynthesizing] = useState(false);
   const [sensitivity, setSensitivity] = useState(1);
   const [visualMode, setVisualMode] = useState<"calm" | "dynamic">("dynamic");
-
+  
   const audioContextRef = useRef<AudioContext | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const analyzerRef = useRef<AnalyserNode | null>(null);
@@ -257,7 +257,7 @@ export default function App() {
 
   const startSession = async () => {
     await initAudio();
-
+    
     if (wsRef.current?.readyState === WebSocket.OPEN) return;
 
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
@@ -267,7 +267,7 @@ export default function App() {
 
     ws.onmessage = async (event) => {
       const msg = JSON.parse(event.data);
-
+      
       // Handle Model Text/Transcript
       const text = msg.serverContent?.modelTurn?.parts?.[0]?.text;
       if (text) {
@@ -281,20 +281,20 @@ export default function App() {
       if (audioData && audioContextRef.current && analyzerRef.current) {
         setStatus("speaking");
         const pcm = base64ToPcm(audioData);
-        const buffer = audioContextRef.current.createBuffer(1, pcm.length, 24000);
+        const buffer = audioContextRef.current.createBuffer(1, pcm.length, 24000); 
         buffer.getChannelData(0).set(pcm);
-
+        
         const source = audioContextRef.current.createBufferSource();
         source.buffer = buffer;
         source.connect(analyzerRef.current);
-
+        
         const now = audioContextRef.current.currentTime;
         if (nextStartTimeRef.current < now) {
           nextStartTimeRef.current = now;
         }
         source.start(nextStartTimeRef.current);
         nextStartTimeRef.current += buffer.duration;
-
+        
         source.onended = () => {
           if (nextStartTimeRef.current <= audioContextRef.current!.currentTime) {
              setStatus("idle");
@@ -335,7 +335,7 @@ export default function App() {
 
       const source = audioContextRef.current!.createMediaStreamSource(stream);
       const processor = audioContextRef.current!.createScriptProcessor(4096, 1, 1);
-
+      
       source.connect(processor);
       processor.connect(audioContextRef.current!.destination);
       source.connect(analyzerRef.current!);
@@ -366,8 +366,8 @@ export default function App() {
       await new Promise(resolve => setTimeout(resolve, 800));
     }
     if (wsRef.current?.readyState === WebSocket.OPEN) {
-      wsRef.current.send(JSON.stringify({
-        text: `Please read this back to me exactly as written: "${aiTranscript}"`
+      wsRef.current.send(JSON.stringify({ 
+        text: `Please read this back to me exactly as written: "${aiTranscript}"` 
       }));
     } else {
       setIsSynthesizing(false);
@@ -387,8 +387,8 @@ export default function App() {
     }
 
     if (wsRef.current?.readyState === WebSocket.OPEN) {
-      wsRef.current.send(JSON.stringify({
-        text: "Give me a very short, profound, and inspiring quote. Speak it directly."
+      wsRef.current.send(JSON.stringify({ 
+        text: "Give me a very short, profound, and inspiring quote. Speak it directly." 
       }));
     } else {
       setStatus("idle");
@@ -408,7 +408,7 @@ export default function App() {
             Good<span className="text-orange">'</span>ai
           </span>
         </div>
-
+        
         <nav className="hidden md:flex items-center border-2 border-ink stamp-box !shadow-[4px_4px_0_#0B0B0B] bg-paper">
           <a href="#" className="font-sans text-xs font-bold uppercase tracking-widest text-paper bg-ink px-6 py-3">Workflows</a>
           <a href="#" className="font-sans text-xs font-bold uppercase tracking-widest text-ink hover:bg-border px-6 py-3 transition-colors border-r-2 border-l-2 border-ink">Systems</a>
@@ -433,7 +433,7 @@ export default function App() {
           </div>
 
           <div className="flex flex-wrap items-center gap-4 mt-2">
-             <button
+             <button 
                 onClick={toggleRecording}
                 className={cn(
                   "btn-primary",
@@ -444,7 +444,7 @@ export default function App() {
                 <span>{isRecording ? "Stop Listening" : "Start Talking"}</span>
              </button>
 
-             <button
+             <button 
                 onClick={handleInspireMe}
                 disabled={status !== "idle" && status !== "speaking"}
                 className="btn-secondary"
@@ -452,7 +452,7 @@ export default function App() {
                 <Zap className="h-4 w-4 mr-2" />
                 Inspire Me
              </button>
-
+             
              {isSynthesizing && (
                <div className="flex items-center gap-2 ml-4">
                  <Loader2 className="h-4 w-4 animate-spin text-orange" />
@@ -465,7 +465,7 @@ export default function App() {
           <div className="min-h-[120px] mt-4 flex items-center">
             <AnimatePresence mode="wait">
               {aiTranscript ? (
-                <motion.div
+                <motion.div 
                   key="ai-text"
                   initial={{ opacity: 0, y: 10, scale: 0.98 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -475,7 +475,7 @@ export default function App() {
                   <p className="font-serif text-2xl text-ink leading-snug">
                     "{aiTranscript}"
                   </p>
-                  <button
+                  <button 
                     onClick={handleRepeatSpeak}
                     disabled={status === "speaking" || isSynthesizing}
                     className="absolute -bottom-4 -right-2 bg-hi-yellow border-2 border-ink shadow-[2px_2px_0_#0B0B0B] text-ink font-mono text-[10px] font-bold uppercase tracking-widest px-3 py-1 flex items-center gap-2 hover:bg-orange hover:text-paper transition-colors disabled:opacity-50"
@@ -484,15 +484,15 @@ export default function App() {
                   </button>
                 </motion.div>
               ) : (
-                 <motion.div
+                 <motion.div 
                   key="status"
-                  initial={{ opacity: 0 }}
+                  initial={{ opacity: 0 }} 
                   animate={{ opacity: 1 }}
                   className="flex items-center gap-3 px-4 py-3 border-2 border-border bg-paper w-max"
                  >
                    <Activity className={cn("h-4 w-4", status === "listening" ? "text-orange animate-bounce" : "text-border")} />
                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-ink/70">
-                     {status === "idle" ? "System Ready" :
+                     {status === "idle" ? "System Ready" : 
                       status === "listening" ? "Listening to environment..." :
                       status === "thinking" ? "Processing audio map..." : "Synthesizing voice..."}
                    </span>
@@ -513,22 +513,22 @@ export default function App() {
                Acoustic_Feed.exe
              </span>
            </div>
-
+           
            <div className="absolute inset-0 pt-8" style={{ background: 'repeating-linear-gradient(0deg, rgba(11,11,11,0.025) 0 1px, transparent 1px 4px)' }}>
              <Visualizer analyzer={analyzerRef.current} active={isRecording || status === "speaking"} sensitivity={sensitivity} mode={visualMode} />
            </div>
-
+           
            <div className="absolute bottom-6 left-6 flex items-center border-2 border-ink bg-paper shadow-[2px_2px_0_#0B0B0B] rounded-[2px] overflow-hidden z-20">
              <div className="px-3 py-1.5 bg-border text-ink font-mono text-[10px] uppercase font-bold border-r-2 border-ink select-none hidden sm:block">
                Mode
              </div>
-             <button
+             <button 
                 onClick={() => setVisualMode("calm")}
                 className={cn("px-4 py-1.5 font-mono text-[10px] uppercase font-bold border-r-2 border-ink transition-colors", visualMode === "calm" ? "bg-ink text-paper" : "bg-paper text-ink hover:bg-paper-raised")}
               >
                 Calm
               </button>
-              <button
+              <button 
                 onClick={() => setVisualMode("dynamic")}
                 className={cn("px-4 py-1.5 font-mono text-[10px] uppercase font-bold transition-colors", visualMode === "dynamic" ? "bg-ink text-paper" : "bg-paper text-ink hover:bg-paper-raised")}
               >
@@ -540,19 +540,19 @@ export default function App() {
              <div className="px-3 py-1.5 bg-border text-ink font-mono text-[10px] uppercase font-bold border-r-2 border-ink select-none hidden sm:block">
                Sens
              </div>
-             <button
+             <button 
                 onClick={() => setSensitivity(0.5)}
                 className={cn("px-4 py-1.5 font-mono text-[10px] uppercase font-bold border-r-2 border-ink transition-colors", sensitivity === 0.5 ? "bg-ink text-paper" : "bg-paper text-ink hover:bg-paper-raised")}
               >
                 Steady
               </button>
-              <button
+              <button 
                 onClick={() => setSensitivity(1)}
                 className={cn("px-4 py-1.5 font-mono text-[10px] uppercase font-bold border-r-2 border-ink transition-colors", sensitivity === 1 ? "bg-ink text-paper" : "bg-paper text-ink hover:bg-paper-raised")}
               >
                 Normal
               </button>
-              <button
+              <button 
                 onClick={() => setSensitivity(2.5)}
                 className={cn("px-4 py-1.5 font-mono text-[10px] uppercase font-bold transition-colors", sensitivity === 2.5 ? "bg-ink text-paper" : "bg-paper text-ink hover:bg-paper-raised")}
               >
@@ -569,3 +569,4 @@ export default function App() {
     </div>
   );
 }
+
