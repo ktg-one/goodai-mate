@@ -6,7 +6,7 @@
 <domain>
 ## Phase Boundary
 
-Visitors land on `/` into `src/components/hero/Hero.tsx` as the first surface. Voice Agent stays usable on a dedicated page (not the homepage hero). This Next.js app is the **homepage / marketing landing** — one section of the Good'ai site — not the blog or services area.
+Visitors land on `/` into `src/components/hero/Hero.tsx` as the first surface. Voice Agent stays usable on a dedicated page (not the homepage hero). **This repo is the homepage: intro + demos only.** Blog/services (front and back) live on Instatic on Railway.
 
 </domain>
 
@@ -14,13 +14,14 @@ Visitors land on `/` into `src/components/hero/Hero.tsx` as the first surface. V
 ## Implementation Decisions
 
 ### Site information architecture
-- **D-01:** This repo's homepage is a **section** of the overall Good'ai site (marketing landing), not the whole product surface.
-- **D-02:** Blog and services content **do not** get built as Next.js routes in this repo. Fallback: **Instatic CMS on Railway** for the services/blog area.
-- **D-03:** Phase 1 only swaps the homepage **hero section** (`VoiceAgentHero` → `Hero`) and stands up a Voice Agent page. Do not invent a blog, CMS client, or services index here.
+- **D-01:** **This repo is the homepage.** Intro + product demos only (hero, voice, playgrounds). Not the full site.
+- **D-02:** **Railway is the backend.** Project `BLOG` (`corebunch/instatic:latest`, `goodai.up.railway.app`) already running.
+- **D-03:** **Instatic on Railway is front and back** for blog/services — it looks chic enough to be both. Do not build `/blog` or `/services` in this Next.js app.
+- **D-04:** Phase 1 only swaps the homepage hero (`VoiceAgentHero` → `Hero`) and stands up a Voice Agent demo page. No CMS, no Railway deploy from this repo.
 
 ### Hero
-- **D-04:** Homepage first surface is `src/components/hero/Hero.tsx` (already in tree; currently unmounted).
-- **D-05:** `VoiceAgentHero` is not the homepage hero. Keep it if already configured; mount it on a dedicated page (e.g. `/voice`).
+- **D-05:** Homepage first surface is `src/components/hero/Hero.tsx` (already in tree; currently unmounted).
+- **D-06:** `VoiceAgentHero` is not the homepage hero. Keep it if already configured; mount it on a dedicated page (e.g. `/voice`) as a **demo**, not as the blog/CMS.
 
 ### the agent's Discretion
 - Exact Voice Agent path (`/voice` vs `/talk` vs other) — `/voice` is the roadmap example, not locked.
@@ -32,7 +33,8 @@ Visitors land on `/` into `src/components/hero/Hero.tsx` as the first surface. V
 ## Specific Ideas
 
 - User is already building the hero in `src/components/hero/`.
-- Instatic is available as an MCP in this session; Railway hosts the CMS fallback. No Instatic/Railway/blog code exists in this repo today (`src/app/` is `/` + API routes only).
+- Railway `BLOG` / Instatic is live at `https://goodai.up.railway.app` — Instatic homepage slug `index` plus posts template, brand-guide pages, Site Shell. That surface is **not** this Next.js app.
+- This repo stays intro + demos. Instatic can carry both the blog/services front and the CMS back.
 
 </specifics>
 
@@ -50,6 +52,9 @@ Visitors land on `/` into `src/components/hero/Hero.tsx` as the first surface. V
 - `src/components/HomeClient.tsx` — still mounts `VoiceAgentHero` as the homepage hero
 - `src/components/hero/Hero.tsx` — new hero (unmounted)
 - `src/components/voice-agent/VoiceAgentHero.tsx` — existing voice product
+
+### Other surfaces
+- Railway project `BLOG` — Instatic `ghcr.io/corebunch/instatic:latest`, domain `https://goodai.up.railway.app`
 
 ### Design kit (Phase 2 SSOT; do not restyle the whole page in Phase 1)
 - `public/colors_and_type.css` — kit tokens (cream `#FFF0D0`) — **not** what `/` currently uses
@@ -79,7 +84,7 @@ Visitors land on `/` into `src/components/hero/Hero.tsx` as the first surface. V
 <deferred>
 ## Deferred Ideas
 
-- **Instatic CMS on Railway** for services/blog — not Phase 1, not this Next.js app. Capture as a later surface / ops task, not a homepage plan.
+- **Instatic on Railway** (blog/services front + back) — not Phase 1, not this Next.js app. Already deployed; later work is linking/nav from this homepage, not rebuilding it here.
 - **DS-01 / HOME-01** — Phase 2 (live tokens + restyle sections below the hero).
 - **HOME-02** — mail-board GSAP can come off `/` (future).
 - Align `public/` cream kit vs live `src/app/tokens/colors.css` palette — Phase 2, not Phase 1.
