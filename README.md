@@ -1,67 +1,71 @@
-# Good'ai (goodai.au)
+# Zenith Interface
+> *An instrument of pure focus. Crafted from digital aerospace titanium and sapphire glass.*
 
-Perth business automations for SMEs. The site hero **is** the product: a working local Voice Agent (Supertonic) whose conversations file as physical mail into a 1978 direct-mail corkboard (GSAP ribbons, stamped dockets, in-tray, footer ritual).
 
-Brutalist mechanical execution at award-craft level, powered by local agent skills.
+## ✦ Overview
 
-## Development
+**Zenith Interface** is an ultra-premium, high-fidelity landing page experience designed to push the boundaries of modern web interactivity. Built with **Next.js 15**, **GSAP**, and **Framer Motion**, it embodies an "Upper Class" aesthetic inspired by high-end fashion editorials and architectural precision.
 
-This is a Next.js 16 (App Router) site.
+This project demonstrates advanced frontend engineering techniques, including physics-based interactions, WebGL-style distortion (simulated), and cinematic scroll storytelling.
 
-```bash
-npm install
-npm run dev
-```
+[**View Live Demo**](https://zenith-interface.vercel.app) · [**Report Bug**](https://github.com/Pusri27/zenith-interface/issues)
 
-Open http://localhost:3000 .
+## ✦ Key Features
 
-Use **Node 20+**.
+### 1. High-Fidelity Interactions
+*   **🧲 Magnetic Physics**: Buttons and interactive elements possess a magnetic field, physically pulling towards the cursor for a tactile feel.
+*   **🔦 Spotlight Intelligence**: Feature cards track mouse movement, shedding dynamic light on borders to reveal content.
+*   **🖱️ Custom Difference Cursor**: A custom blend-mode cursor that ensures visibility on any background, adding an avant-garde touch.
 
-## Skills (local .agents + .claude)
+### 2. Cinematic Storytelling
+*   **🎞️ Dynamic Film Grain**: A procedural noise texture that reacts to scroll velocity, intensifying during rapid movement to simulate analog film speed.
+*   **📜 Editorial Typography**: Massive, tight-tracking headers paired with generous whitespace, mimicking luxury print media.
+*   **🔓 Text Scramble Decryption**: Key headers "decrypt" themselves upon entry, emphasizing the high-tech, secure nature of the product.
 
-The project maintains curated copies of skills in:
+### 3. Advanced Motion
+*   **🌌 Parallax Image Masks**: Images move at different velocities within their containers, creating a "window into another world" depth effect.
+*   **🌊 Infinite Kinetic Marquee**: A seamless, high-performance scrolling band that adds constant horizontal energy.
+*   **⏱️ Cinematic Preloader**: A minimalist counter sequence that builds anticipation before the interface is revealed.
 
-- `.agents/skills/` (goodai-agent-team, goodai-award-configuration, awwwards-*, gsap-*, ui-ux-pro-max, find-skills, ...)
-- `.claude/skills/` (gsap-*, next-*, design, gsd-*, openpets, ...)
+## ✦ Tech Stack
 
-**gsd family** (health, docs-update, progress, manager, do, plan-phase, verify-work, cleanup, etc.) was added from global `.claude`/`.agents` so that `/gsd-health`, `/gsd-progress`, `/gsd-docs-update` etc. are always available when working inside the project.
+*   **Framework**: [Next.js 15 (App Router)](https://nextjs.org/)
+*   **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+*   **Animation**: [Framer Motion](https://www.framer.com/motion/) & [GSAP ScrollTrigger](https://greensock.com/scrolltrigger)
+*   **Smooth Scroll**: [Lenis](https://lenis.studio/freight/react-lenis)
+*   **UI Primitives**: [Shadcn UI](https://ui.shadcn.com/)
+*   **Icons**: [Lucide React](https://lucide.dev/)
 
-To (re)add or update:
+## ✦ Getting Started
 
-- Copy desired SKILL.md trees from `~/ .agents/skills/<name>` / `~/.claude/skills/<name>` into both local trees.
-- Or use global skills CLI (`npx skills ...`) then sync the dirs.
+### Prerequisites
 
-Key project skills:
+*   Node.js 18+
+*   npm or pnpm
 
-- `goodai-award-configuration` — the 5-agent swarm (impeccable + awwwards-animations + awwwards-ui-skills + gsap-awwwards-website + gsap-framer-scroll-animation) that delivered the current mail-board site.
-- `goodai-agent-team` — coordinator for dispatching on Voice / brutalist work.
-- `gsd-health` (and siblings) — planning dir health, progress, docs sync, phase mgmt.
-- Design/animation: awwwards-*, gsap-*, impeccable for mechanical 60fps stamp/ribbon work.
+### Installation
 
-Always inject `PRODUCT.md` + `public/` + current live state + mechanical rules (hard 90-160ms clacks, one red, WONK once, reduced-motion static fidelity) when using the award config.
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/Pusri27/zenith-interface.git
+    cd zenith-interface
+    ```
 
-## gsd (Get Shit Done) + docs hygiene
+2.  Install dependencies:
+    ```bash
+    npm install
+    # or
+    pnpm install
+    ```
 
-- `gsd health` (or gsd-sdk query validate.health) — run at session start / before ship.
-- `gsd progress` — situational awareness + routing.
-- `gsd docs-update` (or --verify-only) — keep .planning/ and docs/ honest against code.
-- Old pre-refactor phases (shader/cursor/lead v1) archived to `.planning/milestones/v0.9-pre-refactor-phases/`.
-- Current .planning/PROJECT.md, ROADMAP.md, STATE.md, REQUIREMENTS.md, docs/agents/* describe the refactored Voice + mail-docket site.
+3.  Run the development server:
+    ```bash
+    npm run dev
+    ```
 
-## Brand / Product
+4.  Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-See `PRODUCT.md` (the SSOT) and `public/`.
+## ✦ Author
 
-Core: "we'll sort the boring stuff." Practical. Warm. Direct. Switched-on Perth mate. One orange/red per surface. Ink and paper do the heavy lifting.
-
-## Deploy
-
-Vercel (see vercel.json). Domain goodai.au.
-
-## Notes
-
-- `public/voice-feature/` is a separate Vite/Gemini Live prototype kept as reference.
-- `feature_list.json` is historical (old 251-test pre-refactor spec); current verification is manual + gsd + browser checks + award-craft rules.
-- `skills-lock.json` tracks some installed design/animation skills.
-
-This project was bootstrapped with create-next-app + heavy agent skill augmentation.
+**Pusri27**
+*   **GitHub**: [@Pusri27](https://github.com/Pusri27)
