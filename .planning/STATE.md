@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1-refactored
-milestone_name: "Voice + Mail Docket (award-refactored)"
-status: "maintained"
-stopped_at: "Post-refactor docs + gsd skills hygiene (gsd-health, gsd-docs-update, gsd-progress alignment)"
-last_updated: "2026-06-04"
+milestone: v2.0
+milestone_name: Design system + hero
+status: planning
+last_updated: "2026-08-24T00:23:46.934Z"
+last_activity: 2026-08-24
 progress:
   total_phases: 0
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
-  percent: 100
+  percent: 0
 ---
 
 # Project State
@@ -25,14 +25,15 @@ See: .planning/PROJECT.md (updated 2026-06-04)
 
 ## Current Position
 
-- No active numbered phases in .planning/phases/ (clean after archive).
-- The delivered v1 is the refactored VoiceAgentHero + GSAP mail-board site (see goodai-award-configuration SKILL.md for the exact 5-skill swarm that shipped the mechanical 1978 direct-mail feel).
-- gsd-* skills (health, progress, docs-update, plan-phase, cleanup, etc.) now resident in local .agents/skills and .claude/skills for in-project use of /gsd-health etc.
-- PRODUCT.md + public/ remain the SSOT for brand, motion rules, stamp physics.
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-08-24 — Milestone v2.0 started
 
 ## Performance Metrics
 
 **Post-refactor hygiene pass (2026-06-04):**
+
 - gsd-health: healthy (only pre-archive I001 infos on missing SUMMARYs for old plans; now resolved by archive).
 - Old phases (01-foundation through 05-*) moved to .planning/milestones/v0.9-pre-refactor-phases/.
 - PROJECT.md, ROADMAP.md, STATE.md, docs/agents/* rewritten for actual shipped site + current skill usage.

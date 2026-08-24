@@ -8,11 +8,21 @@ The entire site below the hero is one cohesive 1978 direct-mail corkboard being 
 
 Development and craft heavily leverage local agent skills from `.agents/skills` and `.claude/skills` (goodai-award-configuration + awwwards/gsap/impeccable swarm for the mechanical brutalist execution).
 
+## Current Milestone: v2.0 Design system + hero
+
+**Goal:** Make `public/` the live design SSOT, ship the new homepage hero from `src/components/hero/`, and move the Voice Agent off the homepage onto its own page.
+
+**Target features:**
+- Adopt `public/colors_and_type.css` + `public/SKILL.md` + `public/preview/` as the design-system SSOT (tokens, type, components). Rewrite PRODUCT.md / planning to match what is already in `public/`.
+- Homepage hero is `src/components/hero/Hero.tsx` (the current hero work), not `VoiceAgentHero`.
+- Voice Agent stays configured if already wired; lives on a dedicated page, not the homepage.
+- Rest of the homepage restyles to the `public/` system as the new hero language takes over.
+
 ## Core Value
 
-A switched-on Perth tradie/business owner lands, speaks their admin mess (invoicing, follow-ups, quotes, the lot) into the Voice Agent, feels understood by a local mate who "gets it", and knows the boring stuff will be sorted so they can knock off early. No portals, no logins, no dashboards. Just relief.
+A switched-on Perth tradie/business owner lands, feels the Good'ai brand in the new hero, and knows the boring stuff will be sorted so they can knock off early. No portals, no logins, no dashboards. Just relief.
 
-If the voice + the physical docket story doesn't make them drop a line, nothing else matters.
+If the new hero + design system don't make them drop a line, nothing else matters. Voice remains a real product surface — on its own page.
 
 ## Requirements
 
@@ -29,10 +39,12 @@ If the voice + the physical docket story doesn't make them drop a line, nothing 
 
 ### Active / Ongoing
 
-- [ ] Voice quality / Supertonic prod endpoint + latency tuning
-- [ ] Lead capture via real contact (mailto + form) + conversation context handoff to ops
-- [ ] Additional surfaces (services, about, case studies) in same brutalist mail language
-- [ ] gsd health + docs alignment after refactor (this work)
+- [ ] Homepage ships `src/components/hero/` as the live hero (in progress now)
+- [ ] `public/` design system (colors, type, preview, ui kit, SKILL.md) is the SSOT for production UI
+- [ ] PRODUCT.md rewritten to match `public/`, not the v1 mail-board-as-hero brief
+- [ ] Voice Agent stays configured; moved to its own page (not homepage)
+- [ ] Remaining homepage sections restyle to the `public/` system
+- [ ] Lead capture via real contact (mailto + form)
 - [ ] Production deploy / domain + analytics
 
 ### Out of Scope (v1)
@@ -57,9 +69,10 @@ If the voice + the physical docket story doesn't make them drop a line, nothing 
 - Stamp clack timing: hard 90-160ms cubic-bezier(0.23,1,0.32,1) — no floaty easings
 - One red accent max per surface/block
 - Exactly one Fraunces WONK phrase per major surface
-- Reduced motion must not lose the 1978 docket artifact
+- Reduced motion must not lose meaning (static fallbacks for hero + any motion)
 - Zero "AI" hype language in UI or persona
-- Voice Agent remains pure functional product moment at top; everything else receives leaked convos as filed mail
+- Homepage hero is `src/components/hero/`; Voice Agent is a separate page
+- Design tokens and craft rules come from `public/` (`colors_and_type.css`, `SKILL.md`, preview, ui kit) — not from the v1 mail-board PRODUCT.md brief
 
 ## Key Decisions (post-refactor)
 
@@ -69,9 +82,26 @@ If the voice + the physical docket story doesn't make them drop a line, nothing 
 | Local .agents/.claude skills copies (goodai-*, gsd-*, awwwards/gsap) | Project-specific context + gsd planning tools always available when working in-repo | Added gsd-health + core set |
 | Archive pre-refactor phases | Old 01-05 plans described shader/cursor/old-lead v1 that was pivoted away in the refactor | Archived to milestones/v0.9-pre-refactor-phases/ |
 | gsd for health/docs/progress | Use /gsd-health, /gsd-docs-update, /gsd-progress etc. to keep .planning and docs/ in sync with actual shipped site | In progress (this task) |
-| PRODUCT.md + public/ design system as SSOT | Brand guardrails must be injected into every creative agent run | Enforced |
+| PRODUCT.md + public/ design system as SSOT | Brand guardrails must be injected into every creative agent run | Enforced (v1) |
+| v2: public/ is the live SSOT; homepage hero is src/components/hero/ | User is building the new hero now. Voice Agent stays configured on a dedicated page. Wipe v1-refactored planning cycle (phases from 1). | Active |
+
+## Evolution
+
+This document evolves at phase transitions and milestone boundaries.
+
+**After each phase transition** (via `$gsd-transition`):
+1. Requirements invalidated? → Move to Out of Scope with reason
+2. Requirements validated? → Move to Validated with phase reference
+3. New requirements emerged? → Add to Active
+4. Decisions to log? → Add to Key Decisions
+5. "What This Is" still accurate? → Update if drifted
+
+**After each milestone** (via `$gsd-complete-milestone`):
+1. Full review of all sections
+2. Core Value check — still the right priority?
+3. Audit Out of Scope — reasons still valid?
+4. Update Context with current state
 
 ---
 
-*Last updated: 2026-06-04 after gsd-health + skills add + docs alignment for refactored site*
-*Pre-refactor planning archived; current reality is the Voice + mail-docket brutalist site delivered via award skills + gsd oversight.*
+*Last updated: 2026-08-24 — start milestone v2.0 Design system + hero*
