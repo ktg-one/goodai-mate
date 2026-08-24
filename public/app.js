@@ -180,7 +180,6 @@
       ScrollTrigger.refresh()
     })
 
-    const seg = 1 / (FRAMES.length - 1)
     let cur = 0
     let lastIdx = -1
     let lastClock = -1
@@ -190,26 +189,31 @@
         aspect()
         fitted = true
       }
-      cur += (target - cur) * 0.08
+      cur += (target - cur) * 0.12
       const p = Math.min(1, Math.max(0, cur))
-      const s = p / seg
-      const i = Math.min(FRAMES.length - 2, Math.floor(s))       // texture pair
-      const ci = Math.min(FRAMES.length - 1, Math.round(s))      // caption follows the eye
-      u.uFrom.value = tex[i]
-      u.uTo.value = tex[i + 1]
-      u.uMix.value = s - i
+      /* hold each beat, then cut — no slow morph between ringing / agent / booked */
+      const ci = p < 0.38 ? 0 : p < 0.70 ? 1 : 2
+      u.uFrom.value = tex[ci]
+      u.uTo.value = tex[ci]
+      u.uMix.value = 0
       renderer.render(scene, cam)
 
-      /* DOM overlay — writes only when the value changes */
       if (ci !== lastIdx) {
         lastIdx = ci
         captions.forEach((c) => {
           const on = Number(c.dataset.cap) === ci
           c.classList.toggle('is-on', on)
-          c.setAttribute('aria-hidden', String(!on)) // SR reads only the active caption
+          c.setAttribute('aria-hidden', String(!on))
         })
         tcStatus.textContent = STATUS[ci]
         document.body.classList.toggle('booked-active', ci >= FRAMES.length - 1)
+        if (ci > 0) {
+          gsap.fromTo(
+            canvas,
+            { scale: 0.9 },
+            { scale: 1, duration: 0.34, ease: 'back.out(2.6)', overwrite: true }
+          )
+        }
       }
       const clock = Math.round(p * 7)
       if (clock !== lastClock) {
