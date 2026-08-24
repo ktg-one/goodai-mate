@@ -7,7 +7,12 @@
    One function owns progress; everything else reads it. */
 (function () {
   document.documentElement.classList.add('js')
-  const { THREE, gsap, ScrollTrigger, Lenis } = window.SITE
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+  window.scrollTo(0, 0)
+
+  const SITE = window.SITE
+  if (!SITE || !SITE.THREE || !SITE.gsap || !SITE.ScrollTrigger) return
+  const { THREE, gsap, ScrollTrigger, Lenis } = SITE
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
   const stage = document.getElementById('peak')
   const canvas = document.getElementById('peak-canvas')
@@ -28,10 +33,11 @@
 
   /* ---- Tier-1 engine ---- */
   const FRAMES = [
-    'assets/gen/hero-ringing.webp',
-    'assets/gen/hero-agent.webp',
-    'assets/gen/hero-booked.webp',
+    'assets/gen/hero-ringing.jpg',
+    'assets/gen/hero-agent.jpg',
+    'assets/gen/hero-booked.jpg',
   ]
+  const LINEAR = 1006 /* three.js LinearFilter — NPOT 1408 frames must not mipmap */
 
   function initEngine() {
     if (reduceMotion) return
@@ -103,6 +109,9 @@
     const tex = FRAMES.map((f) => {
       const t = load.load(f)
       t.colorSpace = THREE.SRGBColorSpace
+      t.generateMipmaps = false
+      t.minFilter = LINEAR
+      t.magFilter = LINEAR
       return t
     })
     const noise = load.load('assets/gen/noise.webp')
@@ -158,17 +167,29 @@
     ScrollTrigger.create({
       trigger: stage,
       start: 'top top',
-      end: '+=300%',
+      end: '+=400%',
       pin: true,
-      scrub: 0.5,
+      pinSpacing: true,
+      anticipatePin: 1,
+      scrub: 0.6,
+      invalidateOnRefresh: true,
       onUpdate: (self) => { target = self.progress },
+    })
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0)
+      ScrollTrigger.refresh()
     })
 
     const seg = 1 / (FRAMES.length - 1)
     let cur = 0
     let lastIdx = -1
     let lastClock = -1
+    let fitted = false
     function frame(time) {
+      if (!fitted && tex[0].image && tex[0].image.width) {
+        aspect()
+        fitted = true
+      }
       cur += (target - cur) * 0.08
       const p = Math.min(1, Math.max(0, cur))
       const s = p / seg

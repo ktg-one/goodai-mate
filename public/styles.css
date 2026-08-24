@@ -12,8 +12,16 @@
   --scrim:       linear-gradient(90deg, color-mix(in srgb, var(--ground) 55%, transparent) 0%, color-mix(in srgb, var(--ground) 22%, transparent) 50%, transparent 78%);
 }
 
+@font-face{
+  font-family:"Fraunces";
+  src:url("/fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.ttf") format("truetype");
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+}
+
 *{ margin:0; padding:0; box-sizing:border-box; }
-html{ scroll-behavior:auto; }
+html{ scroll-behavior:auto; overflow-x:clip; }
 body{
   background:var(--ground);
   color:var(--paper);
@@ -21,9 +29,7 @@ body{
   font-size:16px;
   line-height:1.55;
   -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
 }
-.mono{ font-family:"IBM Plex Mono",monospace; }
 
 /* ---------- scene 1: the peak ---------- */
 .stage{
@@ -82,12 +88,13 @@ body{
   margin-bottom:1.6rem;
 }
 h1{
-  font-family:"Newsreader",Georgia,serif;
-  font-weight:300;
+  font-family:"Fraunces",Georgia,serif;
+  font-weight:340;
   font-size:clamp(3.4rem,10vw,10.5rem);
   line-height:.96;
   letter-spacing:-.04em;
   color:var(--paper);
+  font-variation-settings:"opsz" 144, "SOFT" 40, "WONK" 0.8;
 }
 h1 .period{ color:var(--signal); }
 /* headline chars — flown in by the char-split scrub (see app.js).
