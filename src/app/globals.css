@@ -640,3 +640,9 @@ section:nth-of-type(2n) {
   background-size: cover;
   background-blend-mode: multiply;
 }
+
+/* Bare cards background pattern */
+[data-slot="card"] {
+  background: var(--paper) url('/assets/shapes/shape-big-1.svg') no-repeat center center / cover;
+  background-blend-mode: multiply;
+}
