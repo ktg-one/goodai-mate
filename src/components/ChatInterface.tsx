@@ -3,11 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
 import { Send } from 'lucide-react';
-<<<<<<< HEAD
 import { useEffect, useMemo, useRef, useState, memo, useCallback } from 'react';
-=======
-import { useEffect, useRef, useState, memo, useCallback, useMemo } from 'react';
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
 import LeadCaptureCard from '@/components/LeadCaptureCard';
 
 type TextPart = UIMessage['parts'][number] & { type: 'text'; text: string };
@@ -65,29 +61,12 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
   });
 
   const isBusy = status === 'submitted' || status === 'streaming';
-<<<<<<< HEAD
   const conversationTranscript = useMemo(
-=======
-  const getConversationTranscript = useCallback(
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
     () => messages.map((message) => `${message.role}: ${getMessageText(message)}`).join('\n'),
     [messages],
   );
   const errorMessage = error?.message?.trim() || 'Something went sideways. Try again in a moment.';
 
-<<<<<<< HEAD
-=======
-  // ⚡ Bolt Performance Optimization:
-  // Memoizing the message mapping operation prevents the entire chat thread
-  // from re-rendering and re-reconciling every time the user types in the input form
-  // (which causes the parent ChatInterface component to re-render).
-  const renderedMessages = useMemo(() => {
-    return messages.map((message) => (
-      <ChatMessage key={message.id} message={message} />
-    ));
-  }, [messages]);
-
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
   useEffect(() => {
     if (!initialMessage || initialSent.current) return;
     initialSent.current = true;
@@ -119,11 +98,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
     <div className="gai-chat">
       {/* Header bar */}
       <div className="border-b border-[var(--ink)] bg-[var(--paper)] px-4 py-3">
-<<<<<<< HEAD
         <p className="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--ocean-600)]">
-=======
-        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--navy-deep)]">
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
           Good&apos;ai intake
         </p>
         <h2 className="mt-1 text-[17px] font-bold leading-tight text-[var(--ink)]">
@@ -133,11 +108,7 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
 
       {/* Scrollable thread */}
       <div className="gai-chat-scroll">
-<<<<<<< HEAD
         <div className="gai-chat-inner">
-=======
-        <div className="gai-chat-inner" role="log" aria-live="polite">
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
           {/* Initial prompt bubble */}
           <div className="gai-bubble-row">
             <div className="gai-bubble gai-bubble-ai">
@@ -145,7 +116,6 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
             </div>
           </div>
 
-<<<<<<< HEAD
           {messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
@@ -153,35 +123,20 @@ export default function ChatInterface({ initialMessage = '', onFirstResponse }: 
           {isBusy && (
             <div className="gai-bubble-row">
               <div className="gai-bubble gai-bubble-ai gai-typing">
-=======
-          {renderedMessages}
-
-          {isBusy && (
-            <div className="gai-bubble-row">
-              <div className="gai-bubble gai-bubble-ai gai-typing" role="status">
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                 <span key="a" /><span key="b" /><span key="c" />
               </div>
             </div>
           )}
 
           {error && (
-<<<<<<< HEAD
             <div className="gai-error">{errorMessage}</div>
-=======
-            <div className="gai-error" role="alert" aria-live="assertive">{errorMessage}</div>
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
           )}
 
           {showLeadCard && !leadDismissed && firstMessage && (
             <div ref={leadCardRef}>
               <LeadCaptureCard
                 firstMessage={firstMessage}
-<<<<<<< HEAD
                 conversationTranscript={conversationTranscript}
-=======
-                conversationTranscript={getConversationTranscript}
->>>>>>> cb9dafa (Merge pull request #195 from ktg-one/sentinel-ssrf-ipv6-unspecified-11941053551987039173)
                 onDismiss={() => setLeadDismissed(true)}
               />
             </div>

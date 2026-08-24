@@ -1,8 +1,0 @@
-{
-  "name": "memory_slot_list",
-  "description": "List all memory slots (pinned + project + global). Slots are editable, size-limited memory units the agent can read and modify across sessions.",
-  "inputSchema": {
-    "properties": {},
-    "type": "object"
-  }
-}
