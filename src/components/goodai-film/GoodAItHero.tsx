@@ -72,11 +72,25 @@ export default function GoodAItHero() {
         const frag = document.createDocumentFragment();
         [...headline.childNodes].forEach((node) => {
           if (node.nodeType === 3) {
-            for (const ch of node.textContent ?? '') {
-              const s = document.createElement('span');
-              s.className = 'goodait-char';
-              s.textContent = ch;
-              frag.appendChild(s);
+            const words = (node.textContent ?? '').split(/(\s+)/);
+            for (const word of words) {
+              if (!word) continue;
+              if (/\s+/.test(word)) {
+                const w = document.createElement('span');
+                w.textContent = word;
+                frag.appendChild(w);
+              } else {
+                const w = document.createElement('span');
+                w.style.display = 'inline-block';
+                w.style.whiteSpace = 'nowrap';
+                for (const ch of word) {
+                  const s = document.createElement('span');
+                  s.className = 'goodait-char';
+                  s.textContent = ch;
+                  w.appendChild(s);
+                }
+                frag.appendChild(w);
+              }
             }
           } else if (node.nodeName === 'BR') {
             frag.appendChild(document.createElement('br'));

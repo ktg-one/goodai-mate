@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 // CRITICAL (AGENTS.md): direct imports, no barrels
-import { VoiceAgentHero } from '@/components/voice-agent/VoiceAgentHero';
+
 import GoodAItHero from '@/components/goodai-film/GoodAItHero';
 import ChatInterface from '@/components/ChatInterface';
 import LeadCaptureCard from '@/components/LeadCaptureCard';
@@ -17,7 +17,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import WhyGoodAI from '@/components/marketing/WhyGoodAI';
 import Manifest from '@/components/marketing/Manifest';
 import AISolutions from '@/components/marketing/AISolutions';
-import VoiceAgentDemo from '@/components/marketing/VoiceAgentDemo';
+
 import CallLoopDemo from '@/components/marketing/CallLoopDemo';
 
 
@@ -348,11 +348,6 @@ export default function HomeClient() {
     <GoodAItHero />
     {mounted ? (
     <div ref={mailBoardRef} className="mail-board overflow-x-hidden">
-      {/* HERO - TTS feature (the Voice Agent as the product) — descent files into the stack */}
-      <VoiceAgentHero 
-        supertonicUrl="http://localhost:8000/transcribe" 
-        onMailFiled={handleMailFiled}
-      />
 
       {/* RIBBON 1: hero visualizer language → WhyGoodAI (paper tape bridge) */}
       <div ref={ribbon1Ref} className="mail-ribbon w-full" aria-hidden="true" />
@@ -469,7 +464,7 @@ export default function HomeClient() {
       )}
 
       {/* Voice agent demo (enhanced) + strong CTA */}
-      <VoiceAgentDemo />
+
 
       <CallLoopDemo />
 
