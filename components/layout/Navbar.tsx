@@ -10,7 +10,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetClose } from "@/com
 
 const navLinks = [
     { name: "Features", href: "#features" },
-    { name: "Story", href: "#story" },
+    { name: "Field notes", href: "https://goodai.up.railway.app/" },
     { name: "Services", href: "#specs" },
     { name: "Prices", href: "#pricing" },
 ];
