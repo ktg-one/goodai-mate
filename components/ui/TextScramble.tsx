@@ -1,25 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 interface TextScrambleProps {
     children: string;
     className?: string;
-    duration?: number;
-    speed?: number;
 }
 
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
 
-export function TextScramble({
-    children,
-    className,
-    duration = 0.8,
-    speed = 0.04
-}: TextScrambleProps) {
+export function TextScramble({ children, className }: TextScrambleProps) {
     const [displayText, setDisplayText] = useState(children);
-    const [isScrambling, setIsScrambling] = useState(false);
 
     useEffect(() => {
         let iteration = 0;

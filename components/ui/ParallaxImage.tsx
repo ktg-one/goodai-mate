@@ -5,12 +5,12 @@ import { useRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface ParallaxImageProps {
-    src: string;
     alt: string;
     className?: string;
+    src?: string;
 }
 
-export function ParallaxImage({ src, alt, className }: ParallaxImageProps) {
+export function ParallaxImage({ alt, className }: ParallaxImageProps) {
     const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,

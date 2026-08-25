@@ -1,7 +1,6 @@
 "use client";
 
 import { useScroll, useVelocity, useTransform, useSpring, motion } from "framer-motion";
-import { useEffect, useState } from "react";
 
 export function Noise() {
     const { scrollY } = useScroll();
