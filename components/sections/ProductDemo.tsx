@@ -71,7 +71,7 @@ export function ProductDemo() {
                         </TabsList>
                     </div>
 
-                    <div className="relative aspect-video md:aspect-[16/9] lg:aspect-[2/1] border border-brand-ink bg-brand-paper p-2 md:p-4 shadow-[8px_8px_0_var(--brand-coral)]">
+                    <div className="relative aspect-video md:aspect-video lg:aspect-2/1 border border-brand-ink bg-brand-paper p-2 md:p-4 shadow-[8px_8px_0_var(--brand-coral)]">
                         {/* macOS-style Window Controls */}
                         <div className="absolute top-4 left-4 flex gap-2 z-20">
                             <div className="w-3 h-3 rounded-full bg-brand-coral border border-brand-ink" />
@@ -105,9 +105,9 @@ export function ProductDemo() {
                                         </div>
                                     </div>
 
-                                    <div className="bg-brand-paper text-brand-ink border border-brand-ink p-4 flex min-h-[240px] flex-col">
+                                    <div className="bg-brand-eucalyptus text-brand-ink border border-brand-ink p-4 flex min-h-60 flex-col">
                                         <div className="flex items-center gap-3 mb-4">
-                                            <div className="p-2 bg-brand-eucalyptus text-brand-ink border border-brand-ink">
+                                            <div className="p-2 bg-brand-paper text-brand-ink border border-brand-ink">
                                                 <Workflow className="w-5 h-5" />
                                             </div>
                                             <div>
@@ -142,13 +142,16 @@ export function ProductDemo() {
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ duration: 0.4 }}
-                                    className="space-y-4 max-w-md mx-auto"
+                                    className="max-w-md mx-auto space-y-4 bg-brand-ink p-4"
                                 >
                                     {[1, 2, 3].map((i) => (
-                                        <div key={i} className="flex items-center justify-between p-4 bg-brand-paper border border-brand-ink">
+                                        <div
+                                            key={i}
+                                            className="flex items-center justify-between border border-brand-ink bg-brand-paper p-4"
+                                        >
                                             <span className="text-sm font-medium">Workflow rule {i}</span>
-                                            <div className="w-10 h-6 bg-brand-eucalyptus border border-brand-ink rounded-full relative">
-                                                <div className="absolute right-1 top-1 w-4 h-4 bg-brand-paper border border-brand-ink rounded-full" />
+                                            <div className="relative h-6 w-10 rounded-full border border-brand-ink bg-brand-paper">
+                                                <div className="absolute right-1 top-1 h-4 w-4 rounded-full border border-brand-ink bg-brand-eucalyptus" />
                                             </div>
                                         </div>
                                     ))}

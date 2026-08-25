@@ -6,15 +6,15 @@ import { cn } from "@/lib/utils";
 
 const features = [
     {
-        title: "One clear workflow",
-        description: "We map the job from start to finish so everyone knows what happens next.",
+        title: "BUSINESS WORKFLOWS",
+        description: "One clear end-to-end process, striking that task off your todo list forever.",
         icon: Globe,
         accent: "bg-brand-coral",
         className: "col-span-1 md:col-span-2 lg:col-span-2",
     },
     {
-        title: "Your data stays yours",
-        description: "We use sensible access controls and keep your business information where it belongs.",
+        title: "It's Your Call",
+        description: "You pick where your data lives, how much work gets done, and who has access.",
         icon: Shield,
         accent: "bg-brand-eucalyptus",
         className: "col-span-1 md:col-span-1 lg:col-span-1",
@@ -28,7 +28,7 @@ const features = [
     },
     {
         title: "Less chasing",
-        description: "Updates, reminders, and hand-offs happen automatically, without another spreadsheet to babysit.",
+        description: "You'll no longer dread updates, reminders or alarms  as they now signal a job getting done.",
         icon: Zap,
         accent: "bg-brand-coral",
         className: "col-span-1 md:col-span-2 lg:col-span-2",
@@ -45,7 +45,7 @@ export function Features() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-          className="text-4xl md:text-6xl font-medium tracking-wide leading-[1.15]"
+          className="text-4xl md:text-6xl font-large tracking-wide leading-[1.15]"
                     >
                         Less admin. <br /> <span className="text-brand-coral">More time.</span>
                     </motion.h2>
@@ -56,7 +56,7 @@ export function Features() {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="text-brand-ink/70 max-w-sm mt-8 md:mt-0 text-lg font-light"
                     >
-                        We fix the repetitive work that chews through your week. You get a system your team can actually use.
+                        Invest in yourself, Chuck us all the hassle, we&apos;ll sort it for ya... better quality of life and stuff.
                     </motion.p>
                 </div>
 

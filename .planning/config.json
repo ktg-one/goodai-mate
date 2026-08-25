@@ -1,0 +1,75 @@
+{
+  "project_name": "Good'Ai Frontend",
+  "project_slug": "goodai-frontend",
+  "description": "Ultra-premium marketing site demonstrating advanced frontend engineering with Next.js 16, Tailwind CSS v4, Framer Motion, and GSAP.",
+  "version": "0.1.0",
+  
+  "workflow": {
+    "requirements_first": true,
+    "roadmap_first": true,
+    "auto_plan_phases": false,
+    "commit_docs": true,
+    "prune_closed_issues": false
+  },
+  
+  "verification": {
+    "lint_command": "npm run lint",
+    "build_command": "npm run build",
+    "test_command": null,
+    "typecheck_command": null,
+    "verify_before_commit": true
+  },
+  
+  "codebase": {
+    "language": "TypeScript",
+    "framework": "Next.js 16",
+    "styling": "Tailwind CSS v4",
+    "package_manager": "npm",
+    "monorepo": false,
+    "has_git": true
+  },
+  
+  "git": {
+    "main_branch": "main",
+    "use_conventional_commits": false,
+    "commit_message_style": "imperative"
+  },
+  
+  "quality_gates": {
+    "require_uat": true,
+    "require_code_review": true,
+    "require_security_review": false,
+    "require_performance_review": false,
+    "require_accessibility_check": true
+  },
+  
+  "milestones": {
+    "use_phases": true,
+    "phase_prefix": "Phase",
+    "auto_increment": true
+  },
+  
+  "documentation": {
+    "generate_adr": true,
+    "adr_directory": ".planning/architecture",
+    "generate_changelog": false
+  },
+  
+  "agents": {
+    "default_model": null,
+    "default_reasoning_effort": "medium"
+  },
+  
+  "environment": {
+    "node_version": "18+",
+    "npm_version": "10+"
+  },
+  
+  "links": {
+    "issue_tracker": null,
+    "deploy_preview_prefix": null
+  },
+  
+  "created_at": "2026-08-26T03:49:00.000Z",
+  "gsd_version": "initial"
+}
