@@ -15,13 +15,13 @@ export const PROJECTS = [
     year: "Good'Ai",
   },
   {
-    file: "n8n.png",
+    file: "assets/carousel/business-automation.svg",
     name: "Business Automation",
     type: "n8n + Workspace",
     year: "Good'Ai",
   },
   {
-    file: "Wispr_Flow_77LkjL340d.png",
+    file: "assets/carousel/agent-integration.svg",
     name: "System Integration",
     type: "Proof it saves time",
     year: "Good'Ai",
@@ -33,9 +33,45 @@ export const PROJECTS = [
     year: "Good'Ai",
   },
   {
-    file: "voice-agent.png",
+    file: "assets/carousel/voice-agents.svg",
     name: "Voice Agents",
     type: "When voice fits",
+    year: "Good'Ai",
+  },
+  {
+    file: "assets/carousel/agent-integration.svg",
+    name: "Agent Integration",
+    type: "Multi-agent workflows",
+    year: "Good'Ai",
+  },
+  {
+    file: "assets/carousel/business-automation.svg",
+    name: "Process Automation",
+    type: "End-to-end pipelines",
+    year: "Good'Ai",
+  },
+  {
+    file: "assets/carousel/voice-agents.svg",
+    name: "AI Assistants",
+    type: "Voice-first interfaces",
+    year: "Good'Ai",
+  },
+  {
+    file: "assets/carousel/ai-operations.svg",
+    name: "Workflow Operations",
+    type: "Process optimization",
+    year: "Good'Ai",
+  },
+  {
+    file: "assets/carousel/workflow-redesign.svg",
+    name: "Process Redesign",
+    type: "System overhaul",
+    year: "Good'Ai",
+  },
+  {
+    file: "assets/carousel/ai-governance.svg",
+    name: "Data Governance",
+    type: "Risk & compliance",
     year: "Good'Ai",
   },
 ];
