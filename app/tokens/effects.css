@@ -1,0 +1,25 @@
+.pen-underline::after {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.15rem;
+  left: 0.75rem;
+  height: 0.5rem;
+  content: "";
+  background: currentColor;
+  transform: scaleX(0) rotate(-1deg);
+  transform-origin: left center;
+  transition: transform 180ms ease-out;
+  -webkit-mask: url("/assets/pen-underline.svg") center / 100% 100% no-repeat;
+  mask: url("/assets/pen-underline.svg") center / 100% 100% no-repeat;
+}
+
+.pen-underline:hover::after,
+.pen-underline:focus-visible::after {
+  transform: scaleX(1) rotate(-1deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pen-underline::after {
+    transition: none;
+  }
+}
