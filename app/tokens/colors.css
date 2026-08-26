@@ -3,30 +3,29 @@
   --brand-navy: #202b3d;
   --brand-coral: #ff6f61;
   --brand-teal: #1cabb0;
-  --brand-silver: #fff0d0;
+  --brand-paper: #fff0d0;
   --brand-slate: #282c2d;
 
   /* Backward Compatibility Aliases */
   --brand-ink: var(--brand-navy);
-  --brand-paper: var(--brand-silver);
   --brand-eucalyptus: var(--brand-teal);
 
   /* Semantic Mappings */
   --background: var(--brand-navy);
-  --foreground: var(--brand-silver);
+  --foreground: var(--brand-paper);
 
   --card: var(--brand-navy);
-  --card-foreground: var(--brand-silver);
+  --card-foreground: var(--brand-paper);
   --popover: var(--brand-navy);
-  --popover-foreground: var(--brand-silver);
+  --popover-foreground: var(--brand-paper);
 
-  --primary: var(--brand-silver);
+  --primary: var(--brand-paper);
   --primary-foreground: var(--brand-navy);
   --secondary: var(--brand-teal);
   --secondary-foreground: var(--brand-navy);
 
-  --muted: color-mix(in srgb, var(--brand-navy) 84%, var(--brand-silver));
-  --muted-foreground: color-mix(in srgb, var(--brand-silver) 76%, var(--brand-navy));
+  --muted: color-mix(in srgb, var(--brand-navy) 84%, var(--brand-paper));
+  --muted-foreground: color-mix(in srgb, var(--brand-paper) 76%, var(--brand-navy));
 
   --accent: var(--brand-coral);
   --accent-foreground: var(--brand-navy);
@@ -34,7 +33,7 @@
   --destructive: oklch(0.577 0.245 27.325);
 
   --border: var(--brand-slate);
-  --input: color-mix(in srgb, var(--brand-silver) 24%, var(--brand-navy));
+  --input: color-mix(in srgb, var(--brand-paper) 24%, var(--brand-navy));
   --ring: var(--brand-coral);
 
   /* Charts */
