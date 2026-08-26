@@ -23,10 +23,12 @@ centralised destination already used by the site; do not add isolated CTA links.
 
 ## Product demo conventions
 
-`components/sections/ProductDemo.tsx` is a local, illustrative workflow demo.
-It must remain clear that its jobs, status, and outcomes are examples—not live
-operational data. Keep the interaction usable without animation and clean up
-timers or listeners in effects.
+`components/sections/ProductDemo.tsx` currently uses local example data and a
+simulated workflow state. That is an implementation fact, not a product
+constraint: it may be made real when a verified data contract, access model,
+and workflow source are defined. Until then, do not represent example jobs,
+status, or outcomes as live operational data. Keep the interaction usable
+without animation and clean up timers or listeners in effects.
 
 ## Verification
 
