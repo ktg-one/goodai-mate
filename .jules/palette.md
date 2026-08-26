@@ -4,7 +4,7 @@
 - Navy: #202B3D
 - Coral: #F66F61
 - Teal: #1CABB0
-- Silver: #D9D9D9
+- Silver: #FFEFD2
 - Slate: #282C2D
 
 **Rule:**

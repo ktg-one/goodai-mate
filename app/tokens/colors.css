@@ -1,10 +1,10 @@
 :root {
   --bg: #202B3D;
-  --fg: #D9D9D9;
+  --fg: #FFEFD2;
   --brand-navy: #202b3d;
   --brand-coral: #ff6f61;
   --brand-teal: #1cabb0;
-  --brand-silver: #d9d9d9;
+  --brand-silver: #FFEFD2;
   --brand-slate: #282c2d;
   --background: var(--bg);
   --foreground: var(--fg);
