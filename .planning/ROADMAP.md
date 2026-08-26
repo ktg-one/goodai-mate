@@ -234,3 +234,6 @@ These are potential future work items, not yet scheduled into milestones:
 - The user referenced ProductDemo.tsx:74 multiple times. This roadmap assumes they want to audit/verify that component.
 - If the user has a different specific task in mind for ProductDemo, the roadmap can be adjusted.
 - All work must respect the constraints in AGENTS.md and REQUIREMENTS.md.
+
+### ⚡ Automation Phase (New)
+ProductDemo is evolving from illustrative examples to **real automations** when verified data contracts, access models, and workflow sources are defined (per updated AGENTS.md). This is a future enhancement beyond the current GSD phases.
