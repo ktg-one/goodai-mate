@@ -5,6 +5,7 @@ import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Noise } from "@/components/ui/Noise";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,8 @@ export default function RootLayout({
           <main className="min-h-screen">
             {children}
           </main>
+          <Script src="https://elevenlabs.io/convai-widget/index.js" strategy="afterInteractive" />
+          <elevenlabs-convai agent-id="agent_8501m0h2hvh0edr99jkqzr4rw53n"></elevenlabs-convai>
           <Footer />
         </SmoothScroll>
       </body>
