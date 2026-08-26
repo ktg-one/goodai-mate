@@ -1,14 +1,11 @@
+@import url('tokens/colors.css');
+@import url('tokens/typography.css');
+@import url('tokens/spacing.css');
+@import url('tokens/effects.css');
+@import url('tokens/fonts.css');
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
-
-@font-face {
-  font-family: "Vibes";
-  src: url("/fonts/Vibes/Vibes-Regular.ttf") format("truetype");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
 
 @theme inline {
   --color-background: var(--background);
@@ -55,82 +52,6 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-:root {
-  --font-brand: "Vibes", sans-serif;
-  --brand-ink: #202b3d;
-  --brand-coral: #ff6f61;
-  --brand-paper: #fff0d0;
-  --brand-eucalyptus: #21a179;
-  --radius: 0.625rem;
-  --background: var(--brand-paper);
-  --foreground: var(--brand-ink);
-  --card: var(--brand-paper);
-  --card-foreground: var(--brand-ink);
-  --popover: var(--brand-paper);
-  --popover-foreground: var(--brand-ink);
-  --primary: var(--brand-ink);
-  --primary-foreground: var(--brand-paper);
-  --secondary: var(--brand-eucalyptus);
-  --secondary-foreground: var(--brand-ink);
-  --muted: color-mix(in srgb, var(--brand-paper) 84%, var(--brand-ink));
-  --muted-foreground: color-mix(in srgb, var(--brand-ink) 76%, var(--brand-paper));
-  --accent: var(--brand-coral);
-  --accent-foreground: var(--brand-ink);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: color-mix(in srgb, var(--brand-ink) 24%, var(--brand-paper));
-  --input: color-mix(in srgb, var(--brand-ink) 24%, var(--brand-paper));
-  --ring: var(--brand-coral);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.98 0 0);
-  --sidebar-foreground: oklch(0.10 0 0);
-  --sidebar-primary: oklch(0.10 0 0);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.96 0 0);
-  --sidebar-accent-foreground: oklch(0.10 0 0);
-  --sidebar-border: oklch(0.92 0 0);
-  --sidebar-ring: oklch(0.70 0 0);
-}
-
-.dark {
-  --background: oklch(0.05 0 0);
-  /* Deep Charcoal #0D0D0D approx */
-  --foreground: oklch(0.98 0 0);
-  /* Off-white */
-  --card: oklch(0.08 0 0);
-  --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.08 0 0);
-  --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.98 0 0);
-  --primary-foreground: oklch(0.10 0 0);
-  --secondary: oklch(0.15 0 0);
-  --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.15 0 0);
-  --muted-foreground: oklch(0.60 0 0);
-  --accent: oklch(0.15 0 0);
-  --accent-foreground: oklch(0.98 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(0.20 0 0);
-  --input: oklch(0.20 0 0);
-  --ring: oklch(0.40 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.08 0 0);
-  --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.15 0 0);
-  --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.20 0 0);
-  --sidebar-ring: oklch(0.40 0 0);
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -138,43 +59,5 @@
 
   body {
     @apply bg-background text-foreground;
-  }
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-header nav,
-header nav a,
-header nav button {
-  font-family: var(--font-brand);
-}
-}
-
-.pen-underline::after {
-  position: absolute;
-  right: 0.75rem;
-  bottom: 0.15rem;
-  left: 0.75rem;
-  height: 0.5rem;
-  content: "";
-  background: currentColor;
-  transform: scaleX(0) rotate(-1deg);
-  transform-origin: left center;
-  transition: transform 180ms ease-out;
-  -webkit-mask: url("/assets/pen-underline.svg") center / 100% 100% no-repeat;
-  mask: url("/assets/pen-underline.svg") center / 100% 100% no-repeat;
-}
-
-.pen-underline:hover::after,
-.pen-underline:focus-visible::after {
-  transform: scaleX(1) rotate(-1deg);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pen-underline::after {
-    transition: none;
   }
 }
