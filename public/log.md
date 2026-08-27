@@ -4,3 +4,4 @@
 - [x] Set default foreground (`--fg` alias `--foreground`) to Silver `#D9D9D9`
 - [x] Integrate new color palette: Navy `#202B3D`, Coral `#F66F61`, Teal `#1CABB0`, Silver `#D9D9D9`, Slate `#282C2D`
 - [x] Ensure `shape-big-*.svg` background rule is applied to every 2nd viewport and bare cards in `.jules/palette.md` specs.
+- [x] Add `aria-label="Open menu"` to the mobile navigation toggle button (`<Button size="icon">`) and `aria-hidden="true"` to the inner `<Menu />` icon. Add `aria-label="Close menu"` to `<SheetClose>` and `aria-hidden="true"` to the inner `<X />` icon.
