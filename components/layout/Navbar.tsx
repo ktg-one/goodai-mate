@@ -118,7 +118,7 @@ export function Navbar() {
                     </Button>
                     <Sheet>
                         <SheetTrigger asChild>
-                            <Button variant="ghost" size="icon" className="rounded-full">
+                            <Button variant="ghost" size="icon" className="rounded-full" aria-label="Open menu">
                                 <Menu className="w-5 h-5" />
                             </Button>
                         </SheetTrigger>
