@@ -125,7 +125,7 @@ export function Navbar() {
                         <SheetContent side="top" className="w-full h-full bg-brand-paper text-brand-ink border-none p-0">
                             <SheetTitle className="sr-only">Menu</SheetTitle>
                             <div className="flex flex-col h-full items-center justify-center relative">
-                                <SheetClose className="absolute top-6 right-6">
+                                <SheetClose className="absolute top-6 right-6" aria-label="Close menu">
                                     <X className="w-6 h-6" />
                                 </SheetClose>
                                 <div className="flex flex-col gap-8 text-center">
