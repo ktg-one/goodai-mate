@@ -14,27 +14,43 @@ export function TextScramble({ children, className }: TextScrambleProps) {
 
     useEffect(() => {
         let iteration = 0;
-        const interval = setInterval(() => {
-            setDisplayText(
-                children
-                    .split("")
-                    .map((letter, index) => {
-                        if (index < iteration) {
-                            return children[index];
-                        }
-                        return chars[Math.floor(Math.random() * chars.length)];
-                    })
-                    .join("")
-            );
+        let animationFrameId: number;
+        let lastTime = performance.now();
+        const fpsInterval = 40; // milliseconds
 
-            if (iteration >= children.length) {
-                clearInterval(interval);
+        // Bolt Performance Improvement: Use requestAnimationFrame instead of setInterval
+        // `setInterval` executes regardless of screen refresh rate and tab visibility, leading to
+        // CPU waste and jank. `requestAnimationFrame` syncs with the browser's display refresh and
+        // automatically pauses when the tab is inactive, improving battery life and frame stability.
+        const animate = (currentTime: number) => {
+            const elapsed = currentTime - lastTime;
+
+            if (elapsed > fpsInterval) {
+                lastTime = currentTime - (elapsed % fpsInterval);
+
+                setDisplayText(
+                    children
+                        .split("")
+                        .map((letter, index) => {
+                            if (index < iteration) {
+                                return children[index];
+                            }
+                            return chars[Math.floor(Math.random() * chars.length)];
+                        })
+                        .join("")
+                );
+
+                iteration += 1 / 2; // Slower reveal
             }
 
-            iteration += 1 / 2; // Slower reveal
-        }, 40);
+            if (iteration < children.length) {
+                animationFrameId = requestAnimationFrame(animate);
+            }
+        };
 
-        return () => clearInterval(interval);
+        animationFrameId = requestAnimationFrame(animate);
+
+        return () => cancelAnimationFrame(animationFrameId);
     }, [children]);
 
     return (
