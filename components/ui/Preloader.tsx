@@ -8,19 +8,38 @@ export function Preloader() {
     const [counter, setCounter] = useState(0);
 
     useEffect(() => {
-        // Simulate loading progress
-        const interval = setInterval(() => {
-            setCounter((prev) => {
-                if (prev >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => setIsLoading(false), 500); // Delay fade out
-                    return 100;
-                }
-                return prev + 1;
-            });
-        }, 20); // Adjust speed here
+        let animationFrameId: number;
+        let lastTime = performance.now();
+        const fpsInterval = 20; // Adjust speed here
+        let currentCount = 0;
 
-        return () => clearInterval(interval);
+        // Bolt Performance Improvement: Use requestAnimationFrame instead of setInterval
+        // Using `requestAnimationFrame` for loading progress loops ensures the animation
+        // synchronizes with the browser's render cycle. It avoids unnecessary execution
+        // when the tab is inactive and provides a smoother, more efficient visual update
+        // compared to the fixed, decoupled scheduling of `setInterval`.
+        const animate = (currentTime: number) => {
+            const elapsed = currentTime - lastTime;
+
+            if (elapsed > fpsInterval) {
+                lastTime = currentTime - (elapsed % fpsInterval);
+
+                currentCount++;
+                setCounter(currentCount);
+
+                if (currentCount >= 100) {
+                    setTimeout(() => setIsLoading(false), 500); // Delay fade out
+                }
+            }
+
+            if (currentCount < 100) {
+                 animationFrameId = requestAnimationFrame(animate);
+            }
+        };
+
+        animationFrameId = requestAnimationFrame(animate);
+
+        return () => cancelAnimationFrame(animationFrameId);
     }, []);
 
     return (
