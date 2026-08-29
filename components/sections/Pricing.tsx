@@ -23,37 +23,38 @@ export function Pricing() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* Standard Member */}
-                    <div className="p-10 bg-brand-paper border border-brand-ink shadow-[4px_4px_0_var(--brand-ink)] flex flex-col justify-between h-full">
+                    {/* Starter */}
+                    <div className="p-10 bg-brand-eucalyptus text-brand-ink border border-brand-ink shadow-[4px_4px_0_var(--brand-ink)] flex flex-col justify-between h-full">
                         <div>
-                            <h3 className="text-lg font-medium tracking-widest uppercase mb-4 text-brand-coral">First chat</h3>
-                            <div className="text-5xl font-light mb-8 text-brand-ink">No charge</div>
-                            <ul className="space-y-4 text-sm text-brand-ink/70 mb-10">
-                                {["One messy workflow", "A plain assessment", "A sensible next step"].map(item => (
+                            <h3 className="text-lg font-medium tracking-widest uppercase mb-4 text-brand-ink">Starter</h3>
+                            <div className="text-5xl font-light mb-2 text-brand-ink">A$199<span className="text-2xl">/mo</span></div>
+                            <p className="text-brand-ink/70 text-sm mb-8">A$199 setup</p>
+                            <ul className="space-y-4 text-sm text-brand-ink/80 mb-10">
+                                {["Approx. 500 included minutes."].map(item => (
                                     <li key={item} className="flex items-center gap-3">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-brand-coral" /> {item}
+                                        <div className="w-1.5 h-1.5 rounded-full bg-brand-ink" /> {item}
                                     </li>
                                 ))}
                             </ul>
                         </div>
                         <Button asChild variant="outline" className="w-full rounded-full py-6 border-brand-ink bg-brand-paper text-brand-ink hover:bg-brand-eucalyptus transition-colors">
-                            <a href={SURVEY_URL}>Tell us your problem</a>
+                            <a href={SURVEY_URL}>Get started</a>
                         </Button>
                     </div>
 
-                    {/* Executive Member - Metallic/Premium */}
+                    {/* Business */}
                     <div className="relative p-10 bg-brand-ink text-brand-paper shadow-[8px_8px_0_var(--brand-coral)] flex flex-col justify-between h-full md:scale-105 border border-brand-ink overflow-hidden">
 
                         <div>
                             <div className="flex justify-between items-start mb-4">
-                                <h3 className="text-lg font-medium tracking-widest uppercase text-brand-coral">Operations sprint</h3>
-                                <Badge variant="outline" className="border-brand-paper/30 text-brand-paper/70 font-light">Best place to start</Badge>
+                                <h3 className="text-lg font-medium tracking-widest uppercase text-brand-coral">Business</h3>
+                                <Badge variant="outline" className="border-brand-paper/30 text-brand-paper/70 font-light">Most popular</Badge>
                             </div>
-                            <div className="text-5xl font-light mb-2 text-brand-paper">Fixed scope</div>
-                            <p className="text-brand-paper/60 text-sm mb-8">Agreed before we build</p>
+                            <div className="text-5xl font-light mb-2 text-brand-paper">A$299<span className="text-2xl text-brand-paper/70">/mo</span></div>
+                            <p className="text-brand-paper/60 text-sm mb-8">A$299 setup</p>
 
                             <ul className="space-y-4 text-sm text-brand-paper/75 mb-10">
-                                {["Workflow mapped", "Automation built", "Edge cases tested", "Team handover"].map(item => (
+                                {["Approx. 1,000 included minutes."].map(item => (
                                     <li key={item} className="flex items-center gap-3">
                                         <Check className="w-4 h-4 text-brand-coral" /> {item}
                                     </li>
@@ -61,25 +62,26 @@ export function Pricing() {
                             </ul>
                         </div>
                         <Button asChild className="w-full rounded-full py-6 bg-brand-coral text-brand-ink hover:bg-brand-paper transition-colors font-medium">
-                            <a href={SURVEY_URL}>Talk through a sprint</a>
+                            <a href={SURVEY_URL}>Choose Business</a>
                         </Button>
                     </div>
 
-                    {/* V.I.P. */}
-                    <div className="p-10 bg-brand-paper border border-brand-ink shadow-[4px_4px_0_var(--brand-ink)] flex flex-col justify-between h-full">
+                    {/* Pro */}
+                    <div className="p-10 bg-brand-coral text-brand-ink border border-brand-ink shadow-[4px_4px_0_var(--brand-ink)] flex flex-col justify-between h-full">
                         <div>
-                            <h3 className="text-lg font-medium tracking-widest uppercase mb-4 text-brand-eucalyptus">Ongoing support</h3>
-                            <div className="text-5xl font-light mb-8 text-brand-ink">As needed</div>
-                            <ul className="space-y-4 text-sm text-brand-ink/70 mb-10">
-                                {["New workflows", "System upkeep", "Team questions", "Practical improvements"].map(item => (
+                            <h3 className="text-lg font-medium tracking-widest uppercase mb-4 text-brand-paper">Pro</h3>
+                            <div className="text-5xl font-light mb-2 text-brand-ink">A$499<span className="text-2xl">/mo</span></div>
+                            <p className="text-brand-ink/70 text-sm mb-8">A$599 setup</p>
+                            <ul className="space-y-4 text-sm text-brand-ink/80 mb-10">
+                                {["Approx. 1,500 included minutes.", "Deeper integrations.", "More complex call routing."].map(item => (
                                     <li key={item} className="flex items-center gap-3">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-brand-eucalyptus" /> {item}
+                                        <div className="w-1.5 h-1.5 rounded-full bg-brand-ink" /> {item}
                                     </li>
                                 ))}
                             </ul>
                         </div>
                         <Button asChild variant="outline" className="w-full rounded-full py-6 border-brand-ink bg-brand-paper text-brand-ink hover:bg-brand-eucalyptus transition-colors">
-                            <a href={SURVEY_URL}>Talk to us</a>
+                            <a href={SURVEY_URL}>Contact for Pro</a>
                         </Button>
                     </div>
 
