@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -9,11 +10,23 @@ interface InfiniteMarqueeProps {
     items?: string[];
 }
 
+const DEFAULT_ITEMS = ["WORKFLOWS", "AUTOMATION", "SYSTEMS", "LESS ADMIN", "MORE FRIDAY"];
+
 export function InfiniteMarquee({
     className,
     speed = 20,
-    items = ["WORKFLOWS", "AUTOMATION", "SYSTEMS", "LESS ADMIN", "MORE FRIDAY"]
+    items = DEFAULT_ITEMS
 }: InfiniteMarqueeProps) {
+
+    // ⚡ Bolt: Memoize the rendered items to avoid O(N) operations and
+    // redundant DOM element re-creations on every render.
+    const renderedItems = useMemo(() => {
+        return [...items, ...items, ...items, ...items].map((item, i) => (
+            <span key={i} className="text-sm md:text-base font-medium tracking-[0.3em] text-brand-ink mx-8 uppercase">
+                {item}
+            </span>
+        ));
+    }, [items]);
 
     return (
         <div className={cn("relative w-full overflow-hidden bg-brand-coral py-6 border-y border-brand-ink select-none", className)}>
@@ -33,11 +46,7 @@ export function InfiniteMarquee({
                 }}
             >
                 {/* Render items 4 times to ensure no gaps on large screens */}
-                {[...items, ...items, ...items, ...items].map((item, i) => (
-                    <span key={i} className="text-sm md:text-base font-medium tracking-[0.3em] text-brand-ink mx-8 uppercase">
-                        {item}
-                    </span>
-                ))}
+                {renderedItems}
             </motion.div>
         </div>
     );
