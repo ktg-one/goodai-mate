@@ -13,3 +13,7 @@ Apply `public/assets/shapes/shape-big-*.svg` as backgrounds to every 2nd viewpor
 ## 2024-08-26 - Missing Accessible Name on Mobile Menu Button
 **Learning:** Icon-only buttons used for critical navigation elements like mobile menus often lack `aria-label`s, creating barriers for screen reader users trying to open the navigation drawer.
 **Action:** Consistently ensure that all `<Button size="icon">` components or buttons that only wrap SVG icons receive a descriptive `aria-label` to provide context.
+
+## 2026-09-06 - Missing Focus States on Framer Motion Wrappers
+**Learning:** Custom interactive UI components built with wrappers like Framer Motion (`<motion.button>`) often lack default browser focus rings, reducing keyboard accessibility.
+**Action:** Always append explicit `focus-visible` utility classes (e.g., `focus-visible:outline-2 focus-visible:outline-brand-coral outline-none`) to the component to maintain keyboard accessibility.
