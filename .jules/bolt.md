@@ -4,3 +4,6 @@
 ## 2024-05-24 - Memoize Mapped Component Lists and Preserve Referential Equality
 **Learning:** Re-creating React elements in inline mappings (like `[...items].map(...)`) during every render forces redundant $O(N)$ operations. However, wrapping it in `useMemo` is useless if the dependency (e.g. `items = ["A"]` default prop) is re-created on every render, as it breaks referential equality.
 **Action:** Move static default array props outside the component to preserve referential equality, and wrap array mapping operations in a `useMemo` block that depends on the source data array.
+## 2024-05-24 - React Array Extraction
+**Learning:** Hardcoded arrays inside functional components are recreated on every render, which can break memoization or cause unnecessary allocations inside highly animated components.
+**Action:** Extract static arrays that don't depend on component state or props to the module scope to maintain referential equality across renders.

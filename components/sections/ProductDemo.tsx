@@ -29,6 +29,10 @@ const workflowOutputs = [
     { label: "Team updated", icon: BellRing },
 ];
 
+// PERFORMANCE OPTIMIZATION: Extracted static array to module scope to maintain referential
+// equality across renders and avoid O(N) memory allocation on every component render.
+const WORKFLOW_RULES = [1, 2, 3];
+
 export function ProductDemo() {
     return (
         <section id="demo" className="py-24 px-6 bg-brand-paper text-brand-ink overflow-hidden">
@@ -144,7 +148,7 @@ export function ProductDemo() {
                                     transition={{ duration: 0.4 }}
                                     className="max-w-md mx-auto space-y-4 bg-brand-ink p-4"
                                 >
-                                    {[1, 2, 3].map((i) => (
+                                    {WORKFLOW_RULES.map((i) => (
                                         <div
                                             key={i}
                                             className="flex items-center justify-between border border-brand-ink bg-brand-paper p-4"
@@ -165,21 +169,33 @@ export function ProductDemo() {
     );
 }
 
+// PERFORMANCE OPTIMIZATION: Extracted static arrays to module scope to maintain referential
+// equality across renders and avoid O(N) memory allocation on every component render.
+const INPUT_PATHS = [
+    "M 28 18 C 39 18 39 50 50 50",
+    "M 28 50 H 50",
+    "M 28 82 C 39 82 39 50 50 50",
+];
+const OUTPUT_PATHS = [
+    "M 50 50 C 61 50 61 18 72 18",
+    "M 50 50 H 72",
+    "M 50 50 C 61 50 61 82 72 82",
+];
+const ALL_PATHS = [...INPUT_PATHS, ...OUTPUT_PATHS];
+
+const STATUS_MESSAGES = [
+    "Ready when you are.",
+    "Email received.",
+    "Checking the calendar.",
+    "Booking the job and sending updates.",
+    "Done. Everyone is updated.",
+];
+
 function WorkflowMap() {
     const reduceMotion = useReducedMotion();
     const [phase, setPhase] = useState(0);
     const [runId, setRunId] = useState(0);
     const timersRef = useRef<number[]>([]);
-    const inputPaths = [
-        "M 28 18 C 39 18 39 50 50 50",
-        "M 28 50 H 50",
-        "M 28 82 C 39 82 39 50 50 50",
-    ];
-    const outputPaths = [
-        "M 50 50 C 61 50 61 18 72 18",
-        "M 50 50 H 72",
-        "M 50 50 C 61 50 61 82 72 82",
-    ];
 
     const clearTimers = () => {
         timersRef.current.forEach((timer) => window.clearTimeout(timer));
@@ -209,13 +225,7 @@ function WorkflowMap() {
     };
 
     const isRunning = phase > 0 && phase < 4;
-    const status = [
-        "Ready when you are.",
-        "Email received.",
-        "Checking the calendar.",
-        "Booking the job and sending updates.",
-        "Done. Everyone is updated.",
-    ][phase];
+    const status = STATUS_MESSAGES[phase];
 
     return (
         <div className="flex flex-1 flex-col border-t border-brand-ink/20 pt-3">
@@ -230,7 +240,7 @@ function WorkflowMap() {
                     preserveAspectRatio="none"
                     className="pointer-events-none absolute inset-0 h-full w-full"
                 >
-                    {[...inputPaths, ...outputPaths].map((path) => (
+                    {ALL_PATHS.map((path) => (
                         <path
                             key={path}
                             d={path}
@@ -246,7 +256,7 @@ function WorkflowMap() {
                     {phase >= 1 && (
                         <motion.path
                             key={`input-${runId}`}
-                            d={inputPaths[0]}
+                            d={INPUT_PATHS[0]}
                             fill="none"
                             stroke="var(--brand-coral)"
                             strokeWidth="2"
@@ -257,7 +267,7 @@ function WorkflowMap() {
                         />
                     )}
 
-                    {phase >= 3 && outputPaths.map((path, index) => (
+                    {phase >= 3 && OUTPUT_PATHS.map((path, index) => (
                         <motion.path
                             key={`output-${runId}-${path}`}
                             d={path}
