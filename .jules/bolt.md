@@ -4,3 +4,6 @@
 ## 2024-05-24 - Memoize Mapped Component Lists and Preserve Referential Equality
 **Learning:** Re-creating React elements in inline mappings (like `[...items].map(...)`) during every render forces redundant $O(N)$ operations. However, wrapping it in `useMemo` is useless if the dependency (e.g. `items = ["A"]` default prop) is re-created on every render, as it breaks referential equality.
 **Action:** Move static default array props outside the component to preserve referential equality, and wrap array mapping operations in a `useMemo` block that depends on the source data array.
+## 2024-05-24 - Extract static arrays from functional components to avoid recreation on re-render
+**Learning:** Re-creating static arrays inside React functional components during every render wastes memory allocations and forces unneeded recalculations (e.g., when passing to mapped lists or performing array manipulation) as the component re-renders.
+**Action:** Extracted static configuration arrays like `inputPaths` and `status` maps to module-level constants `INPUT_PATHS`, `OUTPUT_PATHS`, and `WORKFLOW_STATUSES` outside the React functional component in `components/sections/ProductDemo.tsx` to optimize time complexity and space complexity on component re-renders.
