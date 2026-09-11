@@ -13,3 +13,7 @@ Apply `public/assets/shapes/shape-big-*.svg` as backgrounds to every 2nd viewpor
 ## 2024-08-26 - Missing Accessible Name on Mobile Menu Button
 **Learning:** Icon-only buttons used for critical navigation elements like mobile menus often lack `aria-label`s, creating barriers for screen reader users trying to open the navigation drawer.
 **Action:** Consistently ensure that all `<Button size="icon">` components or buttons that only wrap SVG icons receive a descriptive `aria-label` to provide context.
+
+## 2024-08-27 - Focus Visible Styles for SheetClose and Nav Links
+**Learning:** Custom interactive elements within `SheetContent` (like `SheetClose` and internal links) often lack sufficient keyboard focus indicators, making it hard for keyboard-only users to navigate the mobile menu.
+**Action:** Always append explicit `focus-visible` utility classes (e.g., `focus-visible:outline-2 focus-visible:outline-current outline-none`) to interactive elements within custom UI wrappers to ensure clear, accessible focus states.
