@@ -125,7 +125,7 @@ export function Navbar() {
                         <SheetContent side="top" className="w-full h-full bg-brand-paper text-brand-ink border-none p-0">
                             <SheetTitle className="sr-only">Menu</SheetTitle>
                             <div className="flex flex-col h-full items-center justify-center relative">
-                                <SheetClose className="absolute top-6 right-6" aria-label="Close menu">
+                                <SheetClose className="absolute top-6 right-6 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current outline-none" aria-label="Close menu">
                                     <X className="w-6 h-6" />
                                 </SheetClose>
                                 <div className="flex flex-col gap-8 text-center">
@@ -133,7 +133,7 @@ export function Navbar() {
                                         <SheetClose key={link.name} asChild>
                                             <Link
                                                 href={link.href}
-                                                className="text-4xl font-light tracking-tight hover:italic transition-all"
+                                                className="text-4xl font-light tracking-tight hover:italic transition-all focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current outline-none rounded-md"
                                             >
                                                 {link.name}
                                             </Link>
