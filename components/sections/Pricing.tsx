@@ -5,8 +5,37 @@ import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SURVEY_URL } from "@/lib/links";
+import { useMemo } from "react";
+
+const STANDARD_ITEMS = ["One messy workflow", "A plain assessment", "A sensible next step"];
+const EXECUTIVE_ITEMS = ["Workflow mapped", "Automation built", "Edge cases tested", "Team handover"];
+const VIP_ITEMS = ["New workflows", "System upkeep", "Team questions", "Practical improvements"];
 
 export function Pricing() {
+    const renderedStandardItems = useMemo(() => {
+        return STANDARD_ITEMS.map(item => (
+            <li key={item} className="flex items-center gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-brand-coral" /> {item}
+            </li>
+        ));
+    }, []);
+
+    const renderedExecutiveItems = useMemo(() => {
+        return EXECUTIVE_ITEMS.map(item => (
+            <li key={item} className="flex items-center gap-3">
+                <Check className="w-4 h-4 text-brand-coral" /> {item}
+            </li>
+        ));
+    }, []);
+
+    const renderedVipItems = useMemo(() => {
+        return VIP_ITEMS.map(item => (
+            <li key={item} className="flex items-center gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-brand-eucalyptus" /> {item}
+            </li>
+        ));
+    }, []);
+
     return (
         <section id="pricing" className="py-40 px-6 bg-brand-paper text-brand-ink">
             <div className="max-w-7xl mx-auto">
@@ -29,11 +58,7 @@ export function Pricing() {
                             <h3 className="text-lg font-medium tracking-widest uppercase mb-4 text-brand-coral">First chat</h3>
                             <div className="text-5xl font-light mb-8 text-brand-ink">No charge</div>
                             <ul className="space-y-4 text-sm text-brand-ink/70 mb-10">
-                                {["One messy workflow", "A plain assessment", "A sensible next step"].map(item => (
-                                    <li key={item} className="flex items-center gap-3">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-brand-coral" /> {item}
-                                    </li>
-                                ))}
+                                {renderedStandardItems}
                             </ul>
                         </div>
                         <Button asChild variant="outline" className="w-full rounded-full py-6 border-brand-ink bg-brand-paper text-brand-ink hover:bg-brand-eucalyptus transition-colors">
@@ -53,11 +78,7 @@ export function Pricing() {
                             <p className="text-brand-paper/60 text-sm mb-8">Agreed before we build</p>
 
                             <ul className="space-y-4 text-sm text-brand-paper/75 mb-10">
-                                {["Workflow mapped", "Automation built", "Edge cases tested", "Team handover"].map(item => (
-                                    <li key={item} className="flex items-center gap-3">
-                                        <Check className="w-4 h-4 text-brand-coral" /> {item}
-                                    </li>
-                                ))}
+                                {renderedExecutiveItems}
                             </ul>
                         </div>
                         <Button asChild className="w-full rounded-full py-6 bg-brand-coral text-brand-ink hover:bg-brand-paper transition-colors font-medium">
@@ -71,11 +92,7 @@ export function Pricing() {
                             <h3 className="text-lg font-medium tracking-widest uppercase mb-4 text-brand-eucalyptus">Ongoing support</h3>
                             <div className="text-5xl font-light mb-8 text-brand-ink">As needed</div>
                             <ul className="space-y-4 text-sm text-brand-ink/70 mb-10">
-                                {["New workflows", "System upkeep", "Team questions", "Practical improvements"].map(item => (
-                                    <li key={item} className="flex items-center gap-3">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-brand-eucalyptus" /> {item}
-                                    </li>
-                                ))}
+                                {renderedVipItems}
                             </ul>
                         </div>
                         <Button asChild variant="outline" className="w-full rounded-full py-6 border-brand-ink bg-brand-paper text-brand-ink hover:bg-brand-eucalyptus transition-colors">
