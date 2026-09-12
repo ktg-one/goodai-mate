@@ -17,9 +17,14 @@ function SheetTrigger({
 }
 
 function SheetClose({
+  className,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Close>) {
-  return <SheetPrimitive.Close data-slot="sheet-close" {...props} />
+  return <SheetPrimitive.Close
+    data-slot="sheet-close"
+    className={cn("focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-coral outline-none", className)}
+    {...props}
+  />
 }
 
 function SheetPortal({
