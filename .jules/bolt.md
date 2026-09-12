@@ -7,3 +7,6 @@
 ## 2024-05-18 - Extract static arrays to improve render performance
 **Learning:** Hardcoded arrays and object literals inside functional components are recreated on every render, breaking memoization or causing unnecessary memory allocations.
 **Action:** Extracted static structures (such as arrays containing paths, IDs, or static string statuses) that do not depend on component state or props to the module scope (outside the component) to maintain referential equality.
+## 2024-05-24 - Memoize Inline Maps
+**Learning:** Hardcoded arrays placed directly inside functional components are recreated on every render, causing React to unnecessarily recreate elements during list mappings.
+**Action:** Extract inline constant arrays to module scope and wrap their list mappings with `useMemo` to prevent redundant O(N) operations and minimize DOM reconciliation overhead.
