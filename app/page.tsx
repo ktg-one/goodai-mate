@@ -1,29 +1,25 @@
-import { Hero } from "@/components/sections/Hero";
-import { InfiniteMarquee } from "@/components/sections/InfiniteMarquee";
-import { Features } from "@/components/sections/Features";
-import ServicesCarousel from "@/components/sections/ServicesCarousel";
-import { VisualStory } from "@/components/sections/VisualStory";
-import { ProductDemo } from "@/components/sections/ProductDemo";
-import { TechSpecs } from "@/components/sections/TechSpecs";
-import { Pricing } from "@/components/sections/Pricing";
-import { Testimonials } from "@/components/sections/Testimonials";
-import { FAQ } from "@/components/sections/FAQ";
-import { CTA } from "@/components/sections/CTA";
-
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight, MoveDown, Plus, Check, Headphones, Workflow, MessagesSquare, Network, ScanSearch, Asterisk } from "lucide-react";
+import { SURVEY_URL } from "@/lib/links";
+import { services } from "@/lib/services";
+import { WorkflowPreview } from "@/components/studio/WorkflowPreview";
+import { VoiceDemo } from "@/components/studio/VoiceDemo";
+import { ScrollStory } from "@/components/studio/ScrollStory";
+const serviceIcons = [Headphones, Workflow, MessagesSquare, Network, ScanSearch];
 export default function Home() {
-  return (
-    <div className="flex flex-col gap-0 w-full">
-      <Hero />
-      <InfiniteMarquee />
-      <Features />
-      <ServicesCarousel />
-      <VisualStory />
-      <ProductDemo />
-      <TechSpecs />
-      <Pricing />
-      <Testimonials />
-      <FAQ />
-      <CTA />
-    </div>
-  );
+  return <>
+    <section className="hero shell">
+      <div className="hero-copy"><h1>Good work.<br /><em>More life.</em></h1><p className="hero-description">You’ve done enough chasing for one day.<br className="desktop-break" /> Let practical AI and automation take a turn.</p><a href={SURVEY_URL} className="button hero-button">Let’s take work off your plate <ArrowUpRight size={20} /></a><Link href="#voice" className="text-link hero-voice-link">Try the voice agent <Headphones size={17} /></Link><p className="handwritten hero-handnote">Go on. Knock off early.<svg viewBox="0 0 140 45" fill="none" aria-hidden="true"><path d="M4 16c31 21 83 19 123-5m-16-4 20 2-9 17"/></svg></p><div className="hero-bottom"><span className="location-dot" /> Perth, Australia. Working everywhere.<a href="#services" aria-label="Explore our services"><MoveDown size={19} /></a></div></div>
+      <figure className="hero-figure"><Image src="/brand/coastal-phone.webp" alt="A terracotta telephone resting on sunlit limestone beside the ocean" fill priority sizes="(max-width: 760px) 100vw, 52vw" /><figcaption><span>Don’t worry about the busywork.<br /><strong>We’ll sort it.</strong></span><span className="image-seal" aria-hidden="true">g.</span></figcaption></figure>
+    </section>
+    <div className="promise-strip"><div className="shell"><span>Less chasing.</span><Asterisk className="small-spark" aria-hidden="true"/><span>Less copying.</span><Asterisk className="small-spark" aria-hidden="true"/><span>More getting on with it.</span></div></div>
+    <ScrollStory />
+    <section className="services-section shell" id="services"><div className="section-heading"><h2>A little less on<br /><em>your plate.</em></h2><p>One problem or a few connected ones.<br />Start with what’s slowing you down.</p></div><div className="service-list">{services.map((service, index) => {const Icon = serviceIcons[index];return <Link href={`/services/${service.slug}`} className="service-row" key={service.slug}><div className="service-symbol" aria-hidden="true"><Icon strokeWidth={1.25}/></div><div className="service-name"><h3>{service.name}</h3><p>{service.line}</p></div><div className="service-price"><span>{index === 4 ? "Fixed price" : "From"}</span><strong>{service.price}</strong>{index === 0 && <small>setup + A$199/mo</small>}</div><span className="service-arrow"><ArrowUpRight size={25} /></span></Link>})}</div><p className="pricing-note" id="pricing">All prices in AUD. Final scope and ongoing costs agreed before we build. <Link href="/services/opportunity-audit">Not sure? Start with an audit <ArrowUpRight size={14} /></Link></p></section>
+    <section className="demo-section" id="demo"><div className="shell demo-grid"><div className="demo-copy"><h2>A good system<br />knows what<br /><em>happens next.</em></h2><p>An enquiry arrives. The details find their way to the right place. Your team knows what to do. That’s the idea.</p><Link href="/demo" className="text-link">Explore the workflow demo <ArrowUpRight size={18} /></Link></div><WorkflowPreview /></div></section>
+    <div className="shell voice-home"><VoiceDemo /></div>
+    <section className="approach shell" id="approach"><div className="section-heading"><h2>Good people.<br /><em>Useful technology.</em></h2><p>We keep the clever stuff behind the scenes.<br />You get a system that makes sense.</p></div><div className="approach-steps" id="story">{[{n:"01",title:"Find the friction.",text:"We start with your day, your tools and the work that keeps getting in the way. Then we pick a useful place to start."},{n:"02",title:"Make it work.",text:"We agree the scope, build the workflow and test the awkward bits with the people who will actually use it."},{n:"03",title:"Make it yours.",text:"Clear documentation. A team walkthrough. Human hand-off when it matters. Ongoing support if you need it."}].map(step=><article key={step.n}><span className="step-number">{step.n}</span><h3>{step.title}</h3><p>{step.text}</p></article>)}</div><div className="principle-note"><Check size={20} /><p>Your tools where possible. Your people in control. No mystery box.</p></div></section>
+    <section className="faq shell" id="faq"><h2>A few<br /><em>fair questions.</em></h2><div>{[{q:"Do we need to replace our current tools?",a:"Usually, no. We start with what already works and connect or replace only what is causing the problem. The right solution may be a simple workflow change rather than more software."},{q:"What happens when the AI gets it wrong?",a:"We define when a person needs to review, approve or take over. We test the likely failure cases and make those boundaries part of the system, rather than treating AI as infallible."},{q:"Where should we start?",a:"Tell us about one task that gets copied, chased or done twice. If the problem needs a closer look, the A$490 AI opportunity audit gives you a prioritised set of recommendations."},{q:"Can you help after the build?",a:"Yes. Support is available for systems we actively maintain, from A$149–299/month for standard support. Managed or custom systems are A$299–499+/month. Larger changes are quoted separately."}].map(item=><details key={item.q}><summary>{item.q}<Plus size={20} /></summary><p>{item.a}</p></details>)}</div></section>
+    <section className="contact-section" id="contact"><div className="shell contact-inner"><div><h2>What’s eating<br /><em>your week?</em></h2><p>Leave the messy bit with us. Let’s make room for a proper break.</p></div><a href={SURVEY_URL} className="contact-link" aria-label="Tell us about your business in our enquiry form"><ArrowUpRight /><span>Let’s sort it.</span></a></div></section>
+  </>;
 }

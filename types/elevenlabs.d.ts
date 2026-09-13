@@ -7,6 +7,14 @@ declare global {
       interface IntrinsicElements {
         'elevenlabs-convai': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
           'agent-id'?: string;
+          'avatar-image-url'?: string;
+          'avatar-orb-color-1'?: string;
+          'avatar-orb-color-2'?: string;
+          'action-text'?: string;
+          'start-call-text'?: string;
+          'end-call-text'?: string;
+          'listening-text'?: string;
+          'speaking-text'?: string;
         };
       }
     }

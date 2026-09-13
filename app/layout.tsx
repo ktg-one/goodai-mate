@@ -1,48 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+
 import "./globals.css";
-import { SmoothScroll } from "@/components/layout/SmoothScroll";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { Noise } from "@/components/ui/Noise";
-import Script from "next/script";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
+import { StudioHeader, StudioFooter } from "@/components/studio/Shell";
 export const metadata: Metadata = {
-  title: "Good'Ai | We'll handle the boring stuff",
-  description: "Practical workflow fixes and business automation, built in Perth.",
+  title: { default: "Good'Ai — Good work. More life.", template: "%s — Good'Ai" },
+  description: "Practical AI and automation for businesses with better things to do. Voice agents, connected workflows and custom assistants. Built in Perth, working everywhere.",
+  metadataBase: new URL("http://localhost:3011"), robots: { index: false, follow: false },
+  openGraph: { title: "Good'Ai — Good work. More life.", description: "Less chasing. Less copying. More of the work you actually care about.", images: [{ url: "/brand/coastal-phone.webp", width: 1536, height: 1024 }] },
 };
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground overflow-x-hidden selection:bg-brand-coral selection:text-brand-ink`}
-      >
-        <SmoothScroll>
-          <Noise />
-          <Navbar />
-          <main className="min-h-screen">
-            {children}
-          </main>
-          <Script src="https://elevenlabs.io/convai-widget/index.js" strategy="afterInteractive" />
-          <elevenlabs-convai agent-id="agent_8501m0h2hvh0edr99jkqzr4rw53n"></elevenlabs-convai>
-          <Footer />
-        </SmoothScroll>
-      </body>
-    </html>
-  );
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return <html lang="en-AU"><body><a className="skip-link" href="#main">Skip to content</a><StudioHeader /><main id="main">{children}</main><StudioFooter /></body></html>;
 }
