@@ -21,6 +21,7 @@ export function ElevenLabsWidget() {
 
     if (lenis) {
         lenis.on('scroll', handleScroll);
+        window.addEventListener("scroll", handleScroll, { passive: true });
     } else {
         window.addEventListener("scroll", handleScroll, { passive: true });
     }
@@ -28,6 +29,7 @@ export function ElevenLabsWidget() {
     return () => {
       if (lenis) {
           lenis.off('scroll', handleScroll);
+          window.removeEventListener("scroll", handleScroll);
       } else {
           window.removeEventListener("scroll", handleScroll);
       }
