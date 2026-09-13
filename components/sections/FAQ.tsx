@@ -37,7 +37,7 @@ export function FAQ() {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-12"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Straight answers.</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Straight answers.</h2>
                 </motion.div>
 
                 <Accordion type="single" collapsible className="w-full">
