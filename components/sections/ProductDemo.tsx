@@ -197,7 +197,7 @@ function SettingsRules() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4 }}
-            className="max-w-md mx-auto space-y-4 bg-brand-ink p-4 border border-brand-ink shadow-[4px_4px_0_var(--brand-coral)]"
+            className="max-w-md max-h-full mx-auto space-y-4 overflow-y-auto bg-brand-ink p-4 border border-brand-ink shadow-[4px_4px_0_var(--brand-coral)]"
         >
             {rules.map((rule) => (
                 <div
