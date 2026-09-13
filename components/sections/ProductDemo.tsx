@@ -93,20 +93,21 @@ export function ProductDemo() {
                         </TabsList>
                     </div>
 
-                    <div className="relative aspect-video md:aspect-video lg:aspect-2/1 border border-brand-ink bg-brand-paper p-2 md:p-4 shadow-[8px_8px_0_var(--brand-coral)]">
-                        {/* macOS-style Window Controls & Non-Live Data Badge */}
-                        <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20 pointer-events-none">
-                            <div className="flex gap-2">
-                                <div className="w-3 h-3 rounded-full bg-brand-coral border border-brand-ink" />
-                                <div className="w-3 h-3 rounded-full bg-brand-paper border border-brand-ink" />
-                                <div className="w-3 h-3 rounded-full bg-brand-eucalyptus border border-brand-ink" />
+                    <div className="aspect-video md:aspect-video lg:aspect-2/1 border border-brand-ink bg-brand-paper p-2 md:p-4 shadow-[8px_8px_0_var(--brand-coral)]">
+                        <div className="flex h-full flex-col overflow-hidden border border-brand-ink bg-brand-paper">
+                            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-brand-ink px-3 py-2 md:px-4">
+                                <div className="flex gap-2">
+                                    <div className="h-3 w-3 rounded-full border border-brand-ink bg-brand-coral" />
+                                    <div className="h-3 w-3 rounded-full border border-brand-ink bg-brand-paper" />
+                                    <div className="h-3 w-3 rounded-full border border-brand-ink bg-brand-eucalyptus" />
+                                </div>
+                                <span className="border border-brand-ink bg-brand-ink px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wide text-brand-paper sm:px-2 sm:text-[10px]">
+                                    <span className="sm:hidden">Non-Live Demo</span>
+                                    <span className="hidden sm:inline">Illustrative / Non-Live Data</span>
+                                </span>
                             </div>
-                            <span className="bg-brand-ink text-brand-paper text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 border border-brand-ink">
-                                Illustrative / Non-Live Data
-                            </span>
-                        </div>
 
-                        <div className="w-full h-full bg-brand-paper border border-brand-ink overflow-hidden relative">
+                            <div className="relative min-h-0 flex-1">
                             <TabsContent value="dashboard" className="h-full mt-0 p-6 md:p-10">
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.95 }}
@@ -184,6 +185,7 @@ export function ProductDemo() {
                                     ))}
                                 </motion.div>
                             </TabsContent>
+                            </div>
                         </div>
                     </div>
                 </Tabs>
