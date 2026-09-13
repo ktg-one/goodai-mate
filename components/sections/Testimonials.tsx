@@ -35,7 +35,7 @@ export function Testimonials() {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-16"
                 >
-                    <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+                    <h2 className="text-3xl md:text-5xl font-bold mb-4">
                         <StaggeredText stagger={0.03}>The work we take off your plate.</StaggeredText>
                     </h2>
                 </motion.div>

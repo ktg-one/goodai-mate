@@ -6,7 +6,7 @@ export function Footer() {
         <footer className="w-full bg-brand-ink text-brand-paper border-t border-brand-paper/20 py-20 px-6 md:px-12 lg:px-24">
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10">
                 <div className="col-span-2 lg:col-span-2">
-                    <Link href="/" className="font-display text-xl font-bold tracking-tighter">
+                    <Link href="/" className="font-display text-xl font-bold">
                         Good&apos;Ai
                     </Link>
                     <p className="mt-4 text-sm text-brand-paper/65 w-full max-w-xs">
