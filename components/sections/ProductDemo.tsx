@@ -31,7 +31,11 @@ const workflowOutputs = [
 
 // PERFORMANCE PATTERN: Extract static arrays to the module scope to avoid recreating them on every render
 // This preserves referential equality and reduces garbage collection overhead in functional components.
-const SETTINGS_RULES = [1, 2, 3];
+const SETTINGS_RULES = [
+    { id: 1, name: "Auto-file incoming invoices", defaultEnabled: true },
+    { id: 2, name: "Calendar sync & reminder dispatch", defaultEnabled: true },
+    { id: 3, name: "Weekly job summary report", defaultEnabled: false },
+];
 const WORKFLOW_INPUT_PATHS = [
     "M 28 18 C 39 18 39 50 50 50",
     "M 28 50 H 50",
@@ -166,24 +170,7 @@ export function ProductDemo() {
                             </TabsContent>
 
                             <TabsContent value="settings" className="h-full mt-0 p-6 md:p-10">
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.4 }}
-                                    className="max-w-md mx-auto space-y-4 bg-brand-ink p-4"
-                                >
-                                    {SETTINGS_RULES.map((i) => (
-                                        <div
-                                            key={i}
-                                            className="flex items-center justify-between border border-brand-ink bg-brand-paper p-4"
-                                        >
-                                            <span className="text-sm font-medium">Workflow rule {i}</span>
-                                            <div className="relative h-6 w-10 rounded-full border border-brand-ink bg-brand-paper">
-                                                <div className="absolute right-1 top-1 h-4 w-4 rounded-full border border-brand-ink bg-brand-eucalyptus" />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </motion.div>
+                                <SettingsRules />
                             </TabsContent>
                             </div>
                         </div>
@@ -191,6 +178,59 @@ export function ProductDemo() {
                 </Tabs>
             </div>
         </section>
+    );
+}
+
+function SettingsRules() {
+    const [rules, setRules] = useState(SETTINGS_RULES);
+
+    const toggleRule = (id: number) => {
+        setRules((prev) =>
+            prev.map((rule) =>
+                rule.id === id ? { ...rule, defaultEnabled: !rule.defaultEnabled } : rule
+            )
+        );
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+            className="max-w-md max-h-full mx-auto space-y-4 overflow-y-auto bg-brand-ink p-4 border border-brand-ink shadow-[4px_4px_0_var(--brand-coral)]"
+        >
+            {rules.map((rule) => (
+                <div
+                    key={rule.id}
+                    className="flex items-center justify-between gap-4 border border-brand-ink bg-brand-paper p-4"
+                >
+                    <div className="flex flex-col">
+                        <span className="text-sm font-medium text-brand-ink">{rule.name}</span>
+                        <span className="text-xs text-brand-ink/65">
+                            {rule.defaultEnabled ? "Active" : "Paused"}
+                        </span>
+                    </div>
+                    <button
+                        type="button"
+                        role="switch"
+                        aria-checked={rule.defaultEnabled}
+                        aria-label={`Toggle ${rule.name}`}
+                        onClick={() => toggleRule(rule.id)}
+                        className={cn(
+                            "relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-brand-ink transition-colors duration-200 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-coral",
+                            rule.defaultEnabled ? "bg-brand-eucalyptus" : "bg-brand-paper/60"
+                        )}
+                    >
+                        <span
+                            className={cn(
+                                "pointer-events-none inline-block h-4 w-4 transform rounded-full border border-brand-ink bg-brand-paper shadow-sm transition duration-200 ease-in-out mt-0.5",
+                                rule.defaultEnabled ? "translate-x-5.5" : "translate-x-0.5"
+                            )}
+                        />
+                    </button>
+                </div>
+            ))}
+        </motion.div>
     );
 }
 
