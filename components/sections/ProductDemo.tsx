@@ -64,7 +64,7 @@ export function ProductDemo() {
                     >
                         See the workflow.
                     </motion.h2>
-                    <p className="text-muted-foreground max-w-xl mx-auto">
+                    <p className="text-brand-ink/75 max-w-xl mx-auto">
                         One place to see what is moving, what is stuck, and what the system handled for you.
                     </p>
                 </div>
@@ -74,19 +74,19 @@ export function ProductDemo() {
                         <TabsList className="bg-brand-paper p-1 rounded-full border border-brand-ink">
                             <TabsTrigger
                                 value="dashboard"
-                                className="rounded-full px-6 py-2 text-sm font-medium text-brand-ink data-[state=active]:bg-brand-ink data-[state=active]:text-brand-paper transition-colors"
+                                className="rounded-full px-6 py-2 text-sm font-medium text-brand-ink data-[state=active]:bg-brand-ink data-[state=active]:text-brand-paper transition-colors focus-visible:ring-2 focus-visible:ring-brand-coral focus-visible:ring-offset-2"
                             >
                                 Today
                             </TabsTrigger>
                             <TabsTrigger
                                 value="analytics"
-                                className="rounded-full px-6 py-2 text-sm font-medium text-brand-ink data-[state=active]:bg-brand-ink data-[state=active]:text-brand-paper transition-colors"
+                                className="rounded-full px-6 py-2 text-sm font-medium text-brand-ink data-[state=active]:bg-brand-ink data-[state=active]:text-brand-paper transition-colors focus-visible:ring-2 focus-visible:ring-brand-coral focus-visible:ring-offset-2"
                             >
                                 Jobs
                             </TabsTrigger>
                             <TabsTrigger
                                 value="settings"
-                                className="rounded-full px-6 py-2 text-sm font-medium text-brand-ink data-[state=active]:bg-brand-ink data-[state=active]:text-brand-paper transition-colors"
+                                className="rounded-full px-6 py-2 text-sm font-medium text-brand-ink data-[state=active]:bg-brand-ink data-[state=active]:text-brand-paper transition-colors focus-visible:ring-2 focus-visible:ring-brand-coral focus-visible:ring-offset-2"
                             >
                                 Rules
                             </TabsTrigger>
@@ -94,11 +94,16 @@ export function ProductDemo() {
                     </div>
 
                     <div className="relative aspect-video md:aspect-video lg:aspect-2/1 border border-brand-ink bg-brand-paper p-2 md:p-4 shadow-[8px_8px_0_var(--brand-coral)]">
-                        {/* macOS-style Window Controls */}
-                        <div className="absolute top-4 left-4 flex gap-2 z-20">
-                            <div className="w-3 h-3 rounded-full bg-brand-coral border border-brand-ink" />
-                            <div className="w-3 h-3 rounded-full bg-brand-paper border border-brand-ink" />
-                            <div className="w-3 h-3 rounded-full bg-brand-eucalyptus border border-brand-ink" />
+                        {/* macOS-style Window Controls & Non-Live Data Badge */}
+                        <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20 pointer-events-none">
+                            <div className="flex gap-2">
+                                <div className="w-3 h-3 rounded-full bg-brand-coral border border-brand-ink" />
+                                <div className="w-3 h-3 rounded-full bg-brand-paper border border-brand-ink" />
+                                <div className="w-3 h-3 rounded-full bg-brand-eucalyptus border border-brand-ink" />
+                            </div>
+                            <span className="bg-brand-ink text-brand-paper text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 border border-brand-ink">
+                                Illustrative / Non-Live Data
+                            </span>
                         </div>
 
                         <div className="w-full h-full bg-brand-paper border border-brand-ink overflow-hidden relative">
@@ -154,7 +159,7 @@ export function ProductDemo() {
                                             <Layers className="w-8 h-8" />
                                         </div>
                                         <h3 className="text-xl font-bold mb-2">Time back</h3>
-                                        <p className="text-sm text-muted-foreground">See which jobs were handled and where the week got easier.</p>
+                                        <p className="text-sm text-brand-ink/75">See which jobs were handled and where the week got easier.</p>
                                     </div>
                                 </motion.div>
                             </TabsContent>
