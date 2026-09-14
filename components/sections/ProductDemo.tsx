@@ -379,7 +379,7 @@ function WorkflowMap() {
                     onClick={runWorkflow}
                     disabled={isRunning}
                     aria-describedby="workflow-status"
-                    className="shrink-0 rounded-full bg-brand-ink px-4 text-brand-paper hover:bg-brand-coral hover:text-brand-ink focus-visible:outline-brand-coral disabled:cursor-wait disabled:opacity-60"
+                    className="shrink-0 rounded-full bg-brand-ink px-4 text-brand-paper hover:bg-brand-coral hover:text-brand-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-coral disabled:cursor-wait disabled:opacity-60"
                 >
                     {isRunning ? "Running…" : phase === 4 ? "Run again" : "Run it"}
                 </Button>
