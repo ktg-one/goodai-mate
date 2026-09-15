@@ -3,20 +3,22 @@
 :root {
   --font-studio-sans: "Manrope";
   --font-studio-serif: "Fraunces";
-  --paper: #f7f5ed;
-  --ink: #333b32;
-  --rust: #a4432b;
-  --rust-hover: #873821;
-  --muted: #63685d;
-  --line: #d5d6ca;
-  --wash: #eceee3;
-  --white: #fffef9;
-  --sage: #dce3cc;
-  --success: #42583b;
+  --paper: #f6f3ea;
+  --ink: #2f3a33;
+  --rust: #ab4b34;
+  --rust-hover: #8f3f2b;
+  --muted: #5f665c;
+  --line: #d7d7cc;
+  --wash: #ecece1;
+  --white: #fffdf7;
+  --sage: #d8dfca;
+  --sage-deep: #5d7058;
+  --success: #3f5843;
   --brand-ink: var(--ink);
   --brand-paper: var(--paper);
   --brand-coral: var(--rust);
   --brand-eucalyptus: var(--sage);
+  --brand-eucalyptus-ink: var(--sage-deep);
   --background: var(--paper);
   --foreground: var(--ink);
   --card: var(--white);
@@ -45,6 +47,7 @@
   --color-brand-paper: var(--paper);
   --color-brand-coral: var(--rust);
   --color-brand-eucalyptus: var(--sage);
+  --color-brand-eucalyptus-ink: var(--sage-deep);
   --color-card: var(--white);
   --color-card-foreground: var(--ink);
   --color-primary: var(--ink);
@@ -1756,14 +1759,14 @@ em {
 .voice-actions .text-link { min-height: 44px; }
 @media(max-width:760px) { .voice-panel { grid-template-columns: 1fr; gap: 12px; } .voice-home { padding-block: 12px 45px; } .voice-panel h2 { font-size: 30px; } }
 .goodai-voice-widget {
-  --el-bg-color: #f7f5ed !important;
-  --el-text-color: #333b32 !important;
-  --el-border-color: #d5d6ca !important;
+  --el-bg-color: var(--paper) !important;
+  --el-text-color: var(--ink) !important;
+  --el-border-color: var(--line) !important;
   --el-border-radius: 12px !important;
-  --el-btn-color: #a4432b !important;
-  --el-btn-text-color: #f7f5ed !important;
+  --el-btn-color: var(--rust) !important;
+  --el-btn-text-color: var(--paper) !important;
   --el-btn-radius: 5px !important;
-  --el-focus-color: #a4432b !important;
+  --el-focus-color: var(--rust) !important;
   transition: opacity 160ms ease, visibility 160ms;
 }
 .goodai-voice-widget[data-scrolling="true"] { opacity: 0; visibility: hidden; pointer-events: none; }

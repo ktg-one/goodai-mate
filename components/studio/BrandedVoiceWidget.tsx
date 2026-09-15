@@ -10,7 +10,7 @@ const shadowStyles = `
   button, select, input, textarea { font-family: inherit !important; }
   button { min-height: 44px !important; }
   button:focus-visible { outline: 2px solid var(--el-focus-color); outline-offset: 4px; }
-  [class*="_box_"] { box-shadow: 0 12px 36px #333b3226 !important; }
+  [class*="_box_"] { box-shadow: 0 12px 36px color-mix(in srgb, var(--el-text-color) 15%, transparent) !important; }
   [class*="_status_"] { font-weight: 500; }
   [class*="_poweredBy_"] { font-size: 11px; }
   [class*="_poweredBy_"] a, [class*="_poweredBy_"] span { opacity: 1; }

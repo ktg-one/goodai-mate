@@ -1,5 +1,30 @@
 # Project State
 
+## Current handoff — 2026-09-15
+
+Scope correction from Kevin: this workspace is the assistant's one-shot studio
+fork; Kevin's version remains in main. Findings and tasks here apply to this
+fork only. A merge into Kevin's version has not been requested.
+
+Active checklist: [TASKS.md](../TASKS.md). Phone number placement and the studio
+animation pass are implemented. Next: browser visual/interaction verification,
+then voice-agent and enquiry-flow verification. Continue authorised work;
+external call/submission and public release approval remain separate.
+Phone links were confirmed in served HTML and the browser accessibility tree.
+Screenshot and interaction commands failed even after fresh-tab recovery.
+ThreeUI control styling is implemented; lint/build passed in this conversation.
+Header/hero desktop/mobile and mobile workflow visuals were inspected.
+Interaction checks remain incomplete because browser control failed.
+The site is not finished or newly deployed. Older state below is historical.
+
+Palette update in this session: completed a targeted harmonization pass in
+`app/globals.css` with small token adjustments only (no full recolor), added a
+new semantic `--brand-eucalyptus-ink` token for text contrast, and aligned
+studio controls and ElevenLabs widget colors to shared variables. Lint and
+build passed after the changes. Fresh desktop and mobile screenshots were
+captured from `http://localhost:3011` and showed coherent palette behavior.
+Next operational task is now voice-agent runtime and enquiry-flow verification.
+
 ## Current Status
 
 **Last Updated**: 2026-08-26  

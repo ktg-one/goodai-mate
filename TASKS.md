@@ -13,7 +13,46 @@ requiring external access or release approval explicitly pending.
 
 **Finish line:** a polished, animated, mobile-friendly public site where a
 visitor understands the offer, can try the voice agent and can submit an enquiry.
-**Next task:** verify the implemented animation pass in a functioning browser session, then finish voice-agent verification.
+**Next task:** finish voice-agent runtime verification and enquiry-flow delivery checks.
+
+## 0.1 ThreeUI integration plan (brand-safe handoff)
+
+Objective: continue adding selected ThreeUI-inspired elements without crowding
+the homepage and without breaking the current Good'Ai tone.
+
+Rules before adding any new component:
+
+- [ ] Keep palette/token consistency (`--brand-ink`, `--brand-paper`, `--brand-coral`, `--brand-eucalyptus`) and avoid introducing unrelated neon/glass themes unless muted to current palette.
+- [ ] Keep one primary visual interaction per section; do not stack multiple attention-heavy effects in the same viewport.
+- [ ] Verify mobile readability first. If a component competes with CTA clarity at <= 760px, hide/simplify it on mobile.
+
+Crowding gate (must pass):
+
+- [ ] Hero section still shows headline, primary CTA and secondary CTA clearly above fold on common laptop sizes.
+- [ ] No overlap with carousel, voice widget, or sticky/header affordances.
+- [ ] Keyboard focus order remains obvious and unambiguous.
+
+If crowding gate fails:
+
+- [ ] Stop adding to homepage hero.
+- [ ] Move next ThreeUI-inspired experiment to `/demo` as an "interaction lab" module.
+- [ ] Keep only the strongest one on homepage; others live on `/demo` or a dedicated gallery page.
+
+Current status:
+
+- [x] Added one ThreeUI-inspired dock interaction (`components/ui/AutomationDock.tsx`) and mounted in homepage hero.
+- [x] Applied anti-crowding adjustment: dock is desktop/tablet only (`md+`) and spacing tightened.
+- [ ] Next candidate (if adding more): one restrained microinteraction in `/demo`, not in hero.
+
+## 0. Palette harmonization — completed
+
+- [x] Align the active palette in `app/globals.css` with small value tweaks so tones stay in-family but work together more consistently.
+- [x] Add a semantic dark eucalyptus text token for contrast-safe accent text while keeping the existing light eucalyptus fill token.
+- [x] Replace hard-coded widget and control color literals with shared token-driven values where possible.
+- [x] Validate lint and production build after token changes.
+- [x] Capture desktop and mobile screenshots after launch to confirm visual coherence.
+
+Notes: Live palette source remains `app/globals.css`. `app/tokens/colors.css` is currently not imported by the app and was left unchanged.
 
 ## 1. Animations — next
 

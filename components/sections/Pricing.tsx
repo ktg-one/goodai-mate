@@ -68,7 +68,7 @@ export function Pricing() {
                     {/* V.I.P. */}
                     <div className="p-10 bg-brand-paper border border-brand-ink shadow-[4px_4px_0_var(--brand-ink)] flex flex-col justify-between h-full">
                         <div>
-                            <h3 className="text-lg font-medium tracking-widest uppercase mb-4 text-brand-eucalyptus">Ongoing support</h3>
+                            <h3 className="text-lg font-medium tracking-widest uppercase mb-4 text-brand-eucalyptus-ink">Ongoing support</h3>
                             <div className="text-5xl font-light mb-8 text-brand-ink">As needed</div>
                             <ul className="space-y-4 text-sm text-brand-ink/70 mb-10">
                                 {["New workflows", "System upkeep", "Team questions", "Practical improvements"].map(item => (
