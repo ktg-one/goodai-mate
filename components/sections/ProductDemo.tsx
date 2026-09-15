@@ -97,7 +97,7 @@ export function ProductDemo() {
                         </TabsList>
                     </div>
 
-                    <div className="aspect-video md:aspect-video lg:aspect-2/1 border border-brand-ink bg-brand-paper p-2 md:p-4 shadow-[8px_8px_0_var(--brand-coral)]">
+                    <div className="min-h-[500px] md:min-h-0 md:aspect-video lg:aspect-2/1 border border-brand-ink bg-brand-paper p-2 md:p-4 shadow-[8px_8px_0_var(--brand-coral)]">
                         <div className="flex h-full flex-col overflow-hidden border border-brand-ink bg-brand-paper">
                             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-brand-ink px-3 py-2 md:px-4">
                                 <div className="flex gap-2">
@@ -112,7 +112,7 @@ export function ProductDemo() {
                             </div>
 
                             <div className="relative min-h-0 flex-1">
-                            <TabsContent value="dashboard" className="h-full mt-0 p-6 md:p-10">
+                            <TabsContent value="dashboard" className="h-full mt-0 p-4 sm:p-6 md:p-10">
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
@@ -152,7 +152,7 @@ export function ProductDemo() {
                                 </motion.div>
                             </TabsContent>
 
-                            <TabsContent value="analytics" className="h-full mt-0 p-6 md:p-10">
+                            <TabsContent value="analytics" className="h-full mt-0 p-4 sm:p-6 md:p-10">
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
@@ -169,7 +169,7 @@ export function ProductDemo() {
                                 </motion.div>
                             </TabsContent>
 
-                            <TabsContent value="settings" className="h-full mt-0 p-6 md:p-10">
+                            <TabsContent value="settings" className="h-full mt-0 p-4 sm:p-6 md:p-10">
                                 <SettingsRules />
                             </TabsContent>
                             </div>
