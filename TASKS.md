@@ -28,7 +28,8 @@ verification remains pending, so the acceptance items below stay unchecked.
 - [ ] Add a coordinated hero entrance for headline, supporting copy, CTA and image.
 - [ ] Add visible, restrained scroll reveals for service rows, approach steps and section headings.
 - [ ] Finish the scroll-story transitions and subtle image movement, keeping text readable throughout.
-- [ ] Finish hover, press and keyboard-focus feedback for buttons, links and service rows.
+- [x] Finish hover, press and keyboard-focus feedback for buttons, links and service rows.
+  Added :focus-visible styles to desktop-nav, mobile-nav, footer nav, header-phone, footer-phone, voice-phone, contact-phone, and service-row in globals.css and studio-controls.css.
 - [ ] Verify on mobile and desktop, including reduced motion, touch, back navigation and direct section links. Content must remain accessible if animation fails.
 
 Done means the motion has been observed in the browser, with no hidden content,
