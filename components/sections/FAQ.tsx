@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import {
     Accordion,
@@ -28,6 +29,18 @@ const faqs = [
 ];
 
 export function FAQ() {
+    // ⚡ Bolt: Memoize the mapped accordion items to prevent redundant O(N) array mapping operations and DOM element re-creations when the FAQ component re-renders.
+    const renderedFaqs = useMemo(() => {
+        return faqs.map((faq, index) => (
+            <AccordionItem key={index} value={`item-${index}`}>
+                <AccordionTrigger className="text-lg text-left">{faq.question}</AccordionTrigger>
+                <AccordionContent className="text-brand-ink/70 text-base leading-relaxed">
+                    {faq.answer}
+                </AccordionContent>
+            </AccordionItem>
+        ));
+    }, []);
+
     return (
         <section id="faq" className="py-24 px-6 bg-brand-paper text-brand-ink border-t border-brand-ink">
             <div className="max-w-3xl mx-auto">
@@ -41,14 +54,7 @@ export function FAQ() {
                 </motion.div>
 
                 <Accordion type="single" collapsible className="w-full">
-                    {faqs.map((faq, index) => (
-                        <AccordionItem key={index} value={`item-${index}`}>
-                            <AccordionTrigger className="text-lg text-left">{faq.question}</AccordionTrigger>
-                            <AccordionContent className="text-brand-ink/70 text-base leading-relaxed">
-                                {faq.answer}
-                            </AccordionContent>
-                        </AccordionItem>
-                    ))}
+                    {renderedFaqs}
                 </Accordion>
             </div>
         </section>

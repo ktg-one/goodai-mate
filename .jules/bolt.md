@@ -10,3 +10,7 @@
 ## 2024-05-24 - Memoize Inline Maps
 **Learning:** Hardcoded arrays placed directly inside functional components are recreated on every render, causing React to unnecessarily recreate elements during list mappings.
 **Action:** Extract inline constant arrays to module scope and wrap their list mappings with `useMemo` to prevent redundant O(N) operations and minimize DOM reconciliation overhead.
+
+## 2024-05-25 - Memoize FAQ Accordion List Mapping
+**Learning:** Re-mapping constant lists during render causes unnecessary $O(N)$ JSX node allocations and DOM reconciliation overhead on component updates.
+**Action:** Wrapped the mapped FAQ accordion items in `useMemo` with an empty dependency array to preserve referential equality of rendered items across re-renders.
