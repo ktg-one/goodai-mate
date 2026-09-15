@@ -5,7 +5,7 @@ import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Noise } from "@/components/ui/Noise";
-import { ElevenLabsWidget } from "@/components/ui/ElevenLabsWidget";
+import { BrandedElevenLabsWidget } from "@/components/ui/BrandedElevenLabsWidget";
 import Script from "next/script";
 
 const geistSans = Geist({
@@ -40,7 +40,7 @@ export default function RootLayout({
             {children}
           </main>
           <Script src="https://elevenlabs.io/convai-widget/index.js" strategy="afterInteractive" />
-          <ElevenLabsWidget />
+          <BrandedElevenLabsWidget />
           <Footer />
         </SmoothScroll>
       </body>

@@ -1,7 +1,6 @@
 import { Hero } from "@/components/sections/Hero";
 import { InfiniteMarquee } from "@/components/sections/InfiniteMarquee";
 import { Features } from "@/components/sections/Features";
-import ServicesCarousel from "@/components/sections/ServicesCarousel";
 import { VisualStory } from "@/components/sections/VisualStory";
 import { ProductDemo } from "@/components/sections/ProductDemo";
 import { TechSpecs } from "@/components/sections/TechSpecs";
@@ -16,7 +15,6 @@ export default function Home() {
       <Hero />
       <InfiniteMarquee />
       <Features />
-      <ServicesCarousel />
       <VisualStory />
       <ProductDemo />
       <TechSpecs />
