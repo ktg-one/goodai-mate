@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { AutomationDock } from "@/components/ui/AutomationDock";
 import { TextScramble } from "@/components/ui/TextScramble";
 import { SURVEY_URL } from "@/lib/links";
 
@@ -58,6 +59,15 @@ export function Hero() {
                     <MagneticButton onClick={() => window.location.assign(SURVEY_URL)} className="flex items-center text-sm uppercase tracking-widest text-brand-paper/75 hover:text-brand-paper transition-colors group px-6 py-4">
                         Let us sort it <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                     </MagneticButton>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    className="w-full flex justify-center"
+                >
+                    <AutomationDock />
                 </motion.div>
             </div>
 
