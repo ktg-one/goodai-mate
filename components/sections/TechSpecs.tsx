@@ -22,7 +22,7 @@ export function TechSpecs() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="text-4xl md:text-6xl font-bold tracking-tighter"
+                        className="text-4xl md:text-6xl font-bold"
                     >
                         What you get.
                     </motion.h2>
@@ -39,7 +39,7 @@ export function TechSpecs() {
                             <h4 className="text-sm font-medium text-brand-coral uppercase tracking-widest mb-2">
                                 {spec.label}
                             </h4>
-                            <p className="text-3xl md:text-4xl font-light tracking-tight">{spec.value}</p>
+                            <p className="text-3xl md:text-4xl font-light">{spec.value}</p>
                             <Separator className="mt-6 bg-brand-paper/20" />
                         </motion.div>
                     ))}

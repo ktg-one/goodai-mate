@@ -7,13 +7,13 @@ import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetClose } from "@/components/ui/sheet";
-import { SURVEY_URL } from "@/lib/links";
+import { SURVEY_URL, PHONE_HREF, PHONE_DISPLAY } from "@/lib/links";
 
 const navLinks = [
+    { name: "Workflows", href: "#demo" },
+    { name: "Voice Agent", href: "#demo" },
     { name: "Features", href: "#features" },
-    { name: "Field notes", href: "https://goodai.up.railway.app/" },
-    { name: "Services", href: "#specs" },
-    { name: "Prices", href: "#pricing" },
+    { name: "Pricing", href: "#pricing" },
 ];
 
 export function Navbar() {
@@ -65,7 +65,7 @@ export function Navbar() {
             >
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2 group mr-8">
-                    <span className="font-display text-4xl md:text-5xl font-normal leading-[0.75] tracking-tighter text-current group-hover:opacity-70 transition-opacity">
+                    <span className="font-display text-4xl md:text-5xl font-normal leading-[0.75] text-current group-hover:opacity-70 transition-opacity">
                         Good&apos;Ai
                     </span>
                 </Link>
@@ -85,20 +85,26 @@ export function Navbar() {
 
                 {/* Actions */}
                 <div className="hidden md:flex items-center gap-4 ml-8">
-                    <Link href={SURVEY_URL} className={cn("text-lg lg:text-xl font-normal text-current opacity-75 hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current transition-opacity", isScrolled ? "hidden lg:block" : "")}>
-                        Survey
-                    </Link>
+                    <a
+                        href={PHONE_HREF}
+                        className={cn(
+                            "font-mono text-xs uppercase tracking-widest px-3 py-1.5 rounded-full border border-brand-coral text-brand-coral transition-colors hover:bg-brand-coral hover:text-brand-navy",
+                            isScrolled ? "hidden lg:inline-block" : ""
+                        )}
+                    >
+                        Call AI: {PHONE_DISPLAY}
+                    </a>
                     <Button
                         asChild
                         size="sm"
                         className={cn(
-                            "h-10 rounded-full px-7 text-base lg:text-lg transition-colors font-normal",
+                            "h-10 rounded-full px-6 text-sm font-medium transition-all shadow-sm",
                             isScrolled
                                 ? "bg-brand-ink text-brand-paper hover:bg-brand-coral hover:text-brand-ink"
                                 : "bg-brand-paper text-brand-ink hover:bg-brand-coral"
                         )}
                     >
-                        <Link href={SURVEY_URL}>Quick Chat</Link>
+                        <a href={SURVEY_URL}>Get Started</a>
                     </Button>
                 </div>
 
@@ -118,14 +124,14 @@ export function Navbar() {
                     </Button>
                     <Sheet>
                         <SheetTrigger asChild>
-                            <Button variant="ghost" size="icon" className="rounded-full">
+                            <Button variant="ghost" size="icon" className="rounded-full" aria-label="Open menu">
                                 <Menu className="w-5 h-5" />
                             </Button>
                         </SheetTrigger>
                         <SheetContent side="top" className="w-full h-full bg-brand-paper text-brand-ink border-none p-0">
                             <SheetTitle className="sr-only">Menu</SheetTitle>
                             <div className="flex flex-col h-full items-center justify-center relative">
-                                <SheetClose className="absolute top-6 right-6">
+                                <SheetClose className="absolute top-6 right-6" aria-label="Close menu">
                                     <X className="w-6 h-6" />
                                 </SheetClose>
                                 <div className="flex flex-col gap-8 text-center">
@@ -133,7 +139,7 @@ export function Navbar() {
                                         <SheetClose key={link.name} asChild>
                                             <Link
                                                 href={link.href}
-                                                className="text-4xl font-light tracking-tight hover:italic transition-all"
+                                                className="text-4xl font-light hover:italic transition-all"
                                             >
                                                 {link.name}
                                             </Link>

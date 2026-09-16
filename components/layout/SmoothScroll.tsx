@@ -31,7 +31,7 @@ function ScrollTriggerSync() {
 
 export function SmoothScroll({ children }: { children: ReactNode }) {
   return (
-    <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
+    <ReactLenis root options={{ lerp: 0.08, duration: 1.1, smoothWheel: true }}>
       <ScrollTriggerSync />
       {children}
     </ReactLenis>
