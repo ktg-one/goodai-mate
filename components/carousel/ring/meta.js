@@ -159,8 +159,9 @@ export function createMeta(refs, params) {
     // Everything downstream is derived from this one figure: the box height,
     // so the filter region, so where the corner offset has to drop the box to.
     const bigVw = params.nameSize * textK * (tight ? params.tightName : 1);
-    const big = `${bigVw}vw`;
-    const small = `${params.idxSize * textK}vw`;
+    const vw = (value) => `${(value * viewW) / 100}px`;
+    const big = vw(bigVw);
+    const small = vw(params.idxSize * textK);
     const bigFace = `"${params.nameFont}", ui-sans-serif, system-ui, sans-serif`;
     const smallFace = `"${params.idxFont}", ui-sans-serif, system-ui, sans-serif`;
     const bigWeight = `${params.nameWeight}`;
@@ -184,8 +185,8 @@ export function createMeta(refs, params) {
       }
       g.box.style.display = "";
 
-      g.box.style.width = `${corner ? params.tightMetaWidth : params.metaWidth}vw`; // prettier-ignore
-      g.box.style.height = `${h}vw`;
+      g.box.style.width = vw(corner ? params.tightMetaWidth : params.metaWidth); // prettier-ignore
+      g.box.style.height = vw(h);
 
       if (corner) {
         // The box is three times the type's height, so placing it at the
@@ -207,8 +208,8 @@ export function createMeta(refs, params) {
         // number, the year — is the one against the margin. That is also what
         // stops a morph shifting anything: rows are sized by their own words
         // but justified to the same edge, so the words line up across rows.
-        g.box.style.left = isRight ? "auto" : `${params.metaLeft}vw`;
-        g.box.style.right = isRight ? `${params.metaRight}vw` : "auto";
+        g.box.style.left = isRight ? "auto" : vw(params.metaLeft);
+        g.box.style.right = isRight ? vw(params.metaRight) : "auto";
       }
 
       // All three rows, the steady one included. They have to agree exactly or
@@ -218,7 +219,7 @@ export function createMeta(refs, params) {
         layer.style.justifyContent =
           corner || isRight ? "flex-end" : "flex-start";
         const row = layer.firstElementChild;
-        row.style.gap = `${isRight ? params.metaGapR : params.metaGapL}vw`;
+        row.style.gap = vw(isRight ? params.metaGapR : params.metaGapL);
         const [lead, trail] = row.children;
         // The number is what goes in the corner layout. Its morph carries on
         // underneath, so nothing needs resyncing on the way back out.
@@ -234,7 +235,7 @@ export function createMeta(refs, params) {
 
     // The column and the counter are set from here too, so all the type moves
     // as one piece across a breakpoint instead of half of it growing.
-    if (list) list.style.fontSize = `${params.listSize * textK}vw`;
+    if (list) list.style.fontSize = vw(params.listSize * textK);
     if (loader) {
       loader.style.bottom = `${params.loaderBottom}vh`;
       loader.style.fontFamily = smallFace;

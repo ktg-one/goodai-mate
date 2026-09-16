@@ -1,4 +1,4 @@
-import ServicesCarousel from "@/components/sections/ServicesCarousel";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, MoveDown, Plus, Check, Headphones, Workflow, MessagesSquare, Network, ScanSearch, Asterisk } from "lucide-react";
 import { SURVEY_URL, PHONE_DISPLAY, PHONE_HREF } from "@/lib/links";
@@ -6,13 +6,12 @@ import { services } from "@/lib/services";
 import { WorkflowPreview } from "@/components/studio/WorkflowPreview";
 import { VoiceDemo } from "@/components/studio/VoiceDemo";
 import { ScrollStory } from "@/components/studio/ScrollStory";
-import { AutomationDock } from "@/components/ui/AutomationDock";
 const serviceIcons = [Headphones, Workflow, MessagesSquare, Network, ScanSearch];
 export default function Home() {
   return <>
     <section className="hero shell">
-      <div className="hero-copy"><h1>Good work.<br /><em>More life.</em></h1><p className="hero-description">You’ve done enough chasing for one day.<br className="desktop-break" /> Let practical AI and automation take a turn.</p><a href={SURVEY_URL} className="button hero-button">Let’s take work off your plate <ArrowUpRight size={20} /></a><Link href="#voice" className="text-link hero-voice-link">Try the voice agent <Headphones size={17} /></Link><p className="handwritten hero-handnote">Go on. Knock off early.<svg viewBox="0 0 140 45" fill="none" aria-hidden="true"><path d="M4 16c31 21 83 19 123-5m-16-4 20 2-9 17"/></svg></p><div className="hero-bottom"><span className="location-dot" /> Perth, Australia. Working everywhere.<a href="#services" aria-label="Explore our services"><MoveDown size={19} /></a></div><AutomationDock /></div>
-      <div className="hero-carousel"><p className="hero-carousel-eyebrow">A few things we can take off your plate</p><ServicesCarousel hero /><p className="hero-carousel-hint">Drag to explore · Use arrow keys when focused</p></div>
+      <div className="hero-copy"><h1>Good work.<br /><em>More life.</em></h1><p className="hero-description">You’ve done enough chasing for one day.<br className="desktop-break" /> Let practical AI and automation take a turn.</p><a href={SURVEY_URL} className="button hero-button">Let’s take work off your plate <ArrowUpRight size={20} /></a><Link href="#voice" className="text-link hero-voice-link">Try the voice agent <Headphones size={17} /></Link><p className="handwritten hero-handnote">Go on. Knock off early.<svg viewBox="0 0 140 45" fill="none" aria-hidden="true"><path d="M4 16c31 21 83 19 123-5m-16-4 20 2-9 17"/></svg></p><div className="hero-bottom"><span className="location-dot" /> Perth, Australia. Working everywhere.<a href="#services" aria-label="Explore our services"><MoveDown size={19} /></a></div></div>
+      <figure className="hero-figure"><Image src="/brand/coastal-phone.webp" alt="A terracotta telephone resting on sunlit limestone beside the ocean" fill priority sizes="(max-width: 760px) 100vw, 52vw" /><figcaption><span>Don’t worry about the busywork.<br /><strong>We’ll sort it.</strong></span><span className="image-seal" aria-hidden="true">g.</span></figcaption></figure>
     </section>
     <div className="promise-strip"><div className="shell"><span>Less chasing.</span><Asterisk className="small-spark" aria-hidden="true"/><span>Less copying.</span><Asterisk className="small-spark" aria-hidden="true"/><span>More getting on with it.</span></div></div>
     <ScrollStory />

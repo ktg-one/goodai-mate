@@ -48,7 +48,7 @@ export function Navbar() {
                 hidden: { y: -20, opacity: 0 },
             }}
             animate={isHidden ? "hidden" : "visible"}
-            transition={{ duration: 0.35, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
             className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4 pointer-events-none"
         >
             {/* Floating Glass Pill */}

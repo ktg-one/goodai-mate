@@ -1,5 +1,9 @@
 # Roadmap
 
+> **2026-09-15: Active launch tasks are in [TASKS.md](../TASKS.md).**
+> The milestones below are historical planning for an earlier implementation.
+> Use the root checklist for current scope, order and completion evidence.
+
 ## Overview
 
 This roadmap defines the phased execution plan for the Good'Ai frontend project. Each phase represents a focused body of work with clear deliverables and acceptance criteria.
