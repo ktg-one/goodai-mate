@@ -120,7 +120,7 @@ export function Navbar() {
                                 : "bg-brand-paper text-brand-ink hover:bg-brand-coral"
                         )}
                     >
-                        <Link href={SURVEY_URL}>Cuppa?</Link>
+                        <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer">Cuppa?</a>
                     </Button>
                     <Sheet>
                         <SheetTrigger asChild>
