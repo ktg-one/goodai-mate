@@ -5,3 +5,9 @@ export const services = [
   { slug: "ai-integration", name: "AI integration projects", line: "Make the pieces work together.", description: "Connect AI to your business software, with custom workflows and interfaces built around how your team actually works.", price: "A$2,500", priceNote: "projects from", items: ["CRM, business software and API connections", "Custom interfaces and internal tools", "Agent workflows with clear oversight"], detail: "We define the data flow, access boundaries and review points before building. The work includes testing and a practical handover so the result is something your team can use and understand.", range: "From A$2,500. Typical launch projects: A$2,500–5,000. Larger or more complex integrations are quoted individually." },
   { slug: "opportunity-audit", name: "AI opportunity audit", line: "Start with the problem. Then pick the technology.", description: "A practical look at where your time goes, what’s worth fixing and what you can safely leave alone.", price: "A$490", priceNote: "fixed-price review", items: ["Workflow review and recurring admin drains", "Missed lead and automation opportunities", "Priorities, estimated costs and potential return"], detail: "You leave with an ordered set of recommendations and a sensible first project. Estimated savings are planning assumptions to validate, not promised outcomes.", range: "A$490 for the opportunity audit. Any implementation is scoped and quoted separately." },
 ] as const;
+
+export type Service = (typeof services)[number];
+
+export function getServiceBySlug(slug: string): Service | undefined {
+  return services.find((service) => service.slug === slug);
+}
