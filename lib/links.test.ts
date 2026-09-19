@@ -65,7 +65,7 @@ test("external SURVEY_URL links use target='_blank' and rel='noopener noreferrer
 
   for (const relativePath of filesToCheck) {
     const fullPath = path.join(process.cwd(), relativePath);
-    if (!fs.existsSync(fullPath)) continue;
+    assert.ok(fs.existsSync(fullPath), `Expected file to exist: ${relativePath}`);
     const content = fs.readFileSync(fullPath, "utf-8");
 
     // Match any <a ... href={SURVEY_URL} ... > or <a ... href="https://..." ... >
