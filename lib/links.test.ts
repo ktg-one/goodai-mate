@@ -49,3 +49,38 @@ test("layout components do not use Next.js <Link> for external URLs or empty anc
     "Navbar should not use Next.js Link for SURVEY_URL"
   );
 });
+
+test("external SURVEY_URL links use target='_blank' and rel='noopener noreferrer'", () => {
+  const filesToCheck = [
+    "components/studio/Shell.tsx",
+    "components/studio/VoiceDemo.tsx",
+    "components/layout/Navbar.tsx",
+    "components/layout/Footer.tsx",
+    "components/sections/CTA.tsx",
+    "components/sections/Pricing.tsx",
+    "components/sections/TechSpecs.tsx",
+    "app/page.tsx",
+    "app/services/[slug]/page.tsx",
+  ];
+
+  for (const relativePath of filesToCheck) {
+    const fullPath = path.join(process.cwd(), relativePath);
+    if (!fs.existsSync(fullPath)) continue;
+    const content = fs.readFileSync(fullPath, "utf-8");
+
+    // Match any <a ... href={SURVEY_URL} ... > or <a ... href="https://..." ... >
+    const anchorRegex = /<a\s+[^>]*href=\{(?:SURVEY_URL|"https:\/\/[^"]+")\}[^>]*>|<a\s+[^>]*href="https:\/\/[^"]+"[^>]*>/g;
+    let match;
+    while ((match = anchorRegex.exec(content)) !== null) {
+      const tag = match[0];
+      assert.ok(
+        tag.includes('target="_blank"'),
+        `Anchor tag in ${relativePath} missing target="_blank": ${tag}`
+      );
+      assert.ok(
+        tag.includes('rel="noopener noreferrer"'),
+        `Anchor tag in ${relativePath} missing rel="noopener noreferrer": ${tag}`
+      );
+    }
+  }
+});
