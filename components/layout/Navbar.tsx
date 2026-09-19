@@ -104,7 +104,7 @@ export function Navbar() {
                                 : "bg-brand-paper text-brand-ink hover:bg-brand-coral"
                         )}
                     >
-                        <a href={SURVEY_URL}>Get Started</a>
+                        <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer">Get Started</a>
                     </Button>
                 </div>
 

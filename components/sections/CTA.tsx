@@ -55,7 +55,7 @@ export function CTA() {
                     </Button>
 
                     <Button asChild size="lg" variant="outline" className="rounded-full px-8 h-14 text-sm sm:text-base border-brand-paper/30 text-brand-paper hover:bg-brand-paper/10 transition-colors">
-                        <a href={SURVEY_URL} className="flex items-center gap-2">
+                        <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                             Tell us what&apos;s eating your time <ArrowRight className="w-4 h-4 ml-1" />
                         </a>
                     </Button>
