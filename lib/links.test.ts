@@ -50,6 +50,29 @@ test("layout components do not use Next.js <Link> for external URLs or empty anc
   );
 });
 
+test("PHONE_HREF links are rendered using native anchor <a> tags and not Next.js <Link>", () => {
+  const filesWithPhone = [
+    "components/studio/Shell.tsx",
+    "components/studio/VoiceDemo.tsx",
+    "components/layout/Navbar.tsx",
+    "components/sections/CTA.tsx",
+    "components/sections/Hero.tsx",
+    "app/page.tsx",
+  ];
+
+  for (const relativePath of filesWithPhone) {
+    const fullPath = path.join(process.cwd(), relativePath);
+    if (!fs.existsSync(fullPath)) continue;
+    const content = fs.readFileSync(fullPath, "utf-8");
+
+    assert.strictEqual(
+      content.includes("<Link href={PHONE_HREF}"),
+      false,
+      `File ${relativePath} should not use Next.js <Link> for PHONE_HREF`
+    );
+  }
+});
+
 test("external SURVEY_URL links use target='_blank' and rel='noopener noreferrer'", () => {
   const filesToCheck = [
     "components/studio/Shell.tsx",
