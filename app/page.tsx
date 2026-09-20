@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, MoveDown, Plus, Check, Headphones, Workflow, MessagesSquare, Network, ScanSearch, Asterisk } from "lucide-react";
-import { SURVEY_URL, PHONE_DISPLAY, PHONE_HREF } from "@/lib/links";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/links";
 import { services } from "@/lib/services";
 import { WorkflowPreview } from "@/components/studio/WorkflowPreview";
 import { VoiceDemo } from "@/components/studio/VoiceDemo";
