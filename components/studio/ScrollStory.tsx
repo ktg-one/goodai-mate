@@ -26,10 +26,16 @@ export function ScrollStory() {
           const paths = scene.querySelectorAll<SVGPathElement>("[data-ink]");
           paths.forEach(path => { const length = path.getTotalLength(); gsap.set(path, { strokeDasharray: length, strokeDashoffset: length }); });
           gsap.set(scene, { opacity: index === 0 ? 1 : 0 });
-          const timeline = gsap.timeline({ scrollTrigger: { trigger: steps[index], start: "top 65%", end: "bottom 65%", scrub: 0.7, invalidateOnRefresh: true } });
-          timeline.to(scene, { opacity: 1, duration: 0.08, ease: "none" }, 0)
-            .to(paths, { strokeDashoffset: 0, duration: 0.65, stagger: 0.025, ease: "none" }, 0.05);
-          if (index < scenes.length - 1) timeline.to(scene, { opacity: 0, duration: 0.1, ease: "none" }, 1);
+          const timeline = gsap.timeline({ scrollTrigger: { trigger: steps[index], start: "top 70%", end: "bottom 30%", scrub: 0.8, invalidateOnRefresh: true } });
+          // 0.0 -> 0.15: Smooth entrance
+          timeline.to(scene, { opacity: 1, duration: 0.15, ease: "power1.out" }, 0)
+            // 0.10 -> 0.45: Ink lines draw to completion
+            .to(paths, { strokeDashoffset: 0, duration: 0.35, stagger: 0.015, ease: "power1.inOut" }, 0.10);
+          // 0.45 -> 0.85: DWELL / LINGER ZONE (Artwork holds completely stable for human reading)
+          // 0.85 -> 1.00: Smooth transition out
+          if (index < scenes.length - 1) {
+            timeline.to(scene, { opacity: 0, duration: 0.15, ease: "power1.in" }, 0.85);
+          }
         });
       });
       media.add("(max-width: 760px) and (prefers-reduced-motion: no-preference)", () => {
@@ -49,7 +55,7 @@ export function ScrollStory() {
       <div className="chapter-copy"><h3>{chapter.title}</h3><p>{chapter.copy}</p><span className="handwritten chapter-note">{chapter.note}</span></div>
       <div className="story-mobile-art" aria-hidden="true"><StoryDrawing scene={index}/><span className="drawing-caption">{chapter.caption}</span></div>
     </article>)}</div><div className="story-canvas" aria-hidden="true">{chapters.map((chapter, index) => <div data-scene={index} key={chapter.title}><StoryDrawing scene={index}/><span className="drawing-caption">{chapter.caption}</span></div>)}</div></div>
-    <a href="#services" className="text-link story-next">Here’s what we can take off your plate <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M12 3v17m-6-6 6 6 6-6"/></svg></a>
+    <a href="#suss-the-fuss" className="text-link story-next">We’ll suss the fuss <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M12 3v17m-6-6 6 6 6-6"/></svg></a>
   </section>;
 }
 

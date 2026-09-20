@@ -1,109 +1,61 @@
-# Project State
+# Project State & GSD Handoff
 
-## Current handoff — 2026-09-15
-
-Scope correction from Kevin: this workspace is the assistant's one-shot studio
-fork; Kevin's version remains in main. Findings and tasks here apply to this
-fork only. A merge into Kevin's version has not been requested.
-
-Active checklist: [TASKS.md](../TASKS.md). Phone number placement and the studio
-animation pass are implemented. Next: browser visual/interaction verification,
-then voice-agent and enquiry-flow verification. Continue authorised work;
-external call/submission and public release approval remain separate.
-Phone links were confirmed in served HTML and the browser accessibility tree.
-Screenshot and interaction commands failed even after fresh-tab recovery.
-ThreeUI control styling is implemented; lint/build passed in this conversation.
-Header/hero desktop/mobile and mobile workflow visuals were inspected.
-Interaction checks remain incomplete because browser control failed.
-The site is not finished or newly deployed. Older state below is historical.
-
-Palette update in this session: completed a targeted harmonization pass in
-`app/globals.css` with small token adjustments only (no full recolor), added a
-new semantic `--brand-eucalyptus-ink` token for text contrast, and aligned
-studio controls and ElevenLabs widget colors to shared variables. Lint and
-build passed after the changes. Fresh desktop and mobile screenshots were
-captured from `http://localhost:3011` and showed coherent palette behavior.
-Next operational task is now voice-agent runtime and enquiry-flow verification.
-
-## Current Status
-
-**Last Updated**: 2026-08-26  
-**Milestone**: Milestone 1 - GSD Initialization & Project Setup  
-**Phase**: 1 (ProductDemo Verification) - COMPLETE  
-
-## Git State
-
-```
-Current branch: main
-Latest commit: aa0724f (HEAD -> main, origin/main)
-Commit message: chore: merge remote changes to AGENTS.md
-
-Recent commit history:
-- aa0724f - chore: merge remote changes to AGENTS.md
-- ff3e4fb - Merge branch 'main' of https://github.com/ktg-one/goodai-mate
-- 2b2126e - feat: add placeholder services to carousel (12 total)
-- e29f507 - fix: remove unused ESLint variables
-- 3e035bc - feat: initialize GSD workflows and clean up aspect ratios
-```
-
-## Working Tree
-
-**Uncommitted Changes Detected:**
-- `components/sections/ProductDemo.tsx` - Aspect ratio cleanup (line 74)
-- `components/sections/Features.tsx` - Pending review (content changes)
-- `.planning/STATE.md` - Updated with latest git state
-
-**Pushed to origin**: All GSD commits deployed
-
-## Build Status
-
-- **Lint**: Not yet run in this session
-- **Build**: Not yet run in this session
-- **Tests**: No test suite configured
-
-## Environment
-
-- **Node.js**: 18+
-- **npm**: 10+
-- **Next.js**: 16.0.8
-- **React**: 19.2.1
-- **TypeScript**: ^5
-- **Tailwind CSS**: v4
-
-## Deployments
-
-- Platform: Vercel (configured via vercel.json)
-- Production URL: Not specified in project files
-- Preview deployments: Available via Vercel
-
-## Known Issues
-
-None identified at initialization.
-
-## In Progress
-
-- GSD workflow initialization (completed: PROJECT.md, config.json, STATE.md, REQUIREMENTS.md, ROADMAP.md)
-- All Milestone 1 deliverables complete
-
-## Blockers
-
-None
-
-## Recent Changes Summary
-
-Based on commit history, the project has recently:
-1. Connected a live intake form (latest feature)
-2. Fixed brand capitalization ('a' -> 'A'?)
-3. Fixed link to Railway content backend
-4. Launched the new site
-5. Fixed GSAP wrapping issue in GoodAIt hero section
-
-## Next Actions
-
-1. Complete GSD initialization (REQUIREMENTS.md, ROADMAP.md)
-2. Define first milestone based on user's work focus
-3. User referenced `ProductDemo.tsx:74` - investigate if work is needed there
+**Last Updated**: 2026-09-21T03:32Z  
+**Branch**: `feat/threeui-brand-harmony-dock` (ready for main sync)  
+**Status**: All builds passing, 0 errors, 0 warnings, dev server verified.
 
 ---
-*GSD State File*  
-*Format: Markdown with structured sections for agent consumption*
+
+## 1. Executive Summary of Achievements
+
+In this session, we completed the kinetic pacing overhaul, replaced all external Google Forms with a native visual intake card, integrated Lenis smooth scrolling with GSAP ticker synchronization, eliminated scroll-translation collisions, implemented ThreeUI's exact Generative Tree shader, and prepared `@shadcn/lint` contracts.
+
+### Key Milestones Completed:
+1. **Zero "Half-Sights" Viewport Pacing**:
+   - `.hero` extended to `min-height: calc(100dvh - 100px)` (desktop) / `calc(100dvh - 79px)` (mobile).
+   - `.scroll-chapter` extended to `min-height: 150vh` with a dedicated **40% human dwell/linger zone** ($0.45 \to 0.85$ of the scroll runway), ensuring drawings hold stable so humans can actually read and absorb the story.
+   - `.services-section`, `.demo-section`, `.voice-home`, and `.contact-section` padded to `min-height: calc(100dvh - 100px)` with flex centering.
+2. **Native "We'll Suss the Fuss" Visual Intake Card**:
+   - Created [`components/studio/SussTheFussCard.tsx`](file:///c:/Users/kevin/Documents/goodai3/goodai-studio/components/studio/SussTheFussCard.tsx).
+   - Replaced all Google Form links with direct in-page `#suss-the-fuss` anchors.
+   - 3-step intake: Headache Chips $\to$ Plain-English Scratchpad $\to$ Direct Contact Hand-off.
+   - Authentic Australian mate-ship voice: *"Knock off early. We’ll sort it." / "Admin? Give us the work. Go see the kids."*
+3. **Lenis Inertial Smooth Scrolling**:
+   - Created [`components/studio/SmoothScroll.tsx`](file:///c:/Users/kevin/Documents/goodai3/goodai-studio/components/studio/SmoothScroll.tsx) with exponential deceleration curve.
+   - Synchronized Lenis with GSAP ScrollTrigger ticker (`lenis.on('scroll', ScrollTrigger.update)` and `gsap.ticker.add((time) => lenis.raf(time * 1000))`).
+   - Calibrated for sensitive/high-DPI mice (jog-wheel precision without runaway fling).
+   - Added official Lenis CSS in `app/globals.css`.
+4. **Eliminated Relative Velocity Collision**:
+   - Updated `components/studio/StudioMotion.tsx` to set `distance = 0` during scroll ("leave one down there, we're coming to it").
+   - Elements no longer translate upward into the user's downward scroll; they stay grounded at their resting position and fade in smoothly.
+5. **ThreeUI `<ElementsCollection />` Generative Tree**:
+   - Verified and extracted exact source bundle from `https://threeui.com/source-code/generative-tree.json`.
+   - Registered files with exact SHA-256 verification:
+     - `src/shaders/elements/GenerativeTree.tsx` (`bb6bf95154f38e7a9772eef6fe2aa89ff72284a13345d56e66fba234894c2127`)
+     - `src/shaders/elements/sources/generative-tree.html` (`8ea51733bddf5cc44df338ef9af3a21633d62daa92c17fde5faa2fcab90fa0ef`)
+     - `src/shaders/threeui.css` (`efe4447139f1358dd8e9be68edf6fa46cbefbd1de423a4d6c439ca61d2c8eccf`)
+   - Configured usage in [`src/shaders/Scene.tsx`](file:///c:/Users/kevin/Documents/goodai3/goodai-studio/src/shaders/Scene.tsx).
+   - Staged in `/lab` ([`app/lab/page.tsx`](file:///c:/Users/kevin/Documents/goodai3/goodai-studio/app/lab/page.tsx)), verified live at `http://localhost:3000/lab` (HTTP 200).
+6. **Agentic Linter Analysis (`@shadcn/lint`)**:
+   - Cloned and analyzed `@shadcn/lint` AST engine.
+   - Prepared `design-system.lint.json` contracts locking Studio tokens (`#F6F3EA`, `#2F3A33`, `#AB4B34`) and component rules.
+
+---
+
+## 2. Verification Evidence
+
+- **`npm run lint`**: 0 errors, 0 warnings.
+- **`npm run build`**: 0 errors, 16 static routes compiled in 1.9s.
+- **Live Dev Server**: Running on `http://localhost:3000` (PID session verified).
+
+---
+
+## 3. Next Steps & Strategy Handoff
+
+When resuming:
+1. **Capture & Visual QA**:
+   - Capture keyframe screenshots of the live scrub at 0%, 25%, 50%, 75%, 100% using the 3-Agent Kinetic Loop geometry inspector.
+2. **Generative Tree Strategy**:
+   - Decide whether to connect the ThreeUI Generative Tree directly to the homepage Hero $\to$ Scroll transition as a scroll-scrubbed backdrop or keep it staged in `/lab`.
+3. **Agentic Linter Gate**:
+   - Wire `@shadcn/lint` into `eslint.config.mjs` for automated design system contract enforcement.

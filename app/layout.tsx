@@ -4,6 +4,7 @@ import "./globals.css";
 import "./studio-controls.css";
 import { StudioHeader, StudioFooter } from "@/components/studio/Shell";
 import { StudioMotion } from "@/components/studio/StudioMotion";
+import { SmoothScroll } from "@/components/studio/SmoothScroll";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://goodai.au";
 
 export const metadata: Metadata = {
@@ -38,5 +39,5 @@ export const metadata: Metadata = {
   },
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en-AU"><body><a className="skip-link" href="#main">Skip to content</a><StudioHeader /><main id="main">{children}</main><StudioFooter /><StudioMotion /></body></html>;
+  return <html lang="en-AU"><body><a className="skip-link" href="#main">Skip to content</a><StudioHeader /><main id="main">{children}</main><StudioFooter /><StudioMotion /><SmoothScroll /></body></html>;
 }

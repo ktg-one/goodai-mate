@@ -1,11 +1,12 @@
 import ServicesCarousel from "@/components/sections/ServicesCarousel";
 import { AutomationDock } from "@/components/ui/AutomationDock";
+import { Scene } from "@/src/shaders/Scene";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export const metadata = {
   title: "Studio Lab | Good'Ai Experiments",
-  description: "Experimental 3D Services Carousel and Automation Dock.",
+  description: "Experimental 3D Services Carousel, Automation Dock, and ThreeUI Generative Tree.",
 };
 
 export default function LabPage() {
@@ -21,11 +22,24 @@ export default function LabPage() {
           </Link>
           <h1 className="text-3xl font-medium mt-4 tracking-tight">Studio Lab Experiments</h1>
           <p className="text-brand-ink/70 mt-1">
-            Dedicated staging area for the 3D WebGL Carousel and the animated Automation Dock.
+            Dedicated staging area for the 3D WebGL Carousel, Automation Dock, and ThreeUI Generative Tree.
           </p>
         </div>
 
-        {/* Section 1: The Automation Dock */}
+        {/* Section 1: ThreeUI Generative Tree */}
+        <section className="mb-20 p-8 rounded-2xl border border-brand-line bg-brand-surface shadow-sm">
+          <div className="mb-6">
+            <h2 className="text-xl font-medium mb-1">ThreeUI Generative Tree</h2>
+            <p className="text-sm text-brand-ink/60">
+              Painterly branching tree growing from warm sienna to golden tips with ambient motes and pointer wind.
+            </p>
+          </div>
+          <div className="w-full h-[550px] rounded-xl overflow-hidden border border-brand-line">
+            <Scene />
+          </div>
+        </section>
+
+        {/* Section 2: The Automation Dock */}
         <section className="mb-20 p-8 rounded-2xl border border-brand-line bg-brand-surface shadow-sm">
           <h2 className="text-xl font-medium mb-2">Automation Dock</h2>
           <p className="text-sm text-brand-ink/60 mb-6">
@@ -36,7 +50,7 @@ export default function LabPage() {
           </div>
         </section>
 
-        {/* Section 2: The 3D Carousel */}
+        {/* Section 3: The 3D Carousel */}
         <section className="p-8 rounded-2xl border border-brand-line bg-brand-surface shadow-sm">
           <div className="mb-6">
             <h2 className="text-xl font-medium mb-1">3D Services Carousel</h2>
