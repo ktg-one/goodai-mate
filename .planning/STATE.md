@@ -1,14 +1,14 @@
 # Project State & GSD Handoff
 
-**Last Updated**: 2026-09-21T03:32Z  
+**Last Updated**: 2026-09-21T03:37Z  
 **Branch**: `feat/threeui-brand-harmony-dock` (ready for main sync)  
-**Status**: All builds passing, 0 errors, 0 warnings, dev server verified.
+**Status**: Clean build, 0 errors, 0 warnings, Trillet AI voice integration fully planned and verified.
 
 ---
 
 ## 1. Executive Summary of Achievements
 
-In this session, we completed the kinetic pacing overhaul, replaced all external Google Forms with a native visual intake card, integrated Lenis smooth scrolling with GSAP ticker synchronization, eliminated scroll-translation collisions, implemented ThreeUI's exact Generative Tree shader, and prepared `@shadcn/lint` contracts.
+In this session, we completed the kinetic pacing overhaul, replaced all external Google Forms with a native visual intake card, integrated Lenis smooth scrolling with GSAP ticker synchronization, eliminated scroll-translation collisions, implemented ThreeUI's exact Generative Tree shader, prepared `@shadcn/lint` contracts, and specified the **Trillet AI** voice agent SDK integration.
 
 ### Key Milestones Completed:
 1. **Zero "Half-Sights" Viewport Pacing**:
@@ -31,14 +31,19 @@ In this session, we completed the kinetic pacing overhaul, replaced all external
 5. **ThreeUI `<ElementsCollection />` Generative Tree**:
    - Verified and extracted exact source bundle from `https://threeui.com/source-code/generative-tree.json`.
    - Registered files with exact SHA-256 verification:
-     - `src/shaders/elements/GenerativeTree.tsx` (`bb6bf95154f38e7a9772eef6fe2aa89ff72284a13345d56e66fba234894c2127`)
-     - `src/shaders/elements/sources/generative-tree.html` (`8ea51733bddf5cc44df338ef9af3a21633d62daa92c17fde5faa2fcab90fa0ef`)
-     - `src/shaders/threeui.css` (`efe4447139f1358dd8e9be68edf6fa46cbefbd1de423a4d6c439ca61d2c8eccf`)
+     - `src/shaders/elements/GenerativeTree.tsx` (`bb6bf951...`)
+     - `src/shaders/elements/sources/generative-tree.html` (`8ea51733...`)
+     - `src/shaders/threeui.css` (`efe44471...`)
    - Configured usage in [`src/shaders/Scene.tsx`](file:///c:/Users/kevin/Documents/goodai3/goodai-studio/src/shaders/Scene.tsx).
    - Staged in `/lab` ([`app/lab/page.tsx`](file:///c:/Users/kevin/Documents/goodai3/goodai-studio/app/lab/page.tsx)), verified live at `http://localhost:3000/lab` (HTTP 200).
 6. **Agentic Linter Analysis (`@shadcn/lint`)**:
-   - Cloned and analyzed `@shadcn/lint` AST engine.
-   - Prepared `design-system.lint.json` contracts locking Studio tokens (`#F6F3EA`, `#2F3A33`, `#AB4B34`) and component rules.
+   - Analyzed `@shadcn/lint` AST engine and prepared `design-system.lint.json` contracts.
+7. **Trillet AI Voice Agent Specification**:
+   - Identified and verified exact voice provider: **Trillet AI** (`https://docs.trillet.ai/documentation/web-integration/voice-agent`).
+   - Verified active agents from user dashboard:
+     - **"Darling Good"**: Bidirectional Grok Realtime agent on `+61877414191` (Flow/Agent ID: `68f6b3cb..`).
+     - **"Good'ai"**: Bidirectional Gemini 3.1 Flash Lite agent (Flow/Agent ID: `6a44e2d7..`).
+   - SDK: `@trillet-ai/web-sdk` with `TrilletAgent`, event hooks (`connected`, `disconnected`, `assistantStartedSpeaking`, `transcript`), audio visualizer, and public call lifecycle.
 
 ---
 
@@ -46,16 +51,17 @@ In this session, we completed the kinetic pacing overhaul, replaced all external
 
 - **`npm run lint`**: 0 errors, 0 warnings.
 - **`npm run build`**: 0 errors, 16 static routes compiled in 1.9s.
-- **Live Dev Server**: Running on `http://localhost:3000` (PID session verified).
+- **Live Dev Server**: Running on `http://localhost:3000`.
 
 ---
 
-## 3. Next Steps & Strategy Handoff
+## 3. Immediate Resume Checklist
 
-When resuming:
-1. **Capture & Visual QA**:
-   - Capture keyframe screenshots of the live scrub at 0%, 25%, 50%, 75%, 100% using the 3-Agent Kinetic Loop geometry inspector.
-2. **Generative Tree Strategy**:
-   - Decide whether to connect the ThreeUI Generative Tree directly to the homepage Hero $\to$ Scroll transition as a scroll-scrubbed backdrop or keep it staged in `/lab`.
-3. **Agentic Linter Gate**:
-   - Wire `@shadcn/lint` into `eslint.config.mjs` for automated design system contract enforcement.
+When ready to resume work:
+1. **Implement Trillet Voice Agent Component**:
+   - Build `components/studio/TrilletVoiceWidget.tsx` using `@trillet-ai/web-sdk`.
+   - Integrate with `components/studio/VoiceDemo.tsx` targeting Agent ID `68f6b3cb..` ("Darling Good") or `6a44e2d7..` ("Good'ai").
+2. **Visual Scrub QA**:
+   - Capture keyframe screenshots at 0%, 25%, 50%, 75%, 100% scroll with the 3-Agent Kinetic Loop geometry inspector.
+3. **Automated Design System Gate**:
+   - Wire `@shadcn/lint` rules into `eslint.config.mjs`.
