@@ -46,7 +46,7 @@ export function AutomationDock() {
               key={label}
               type="button"
               aria-label={label}
-              className="group relative flex h-14 w-14 origin-bottom flex-col items-center justify-center rounded-xl border border-brand-paper/20 bg-brand-paper text-brand-ink shadow-[0_8px_18px_-14px_var(--brand-ink)] transition-colors hover:bg-brand-eucalyptus"
+              className="group relative flex h-14 w-14 origin-bottom flex-col items-center justify-center rounded-xl border border-brand-paper/20 bg-brand-paper text-brand-ink shadow-[0_8px_18px_-14px_var(--brand-ink)] transition-colors hover:bg-brand-eucalyptus outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-coral focus-visible:ring-2 focus-visible:ring-brand-coral/50"
               style={{ transform: `translateY(${-t.lift}px) scale(${t.scale})` }}
               onMouseEnter={() => setActiveIndex(index)}
               onFocus={() => setActiveIndex(index)}
