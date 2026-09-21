@@ -3,21 +3,24 @@
 import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
+const SPRING_CONFIG = { damping: 25, stiffness: 700 };
+
 export function CustomCursor() {
     const [isVisible, setIsVisible] = useState(false);
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
     // Smooth spring physics for the cursor
-    const springConfig = { damping: 25, stiffness: 700 };
-    const cursorX = useSpring(mouseX, springConfig);
-    const cursorY = useSpring(mouseY, springConfig);
+    // ⚡ Bolt: Extract spring configuration to module scope to preserve referential equality across renders
+    const cursorX = useSpring(mouseX, SPRING_CONFIG);
+    const cursorY = useSpring(mouseY, SPRING_CONFIG);
 
     useEffect(() => {
+        // ⚡ Bolt: Use functional state update to prevent listener churn (removing/re-adding window listeners on cursor move)
         const moveCursor = (e: MouseEvent) => {
             mouseX.set(e.clientX - 16); // Center the 32px cursor
             mouseY.set(e.clientY - 16);
-            if (!isVisible) setIsVisible(true);
+            setIsVisible((prev) => (prev ? prev : true));
         };
 
         const handleMouseDown = () => document.body.classList.add("cursor-clicking");
@@ -32,7 +35,7 @@ export function CustomCursor() {
             window.removeEventListener("mousedown", handleMouseDown);
             window.removeEventListener("mouseup", handleMouseUp);
         };
-    }, [mouseX, mouseY, isVisible]);
+    }, [mouseX, mouseY]);
 
     return (
         <motion.div
