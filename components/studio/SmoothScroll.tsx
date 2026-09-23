@@ -7,32 +7,56 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export function SmoothScroll() {
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
     gsap.registerPlugin(ScrollTrigger);
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let lenis: Lenis | null = null;
+    let updateLenis: ((time: number) => void) | null = null;
 
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.5,
-      smoothWheel: true,
-    });
-
-    lenis.on("scroll", ScrollTrigger.update);
-
-    const updateLenis = (time: number) => {
-      lenis.raf(time * 1000);
+    const stop = () => {
+      if (updateLenis) {
+        gsap.ticker.remove(updateLenis);
+        updateLenis = null;
+      }
+      if (lenis) {
+        lenis.destroy();
+        lenis = null;
+      }
     };
 
-    gsap.ticker.add(updateLenis);
-    gsap.ticker.lagSmoothing(0);
+    const start = () => {
+      if (preference.matches || lenis) return;
+      lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        wheelMultiplier: 1.0,
+        touchMultiplier: 1.5,
+        smoothWheel: true,
+      });
+
+      lenis.on("scroll", ScrollTrigger.update);
+
+      updateLenis = (time: number) => {
+        lenis?.raf(time * 1000);
+      };
+
+      gsap.ticker.add(updateLenis);
+      gsap.ticker.lagSmoothing(0);
+    };
+
+    const syncPreference = () => {
+      if (preference.matches) {
+        stop();
+        return;
+      }
+      start();
+    };
+
+    syncPreference();
+    preference.addEventListener("change", syncPreference);
 
     return () => {
-      gsap.ticker.remove(updateLenis);
-      lenis.destroy();
+      preference.removeEventListener("change", syncPreference);
+      stop();
     };
   }, []);
 
