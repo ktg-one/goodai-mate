@@ -1765,11 +1765,11 @@ em {
 @media(prefers-reduced-motion:reduce) {
  .story-layout { display: block; }
  .story-canvas { display: none; }
- .scroll-chapter { min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 45px; align-items: center; }
+ .story-chapters-pinned { height: auto; display: block; }
+ .story-chapter-item { grid-area: auto; position: static; margin-bottom: 40px; opacity: 1 !important; transform: none !important; }
  .story-mobile-art { display: block; }
  .story-drawing [data-ink] { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
 }
-@media(prefers-reduced-motion:reduce) and (max-width:760px) { .scroll-chapter { display: block; } }
 .hero-voice-link { display: flex; width: fit-content; margin-top: 17px; min-height: 44px; }
 .voice-home { min-height: 100vh; padding-block: 140px 100px; display: flex; flex-direction: column; justify-content: center; }
 .voice-panel { display: grid; grid-template-columns: 1.4fr 1fr; align-items: center; gap: 60px; scroll-margin-top: 120px; }
