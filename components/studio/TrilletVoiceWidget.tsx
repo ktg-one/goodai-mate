@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Mic, MicOff, PhoneOff, Sparkles, X, Volume2 } from "lucide-react";
+import { Mic, MicOff, PhoneOff, Sparkles, X, Volume2, ChevronUp } from "lucide-react";
 import type { TrilletAgent as TrilletAgentType } from "@trillet-ai/web-sdk";
 
 interface TranscriptMessage {
@@ -378,3 +378,4 @@ export function TrilletVoiceWidget({
     </>
   );
 }
+
