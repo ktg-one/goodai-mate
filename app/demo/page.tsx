@@ -4,8 +4,8 @@ import { InteractiveWorkflowCanvas } from "@/components/ui/InteractiveWorkflowCa
 import { VoiceDemo } from "@/components/studio/VoiceDemo";
 
 export const metadata = {
-  title: "See it in action",
-  description: "Interactive demonstrations of real-world AI automations and voice agents.",
+  title: "Voice + automation demo",
+  description: "Call the voice agent and watch the automation that follows.",
 };
 
 export default function DemoPage() {
@@ -17,20 +17,20 @@ export default function DemoPage() {
           Back to Good’Ai
         </Link>
         <h1>
-          Less busywork.<br />
-          <em>See how it feels.</em>
+          Call the voice agent.<br />
+          <em>Watch the automation finish the job.</em>
         </h1>
         <p>
-          Choose a scenario below and watch how an automated workflow moves from customer trigger to resolution. Includes audio feedback and realistic timing.
+          Start with a live voice conversation, then watch the connected workflow move from trigger to booking, follow-up, and handoff.
         </p>
       </div>
 
       <div className="full-demo">
         <div className="shell">
-          <div className="mb-16">
+          <VoiceDemo />
+          <div className="mb-16 mt-16">
             <InteractiveWorkflowCanvas />
           </div>
-          <VoiceDemo />
         </div>
       </div>
     </>

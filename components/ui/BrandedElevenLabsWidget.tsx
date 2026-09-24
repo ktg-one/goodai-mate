@@ -10,7 +10,7 @@ export function BrandedElevenLabsWidget() {
   const lenis = useLenis();
 
   useEffect(() => {
-    let scrollStopTimer: NodeJS.Timeout;
+    let scrollStopTimer: NodeJS.Timeout | null = null;
 
     const handleScroll = () => {
       const scrollY = window.scrollY || document.documentElement.scrollTop;
@@ -19,7 +19,7 @@ export function BrandedElevenLabsWidget() {
       setPastHero(scrollY > heroThreshold);
       setIsScrolling(true);
 
-      clearTimeout(scrollStopTimer);
+      if (scrollStopTimer) clearTimeout(scrollStopTimer);
       scrollStopTimer = setTimeout(() => {
         setIsScrolling(false);
       }, 350);
@@ -34,7 +34,7 @@ export function BrandedElevenLabsWidget() {
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
-      clearTimeout(scrollStopTimer);
+      if (scrollStopTimer) clearTimeout(scrollStopTimer);
       if (lenis) {
         lenis.off("scroll", handleScroll);
       }

@@ -33,6 +33,8 @@ export function TrilletVoiceWidget({
   const agentRef = useRef<TrilletAgentType | null>(null);
   const transcriptEndRef = useRef<HTMLDivElement | null>(null);
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const connectInFlightRef = useRef(false);
+  const listenerCleanupRef = useRef<Array<() => void>>([]);
 
   const scrollToBottom = () => {
     transcriptEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -56,6 +58,22 @@ export function TrilletVoiceWidget({
     }
   };
 
+  const cleanupAgentListeners = useCallback(() => {
+    listenerCleanupRef.current.forEach(dispose => dispose());
+    listenerCleanupRef.current = [];
+  }, []);
+
+  const bindAgentEvent = useCallback((
+    agent: TrilletAgentType,
+    eventName: string,
+    handler: (...args: unknown[]) => void,
+  ) => {
+    agent.on(eventName, handler);
+    listenerCleanupRef.current.push(() => {
+      (agent as TrilletAgentType & { off?: (event: string, cb: (...args: unknown[]) => void) => void }).off?.(eventName, handler);
+    });
+  }, []);
+
   const startPolling = useCallback(() => {
     let lastCount = 0;
     pollIntervalRef.current = setInterval(() => {
@@ -76,6 +94,8 @@ export function TrilletVoiceWidget({
   }, [status, addMessage]);
 
   const connectVoice = async () => {
+    if (connectInFlightRef.current || status === "connected") return;
+    connectInFlightRef.current = true;
     setStatus("connecting");
     setStatusLabel("Connecting to agent...");
     setIsOpen(true);
@@ -89,9 +109,11 @@ export function TrilletVoiceWidget({
         agentId,
         mode: "voice",
       });
+
+      cleanupAgentListeners();
       agentRef.current = agent;
 
-      agent.on("connected", () => {
+      bindAgentEvent(agent, "connected", () => {
         setStatus("connected");
         setIsMuted(false);
         setStatusLabel("Listening...");
@@ -99,7 +121,7 @@ export function TrilletVoiceWidget({
         startPolling();
       });
 
-      agent.on("disconnected", () => {
+      bindAgentEvent(agent, "disconnected", () => {
         setStatus("disconnected");
         setIsSpeaking(false);
         setStatusLabel("Call ended");
@@ -107,7 +129,7 @@ export function TrilletVoiceWidget({
         stopPolling();
       });
 
-      agent.on("error", () => {
+      bindAgentEvent(agent, "error", () => {
         setStatus("error");
         setIsSpeaking(false);
         setStatusLabel("Connection error");
@@ -115,19 +137,19 @@ export function TrilletVoiceWidget({
         stopPolling();
       });
 
-      agent.on("assistantStartedSpeaking", () => {
+      bindAgentEvent(agent, "assistantStartedSpeaking", () => {
         setIsSpeaking(true);
         setStatusLabel(`${agentName} speaking...`);
       });
 
-      agent.on("assistantStoppedSpeaking", () => {
+      bindAgentEvent(agent, "assistantStoppedSpeaking", () => {
         setIsSpeaking(false);
         setStatusLabel(isMuted ? "Microphone muted" : "Listening...");
       });
 
       // Listen for direct transcript events
       ["message", "transcript", "transcriptUpdate"].forEach((evt) => {
-        agent.on(evt, (data: unknown) => {
+        bindAgentEvent(agent, evt, (data: unknown) => {
           const payload = data as { isFinal?: boolean; text?: string; content?: string; role?: "user" | "assistant" };
           if (payload?.isFinal === false) return;
           const text = typeof data === "string" ? data : payload?.text || payload?.content;
@@ -143,6 +165,10 @@ export function TrilletVoiceWidget({
         body: JSON.stringify({ agentId }),
       });
 
+      if (!response.ok) {
+        throw new Error(`Voice call bootstrap failed: ${response.status}`);
+      }
+
       const data = await response.json();
 
       if (data.mode === "authenticated" && data.connection) {
@@ -157,6 +183,8 @@ export function TrilletVoiceWidget({
       setStatus("error");
       setStatusLabel("Failed to connect");
       addMessage("Call failed to initialize. Please check microphone access.", "system");
+    } finally {
+      connectInFlightRef.current = false;
     }
   };
 
@@ -179,6 +207,7 @@ export function TrilletVoiceWidget({
       console.error("[Trillet End Call Error]:", e);
     }
     stopPolling();
+    cleanupAgentListeners();
     setStatus("idle");
     setStatusLabel("Ready to talk");
     setIsSpeaking(false);
@@ -192,11 +221,12 @@ export function TrilletVoiceWidget({
   useEffect(() => {
     return () => {
       stopPolling();
+      cleanupAgentListeners();
       try {
         agentRef.current?.endCall();
       } catch {}
     };
-  }, []);
+  }, [cleanupAgentListeners]);
 
   return (
     <>
@@ -209,7 +239,7 @@ export function TrilletVoiceWidget({
               setIsOpen(true);
               if (status === "idle") connectVoice();
             }}
-            className="group relative flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-navy border border-brand-paper/30 shadow-2xl transition-all duration-300 hover:scale-105 hover:border-brand-coral cursor-pointer"
+            className="group relative flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-navy border border-brand-paper/30 shadow-2xl transition-[border-color,transform] duration-300 hover:scale-105 hover:border-brand-coral cursor-pointer"
             aria-label="Open Voice Assistant"
           >
             {status === "connected" && (
@@ -225,7 +255,7 @@ export function TrilletVoiceWidget({
         {/* Voice Agent Slide-Up Panel */}
         {isOpen && (
           <div
-            className="w-[360px] sm:w-[400px] max-w-[calc(100vw-32px)] rounded-2xl bg-brand-navy border border-brand-paper/20 shadow-2xl overflow-hidden flex flex-col transition-all duration-300 animate-in fade-in slide-in-from-bottom-6"
+            className="w-[360px] sm:w-[400px] max-w-[calc(100vw-32px)] rounded-2xl bg-brand-navy border border-brand-paper/20 shadow-2xl overflow-hidden flex flex-col transition-[opacity,transform,border-color] duration-300 animate-in fade-in slide-in-from-bottom-6"
             style={{ maxHeight: "560px" }}
             role="region"
             aria-label="Good'Ai Voice Agent"
@@ -246,7 +276,7 @@ export function TrilletVoiceWidget({
                           : status === "connecting"
                           ? "bg-brand-coral animate-ping"
                           : status === "error"
-                          ? "bg-red-400"
+                          ? "bg-destructive"
                           : "bg-brand-paper/30"
                       }`}
                     />
@@ -300,7 +330,7 @@ export function TrilletVoiceWidget({
                       <div
                         className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-xs leading-relaxed ${
                           msg.role === "user"
-                            ? "bg-brand-coral text-brand-navy font-medium rounded-br-xs"
+                            ? "bg-brand-coral text-brand-paper font-medium rounded-br-xs"
                             : "bg-brand-paper/15 text-brand-paper border border-brand-paper/15 rounded-bl-xs"
                         }`}
                       >
@@ -318,7 +348,7 @@ export function TrilletVoiceWidget({
               {[0, 1, 2, 3, 4, 5, 6].map((i) => (
                 <span
                   key={i}
-                  className={`w-1 rounded-full transition-all duration-200 ${
+                  className={`w-1 rounded-full transition-[height,background-color] duration-200 ${
                     isSpeaking
                       ? "bg-brand-coral animate-pulse"
                       : status === "connected"
@@ -340,20 +370,20 @@ export function TrilletVoiceWidget({
                   <button
                     type="button"
                     onClick={toggleMute}
-                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border text-xs font-bold font-mono transition-all cursor-pointer ${
+                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border text-xs font-bold font-mono transition-colors cursor-pointer ${
                       isMuted
-                        ? "bg-red-500/20 border-red-500/40 text-red-300 hover:bg-red-500/30"
+                        ? "bg-destructive/20 border-destructive/40 text-brand-coral hover:bg-destructive/30"
                         : "bg-brand-paper/10 border-brand-paper/20 text-brand-paper hover:bg-brand-paper/20"
                     }`}
                   >
-                    {isMuted ? <MicOff className="h-4 w-4 text-red-400" /> : <Mic className="h-4 w-4" />}
+                    {isMuted ? <MicOff className="h-4 w-4 text-brand-coral" /> : <Mic className="h-4 w-4" />}
                     {isMuted ? "Unmute Mic" : "Mute Mic"}
                   </button>
 
                   <button
                     type="button"
                     onClick={endCall}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold font-mono transition-all cursor-pointer shadow-lg"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground text-xs font-bold font-mono transition-colors cursor-pointer shadow-lg"
                     aria-label="End call"
                   >
                     <PhoneOff className="h-4 w-4" />
@@ -365,7 +395,7 @@ export function TrilletVoiceWidget({
                   type="button"
                   onClick={connectVoice}
                   disabled={status === "connecting"}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-coral hover:bg-brand-paper text-brand-navy font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-md cursor-pointer disabled:opacity-50"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-coral hover:bg-brand-paper text-brand-paper hover:text-brand-ink font-bold text-xs uppercase tracking-wider transition-colors duration-200 shadow-md cursor-pointer disabled:opacity-50"
                 >
                   <Mic className="h-4 w-4" />
                   {status === "connecting" ? "Connecting..." : "Start Voice Conversation"}

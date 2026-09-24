@@ -40,7 +40,7 @@ export function SussTheFussCard() {
     <div className="suss-card" id="suss-the-fuss">
       <div className="suss-header">
         <div className="suss-badge">
-          <Sparkles size={14} className="text-rust" />
+          <Sparkles size={14} className="text-brand-coral" />
           <span>We’ll Suss the Fuss</span>
         </div>
         <h2>

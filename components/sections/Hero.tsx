@@ -60,7 +60,7 @@ export function Hero() {
                 >
                     <MagneticButton
                         onClick={() => window.location.assign(PHONE_HREF)}
-                        className="rounded-full px-8 h-14 text-xs sm:text-sm uppercase tracking-widest bg-brand-coral text-brand-navy font-bold hover:bg-brand-paper transition-all shadow-[0_0_25px_rgba(255,111,97,0.35)] flex items-center gap-2.5"
+                        className="rounded-full px-8 h-14 text-xs sm:text-sm uppercase tracking-widest bg-brand-coral text-brand-paper font-bold hover:bg-brand-paper hover:text-brand-ink transition-colors shadow-[0_0_25px_rgba(255,111,97,0.35)] flex items-center gap-2.5"
                     >
                         <PhoneCall className="w-4 h-4" />
                         Test Voice Agent: {PHONE_DISPLAY}

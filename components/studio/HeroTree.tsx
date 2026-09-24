@@ -57,8 +57,8 @@ export function HeroTree() {
   return (
     <div className="hero-tree-plate relative" ref={plateRef}>
       {/* Reserve aspect to avoid layout jump; adjust aspect ratio if needed */}
-      <div className="w-full aspect-[16/9] bg-gray-50 overflow-hidden relative">
-        {!loaded && <div className="absolute inset-0 bg-gray-100 animate-pulse" />}
+      <div className="w-full aspect-[16/9] bg-brand-paper overflow-hidden relative">
+        {!loaded && <div className="absolute inset-0 bg-brand-surface animate-pulse" />}
         <img
           src="/sketchbook/perth.png"
           alt="Hero"

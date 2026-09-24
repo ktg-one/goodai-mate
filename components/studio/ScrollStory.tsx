@@ -1,19 +1,21 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const chapters = [
-  { title: "Still doing the one last thing?", copy: "Reply to that enquiry. Chase that quote. Copy the details over. Small jobs have a way of taking the whole afternoon.", note: "Sound familiar?", caption: "The work that follows you home." },
-  { title: "Leave the running around to us.", copy: "We connect the moving parts: the enquiry, the calendar, the follow-up. Routine work keeps moving, with a person in the loop where it matters.", note: "Yep, we’ll sort that too.", caption: "A place for everything. A next step for every job." },
-  { title: "Go on. Knock off early.", copy: "Take a proper lunch. Pick up the kids. Get down to the beach. The point of a better system is having more of your day to yourself.", note: "You’ve got better things to do.", caption: "Less of the busywork. More of the good stuff." },
+  { title: "Call it a day.", copy: "Another day done. Leave the follow-ups, copying and chasing with us.", note: "This is home.", caption: "Perth. Another day done." },
+  { title: "Go on. Knock off early.", copy: "Pick up the kids. Be there for what matters. The routine work can keep moving without taking the rest of your day.", note: "Go see the kids.", caption: "What matters is waiting." },
+  { title: "We got you.", copy: "See your mates. Have a proper arvo. Good work should leave room for a life outside it.", note: "Your time is yours.", caption: "Less busywork. More living." },
 ];
 
 export function ScrollStory() {
   const root = useRef<HTMLElement>(null);
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
     const media = gsap.matchMedia();
     let disposed = false;
     const scope = root.current;
@@ -46,16 +48,20 @@ export function ScrollStory() {
         });
       });
     }, scope);
-    document.fonts.ready.then(() => { if (!disposed) ScrollTrigger.refresh(); });
+    document.fonts?.ready
+      .then(() => {
+        if (!disposed) ScrollTrigger.refresh();
+      })
+      .catch(() => undefined);
     return () => { disposed = true; media.revert(); ctx.revert(); };
   }, []);
   return <section className="scroll-story shell" ref={root} id="features" aria-labelledby="scroll-story-title">
-    <div className="story-intro"><h2 id="scroll-story-title">You’ve done enough<br /><em>for one day.</em></h2><p>Let’s get the work out of the way.</p></div>
-    <div className="story-layout"><div className="story-chapters">{chapters.map((chapter, index) => <article className="scroll-chapter" key={chapter.title}>
+    <div className="story-intro"><h2 id="scroll-story-title">Another day done.<br /><em>Go live it.</em></h2><p>Perth → what matters → relax.</p></div>
+    <div className="story-layout"><div>{chapters.map((chapter, index) => <article className="scroll-chapter" key={chapter.title}>
       <div className="chapter-copy"><h3>{chapter.title}</h3><p>{chapter.copy}</p><span className="handwritten chapter-note">{chapter.note}</span></div>
       <div className="story-mobile-art" aria-hidden="true"><StoryDrawing scene={index}/><span className="drawing-caption">{chapter.caption}</span></div>
     </article>)}</div><div className="story-canvas" aria-hidden="true">{chapters.map((chapter, index) => <div data-scene={index} key={chapter.title}><StoryDrawing scene={index}/><span className="drawing-caption">{chapter.caption}</span></div>)}</div></div>
-    <a href="#suss-the-fuss" className="text-link story-next">We’ll suss the fuss <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M12 3v17m-6-6 6 6 6-6"/></svg></a>
+    <Link href="/contact" className="text-link story-next">We’ll suss the fuss <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M12 3v17m-6-6 6 6 6-6"/></svg></Link>
   </section>;
 }
 

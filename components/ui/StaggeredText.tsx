@@ -16,12 +16,16 @@ export function StaggeredText({
     stagger = 0.05
 }: StaggeredTextProps) {
     const letters = children.split("");
+    const counts = new Map<string, number>();
 
     return (
         <span className={className}>
-            {letters.map((letter, i) => (
+            {letters.map((letter, i) => {
+                const count = (counts.get(letter) ?? 0) + 1;
+                counts.set(letter, count);
+                return (
                 <motion.span
-                    key={i}
+                    key={`${letter}-${count}`}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -34,7 +38,7 @@ export function StaggeredText({
                 >
                     {letter === " " ? "\u00A0" : letter}
                 </motion.span>
-            ))}
+            )})}
         </span>
     );
 }

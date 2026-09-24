@@ -35,7 +35,7 @@ The bundled Impeccable detector returned an empty array on the homepage, styles,
 - Mobile menu opens, exposes correct destinations, closes on Escape, and returns focus to the trigger.
 - Quote follow-up scenario selected; Run example changes the state to complete; Reset appears.
 - FAQ opens and displays its answer.
-- Service row navigates to the voice-agent detail page; service CTA keeps the centralized survey destination.
+- Service row navigates to the voice-agent detail page; service CTA keeps the centralized contact-page intake form destination.
 - Operations dashboard Today/Jobs/Rules render. ArrowRight from Jobs selects Rules. The reminder switch changes aria-checked and summary from 2 to 3 enabled rules.
 - Optional ElevenLabs widget loaded; actual Start a call button seen. No conversation initiated.
 - Reduced motion emulated at 320px: media query true, hero animation name none, no horizontal overflow.

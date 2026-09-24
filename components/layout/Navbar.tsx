@@ -11,7 +11,7 @@ import { SURVEY_URL, PHONE_HREF, PHONE_DISPLAY } from "@/lib/links";
 
 const navLinks = [
     { name: "Workflows", href: "#demo" },
-    { name: "Voice Agent", href: "#demo" },
+    { name: "Voice Agent", href: "/demo" },
     { name: "Features", href: "#features" },
     { name: "Pricing", href: "#pricing" },
 ];
@@ -52,12 +52,9 @@ export function Navbar() {
             className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4 pointer-events-none"
         >
             {/* Floating Glass Pill */}
-            <motion.div
-                initial={{ width: "95%" }}
-                animate={{ width: isScrolled ? "fit-content" : "95%" }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            <div
                 className={cn(
-                    "font-display pointer-events-auto flex items-center justify-between transition-all duration-500 rounded-full",
+                    "font-display pointer-events-auto flex items-center justify-between rounded-full transition-[background-color,color,border-color,box-shadow,padding] duration-500",
                     isScrolled
                         ? "bg-brand-paper text-brand-ink border border-brand-ink px-6 py-2 shadow-[4px_4px_0_var(--brand-coral)]"
                         : "bg-transparent text-brand-paper py-2 max-w-7xl mx-auto w-full"
@@ -88,7 +85,7 @@ export function Navbar() {
                     <a
                         href={PHONE_HREF}
                         className={cn(
-                            "font-mono text-xs uppercase tracking-widest px-3 py-1.5 rounded-full border border-brand-coral text-brand-coral transition-colors hover:bg-brand-coral hover:text-brand-navy",
+                            "font-mono text-xs uppercase tracking-widest px-3 py-1.5 rounded-full border border-brand-coral text-brand-coral transition-colors hover:bg-brand-coral hover:text-brand-paper",
                             isScrolled ? "hidden lg:inline-block" : ""
                         )}
                     >
@@ -98,7 +95,7 @@ export function Navbar() {
                         asChild
                         size="sm"
                         className={cn(
-                            "h-10 rounded-full px-6 text-sm font-medium transition-all shadow-sm",
+                            "h-10 rounded-full px-6 text-sm font-medium transition-colors shadow-sm",
                             isScrolled
                                 ? "bg-brand-ink text-brand-paper hover:bg-brand-coral hover:text-brand-ink"
                                 : "bg-brand-paper text-brand-ink hover:bg-brand-coral"
@@ -150,7 +147,7 @@ export function Navbar() {
                         </SheetContent>
                     </Sheet>
                 </div>
-            </motion.div>
+            </div>
         </motion.header>
     );
 }

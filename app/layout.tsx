@@ -5,7 +5,18 @@ import "./studio-controls.css";
 import { StudioHeader, StudioFooter } from "@/components/studio/Shell";
 import { StudioMotion } from "@/components/studio/StudioMotion";
 import { SmoothScroll } from "@/components/studio/SmoothScroll";
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://goodai.au";
+import { Preloader } from "@/components/ui/Preloader";
+
+function resolveSiteUrl() {
+  try {
+    const raw = process.env.NEXT_PUBLIC_SITE_URL || "https://goodai.au";
+    return new URL(raw).toString();
+  } catch {
+    return "https://goodai.au";
+  }
+}
+
+const siteUrl = resolveSiteUrl();
 
 export const metadata: Metadata = {
   title: { default: "Good'Ai — Good work. More life.", template: "%s — Good'Ai" },
@@ -39,5 +50,5 @@ export const metadata: Metadata = {
   },
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en-AU"><body><a className="skip-link" href="#main">Skip to content</a><StudioHeader /><main id="main">{children}</main><StudioFooter /><StudioMotion /><SmoothScroll /></body></html>;
+  return <html lang="en-AU"><body><Preloader /><a className="skip-link" href="#main">Skip to content</a><StudioHeader /><main id="main">{children}</main><StudioFooter /><StudioMotion /><SmoothScroll /></body></html>;
 }

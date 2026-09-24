@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/links";
@@ -58,9 +59,9 @@ export function VoiceDemo() {
           />
         )}
 
-        <a href="#suss-the-fuss" className="text-link">
+        <Link href="/contact" className="text-link">
           Want one for your business? <Sparkles size={16} />
-        </a>
+        </Link>
       </div>
     </section>
   );

@@ -21,6 +21,7 @@ const shadowStyles = `
 
 export function BrandedVoiceWidget() {
   const widget = useRef<HTMLElement>(null);
+
   useEffect(() => {
     const host = widget.current;
     if (!host) return;
@@ -59,6 +60,8 @@ export function BrandedVoiceWidget() {
       show();
     };
   }, []);
+
+  if (typeof document === "undefined") return null;
 
   return createPortal(<elevenlabs-convai
     ref={widget}

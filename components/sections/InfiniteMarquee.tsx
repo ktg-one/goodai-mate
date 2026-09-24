@@ -21,11 +21,15 @@ export function InfiniteMarquee({
     // ⚡ Bolt: Memoize the rendered items to avoid O(N) operations and
     // redundant DOM element re-creations on every render.
     const renderedItems = useMemo(() => {
-        return [...items, ...items, ...items, ...items].map((item, i) => (
-            <span key={i} className="text-sm md:text-base font-medium tracking-[0.3em] text-brand-ink mx-8 uppercase">
+        const seen = new Map<string, number>();
+        return [...items, ...items, ...items, ...items].map((item) => {
+            const count = (seen.get(item) ?? 0) + 1;
+            seen.set(item, count);
+            return (
+            <span key={`${item}-${count}`} className="text-sm md:text-base font-medium tracking-[0.3em] text-brand-ink mx-8 uppercase">
                 {item}
             </span>
-        ));
+        )});
     }, [items]);
 
     return (
