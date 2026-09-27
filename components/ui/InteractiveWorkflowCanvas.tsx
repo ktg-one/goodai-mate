@@ -351,7 +351,7 @@ export function InteractiveWorkflowCanvas({
             type="button"
             onClick={toggleSound}
             aria-label={soundEnabled ? "Mute audio" : "Enable audio"}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-paper/20 bg-brand-paper/10 text-brand-paper/80 hover:bg-brand-paper/20 transition-colors"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-paper/20 bg-brand-paper/10 text-brand-paper/80 hover:bg-brand-paper/20 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-coral outline-none"
           >
             {soundEnabled ? <Volume2 className="h-4 w-4 text-brand-teal" /> : <VolumeX className="h-4 w-4 text-brand-paper/50" />}
           </button>
@@ -360,7 +360,7 @@ export function InteractiveWorkflowCanvas({
             <button
               type="button"
               onClick={resetSimulation}
-              className="flex items-center gap-2 rounded-xl border border-brand-paper/30 bg-brand-paper/10 px-4 py-2 text-xs uppercase font-medium tracking-wider text-brand-paper hover:bg-brand-paper/20 transition-all"
+              className="flex items-center gap-2 rounded-xl border border-brand-paper/30 bg-brand-paper/10 px-4 py-2 text-xs uppercase font-medium tracking-wider text-brand-paper hover:bg-brand-paper/20 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-coral outline-none"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               Reset
@@ -370,7 +370,7 @@ export function InteractiveWorkflowCanvas({
               type="button"
               onClick={runSimulation}
               disabled={isRunning}
-              className="group flex items-center gap-2 rounded-xl border border-brand-coral bg-brand-coral px-5 py-2.5 text-xs uppercase font-bold tracking-widest text-brand-navy hover:bg-brand-paper hover:border-brand-paper transition-all shadow-[0_0_20px_rgba(255,111,97,0.35)] disabled:opacity-50 cursor-pointer"
+              className="group flex items-center gap-2 rounded-xl border border-brand-coral bg-brand-coral px-5 py-2.5 text-xs uppercase font-bold tracking-widest text-brand-navy hover:bg-brand-paper hover:border-brand-paper transition-all shadow-[0_0_20px_rgba(255,111,97,0.35)] disabled:opacity-50 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-coral outline-none"
             >
               <Play className="h-3.5 w-3.5 fill-current transition-transform group-hover:scale-110" />
               {isRunning ? "Running Pipeline..." : "Fire Test Trigger"}
@@ -380,14 +380,16 @@ export function InteractiveWorkflowCanvas({
       </div>
 
       {/* Scenario Tabs */}
-      <div className="relative z-10 flex flex-wrap gap-2 mb-8">
+      <div className="relative z-10 flex flex-wrap gap-2 mb-8" role="tablist" aria-label="Workflow Scenarios">
         {SCENARIOS.map((s) => (
           <button
             key={s.id}
             type="button"
+            role="tab"
+            aria-selected={activeScenarioId === s.id}
             onClick={() => handleSelectScenario(s.id)}
             className={cn(
-              "rounded-lg px-3 py-1.5 text-xs font-mono transition-all",
+              "rounded-lg px-3 py-1.5 text-xs font-mono transition-all outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-coral",
               activeScenarioId === s.id
                 ? "bg-brand-paper text-brand-navy font-bold shadow-md"
                 : "bg-brand-paper/5 text-brand-paper/70 hover:bg-brand-paper/15 border border-brand-paper/10"
