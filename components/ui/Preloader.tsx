@@ -9,15 +9,15 @@ export function Preloader() {
 
     useEffect(() => {
         // Simulate loading progress
+        let count = 0;
         const interval = setInterval(() => {
-            setCounter((prev) => {
-                if (prev >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => setIsLoading(false), 500); // Delay fade out
-                    return 100;
-                }
-                return prev + 1;
-            });
+            count += 1;
+            setCounter(count);
+
+            if (count >= 100) {
+                clearInterval(interval);
+                setTimeout(() => setIsLoading(false), 500); // Delay fade out
+            }
         }, 20); // Adjust speed here
 
         return () => clearInterval(interval);
