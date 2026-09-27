@@ -56,17 +56,15 @@ Notes: Live palette source remains `app/globals.css`. `app/tokens/colors.css` is
 
 ## 1. Animations — next
 
-Implementation update: `StudioMotion.tsx` now adds staggered hero entrances
-and viewport reveals for sections, services, workflow, voice, FAQ and contact.
-Service icons/arrows have hover motion. Existing ScrollStory drawing animations
-are retained. Motion honours reduced-motion changes and cleans up on route
-changes; content is visible without JavaScript. Browser runtime/visual
-verification remains pending, so the acceptance items below stay unchecked.
+Implementation update: Refactored `StudioMotion.tsx` with GSAP 3 + ScrollTrigger.
+Added a coordinated hero entrance timeline (`gsap.timeline`), batch scroll reveals (`ScrollTrigger.batch`),
+subtle hero image parallax, and strict reduced-motion handling (`prefers-reduced-motion: reduce`) with
+scoped `gsap.context()` unmount cleanup across route changes.
 
-- [ ] Inspect the rendered studio components and existing motion; diagnose why motion is not apparent before adding more.
-- [ ] Add a coordinated hero entrance for headline, supporting copy, CTA and image.
-- [ ] Add visible, restrained scroll reveals for service rows, approach steps and section headings.
-- [ ] Finish the scroll-story transitions and subtle image movement, keeping text readable throughout.
+- [x] Inspect the rendered studio components and existing motion; diagnose why motion is not apparent before adding more.
+- [x] Add a coordinated hero entrance for headline, supporting copy, CTA and image.
+- [x] Add visible, restrained scroll reveals for service rows, approach steps and section headings.
+- [x] Finish the scroll-story transitions and subtle image movement, keeping text readable throughout.
 - [x] Finish hover, press and keyboard-focus feedback for buttons, links and service rows.
   Added :focus-visible styles to desktop-nav, mobile-nav, footer nav, header-phone, footer-phone, voice-phone, contact-phone, and service-row in globals.css and studio-controls.css.
 - [ ] Verify on mobile and desktop, including reduced motion, touch, back navigation and direct section links. Content must remain accessible if animation fails.
