@@ -2,53 +2,110 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-/** Progressive enhancement: content is visible before JS and after cleanup. */
+gsap.registerPlugin(ScrollTrigger);
+
+/**
+ * GSAP + ScrollTrigger Motion System for Good'Ai.
+ * Handles staggered hero entrances, scroll reveals, image parallax,
+ * and scoped cleanup on route changes with strict reduced-motion support.
+ */
 export function StudioMotion() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let cleanup = () => {};
-    const start = () => {
-      cleanup();
-      if (preference.matches) return;
-      const animations = new Set<Animation>();
-      const play = (element: Element, delay = 0, distance = 24) => {
-        const animation = element.animate(
-          [{ opacity: 0, translate: `0 ${distance}px` }, { opacity: 1, translate: "0 0" }],
-          { duration: 750, delay, easing: "cubic-bezier(.16,1,.3,1)", fill: "backwards" },
-        );
-        animations.add(animation);
-        animation.onfinish = () => animations.delete(animation);
-      };
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-      // Do not replay the hero over direct links to lower sections.
+    if (prefersReducedMotion.matches) {
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      // 1. Coordinated Hero Entrance Timeline
       if (!window.location.hash && window.scrollY < 100) {
-        document.querySelectorAll(".hero-copy > h1, .hero-description, .hero-button, .hero-voice-link, .hero-handnote, .hero-figure figcaption")
-          .forEach((element, index) => play(element, index * 95, 32));
+        const heroElements = gsap.utils.toArray<HTMLElement>(
+          ".hero-copy > h1, .hero-description, .hero-actions > *, .hero-handnote, .hero-bottom, .hero-figure"
+        );
+
+        if (heroElements.length > 0) {
+          gsap.from(heroElements, {
+            opacity: 0,
+            y: 28,
+            duration: 0.8,
+            stagger: 0.08,
+            ease: "power3.out",
+            clearProps: "opacity,transform",
+          });
+        }
       }
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(({ target, isIntersecting }) => {
-          if (!isIntersecting) return;
-          observer.unobserve(target);
-          play(target);
+      // 2. Subtle Parallax for Hero Image
+      const heroImage = document.querySelector<HTMLElement>(".hero-figure img");
+      if (heroImage) {
+        gsap.to(heroImage, {
+          yPercent: 8,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".hero-figure",
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.5,
+          },
         });
-      }, { threshold: 0.12, rootMargin: "0px 0px -35px 0px" });
+      }
 
-      document.querySelectorAll(".section-heading, .story-intro, .chapter-copy, .service-row, .demo-copy, .workflow-preview, .voice-panel, .approach-steps article, .faq > h2, .faq details, .contact-inner, .detail-grid")
-        .forEach(element => observer.observe(element));
+      // 3. Staggered Scroll Reveals using ScrollTrigger Batching
+      const revealSelectors = [
+        ".section-heading",
+        ".story-intro",
+        ".service-row",
+        ".demo-copy",
+        ".workflow-preview",
+        ".voice-panel",
+        ".approach-steps article",
+        ".faq > h2",
+        ".faq details",
+        ".contact-inner",
+        ".detail-grid",
+        ".promise-strip",
+      ];
 
-      cleanup = () => {
-        observer.disconnect();
-        animations.forEach(animation => animation.cancel());
-        animations.clear();
-      };
+      const targets = gsap.utils.toArray<HTMLElement>(revealSelectors.join(", "));
+
+      if (targets.length > 0) {
+        ScrollTrigger.batch(targets, {
+          start: "top 88%",
+          once: true,
+          fastScrollEnd: true,
+          preventOverlaps: true,
+          onEnter: (batch) => {
+            gsap.fromTo(
+              batch,
+              { opacity: 0, y: 28 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.7,
+                stagger: 0.08,
+                ease: "power2.out",
+                clearProps: "opacity,transform",
+              }
+            );
+          },
+        });
+      }
+    });
+
+    // Refresh ScrollTrigger instances on fonts/images load
+    document.fonts.ready.then(() => {
+      ScrollTrigger.refresh();
+    });
+
+    return () => {
+      ctx.revert();
     };
-    start();
-    preference.addEventListener("change", start);
-    return () => { cleanup(); preference.removeEventListener("change", start); };
   }, [pathname]);
 
   return null;
