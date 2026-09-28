@@ -14,3 +14,7 @@
 ## 2026-09-21 - Optimize Global Event Listeners and Spring Config in CustomCursor
 **Learning:** Including reactive state variables in `useEffect` dependency arrays when handling global window events (such as `mousemove`) causes event listeners to be unbound and re-bound on state updates, leading to listener churn. Additionally, declaring config objects inside render functions breaks referential equality on every render.
 **Action:** Extract static config objects to module scope and use functional state updates inside event handlers to keep effect dependencies minimal and avoid unnecessary listener teardown.
+
+## 2026-09-28 - Optimize Scenario Lookups and List Memoization in InteractiveWorkflowCanvas
+**Learning:** Performing array search lookups (`Array.prototype.find`) on every render forces unnecessary $O(N)$ comparisons, and unmemoized inline map functions force React to re-instantiate JSX element nodes on every state tick during animation timers.
+**Action:** Index static configuration arrays in a module-level `Map` for $O(1)$ constant-time lookup, extract inline audio frequency arrays to module scope, and wrap list mappings in `useMemo` to prevent redundant VDOM element re-creation during timer progression.
