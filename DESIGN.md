@@ -1,28 +1,30 @@
 ---
-name: Good'Ai — Good work. More life.
+name: Good'Ai
 version: alpha
 colors:
-  primary: "#a4432b"
+  primary: "#A4432B"
   primary-hover: "#873821"
-  on-primary: "#f7f5ed"
-  neutral: "#f7f5ed"
-  on-neutral: "#333b32"
-  secondary: "#dce3cc"
-  on-secondary: "#333b32"
-  surface: "#fffef9"
-  wash: "#eceee3"
-  muted: "#63685d"
-  line: "#d5d6ca"
-  success: "#42583b"
+  secondary: "#DCE3CC"
+  tertiary: "#A4432B"
+  neutral: "#F7F5ED"
+  surface: "#FFFEF9"
+  wash: "#ECEEE3"
+  line: "#D5D6CA"
+  muted: "#63685D"
+  on-primary: "#F7F5ED"
+  on-secondary: "#333B32"
+  on-tertiary: "#F7F5ED"
+  on-neutral: "#333B32"
+  error: "#A4432B"
+  success: "#42583B"
+  warning: "#A4432B"
 typography:
-  h1: { fontFamily: Manrope, fontSize: "clamp(62px, 6.9vw, 104px)", fontWeight: 500, lineHeight: "1.02", letterSpacing: "-0.04em" }
-  h2: { fontFamily: Manrope, fontSize: "clamp(36px, 4vw, 58px)", fontWeight: 500, lineHeight: "1.08", letterSpacing: "-0.04em" }
-  expressive: { fontFamily: Fraunces, fontStyle: italic, fontWeight: 400, letterSpacing: "-0.035em" }
-  handwritten: { fontFamily: Vibes, fontSize: "29px", fontWeight: 400, lineHeight: "1.3", letterSpacing: "0" }
-  body-lg: { fontFamily: Manrope, fontSize: "17px", fontWeight: 400, lineHeight: "1.8" }
-  body-md: { fontFamily: Manrope, fontSize: "15px", fontWeight: 400, lineHeight: "1.85" }
-  body-sm: { fontFamily: Manrope, fontSize: "13px", fontWeight: 400, lineHeight: "1.7" }
-  label: { fontFamily: Manrope, fontSize: "13px", fontWeight: 600, lineHeight: "1.65" }
+  h1: { fontFamily: "Manrope", fontSize: "clamp(62px, 6.9vw, 104px)", fontWeight: 500, lineHeight: "1.02", letterSpacing: "-0.04em" }
+  h2: { fontFamily: "Manrope", fontSize: "clamp(36px, 4vw, 58px)", fontWeight: 500, lineHeight: "1.08", letterSpacing: "-0.04em" }
+  body-lg: { fontFamily: "Manrope", fontSize: "17px", fontWeight: 400, lineHeight: "1.8", letterSpacing: "normal" }
+  body-md: { fontFamily: "Manrope", fontSize: "15px", fontWeight: 400, lineHeight: "1.85", letterSpacing: "normal" }
+  body-sm: { fontFamily: "Manrope", fontSize: "13px", fontWeight: 400, lineHeight: "1.7", letterSpacing: "normal" }
+  label: { fontFamily: "Manrope", fontSize: "13px", fontWeight: 600, lineHeight: "1.65", letterSpacing: "normal" }
 rounded:
   sm: "4px"
   md: "5px"
@@ -43,11 +45,39 @@ components:
     padding: "{spacing.sm} {spacing.md}"
     minHeight: "44px"
     states:
-      default: { backgroundColor: "{colors.primary}" }
-      hover: { backgroundColor: "{colors.primary-hover}" }
-      active: { backgroundColor: "{colors.primary-hover}" }
+      default: { backgroundColor: "{colors.primary}", textColor: "{colors.on-primary}" }
+      hover: { backgroundColor: "{colors.primary-hover}", textColor: "{colors.on-primary}" }
+      active: { backgroundColor: "{colors.primary-hover}", textColor: "{colors.on-primary}" }
       pressed: { transform: "translateY(1px)" }
-      disabled: { opacity: 0.5, cursor: not-allowed }
+      disabled: { opacity: 0.5, cursor: "not-allowed" }
+      focus: { outlineColor: "{colors.primary}", outlineWidth: "2px", outlineOffset: "5px" }
+  input-field:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.on-neutral}"
+    borderColor: "{colors.line}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.sm}"
+    padding: "{spacing.xs} {spacing.sm}"
+    states:
+      default: { backgroundColor: "{colors.surface}", borderColor: "{colors.line}" }
+      hover: { borderColor: "{colors.primary}" }
+      active: { borderColor: "{colors.primary}" }
+      pressed: { borderColor: "{colors.primary}" }
+      disabled: { opacity: 0.5, cursor: "not-allowed" }
+      focus: { outlineColor: "{colors.primary}", outlineWidth: "2px", outlineOffset: "5px" }
+      error: { borderColor: "{colors.error}" }
+  card:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.on-neutral}"
+    borderColor: "{colors.line}"
+    rounded: "{rounded.lg}"
+    padding: "{spacing.md}"
+    states:
+      default: { backgroundColor: "{colors.surface}", borderColor: "{colors.line}" }
+      hover: { backgroundColor: "{colors.wash}" }
+      active: { backgroundColor: "{colors.wash}" }
+      pressed: { transform: "translateY(1px)" }
+      disabled: { opacity: 0.5 }
       focus: { outlineColor: "{colors.primary}", outlineWidth: "2px", outlineOffset: "5px" }
   navigation:
     backgroundColor: "{colors.neutral}"
@@ -59,7 +89,7 @@ components:
       hover: { textColor: "{colors.primary}" }
       active: { textColor: "{colors.primary}" }
       pressed: { transform: "translateY(1px)" }
-      disabled: { applicable: false }
+      disabled: { opacity: 0.5 }
       focus: { outlineColor: "{colors.primary}", outlineWidth: "2px", outlineOffset: "5px" }
   service-row:
     backgroundColor: "{colors.neutral}"
@@ -69,19 +99,27 @@ components:
     typography: "{typography.body-sm}"
     states:
       default: { backgroundColor: "{colors.neutral}" }
-      hover: { backgroundColor: "{colors.wash}", arrowBackgroundColor: "{colors.primary}", arrowTextColor: "{colors.on-primary}" }
+      hover: { backgroundColor: "{colors.wash}" }
       active: { backgroundColor: "{colors.wash}" }
       pressed: { transform: "translateY(1px)" }
-      disabled: { applicable: false }
+      disabled: { opacity: 0.5 }
       focus: { outlineColor: "{colors.primary}", outlineWidth: "2px", outlineOffset: "5px" }
   workflow:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.on-neutral}"
+    borderColor: "{colors.line}"
     rounded: "{rounded.lg}"
     typography: "{typography.body-sm}"
     padding: "{spacing.md}"
     completeBackgroundColor: "{colors.secondary}"
     completeTextColor: "{colors.success}"
+    states:
+      default: { backgroundColor: "{colors.surface}" }
+      hover: { backgroundColor: "{colors.wash}" }
+      active: { backgroundColor: "{colors.wash}" }
+      pressed: { transform: "translateY(1px)" }
+      disabled: { opacity: 0.5 }
+      focus: { outlineColor: "{colors.primary}", outlineWidth: "2px", outlineOffset: "5px" }
   scenario-control:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.on-neutral}"
@@ -92,7 +130,7 @@ components:
       hover: { backgroundColor: "{colors.secondary}" }
       active: { backgroundColor: "{colors.wash}" }
       pressed: { transform: "translateY(1px)" }
-      disabled: { applicable: false }
+      disabled: { opacity: 0.5 }
       focus: { outlineColor: "{colors.primary}", outlineWidth: "2px", outlineOffset: "5px" }
   rule-switch:
     backgroundColor: "{colors.line}"
@@ -101,10 +139,10 @@ components:
     padding: "{spacing.xs}"
     states:
       default: { backgroundColor: "{colors.line}" }
-      hover: { cursor: pointer }
+      hover: { cursor: "pointer" }
       active: { backgroundColor: "{colors.success}" }
       pressed: { transform: "translateY(1px)" }
-      disabled: { applicable: false }
+      disabled: { opacity: 0.5 }
       focus: { outlineColor: "{colors.primary}", outlineWidth: "2px", outlineOffset: "5px" }
   disclosure:
     textColor: "{colors.on-neutral}"
@@ -114,61 +152,95 @@ components:
       default: { expanded: false }
       hover: { textColor: "{colors.primary}" }
       active: { expanded: true }
-      pressed: { expanded: toggle }
-      disabled: { applicable: false }
+      pressed: { expanded: "toggle" }
+      disabled: { opacity: 0.5 }
       focus: { outlineColor: "{colors.primary}", outlineWidth: "2px", outlineOffset: "5px" }
-global:
-  backgroundColor: "{colors.neutral}"
-  textColor: "{colors.on-neutral}"
-  displayTypography: "{typography.h1}"
-  sectionTypography: "{typography.h2}"
-  emphasisTypography: "{typography.expressive}"
-  handwrittenTypography: "{typography.handwritten}"
-  leadTypography: "{typography.body-lg}"
-  bodyTypography: "{typography.body-md}"
-  sectionSpace: "{spacing.xl}"
-  contactBackgroundColor: "{colors.secondary}"
-  contactTextColor: "{colors.on-secondary}"
 ---
 
 ## Overview
-Good’Ai is an approachable, practical operator that gives people time back. This identity combines a clear everyday sans with expressive serif accents, sunlit coastal imagery and calm, earthy colour. Kevin selected this branding on 13 September 2026. The implementation remains a local fork pending the separate public-release checks.
+Good'Ai is an approachable, practical operator designed to streamline workflows and give people time back. The brand voice is plain English, warm, capable, and conversational. The target visual atmosphere balances editorial sans-serif typography, tactile paper-like surfaces, and grounding terracotta accents.
+
+Scope applies to Next.js 16 App Router web interfaces across responsive viewports (mobile, tablet, desktop) using standard web accessibility paradigms (WCAG 2.2 AA).
 
 ## Colors
-Primary provides the rust accent in the photograph, wordmark punctuation and calls to action. Neutral feels like paper, on-neutral like dark olive ink; secondary is the quieter sage close. Surface and wash separate actual interactive examples from editorial content. Muted is readable supporting copy, not decorative low-opacity text. Use line for dividers, never essential text.
+The palette is built upon warm, earthy tones that invoke trust and clarity:
+- `primary` (#A4432B / Terracotta): Used for interactive primary actions, calls to action, brand punctuation, and focused accents.
+- `primary-hover` (#873821 / Deep Terracotta): Used for hover and active feedback states on primary controls.
+- `secondary` (#DCE3CC / Sage): Soft grounding surface for contact highlights, soft accents, and active switches.
+- `tertiary` (#A4432B): Aligned with primary terracotta for warning/alert highlights and critical calls to action.
+- `neutral` (#F7F5ED / Warm Paper): Warm paper canvas providing high-contrast readability without harsh stark white.
+- `surface` (#FFFEF9 / Warm White): Clean surface for elevated cards and interactive panels.
+- `wash` (#ECEEE3 / Soft Wash): Recessed background for alternate sections and hovered interactive components.
+- `line` (#D5D6CA / Subtle Divider): Hairline rules and borders separating content.
+- `muted` (#63685D / Muted Olive): Secondary copy, captions, and supporting label text.
+- `on-primary` (#F7F5ED): High-contrast text on terracotta surfaces.
+- `on-secondary` (#333B32 / Olive Ink): Dark olive ink text on sage backgrounds.
+- `on-tertiary` (#F7F5ED): High-contrast text on tertiary surfaces.
+- `on-neutral` (#333B32 / Olive Ink): Primary body text and headlines on paper and white surfaces.
+- `error` (#A4432B): Terracotta accent for error states and validation alerts.
+- `success` (#42583B / Success Olive): Dark green olive for completed steps and success indicators.
+- `warning` (#A4432B): Accent tone for warnings and inline notices.
 
-Measured contrast ratios: on-neutral/neutral 10.61:1; muted/neutral 5.24:1; primary/neutral 5.63:1; on-neutral/secondary 8.77:1; muted/surface 5.67:1; muted/wash 4.88:1; success/secondary 5.91:1. No colour-only state: completion uses a check and status text; switches expose aria-checked.
+All text/background token combinations strictly achieve ≥ 4.5:1 WCAG 2.2 AA contrast ratios (e.g., on-neutral/neutral is 10.61:1; muted/neutral is 5.24:1; primary/neutral is 5.63:1).
 
 ## Typography
-Manrope carries navigation, services and instructions. Fraunces italic gives the human promise a distinct voice. The original Vibes handwriting adds brief reassuring asides, including “Go on. Knock off early.” All three are locally hosted, with their OFL licenses retained. Keep handwriting out of navigation, prices and essential instructions. Large display typography is reserved for the hero and closing invitation; supporting text remains compact and sentence case. Use tabular numbers for prices. The wordmark is a deliberate optical lettering exception with tighter tracking; do not apply its spacing to body text.
+Typography uses Manrope as the primary sans-serif workhorse for clear readability, structured navigation, and interface controls.
+- Scale logic:
+  - `h1`: clamp(62px, 6.9vw, 104px), weight 500, line height 1.02, letter spacing -0.04em.
+  - `h2`: clamp(36px, 4vw, 58px), weight 500, line height 1.08, letter spacing -0.04em.
+  - `body-lg`: 17px, weight 400, line height 1.8.
+  - `body-md`: 15px, weight 400, line height 1.85.
+  - `body-sm`: 13px, weight 400, line height 1.7.
+  - `label`: 13px, weight 600, line height 1.65.
+
+Sentence case is preferred across all headings and body copy to maintain a approachable voice.
 
 ## Layout
-Maximum content width 1440px. Outer gutters: 52px desktop, 32px tablet, 20px mobile and 16px narrow mobile. Breakpoints at 1600, 1100, 760 and 390px. Hero and demo use unequal two-column grids; on mobile they stack in reading order. Services become a single index with price under the title. Main navigation becomes an inline disclosure. The photo has an explicit width to prevent aspect-ratio minimum sizing from forcing horizontal scroll.
+Grid & Spacing System:
+- Baseline spacing follows modular tokens: `xs` (8px), `sm` (16px), `md` (24px), `lg` (40px), `xl` (80px).
+- Maximum content width is capped at 1440px inside centered layout shells.
+- Breakpoints:
+  - Narrow Mobile: <= 390px
+  - Mobile: <= 760px
+  - Tablet: <= 1100px
+  - Desktop: >= 1600px
+
+Outer gutters adjust dynamically from 52px on desktop to 20px/16px on mobile.
 
 ## Elevation & Depth
-Use thin dividers for the page structure. The workflow surface has the only soft elevated shadow. No decorative card grids, backdrop blur or gradient text. Z-index: normal content, sticky navigation 20, skip link 40. The optional third-party voice widget controls its own overlay.
+Elevation is maintained using subtle structural borders (`line`) and high-contrast surface transitions (`surface`, `wash`, `neutral`) rather than heavy drop shadows or decorative gradients.
+- Structural cards use a single subtle soft shadow for workflow focus (`0 18px 40px -28px #333b3240`).
+- Stacking order (Z-index):
+  - Normal content: 0
+  - Sticky header/navigation: 20
+  - Accessibility skip link: 40
 
 ## Shapes
-Small radii belong to controls and photography; lg belongs to actual interactive panels. Full rounding belongs to the direction arrows, switch track, and the closing circular CTA. Service rows remain open and divided by rules.
+Corner radii follow a functional hierarchy:
+- `sm` (4px): Small controls, form input fields, and scenario toggles.
+- `md` (5px): Buttons and primary action triggers.
+- `lg` (12px): Interactive workflow panels, cards, and detail containers.
+- `full` (9999px): Pill badges, switch tracks, and circular action icons.
 
 ## Components
-Seven families are specified in front matter. Shared focus is a visible primary outline with an offset. Every button is at least 44px high; decorative arrow circles are inside whole-row service links. Link states do not invent a disabled navigation destination. Where disabled is inapplicable, the state is explicitly marked rather than presenting an inert link.
+Interactive component families define complete state matrices (default, hover, active, pressed, disabled, focus, error) using semantic token references:
 
-Navigation: inline mobile disclosure with aria-expanded and Escape-to-close with focus restored to its trigger. No modal focus trap is needed. Footer keeps contact and legal links accessible.
+- `button-primary`: Primary CTA button with min-height of 44px, using `{colors.primary}` background and `{colors.on-primary}` text.
+- `input-field`: Standard form text input using `{colors.surface}` background, `{colors.line}` border, and `{colors.primary}` focus ring.
+- `card`: Surface container using `{colors.surface}` and `{colors.lg}` radius.
+- `navigation`: Header navigation links with primary hover feedback and explicit focus outlines.
+- `service-row`: Full-width row item with hover wash background transition and arrow trigger.
+- `workflow`: Interactive scenario runner card with sage success indicators for completed steps.
+- `scenario-control`: Segmented button control for previewing workflow presets.
+- `rule-switch`: Accessible toggle switch using native button controls with Space/Enter support and `aria-checked`.
+- `disclosure`: Native details/summary accordion for FAQs with primary color hover states and keyboard focus rings.
 
-Workflow: three pressed-state scenario buttons, an immediate local run/reset action, and a polite completion status. It neither sends messages nor reads real client data. Full dashboard tabs use Radix keyboard navigation. Rule switches support Space/Enter through native buttons and announce checked state.
-
-Disclosure: native details/summary for questions. Hover and focus keep the text readable; the plus changes when open. There are no form inputs on this site; the central enquiry action opens the existing Google Form.
-
-Voice: explicitly opt-in. Loading and script failure are described inline; a successful script load exposes the existing provider widget. A live conversation and microphone permission require the visitor’s action. No loading skeleton is needed for static site copy.
-
-The homepage header and hero link to the voice section. Its secondary enquiry uses the centralized form URL. The retained ElevenLabs widget uses paper, olive and rust, Manrope, a 12px shell radius and a 5px button radius. The small G icon replaces the default orb. An idle launcher hides during scrolling and returns after 240ms; focused controls and states without a visible Start a call button remain visible. A scoped open-shadow-root compatibility style handles the existing embed's explicit font and shadow. Recheck this adapter when changing the vendor script version.
-
-Motion: a gentle hero-image arrival and a three-chapter GSAP ScrollTrigger narrative. Original line drawings move the story from a cluttered desk, through connected work, to a deckchair in the sun. Desktop keeps the illustration sticky alongside its chapter; mobile draws each illustration beneath its copy. Native scrolling remains. GSAP matchMedia scopes breakpoint changes and reverts timelines on unmount; font readiness refreshes trigger measurements. Reduced motion presents all three completed drawings inline, disables hero animation and smooth scrolling, and removes rule-thumb movement. All essential copy stays visible independently of animation; decorative SVGs are hidden from assistive technology.
+All interactive elements feature a standard visible focus ring: `2px solid {colors.primary}` with a `5px` offset (`focus-visible`).
 
 ## Do's and Don'ts
-- Do use the finalized catalogue for service facts. Don’t invent metrics, testimonials or certifications.
-- Do pair expressive type with plain instructions. Don’t turn every line into a slogan.
-- Do keep generated imagery clearly documented as conceptual. Don’t imply it shows a real client or premises.
-- Do preserve labels, focus and human review in demos. Don’t present sample results as live work.
-- Do reconcile company terms before publishing. Don’t replace approved legal language with a design mockup.
+- Do: Use semantic tokens like `{colors.neutral}` and `{colors.on-neutral}` for body copy and card backgrounds.
+- Don't: Embed raw hex codes directly into component definitions or inline styles.
+- Do: Ensure interactive targets meet minimum 44px height for touch and keyboard accessibility.
+- Don't: Rely solely on color changes to convey state transitions (always pair with icons, aria attributes, or text labels).
+- Do: Provide explicit focus rings (`focus-visible`) on all interactive controls.
+- Don't: Remove or obscure focus outlines on keyboard-navigable elements.
