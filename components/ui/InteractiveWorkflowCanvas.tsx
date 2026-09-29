@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Play,
@@ -82,7 +82,7 @@ class SoundFx {
     if (this.ctx.state === "suspended") this.ctx.resume();
 
     const now = this.ctx.currentTime;
-    [659.25, 880, 1318.51].forEach((freq, i) => {
+    CHIME_FREQUENCIES.forEach((freq, i) => {
       if (!this.ctx) return;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
@@ -101,6 +101,7 @@ class SoundFx {
 }
 
 const sound = new SoundFx();
+const CHIME_FREQUENCIES = [659.25, 880, 1318.51] as const;
 
 export type ScenarioId = "speed-to-lead" | "voice-agent" | "invoice-extract";
 
@@ -233,6 +234,8 @@ export const SCENARIOS: Scenario[] = [
   },
 ];
 
+export const SCENARIOS_MAP = new Map(SCENARIOS.map((s) => [s.id, s]));
+
 export function InteractiveWorkflowCanvas({
   selectedScenario,
   onSelectScenario,
@@ -246,9 +249,10 @@ export function InteractiveWorkflowCanvas({
   const [isRunning, setIsRunning] = useState(false);
   const [step, setStep] = useState<number>(0); // 0 = idle, 1 = trigger, 2 = ai, 3 = actions, 4 = complete
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const timerRef = useRef<NodeJS.Timeout[]>([]);
+  const timerRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  const scenario = SCENARIOS.find((s) => s.id === activeScenarioId) || SCENARIOS[0];
+  // O(1) scenario lookup instead of O(N) array search on every render
+  const scenario = SCENARIOS_MAP.get(activeScenarioId) || SCENARIOS[0];
 
   const clearTimers = () => {
     timerRef.current.forEach((t) => clearTimeout(t));
@@ -287,20 +291,23 @@ export function InteractiveWorkflowCanvas({
     );
   }, []);
 
-  const resetSimulation = () => {
+  const resetSimulation = useCallback(() => {
     clearTimers();
     setStep(0);
     setIsRunning(false);
-  };
+  }, []);
 
-  const handleSelectScenario = (id: ScenarioId) => {
-    if (onSelectScenario) {
-      onSelectScenario(id);
-    } else {
-      setInternalScenarioId(id);
-    }
-    resetSimulation();
-  };
+  const handleSelectScenario = useCallback(
+    (id: ScenarioId) => {
+      if (onSelectScenario) {
+        onSelectScenario(id);
+      } else {
+        setInternalScenarioId(id);
+      }
+      resetSimulation();
+    },
+    [onSelectScenario, resetSimulation]
+  );
 
   const toggleSound = () => {
     const next = !soundEnabled;
@@ -379,23 +386,27 @@ export function InteractiveWorkflowCanvas({
         </div>
       </div>
 
-      {/* Scenario Tabs */}
+      {/* Scenario Tabs - Memoized to prevent redundant DOM element re-creations on simulation steps */}
       <div className="relative z-10 flex flex-wrap gap-2 mb-8">
-        {SCENARIOS.map((s) => (
-          <button
-            key={s.id}
-            type="button"
-            onClick={() => handleSelectScenario(s.id)}
-            className={cn(
-              "rounded-lg px-3 py-1.5 text-xs font-mono transition-all",
-              activeScenarioId === s.id
-                ? "bg-brand-paper text-brand-navy font-bold shadow-md"
-                : "bg-brand-paper/5 text-brand-paper/70 hover:bg-brand-paper/15 border border-brand-paper/10"
-            )}
-          >
-            {s.title}
-          </button>
-        ))}
+        {useMemo(
+          () =>
+            SCENARIOS.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => handleSelectScenario(s.id)}
+                className={cn(
+                  "rounded-lg px-3 py-1.5 text-xs font-mono transition-all",
+                  activeScenarioId === s.id
+                    ? "bg-brand-paper text-brand-navy font-bold shadow-md"
+                    : "bg-brand-paper/5 text-brand-paper/70 hover:bg-brand-paper/15 border border-brand-paper/10"
+                )}
+              >
+                {s.title}
+              </button>
+            )),
+          [activeScenarioId, handleSelectScenario]
+        )}
       </div>
 
       {/* Canvas Area: n8n Connected Nodes */}
@@ -452,21 +463,25 @@ export function InteractiveWorkflowCanvas({
             <h4 className="font-bold text-sm text-brand-paper">{scenario.nodes.ai.title}</h4>
             <p className="text-xs text-brand-paper/70 mt-0.5">{scenario.nodes.ai.subtitle}</p>
 
-            {/* Extracted Data Tags */}
+            {/* Extracted Data Tags - Memoized to prevent O(N) re-mapping on unrelated state updates */}
             <div className="mt-3 space-y-1">
-              {scenario.nodes.ai.extractedData.map((item, i) => (
-                <div
-                  key={i}
-                  className={cn(
-                    "text-[10px] font-mono px-2 py-0.5 rounded border transition-all duration-300",
-                    step >= 2
-                      ? "border-brand-teal/40 bg-brand-teal/10 text-brand-paper"
-                      : "border-brand-paper/10 bg-brand-paper/5 text-brand-paper/40"
-                  )}
-                >
-                  {item}
-                </div>
-              ))}
+              {useMemo(
+                () =>
+                  scenario.nodes.ai.extractedData.map((item, i) => (
+                    <div
+                      key={i}
+                      className={cn(
+                        "text-[10px] font-mono px-2 py-0.5 rounded border transition-all duration-300",
+                        step >= 2
+                          ? "border-brand-teal/40 bg-brand-teal/10 text-brand-paper"
+                          : "border-brand-paper/10 bg-brand-paper/5 text-brand-paper/40"
+                      )}
+                    >
+                      {item}
+                    </div>
+                  )),
+                [scenario.nodes.ai.extractedData, step]
+              )}
             </div>
           </div>
         </div>
