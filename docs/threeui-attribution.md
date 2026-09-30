@@ -6,10 +6,11 @@ The workflow panel and recessed selector are custom companion styles. Colours,
 sizing, semantic links, existing actions and reduced-motion behaviour are local.
 No ThreeUI runtime, iframe, shader loop or additional dependency is required.
 
-The hero dock interaction in `components/ui/AutomationDock.tsx` is a local
-adaptation inspired by the proximity-based interaction style of ThreeUI
-AnimatedTopDock (`src/shaders/animated-top-dock/AnimatedTopDock.tsx`), rebuilt
-with project tokens and existing iconography.
+The lab page mounts the real ThreeUI `AnimatedTopDock` (via
+`components/ui/TopDock.tsx`, a thin wrapper importing
+`@designcodeio/threeui/components/AnimatedTopDock` and its `style.css`).
+The dock's proximity-based spring magnification, focus states and
+reduced-motion behaviour are provided by the upstream component unmodified.
 
 ## Upstream license
 

@@ -285,6 +285,7 @@ export function createCarousel({ containerRef, listRef, itemsRef, loaderRef, liv
 
   resize();
   window.addEventListener("resize", onResize);
+  if (window.visualViewport) window.visualViewport.addEventListener("resize", onResize);
   const onScroll = () => {
     const rect = renderer.domElement.getBoundingClientRect();
     bounds.left = rect.left;
@@ -1263,6 +1264,7 @@ export function createCarousel({ containerRef, listRef, itemsRef, loaderRef, liv
     renderer.setAnimationLoop(null);
 
     window.removeEventListener("resize", onResize);
+    if (window.visualViewport) window.visualViewport.removeEventListener("resize", onResize);
     window.removeEventListener("scroll", onScroll, true);
     resizeObserver.disconnect();
     container.removeEventListener("wheel", onWheel);

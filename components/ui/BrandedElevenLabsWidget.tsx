@@ -14,7 +14,9 @@ export function BrandedElevenLabsWidget() {
 
     const handleScroll = () => {
       const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const heroThreshold = window.innerHeight * 0.65;
+      const heroThreshold =
+        ((window.visualViewport && window.visualViewport.height) ||
+          window.innerHeight) * 0.65;
 
       setPastHero(scrollY > heroThreshold);
       setIsScrolling(true);
@@ -32,6 +34,9 @@ export function BrandedElevenLabsWidget() {
       lenis.on("scroll", handleScroll);
     }
     window.addEventListener("scroll", handleScroll, { passive: true });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", handleScroll);
+    }
 
     return () => {
       if (scrollStopTimer) clearTimeout(scrollStopTimer);
@@ -39,6 +44,9 @@ export function BrandedElevenLabsWidget() {
         lenis.off("scroll", handleScroll);
       }
       window.removeEventListener("scroll", handleScroll);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", handleScroll);
+      }
     };
   }, [lenis]);
 

@@ -237,7 +237,7 @@ export function createMeta(refs, params) {
     // as one piece across a breakpoint instead of half of it growing.
     if (list) list.style.fontSize = vw(params.listSize * textK);
     if (loader) {
-      loader.style.bottom = `${params.loaderBottom}vh`;
+      loader.style.bottom = `${params.loaderBottom}dvh`;
       loader.style.fontFamily = smallFace;
       loader.style.fontSize = small;
       loader.style.fontWeight = smallWeight;

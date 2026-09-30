@@ -1,17 +1,17 @@
 import ServicesCarousel from "@/components/sections/ServicesCarousel";
-import { AutomationDock } from "@/components/ui/AutomationDock";
-import { Scene } from "@/src/shaders/Scene";
+import { TopDock } from "@/components/ui/TopDock";
+import { GenerativeTree } from "@/src/shaders/elements/GenerativeTree";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export const metadata = {
   title: "Studio Lab | Good'Ai Experiments",
-  description: "Experimental 3D Services Carousel, Automation Dock, and ThreeUI Generative Tree.",
+  description: "Experimental 3D Services Carousel, ThreeUI Animated Top Dock, and ThreeUI Generative Tree.",
 };
 
 export default function LabPage() {
   return (
-    <main className="min-h-screen py-16 px-4 bg-brand-paper text-brand-ink">
+    <main className="min-h-[100dvh] py-16 px-4 bg-brand-paper text-brand-ink">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <Link
@@ -22,7 +22,7 @@ export default function LabPage() {
           </Link>
           <h1 className="text-3xl font-medium mt-4 tracking-tight">Studio Lab Experiments</h1>
           <p className="text-brand-ink/70 mt-1">
-            Dedicated staging area for the 3D WebGL Carousel, Automation Dock, and ThreeUI Generative Tree.
+            Dedicated staging area for the 3D WebGL Carousel, Animated Top Dock, and ThreeUI Generative Tree.
           </p>
         </div>
 
@@ -35,18 +35,18 @@ export default function LabPage() {
             </p>
           </div>
           <div className="w-full h-[550px] rounded-xl overflow-hidden border border-brand-line">
-            <Scene />
+            <GenerativeTree />
           </div>
         </section>
 
-        {/* Section 2: The Automation Dock */}
+        {/* Section 2: The Animated Top Dock */}
         <section className="mb-20 p-8 rounded-2xl border border-brand-line bg-brand-surface shadow-sm">
-          <h2 className="text-xl font-medium mb-2">Automation Dock</h2>
+          <h2 className="text-xl font-medium mb-2">Animated Top Dock</h2>
           <p className="text-sm text-brand-ink/60 mb-6">
-            Spring magnification interaction.
+            ThreeUI spring-dock navbar. Move across it with the pointer; focus with Tab.
           </p>
-          <div className="flex justify-center py-4">
-            <AutomationDock />
+          <div className="w-full h-[220px] rounded-xl overflow-hidden border border-brand-line bg-[#0b0b0c]">
+            <TopDock />
           </div>
         </section>
 

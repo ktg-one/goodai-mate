@@ -1,243 +1,129 @@
-# Roadmap
+# Roadmap — Milestone v1.0: Launch
 
-> **2026-09-15: Active launch tasks are in [TASKS.md](../TASKS.md).**
-> The milestones below are historical planning for an earlier implementation.
-> Use the root checklist for current scope, order and completion evidence.
+> Rewritten 2026-09-30. The previous roadmap (Aug 2026 milestones) is in git history.
+> This file is the single source of scope and order. `TASKS.md` points here.
 
-## Overview
+## How to run this
 
-This roadmap defines the phased execution plan for the Good'Ai frontend project. Each phase represents a focused body of work with clear deliverables and acceptance criteria.
+- Standard GSD loop per phase: `/gsd:plan-phase N` → `/gsd:execute-phase N` → `/gsd:verify-work N`.
+- One branch + PR per phase (`phase/NN-slug`). Update `.planning/STATE.md` at the end of every phase.
+- **Waves**: phases in the same wave touch different files and can run in parallel (separate worktrees).
+  A wave starts only when every phase in the previous wave is merged.
+- Every phase gate includes `npm run lint` + `npm run build` clean, and desktop (1440) + mobile (390) screenshots with no horizontal overflow.
+- Site is **not open yet** — no live traffic, so nothing here is an incident.
 
-## Milestones
+**Open gate:** the site can go live as soon as Phases 1 and 5 are done (clean baseline + a CTA form that really delivers leads) and a quick Phase 7 smoke check passes. Everything else ships after opening.
 
-### Milestone 1: GSD Initialization & Project Setup
-
-**Status**: In Progress  
-**Phase**: 0 (Setup)  
-**Estimated Duration**: 1-2 hours  
-
-#### Objective
-Establish GSD workflow infrastructure and document the existing project state.
-
-#### Deliverables
-- [x] `.planning/PROJECT.md` - Project context and scope
-- [x] `.planning/config.json` - Workflow preferences
-- [x] `.planning/STATE.md` - Current project state
-- [x] `.planning/REQUIREMENTS.md` - Functional and non-functional requirements
-- [x] `.planning/ROADMAP.md` - This document
-- [ ] `.planning/backlog/` - Initial backlog items (optional)
-- [ ] `.planning/codebase/` - Codebase documentation (optional)
-
-#### Acceptance Criteria
-- All GSD core files are created
-- Project context is accurately captured
-- Requirements reflect the current state of the codebase
-- Verification commands (`npm run lint`, `npm run build`) are configured
+| Wave | Phase | Status |
+|---|---|---|
+| 1 | 1. Baseline commit & cleanup | Ready |
+| 2 | 5. Lead capture that actually sends — **gates opening** | Needs email + webhook target |
+| 2 | 3. Scroll motion restored | Ready after wave 1 |
+| 2 | 4. Voice agent site-wide | Needs Trillet keys in `.env.local` |
+| 2 | 2. Scroll-story art matches the words | Blocked — decision (may be absorbed by Phase 9) |
+| 3 | 6. "Quick dive" — email in, light research back | Blocked — decisions |
+| 3 | 8. Brand: sun-moving plant shadow | After opening |
+| 3 | 9. Brand: Kevin's handwriting drawn down the page | After opening; needs handwriting samples |
+| 4 | 7. Pre-launch QA (smoke check before opening; full pass later) | — |
 
 ---
 
-### Milestone 2: ProductDemo Enhancement & Verification
+## Phase 1 — Baseline commit & cleanup (Wave 1)
 
-**Status**: Pending  
-**Phase**: 1  
-**Estimated Duration**: 2-4 hours  
-**Priority**: High (user referenced ProductDemo.tsx:74)
+Everything else branches from this, so it runs alone.
 
-#### Objective
-Verify and potentially enhance the ProductDemo section, ensuring it meets all constraints from AGENTS.md and REQUIREMENTS.md.
+- Commit the work in the tree: ThreeUI sketchbook with Perth plates (`components/studio/PerthSketchbook.tsx`, `src/shaders/sketchbook/`, `public/sketchbook/plates/`), the text-only hero with the golden-spiral study (`components/studio/HeroStudy.tsx`), tree removal.
+- Delete dead code: `components/studio/SketchbookFlip.tsx` + `.sbf*` CSS, `components/studio/HeroTree.tsx`, `components/layout/HomeScroll.tsx` (tree-only, now a no-op) and its mount in `app/page.tsx`, `.hero-figure*` / `.image-seal` CSS, `.hero-figure` rules in the preloader block of `app/globals.css`.
+- Decide what stays untracked (`klint/`, `.agents/`, `bun.lock`, `skills-lock.json`) — ask Kevin, don't guess.
 
-#### Context
-The user specifically referenced line 74 of `components/sections/ProductDemo.tsx`:
-```tsx
-<div className="relative aspect-video md:aspect-video lg:aspect-2/1 border border-brand-ink bg-brand-paper p-2 md:p-4 shadow-[8px_8px_0_var(--brand-coral)]">
-```
+**Gate:** lint + build clean; home renders the same as before cleanup.
 
-This is the container for the macOS-style window demo that illustrates workflow jobs, status, and outcomes.
+## Phase 2 — Scroll-story art matches the words (Wave 2) — BLOCKED on Kevin
 
-#### Tasks
-- [ ] Audit ProductDemo.tsx against AGENTS.md constraints
-- [ ] Verify example data is clearly marked as non-live
-- [ ] Verify interaction works without animation
-- [ ] Verify timers and listeners are cleaned up in effects
-- [ ] Check responsive behavior (mobile, tablet, desktop)
-- [ ] Check accessibility (keyboard focus, reduced motion)
-- [ ] Check brand token usage consistency
-- [ ] Run lint and build verification
+`components/studio/ScrollStory.tsx` line art was drawn for the old chapters (desk/inbox, envelope→calendar, beach) and doesn't fit the current copy:
+"Call it a day." / "Go on. Knock off early." / "We got you."
 
-#### Deliverables
-- ProductDemo section that passes all constraints
-- Updated STATE.md with findings
-- Optional: Enhancements based on audit findings
+Options (Kevin picks one):
+- **a.** Use the Perth watercolours: city skyline → Cottesloe families → Fremantle mates.
+- **b.** As (a), and remove those three plates from the sketchbook so nothing repeats.
+- **c.** Redraw the SVG line art to match (keeps the ink-draw animation).
 
-#### Acceptance Criteria
-- [ ] ProductDemo clearly indicates example/illustrative data
-- [ ] ProductDemo is usable without animation
-- [ ] All timers/listeners are cleaned up
-- [ ] Responsive breakpoints work correctly
-- [ ] Brand tokens are used consistently
-- [ ] Passes `npm run lint`
-- [ ] Passes `npm run build`
+**Gate:** each chapter's art depicts its own title; the pinned scrub still works; reduced-motion shows final art.
 
----
+## Phase 3 — Scroll motion restored (Wave 2)
 
-### Milestone 3: Codebase Health & Documentation
+Commit 1dac4ea removed the scroll reveals from `components/studio/StudioMotion.tsx`; the working tree also dropped `<StudioMotion />` from `app/layout.tsx`. The site now has almost no motion outside the scroll story.
 
-**Status**: Pending  
-**Phase**: 2  
-**Estimated Duration**: 4-8 hours  
-**Priority**: Medium
+- Rebuild reveals with GSAP ScrollTrigger (already synced with Lenis in `SmoothScroll.tsx`): fade/rise only, no new pins, one or two elements per view, `gsap.matchMedia` so reduced-motion gets the static final state.
+- Restore the hero entrance, coordinated with `components/ui/Preloader.tsx` (it already fades `.hero-copy`).
+- Targets: section headings, service rows, demo, approach steps, FAQ, contact.
 
-#### Objective
-Document the codebase architecture and ensure all sections meet quality standards.
+**Gate:** keyframe screenshots at 0/25/50/75/100% scroll (desktop + mobile); no layout shift; nothing hidden when JS is off.
 
-#### Tasks
-- [ ] Create codebase map in `.planning/codebase/`
-- [ ] Document component hierarchy
-- [ ] Document animation systems (GSAP, Framer Motion, Lenis)
-- [ ] Document brand design system tokens
-- [ ] Audit all sections for AGENTS.md compliance
-- [ ] Identify and document any technical debt
+## Phase 4 — Voice agent site-wide (Wave 2)
 
-#### Deliverables
-- `.planning/codebase/ARCHITECTURE.md`
-- `.planning/codebase/ANIMATION.md`
-- `.planning/codebase/DESIGN-SYSTEM.md`
-- Updated backlog with identified issues
+`components/studio/TrilletVoiceWidget.tsx` is our own React UI (fully stylable, unlike the old ElevenLabs embed) but only mounts on `/demo`.
 
-#### Acceptance Criteria
-- Codebase is fully documented
-- All sections are audited for compliance
-- Technical debt is identified and prioritized
+- First: verify a real mic call connects end to end with the `.env` Trillet agent. If it doesn't, stop and report.
+- Then: small "Talk to us" launcher in `app/layout.tsx`, brand-styled, SDK loaded on click (dynamic import) so it's not in the initial bundle.
+- Retire `components/ui/ElevenLabsWidget.tsx` / `BrandedElevenLabsWidget.tsx` if nothing uses them.
 
----
+**Gate:** call works on desktop Chrome and mobile Safari; mic permission denial handled; Lighthouse performance not reduced.
 
-### Milestone 4: Performance & Accessibility Audit
+## Phase 5 — Lead capture that actually sends (Wave 2)
 
-**Status**: Pending  
-**Phase**: 3  
-**Estimated Duration**: 4-8 hours  
-**Priority**: Medium
+`components/studio/SussTheFussCard.tsx` fakes submission (`setTimeout` → "We've got it"); nothing is delivered.
 
-#### Objective
-Ensure the site meets performance and accessibility requirements.
+- `app/api/lead/route.ts`: validate, rate-limit, honeypot; deliver by email to Kevin and POST to `LEAD_WEBHOOK_URL`.
+- Form adds business name and website (optional) next to the existing contact, headaches and note.
+- Failure shows an honest error plus the phone number, never a fake success.
 
-#### Tasks
-- [ ] Run Lighthouse audit (Performance, Accessibility, SEO, Best Practices)
-- [ ] Identify performance bottlenecks
-- [ ] Fix accessibility issues (WCAG 2.2 AA compliance)
-- [ ] Optimize animations for 60 FPS
-- [ ] Verify prefers-reduced-motion support
-- [ ] Test on mobile devices
-- [ ] Test keyboard navigation
+**Needs from Kevin:** email provider + destination address; webhook target (n8n or other).
+**Gate:** a test submission arrives by email and at the webhook.
 
-#### Deliverables
-- Lighthouse report with scores > 80 (Performance), > 90 (Accessibility)
-- Fixes for identified issues
-- Documentation of optimizations
+## Phase 6 — "Quick dive": email in, light research back (Wave 3) — BLOCKED on decisions
 
-#### Acceptance Criteria
-- Lighthouse Performance > 80 (desktop)
-- Lighthouse Accessibility > 90
-- All WCAG 2.2 AA criteria met
-- Animations run at 60 FPS
-- Mobile experience is smooth
+A lighter, public version of the internal deep-dive (full version: business deep dive → strategy framework → NotebookLM notebook → one-page site, handed back in the first meeting; stays internal).
 
----
+Visitor gives email + business name/website → one bounded research pass → a short "here's where you're losing time" snapshot by email, with a link to book the full deep dive.
 
-### Milestone 5: Content & CTA Verification
+**Decisions for Kevin:**
+- Output: plain email snapshot, or a hosted one-pager?
+- Runs where: Next route + queue, or the existing pipeline via Phase 5's webhook?
+- Model and hard cost cap per lead; human review before send (yes/no)?
+- Abuse limits (one per email/domain per day, etc.).
 
-**Status**: Pending  
-**Phase**: 4  
-**Estimated Duration**: 2-4 hours  
-**Priority**: Medium
+**Gate:** 5 test businesses produce accurate, non-invented snapshots within the cost cap; nothing claims facts it didn't find.
 
-#### Objective
-Verify all content meets the brand integrity constraints from AGENTS.md.
+## Phase 8 — Brand: sun-moving plant shadow (Wave 3, after opening)
 
-#### Tasks
-- [ ] Audit all text content for invented claims
-- [ ] Verify no fake testimonials
-- [ ] Verify no fake client outcomes
-- [ ] Verify no false integration claims
-- [ ] Verify no specific pricing claims
-- [ ] Verify no compliance claims
-- [ ] Verify all CTAs route through centralized destination
-- [ ] Verify brand spelling consistency (Good'Ai)
+The brand is "a lazy summer": a still plant shadow drifting as the sun crosses the day. Reference: Kevin's banners (rust + forest green, botanical line work, leaf shadows, marker scrawl).
 
-#### Deliverables
-- Content audit report
-- Fixes for any violations
-- Updated content guidelines
+- Full-page fixed leaf/branch shadow layer (multiply blend, low opacity) behind content.
+- Scroll = time of day: shadow angle, length and softness shift, light warms from cool morning (top) to golden knock-off light (contact section). Occasional slow sway. GSAP ScrollTrigger scrub, synced with Lenis.
+- Reduced motion: one static shadow. No layout impact, no main-thread jank (transform/opacity/filter only).
+- Asset: Kevin's banner shadow source if available, otherwise a generated botanical silhouette.
 
-#### Acceptance Criteria
-- No invented claims in content
-- All CTAs properly routed
-- Brand spelling consistent throughout
+**Gate:** 60fps on a mid laptop; readable contrast everywhere the shadow passes; Kevin signs off on the look.
 
----
+## Phase 9 — Brand: Kevin's handwriting drawn down the page (Wave 3, after opening)
 
-## Backlog Items
+The marker writing on the banners is Kevin's own. Scroll draws his handwriting down the page, stroke by stroke, like it's being written as you read.
 
-These are potential future work items, not yet scheduled into milestones:
+- Get samples: Kevin writes the phrases (e.g. "Stop whinging", "Go on. Knock off early.", chapter notes) on paper or a tablet → vectorise to single-line SVG paths (centreline, not outlines, so stroke-dashoffset draw works).
+- ScrollTrigger scrub draws each phrase as its section enters; lines can connect down the page between sections.
+- Handwriting is accent only (notes, asides, callouts) — headings and body stay in the readable typefaces.
+- Likely replaces the Phase 2 line art for the scroll story.
 
-### Enhancements
-- [ ] Add additional page templates (About, Blog, Contact)
-- [ ] Integrate CMS for content management
-- [ ] Add analytics tracking
-- [ ] Implement theme switching
-- [ ] Add internationalization (i18n)
-- [ ] Enhance animation complexity
-- [ ] Add more interactive demos
+**Gate:** writing reads as Kevin's; draws smoothly both scroll directions; static and legible with reduced motion.
 
-### Technical
-- [ ] Upgrade dependencies to latest versions
-- [ ] Add unit/integration tests
-- [ ] Add Storybook for component development
-- [ ] Implement CI/CD pipeline
-- [ ] Add error tracking (Sentry)
-- [ ] Add performance monitoring
+## Phase 7 — Pre-launch QA (Wave 4)
 
-### Content
-- [ ] Add real client case studies (when available)
-- [ ] Add team bios
-- [ ] Add company story/history
-- [ ] Create video demonstrations
+Folds in the old milestones (performance/accessibility, content audit).
 
----
+- Lighthouse: Performance > 80 (desktop), Accessibility > 90.
+- Keyboard + screen-reader pass; reduced-motion pass.
+- Content audit per `AGENTS.md`: no invented claims, testimonials, outcomes or integrations; "Good'Ai" spelling; every CTA routes to a working destination.
+- Wire `@shadcn/lint` design contracts into `eslint.config.mjs` if not already done.
 
-## Priority Definitions
-
-- **Critical**: Must be done immediately, blocks other work
-- **High**: Important, should be done next
-- **Medium**: Nice to have, schedule when resources allow
-- **Low**: Backlog item, future consideration
-
-## Status Definitions
-
-- **Not Started**: Work not yet begun
-- **In Progress**: Actively being worked on
-- **Blocked**: Cannot proceed due to dependencies
-- **Review**: Code/implementation complete, awaiting review
-- **Done**: Complete and verified
-
----
-
-## Next Actions
-
-1. **Immediate**: Complete Milestone 1 (GSD initialization) - IN PROGRESS
-2. **Next**: Begin Milestone 2 (ProductDemo audit) once user confirms focus area
-3. **Optional**: User may want to define different first milestone based on their actual intent for referencing ProductDemo.tsx:74
-
----
-*Roadmap Version: 1.0*  
-*Last Updated: 2026-08-26*  
-*Next Review: Upon completion of Milestone 1*
-
-## Notes
-
-- The user referenced ProductDemo.tsx:74 multiple times. This roadmap assumes they want to audit/verify that component.
-- If the user has a different specific task in mind for ProductDemo, the roadmap can be adjusted.
-- All work must respect the constraints in AGENTS.md and REQUIREMENTS.md.
-
-### ⚡ Automation Phase (New)
-ProductDemo is evolving from illustrative examples to **real automations** when verified data contracts, access models, and workflow sources are defined (per updated AGENTS.md). This is a future enhancement beyond the current GSD phases.
+**Gate:** all of the above recorded in `STATE.md`; Kevin signs off.

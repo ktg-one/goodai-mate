@@ -6,8 +6,8 @@
 <title>Generative Branching Tree</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a0a; }
-  canvas { display: block; width: 100vw; height: 100vh; }
+  html, body { width: 100%; height: 100dvh; min-height: 100dvh; overflow: hidden; background: #0a0a0a; }
+  canvas { display: block; width: 100%; height: 100dvh; min-height: 100dvh; }
   .label {
     position: fixed;
     top: 20px;
@@ -48,6 +48,12 @@
   const HOLD_DURATION = 400;
   const FADE_DURATION = 180;
   const WAIT_DURATION = 80;
+  // Daytime sky palette: the host flips this via string replacement.
+  const DAYTIME = false;
+  // Pre-rendered full scene, baked once the tree stops growing. Holding
+  // and fading only blit this layer instead of re-stroking thousands
+  // of branches every frame — that full redraw is what made the page lag.
+  let staticLayer = null;
 
   // --- Pre-rendered particle sprite (soft dot) ---
   let particleSprite;
@@ -57,19 +63,27 @@
     particleSprite.height = 32;
     const pctx = particleSprite.getContext('2d');
     const g = pctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-    g.addColorStop(0, 'rgba(230, 200, 155, 1)');
-    g.addColorStop(0.3, 'rgba(215, 175, 130, 0.5)');
-    g.addColorStop(1, 'rgba(200, 150, 100, 0)');
+    if (DAYTIME) {
+      g.addColorStop(0, 'rgba(196, 158, 96, 1)');
+      g.addColorStop(0.3, 'rgba(190, 150, 92, 0.5)');
+      g.addColorStop(1, 'rgba(180, 140, 84, 0)');
+    } else {
+      g.addColorStop(0, 'rgba(230, 200, 155, 1)');
+      g.addColorStop(0.3, 'rgba(215, 175, 130, 0.5)');
+      g.addColorStop(1, 'rgba(200, 150, 100, 0)');
+    }
     pctx.fillStyle = g;
     pctx.fillRect(0, 0, 32, 32);
   }
 
   function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
+    W = canvas.width = (window.visualViewport && window.visualViewport.width) || window.innerWidth;
+    H = canvas.height = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+    staticLayer = null;
     initParticleSprite();
   }
   window.addEventListener('resize', resize);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', resize);
   resize();
 
   // --- Particle system ---
@@ -144,6 +158,13 @@
     let g = lerp(PALETTE[i0].g, PALETTE[i1].g, f);
     let b = lerp(PALETTE[i0].b, PALETTE[i1].b, f);
 
+    // Daytime: deepen the tones so the canopy keeps contrast on a light sky.
+    if (DAYTIME) {
+      r *= 0.8;
+      g *= 0.75;
+      b *= 0.68;
+    }
+
     // Per-branch hue variation (stronger at outer depths)
     // hueShift -1..1: negative = olive/green shift, positive = warm rose shift
     if (hueShift !== undefined) {
@@ -198,6 +219,8 @@
     treeState = 'growing';
     holdTimer = fadeTimer = waitTimer = 0;
     treeAlpha = 1;
+    growthFrame = 0;
+    staticLayer = null;
     initParticles();
   }
 
@@ -364,8 +387,8 @@
     // Alpha falloff at outer depths for graceful canopy edge
     const depthT = b.depth / MAX_DEPTH;
     const baseAlpha = b.depth <= 1 ? 0.95
-                    : b.depth <= 5 ? lerp(0.92, 0.7, depthT)
-                    : lerp(0.7, 0.35, (depthT - 0.5) * 2);
+                    : b.depth <= 5 ? lerp(0.92, DAYTIME ? 0.8 : 0.7, depthT)
+                    : lerp(DAYTIME ? 0.8 : 0.7, DAYTIME ? 0.5 : 0.35, (depthT - 0.5) * 2);
 
     // Determine stroke count by depth for performance
     const strokeCount = b.depth < 3 ? 5 : (b.depth < 6 ? 3 : 2);
@@ -446,58 +469,115 @@
   }
 
   // --- Scene ---
-  function drawScene(time) {
-    ctx.clearRect(0, 0, W, H);
+  function paintBackground(c) {
+    if (DAYTIME) {
+      const sky = c.createLinearGradient(0, 0, 0, H);
+      sky.addColorStop(0, '#dce8ea');
+      sky.addColorStop(0.55, '#ece9dc');
+      sky.addColorStop(1, '#f5f0e4');
+      c.fillStyle = sky;
+    } else {
+      c.fillStyle = '#0a0a0a';
+    }
+    c.fillRect(0, 0, W, H);
+  }
 
-    // Background
-    ctx.fillStyle = '#0a0a0a';
-    ctx.fillRect(0, 0, W, H);
+  function paintGlows(c) {
+    if (treeAlpha <= 0.05) return;
 
     // Ambient canopy glow (warm halo behind tree crown)
-    if (treeAlpha > 0.05) {
-      const cx = W / 2, cy = H * 0.38;
-      const canopyGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, H * 0.42);
+    const cx = W / 2, cy = H * 0.38;
+    const canopyGlow = c.createRadialGradient(cx, cy, 0, cx, cy, H * 0.42);
+    if (DAYTIME) {
+      canopyGlow.addColorStop(0, `rgba(255, 224, 158, ${0.26 * treeAlpha})`);
+      canopyGlow.addColorStop(0.5, `rgba(238, 198, 128, ${0.12 * treeAlpha})`);
+      canopyGlow.addColorStop(1, 'rgba(238, 198, 128, 0)');
+    } else {
       canopyGlow.addColorStop(0, `rgba(60, 36, 12, ${0.2 * treeAlpha})`);
       canopyGlow.addColorStop(0.5, `rgba(35, 20, 8, ${0.08 * treeAlpha})`);
       canopyGlow.addColorStop(1, 'rgba(10, 10, 10, 0)');
-      ctx.fillStyle = canopyGlow;
-      ctx.fillRect(0, 0, W, H);
     }
+    c.fillStyle = canopyGlow;
+    c.fillRect(0, 0, W, H);
 
     // Ground glow
-    if (treeAlpha > 0.05) {
-      const groundGrad = ctx.createRadialGradient(W / 2, H, 0, W / 2, H, H * 0.3);
+    const groundGrad = c.createRadialGradient(W / 2, H, 0, W / 2, H, H * 0.3);
+    if (DAYTIME) {
+      groundGrad.addColorStop(0, `rgba(172, 142, 88, ${0.12 * treeAlpha})`);
+      groundGrad.addColorStop(1, 'rgba(172, 142, 88, 0)');
+    } else {
       groundGrad.addColorStop(0, `rgba(70, 42, 12, ${0.1 * treeAlpha})`);
       groundGrad.addColorStop(1, 'rgba(10, 10, 10, 0)');
-      ctx.fillStyle = groundGrad;
-      ctx.fillRect(0, H * 0.55, W, H * 0.45);
     }
+    c.fillStyle = groundGrad;
+    c.fillRect(0, H * 0.55, W, H * 0.45);
+  }
 
-    recalcPositions(time);
-
-    // Draw branches
-    ctx.save();
-    ctx.globalAlpha = treeAlpha;
-    for (const b of allBranches) {
-      drawBranch(ctx, b, time);
+  function drawVignette(c) {
+    const vigGrad = c.createRadialGradient(W / 2, H / 2, W * 0.3, W / 2, H / 2, W * 0.78);
+    if (DAYTIME) {
+      vigGrad.addColorStop(0, 'rgba(110, 96, 66, 0)');
+      vigGrad.addColorStop(1, 'rgba(110, 96, 66, 0.10)');
+    } else {
+      vigGrad.addColorStop(0, 'rgba(10, 10, 10, 0)');
+      vigGrad.addColorStop(1, 'rgba(4, 4, 4, 0.3)');
     }
-    ctx.restore();
+    c.fillStyle = vigGrad;
+    c.fillRect(0, 0, W, H);
+  }
 
-    // Particles
+  function drawParticlesAndVignette(time) {
     updateParticles(time);
     ctx.save();
     drawParticles(ctx, treeAlpha);
     ctx.restore();
+    drawVignette(ctx);
+  }
 
-    // Vignette
-    const vigGrad = ctx.createRadialGradient(W / 2, H / 2, W * 0.3, W / 2, H / 2, W * 0.78);
-    vigGrad.addColorStop(0, 'rgba(10, 10, 10, 0)');
-    vigGrad.addColorStop(1, 'rgba(4, 4, 4, 0.3)');
-    ctx.fillStyle = vigGrad;
-    ctx.fillRect(0, 0, W, H);
+  // Bake background + glows + every branch into an offscreen canvas.
+  function renderStaticLayer(time) {
+    if (!staticLayer) staticLayer = document.createElement('canvas');
+    if (staticLayer.width !== W || staticLayer.height !== H) {
+      staticLayer.width = W;
+      staticLayer.height = H;
+    }
+    const c = staticLayer.getContext('2d');
+    paintBackground(c);
+    paintGlows(c);
+    recalcPositions(time);
+    c.save();
+    c.globalAlpha = treeAlpha;
+    for (const b of allBranches) {
+      drawBranch(c, b, time);
+    }
+    c.restore();
+  }
+
+  // Growth phase: full painterly redraw (throttled to every other frame).
+  function drawScene(time) {
+    renderStaticLayer(time);
+    ctx.drawImage(staticLayer, 0, 0);
+    drawParticlesAndVignette(time);
+  }
+
+  // Idle phases: blit the baked layer with a gentle whole-tree sway —
+  // the per-branch wind is a growing-phase detail, not worth thousands
+  // of strokes per frame.
+  function drawHeldScene(time) {
+    if (!staticLayer) renderStaticLayer(time);
+    paintBackground(ctx);
+    const lean = Math.sin(time * 0.0005) * 0.004 + windForce * 0.008;
+    ctx.save();
+    ctx.translate(W / 2, H);
+    ctx.rotate(lean);
+    ctx.translate(-W / 2, -H);
+    ctx.drawImage(staticLayer, 0, 0);
+    ctx.restore();
+    drawParticlesAndVignette(time);
   }
 
   // --- State machine ---
+  let growthFrame = 0;
   function frame(time) {
     // Decay shake
     if (shakeAmount > 0.01) shakeAmount *= 0.95;
@@ -506,15 +586,19 @@
     switch (treeState) {
       case 'growing': {
         const done = updateBranches(time);
-        drawScene(time);
         if (done) {
+          drawScene(time);
           treeState = 'holding';
           holdTimer = 0;
+        } else {
+          // Halve the redraw cost while growing; the growth itself
+          // masks the lower frame rate.
+          if (growthFrame++ % 2 === 0) drawScene(time);
         }
         break;
       }
       case 'holding': {
-        drawScene(time);
+        drawHeldScene(time);
         holdTimer++;
         if (holdTimer >= HOLD_DURATION) {
           treeState = 'fading';
@@ -525,7 +609,12 @@
       case 'fading': {
         fadeTimer++;
         treeAlpha = Math.max(0, 1 - fadeTimer / FADE_DURATION);
-        drawScene(time);
+        paintBackground(ctx);
+        ctx.save();
+        ctx.globalAlpha = treeAlpha;
+        ctx.drawImage(staticLayer, 0, 0);
+        ctx.restore();
+        drawParticlesAndVignette(time);
         if (fadeTimer >= FADE_DURATION) {
           treeState = 'waiting';
           waitTimer = 0;
@@ -533,9 +622,7 @@
         break;
       }
       case 'waiting': {
-        ctx.clearRect(0, 0, W, H);
-        ctx.fillStyle = '#0a0a0a';
-        ctx.fillRect(0, 0, W, H);
+        paintBackground(ctx);
         waitTimer++;
         if (waitTimer >= WAIT_DURATION) {
           createTree();

@@ -1,5 +1,8 @@
+"use client";
+
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 
+import "../threeui.css";
 import generativeTreeSource from "./sources/generative-tree.html.js";
 
 export type GenerativeTreeProps = {
@@ -10,6 +13,8 @@ export type GenerativeTreeProps = {
   hue?: number;
   saturation?: number;
   brightness?: number;
+  /** Daytime sky palette instead of the dark night background. */
+  daytime?: boolean;
   className?: string;
   style?: CSSProperties;
 };
@@ -22,17 +27,18 @@ export const GENERATIVE_TREE_DEFAULTS = {
   hue: 0,
   saturation: 1,
   brightness: 1,
+  daytime: false,
 } as const;
 
 function clamp(value: number, minimum: number, maximum: number) {
   return Math.min(maximum, Math.max(minimum, value));
 }
 
-function buildFocusedDocument(size: number, particleAmount: number) {
+function buildFocusedDocument(size: number, particleAmount: number, daytime: boolean) {
   const particleCount = Math.max(0, Math.round(50 * clamp(particleAmount, 0, 2)));
   const treePadding = 1 / clamp(size, 0.65, 1.5);
   const focusStyles = `<style data-generative-tree-focus>
-html, body, canvas { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #0a0a0a; }
+html, body, canvas { width: 100%; height: 100dvh; min-height: 100dvh; margin: 0; overflow: hidden; background: ${daytime ? "#f5f0e4" : "#0a0a0a"}; }
 .label { display: none !important; }
 </style>`;
   const controls = `<script data-generative-tree-controls>
@@ -66,6 +72,7 @@ html, body, canvas { width: 100%; height: 100%; margin: 0; overflow: hidden; bac
 
   return generativeTreeSource
     .replace(/<script[^>]+cloudflareinsights\.com[^>]*><\/script>/gi, "")
+    .replace("const DAYTIME = false;", `const DAYTIME = ${daytime ? "true" : "false"};`)
     .replace("</head>", `${focusStyles}${controls}</head>`)
     .replace("const PARTICLE_COUNT = 50;", `const PARTICLE_COUNT = ${particleCount};`)
     .replace(
@@ -108,6 +115,7 @@ export function GenerativeTree({
   hue = GENERATIVE_TREE_DEFAULTS.hue,
   saturation = GENERATIVE_TREE_DEFAULTS.saturation,
   brightness = GENERATIVE_TREE_DEFAULTS.brightness,
+  daytime = GENERATIVE_TREE_DEFAULTS.daytime,
   className = "",
   style,
 }: GenerativeTreeProps) {
@@ -116,7 +124,7 @@ export function GenerativeTree({
   const [documentVisible, setDocumentVisible] = useState(() => typeof document === "undefined" || !document.hidden);
   const safeSpeed = clamp(speed, 0, 3);
   const paused = !hostVisible || !documentVisible || safeSpeed === 0;
-  const source = useMemo(() => buildFocusedDocument(size, particleAmount), [particleAmount, size]);
+  const source = useMemo(() => buildFocusedDocument(size, particleAmount, daytime), [particleAmount, size, daytime]);
 
   const postControls = useCallback(() => {
     iframeRef.current?.contentWindow?.postMessage({
@@ -147,7 +155,7 @@ export function GenerativeTree({
   return (
     <div
       className={`threeui-background generative-tree${className ? ` ${className}` : ""}`}
-      style={{ background: "#0a0a0a", pointerEvents: "auto", ...style }}
+      style={{ background: daytime ? "#f5f0e4" : "#0a0a0a", pointerEvents: "auto", ...style }}
     >
       <iframe
         ref={iframeRef}

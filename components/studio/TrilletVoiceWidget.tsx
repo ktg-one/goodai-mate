@@ -255,7 +255,7 @@ export function TrilletVoiceWidget({
         {/* Voice Agent Slide-Up Panel */}
         {isOpen && (
           <div
-            className="w-[360px] sm:w-[400px] max-w-[calc(100vw-32px)] rounded-2xl bg-brand-navy border border-brand-paper/20 shadow-2xl overflow-hidden flex flex-col transition-[opacity,transform,border-color] duration-300 animate-in fade-in slide-in-from-bottom-6"
+            className="w-[360px] sm:w-[400px] max-w-[calc(100dvw-32px)] rounded-2xl bg-brand-navy border border-brand-paper/20 shadow-2xl overflow-hidden flex flex-col transition-[opacity,transform,border-color] duration-300 animate-in fade-in slide-in-from-bottom-6"
             style={{ maxHeight: "560px" }}
             role="region"
             aria-label="Good'Ai Voice Agent"

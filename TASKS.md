@@ -37,7 +37,11 @@ Updated: 2026-09-21T03:37Z
 
 ---
 
-## Ready to Execute (Next Session)
+## Current plan
+
+**Moved to [.planning/ROADMAP.md](.planning/ROADMAP.md)** (GSD phases and waves). State is in [.planning/STATE.md](.planning/STATE.md).
+
+## Previous list (2026-09-21)
 
 1. **Integrate Trillet AI Voice Agent Widget**:
    - Create `components/studio/TrilletVoiceWidget.tsx` using `@trillet-ai/web-sdk`.

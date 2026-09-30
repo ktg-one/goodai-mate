@@ -19,7 +19,9 @@ export function Preloader() {
             ? Promise.resolve()
             : new Promise<void>((resolve) => window.addEventListener("load", () => resolve(), { once: true }));
         const fontsReady = document.fonts?.ready.catch(() => undefined) ?? Promise.resolve();
-        const minimumDisplay = new Promise<void>((resolve) => window.setTimeout(resolve, 350));
+        // Match the progress-line duration so the loader never disappears in
+        // the middle of its own animation.
+        const minimumDisplay = new Promise<void>((resolve) => window.setTimeout(resolve, 1200));
 
         Promise.all([windowLoaded, fontsReady, minimumDisplay]).then(() => {
             if (disposed) return;
@@ -29,7 +31,7 @@ export function Preloader() {
                 setIsLoading(false);
                 window.setTimeout(() => {
                     delete document.documentElement.dataset.loading;
-                }, 800);
+                }, 450);
             }));
         });
 
@@ -45,8 +47,8 @@ export function Preloader() {
                 <motion.div
                     key="preloader"
                     initial={{ opacity: 1 }}
-                    exit={{ opacity: 0, y: "-4%" }}
-                    transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.45, ease: "easeOut" }}
                     className="fixed inset-0 z-[99999] flex items-center justify-center bg-black text-white"
                     role="status"
                     aria-label="Loading Good'Ai"
