@@ -16,6 +16,14 @@
 - **Voice:** Trillet widget exists, only on `/demo`, never tested with a real call (Phase 4).
 - **Leads:** the `/contact` form fakes success; nothing is sent (Phase 5).
 
+## Decided 2026-09-30
+
+- **No n8n for the site.** Instant work (demo email, lead alert) happens in a Next.js API route. Heavier work (deep dive, follow-ups) goes to an agent + skill on a schedule using the Google Workspace CLI. n8n on Railway (`gai-n8n-new`) is parked.
+- **Email via Resend.** Visitor-facing mail comes from `Good'Ai <mate@goodai.au>`, signed "Big Kev, Founder". Lead alerts go to `bigkev@goodai.au` (Workspace alias, which Kevin creates), with reply-to set to the lead. `sorted@` is reserved for invoices later. No personal name on the site yet.
+- **Content:** Instatic, self-hosted on Railway (BLOG project), admin `goodai.up.railway.app/admin`, posts at `/posts/<slug>`. Next.js keeps the intro, scroll story and demo.
+
+**Blocking the build:** `RESEND_API_KEY` in `.env.local` and goodai.au verified in Resend.
+
 ## Open decisions (Kevin)
 
 1. Scroll-story art: option a / b / c (Phase 2).

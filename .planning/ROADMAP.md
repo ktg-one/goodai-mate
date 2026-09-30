@@ -9,6 +9,7 @@
 - One branch + PR per phase (`phase/NN-slug`). Update `.planning/STATE.md` at the end of every phase.
 - **Waves**: phases in the same wave touch different files and can run in parallel (separate worktrees).
   A wave starts only when every phase in the previous wave is merged.
+- **Scroll motion rules (Kevin):** ~3 viewport heights of scroll per animation; enter → held, readable middle → exit, with calm space top and bottom; nothing faster than ~1.5s; every ScrollTrigger states its `start`/`end` explicitly with a comment.
 - Every phase gate includes `npm run lint` + `npm run build` clean, and desktop (1440) + mobile (390) screenshots with no horizontal overflow.
 - Site is **not open yet** — no live traffic, so nothing here is an incident.
 
