@@ -70,8 +70,12 @@ components:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.on-neutral}"
     borderColor: "{colors.line}"
+    typography: "{typography.body-lg}"
     rounded: "{rounded.lg}"
     padding: "{spacing.md}"
+    accentColor: "{colors.tertiary}"
+    accentTextColor: "{colors.on-tertiary}"
+    warningColor: "{colors.warning}"
     states:
       default: { backgroundColor: "{colors.surface}", borderColor: "{colors.line}" }
       hover: { backgroundColor: "{colors.wash}" }
@@ -99,7 +103,7 @@ components:
     typography: "{typography.body-sm}"
     states:
       default: { backgroundColor: "{colors.neutral}" }
-      hover: { backgroundColor: "{colors.wash}" }
+      hover: { backgroundColor: "{colors.wash}", arrowBackgroundColor: "{colors.primary}", arrowTextColor: "{colors.on-primary}" }
       active: { backgroundColor: "{colors.wash}" }
       pressed: { transform: "translateY(1px)" }
       disabled: { opacity: 0.5 }
@@ -123,6 +127,8 @@ components:
   scenario-control:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.on-neutral}"
+    activeBackgroundColor: "{colors.secondary}"
+    activeTextColor: "{colors.on-secondary}"
     rounded: "{rounded.sm}"
     typography: "{typography.label}"
     states:
@@ -135,6 +141,7 @@ components:
   rule-switch:
     backgroundColor: "{colors.line}"
     thumbColor: "{colors.neutral}"
+    activeBackgroundColor: "{colors.success}"
     rounded: "{rounded.full}"
     padding: "{spacing.xs}"
     states:
@@ -164,24 +171,24 @@ Scope applies to Next.js 16 App Router web interfaces across responsive viewport
 
 ## Colors
 The palette is built upon warm, earthy tones that invoke trust and clarity:
-- `primary` (#A4432B / Terracotta): Used for interactive primary actions, calls to action, brand punctuation, and focused accents.
-- `primary-hover` (#873821 / Deep Terracotta): Used for hover and active feedback states on primary controls.
-- `secondary` (#DCE3CC / Sage): Soft grounding surface for contact highlights, soft accents, and active switches.
-- `tertiary` (#A4432B): Aligned with primary terracotta for warning/alert highlights and critical calls to action.
-- `neutral` (#F7F5ED / Warm Paper): Warm paper canvas providing high-contrast readability without harsh stark white.
-- `surface` (#FFFEF9 / Warm White): Clean surface for elevated cards and interactive panels.
-- `wash` (#ECEEE3 / Soft Wash): Recessed background for alternate sections and hovered interactive components.
-- `line` (#D5D6CA / Subtle Divider): Hairline rules and borders separating content.
-- `muted` (#63685D / Muted Olive): Secondary copy, captions, and supporting label text.
-- `on-primary` (#F7F5ED): High-contrast text on terracotta surfaces.
-- `on-secondary` (#333B32 / Olive Ink): Dark olive ink text on sage backgrounds.
-- `on-tertiary` (#F7F5ED): High-contrast text on tertiary surfaces.
-- `on-neutral` (#333B32 / Olive Ink): Primary body text and headlines on paper and white surfaces.
-- `error` (#A4432B): Terracotta accent for error states and validation alerts.
-- `success` (#42583B / Success Olive): Dark green olive for completed steps and success indicators.
-- `warning` (#A4432B): Accent tone for warnings and inline notices.
+- `primary` ({colors.primary}): Terracotta accent used for interactive primary actions, calls to action, brand punctuation, and focused accents.
+- `primary-hover` ({colors.primary-hover}): Deep terracotta used for hover and active feedback states on primary controls.
+- `secondary` ({colors.secondary}): Soft sage surface for contact highlights, soft accents, and active switches.
+- `tertiary` ({colors.tertiary}): Aligned with terracotta for warning/alert highlights and critical calls to action.
+- `neutral` ({colors.neutral}): Warm paper canvas providing high-contrast readability without harsh stark white.
+- `surface` ({colors.surface}): Clean warm white surface for elevated cards and interactive panels.
+- `wash` ({colors.wash}): Recessed background for alternate sections and hovered interactive components.
+- `line` ({colors.line}): Hairline rules and dividers separating content.
+- `muted` ({colors.muted}): Secondary copy, captions, and supporting label text in muted olive.
+- `on-primary` ({colors.on-primary}): High-contrast paper text on terracotta surfaces.
+- `on-secondary` ({colors.on-secondary}): Dark olive ink text on sage backgrounds.
+- `on-tertiary` ({colors.on-tertiary}): High-contrast text on tertiary surfaces.
+- `on-neutral` ({colors.on-neutral}): Primary body text and headlines on paper and white surfaces.
+- `error` ({colors.error}): Terracotta accent for error states and validation alerts.
+- `success` ({colors.success}): Dark success olive for completed steps and success indicators.
+- `warning` ({colors.warning}): Terracotta tone for warnings and inline notices.
 
-All text/background token combinations strictly achieve ≥ 4.5:1 WCAG 2.2 AA contrast ratios (e.g., on-neutral/neutral is 10.61:1; muted/neutral is 5.24:1; primary/neutral is 5.63:1).
+All text and background token pairs strictly satisfy WCAG 2.2 AA contrast requirements (e.g., `{colors.on-neutral}` on `{colors.neutral}` is 10.61:1; `{colors.muted}` on `{colors.neutral}` is 5.24:1; `{colors.primary}` on `{colors.neutral}` is 5.63:1; `{colors.on-secondary}` on `{colors.secondary}` is 8.77:1; `{colors.success}` on `{colors.secondary}` is 5.91:1).
 
 ## Typography
 Typography uses Manrope as the primary sans-serif workhorse for clear readability, structured navigation, and interface controls.
@@ -193,11 +200,11 @@ Typography uses Manrope as the primary sans-serif workhorse for clear readabilit
   - `body-sm`: 13px, weight 400, line height 1.7.
   - `label`: 13px, weight 600, line height 1.65.
 
-Sentence case is preferred across all headings and body copy to maintain a approachable voice.
+Sentence case is preferred across all headings and body copy to maintain an approachable, conversational voice.
 
 ## Layout
 Grid & Spacing System:
-- Baseline spacing follows modular tokens: `xs` (8px), `sm` (16px), `md` (24px), `lg` (40px), `xl` (80px).
+- Baseline spacing follows modular tokens: `xs` ({spacing.xs}), `sm` ({spacing.sm}), `md` ({spacing.md}), `lg` ({spacing.lg}), `xl` ({spacing.xl}).
 - Maximum content width is capped at 1440px inside centered layout shells.
 - Breakpoints:
   - Narrow Mobile: <= 390px
@@ -208,7 +215,7 @@ Grid & Spacing System:
 Outer gutters adjust dynamically from 52px on desktop to 20px/16px on mobile.
 
 ## Elevation & Depth
-Elevation is maintained using subtle structural borders (`line`) and high-contrast surface transitions (`surface`, `wash`, `neutral`) rather than heavy drop shadows or decorative gradients.
+Elevation is maintained using subtle structural borders (`{colors.line}`) and high-contrast surface transitions (`{colors.surface}`, `{colors.wash}`, `{colors.neutral}`) rather than heavy drop shadows or decorative gradients.
 - Structural cards use a single subtle soft shadow for workflow focus (`0 18px 40px -28px #333b3240`).
 - Stacking order (Z-index):
   - Normal content: 0
@@ -217,23 +224,23 @@ Elevation is maintained using subtle structural borders (`line`) and high-contra
 
 ## Shapes
 Corner radii follow a functional hierarchy:
-- `sm` (4px): Small controls, form input fields, and scenario toggles.
-- `md` (5px): Buttons and primary action triggers.
-- `lg` (12px): Interactive workflow panels, cards, and detail containers.
-- `full` (9999px): Pill badges, switch tracks, and circular action icons.
+- `sm` ({rounded.sm}): Small controls, form input fields, and scenario toggles.
+- `md` ({rounded.md}): Buttons and primary action triggers.
+- `lg` ({rounded.lg}): Interactive workflow panels, cards, and detail containers.
+- `full` ({rounded.full}): Pill badges, switch tracks, and circular action icons.
 
 ## Components
 Interactive component families define complete state matrices (default, hover, active, pressed, disabled, focus, error) using semantic token references:
 
 - `button-primary`: Primary CTA button with min-height of 44px, using `{colors.primary}` background and `{colors.on-primary}` text.
 - `input-field`: Standard form text input using `{colors.surface}` background, `{colors.line}` border, and `{colors.primary}` focus ring.
-- `card`: Surface container using `{colors.surface}` and `{colors.lg}` radius.
-- `navigation`: Header navigation links with primary hover feedback and explicit focus outlines.
-- `service-row`: Full-width row item with hover wash background transition and arrow trigger.
-- `workflow`: Interactive scenario runner card with sage success indicators for completed steps.
-- `scenario-control`: Segmented button control for previewing workflow presets.
-- `rule-switch`: Accessible toggle switch using native button controls with Space/Enter support and `aria-checked`.
-- `disclosure`: Native details/summary accordion for FAQs with primary color hover states and keyboard focus rings.
+- `card`: Surface container using `{colors.surface}` and `{rounded.lg}` radius with optional `{colors.tertiary}` accent badges.
+- `navigation`: Header navigation links with primary hover feedback and explicit focus outlines using `{spacing.lg}` gap.
+- `service-row`: Full-width row item with `{colors.wash}` hover background transition, `{colors.muted}` secondary text, and arrow trigger.
+- `workflow`: Interactive scenario runner card with `{colors.secondary}` background and `{colors.success}` text for completed steps.
+- `scenario-control`: Segmented button control for previewing workflow presets with `{colors.secondary}` hover/active states.
+- `rule-switch`: Accessible toggle switch using native button controls with Space/Enter support, `{colors.success}` active track, and `aria-checked`.
+- `disclosure`: Native details/summary accordion for FAQs with `{colors.primary}` color hover states and keyboard focus rings.
 
 All interactive elements feature a standard visible focus ring: `2px solid {colors.primary}` with a `5px` offset (`focus-visible`).
 
