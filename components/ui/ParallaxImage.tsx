@@ -26,7 +26,7 @@ export function ParallaxImage({ alt, className }: ParallaxImageProps) {
             className={cn("relative overflow-hidden w-full h-full", className)}
         >
             <motion.div style={{ y, scale }} className="absolute inset-0 w-full h-full">
-                <div className="w-full h-full bg-neutral-200 dark:bg-neutral-800 animate-pulse flex items-center justify-center text-neutral-400">
+                <div className="w-full h-full bg-muted animate-pulse flex items-center justify-center text-muted-foreground">
                     {/* Placeholder for actual image if src is not provided or valid */}
                     <span className="text-xs uppercase tracking-widest">Image: {alt}</span>
                 </div>

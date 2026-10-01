@@ -1,109 +1,38 @@
 # Project State
 
-## Current handoff — 2026-09-15
+**Last updated:** 2026-09-30
+**Branch:** `revert/hero-tree-to-static-image` (uncommitted work — Phase 1 commits it)
+**Milestone:** v1.0 Launch — see `.planning/ROADMAP.md`
+**Site status:** not open yet; no live traffic.
 
-Scope correction from Kevin: this workspace is the assistant's one-shot studio
-fork; Kevin's version remains in main. Findings and tasks here apply to this
-fork only. A merge into Kevin's version has not been requested.
+## Where things are
 
-Active checklist: [TASKS.md](../TASKS.md). Phone number placement and the studio
-animation pass are implemented. Next: browser visual/interaction verification,
-then voice-agent and enquiry-flow verification. Continue authorised work;
-external call/submission and public release approval remain separate.
-Phone links were confirmed in served HTML and the browser accessibility tree.
-Screenshot and interaction commands failed even after fresh-tab recovery.
-ThreeUI control styling is implemented; lint/build passed in this conversation.
-Header/hero desktop/mobile and mobile workflow visuals were inspected.
-Interaction checks remain incomplete because browser control failed.
-The site is not finished or newly deployed. Older state below is historical.
+- **Top of home:** ThreeUI sketchbook (`components/studio/PerthSketchbook.tsx` → `src/shaders/sketchbook/`) with 7 Perth plates cut to transparent WebP in `public/sketchbook/plates/`. Intro flips from the busywork sketches and lands on Cottesloe.
+  - `sketchbookDocument.js` accepts `{ pages, land }` and patches the canonical source's arrow-click bug (stage pointer capture swallowed arrow clicks).
+  - `next.config.ts` sends CORS headers for `/sketchbook/*.woff2` (the iframe is sandboxed, origin `null`).
+- **Hero:** text-only, with a faint golden-spiral study on aged paper (`components/studio/HeroStudy.tsx`, `.hero::before` in `globals.css`). The photo was removed.
+- **Tree:** removed from home. Still on `/lab`. `HeroTree.tsx` and `HomeScroll.tsx` are dead code (Phase 1).
+- **Motion:** Lenis + preloader + the pinned scroll story only. Scroll reveals were removed in 1dac4ea (Phase 3).
+- **Voice:** Trillet widget exists, only on `/demo`, never tested with a real call (Phase 4).
+- **Leads:** the `/contact` form fakes success; nothing is sent (Phase 5).
 
-Palette update in this session: completed a targeted harmonization pass in
-`app/globals.css` with small token adjustments only (no full recolor), added a
-new semantic `--brand-eucalyptus-ink` token for text contrast, and aligned
-studio controls and ElevenLabs widget colors to shared variables. Lint and
-build passed after the changes. Fresh desktop and mobile screenshots were
-captured from `http://localhost:3011` and showed coherent palette behavior.
-Next operational task is now voice-agent runtime and enquiry-flow verification.
+## Decided 2026-09-30
 
-## Current Status
+- **No n8n for the site.** Instant work (demo email, lead alert) happens in a Next.js API route. Heavier work (deep dive, follow-ups) goes to an agent + skill on a schedule using the Google Workspace CLI. n8n on Railway (`gai-n8n-new`) is parked.
+- **Email via Resend.** Visitor-facing mail comes from `Good'Ai <mate@goodai.au>`, signed "Big Kev, Founder". Lead alerts go to `hello@goodai.au` (changed 2026-10-01 from `bigkev@` — Kevin doesn't want his name public; override with `CONTACT_TO_EMAIL`), with reply-to set to the lead. `sorted@` is reserved for invoices later. No personal name on the site yet.
+- **Content:** Instatic, self-hosted on Railway (BLOG project), admin `goodai.up.railway.app/admin`, posts at `/posts/<slug>`. Next.js keeps the intro, scroll story and demo.
 
-**Last Updated**: 2026-08-26  
-**Milestone**: Milestone 1 - GSD Initialization & Project Setup  
-**Phase**: 1 (ProductDemo Verification) - COMPLETE  
+**Blocking the build:** `RESEND_API_KEY` in `.env.local` and goodai.au verified in Resend.
 
-## Git State
+## Open decisions (Kevin)
 
-```
-Current branch: main
-Latest commit: aa0724f (HEAD -> main, origin/main)
-Commit message: chore: merge remote changes to AGENTS.md
+1. Scroll-story art: option a / b / c (Phase 2).
+2. Lead delivery: email provider + address, webhook target (Phase 5).
+3. Quick-dive output, runtime, model, cost cap, review step (Phase 6).
+4. Which untracked folders get committed (`klint/`, `.agents/`, `bun.lock`, `skills-lock.json`).
 
-Recent commit history:
-- aa0724f - chore: merge remote changes to AGENTS.md
-- ff3e4fb - Merge branch 'main' of https://github.com/ktg-one/goodai-mate
-- 2b2126e - feat: add placeholder services to carousel (12 total)
-- e29f507 - fix: remove unused ESLint variables
-- 3e035bc - feat: initialize GSD workflows and clean up aspect ratios
-```
+## Next
 
-## Working Tree
-
-**Uncommitted Changes Detected:**
-- `components/sections/ProductDemo.tsx` - Aspect ratio cleanup (line 74)
-- `components/sections/Features.tsx` - Pending review (content changes)
-- `.planning/STATE.md` - Updated with latest git state
-
-**Pushed to origin**: All GSD commits deployed
-
-## Build Status
-
-- **Lint**: Not yet run in this session
-- **Build**: Not yet run in this session
-- **Tests**: No test suite configured
-
-## Environment
-
-- **Node.js**: 18+
-- **npm**: 10+
-- **Next.js**: 16.0.8
-- **React**: 19.2.1
-- **TypeScript**: ^5
-- **Tailwind CSS**: v4
-
-## Deployments
-
-- Platform: Vercel (configured via vercel.json)
-- Production URL: Not specified in project files
-- Preview deployments: Available via Vercel
-
-## Known Issues
-
-None identified at initialization.
-
-## In Progress
-
-- GSD workflow initialization (completed: PROJECT.md, config.json, STATE.md, REQUIREMENTS.md, ROADMAP.md)
-- All Milestone 1 deliverables complete
-
-## Blockers
-
-None
-
-## Recent Changes Summary
-
-Based on commit history, the project has recently:
-1. Connected a live intake form (latest feature)
-2. Fixed brand capitalization ('a' -> 'A'?)
-3. Fixed link to Railway content backend
-4. Launched the new site
-5. Fixed GSAP wrapping issue in GoodAIt hero section
-
-## Next Actions
-
-1. Complete GSD initialization (REQUIREMENTS.md, ROADMAP.md)
-2. Define first milestone based on user's work focus
-3. User referenced `ProductDemo.tsx:74` - investigate if work is needed there
-
----
-*GSD State File*  
-*Format: Markdown with structured sections for agent consumption*
+Open gate = Phase 1 + Phase 5 (working CTA form) + smoke check. Run Phase 1 alone, then Phase 5 first in Wave 2.
+Brand direction after opening: Phase 8 (sun-moving plant shadow) and Phase 9 (Kevin's handwriting drawn down the page on scroll).
+Also running: original Aug-26 site at `../goodai-original` (git worktree, `npm run dev` on :3001) for reference only.

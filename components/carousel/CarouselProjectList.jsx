@@ -9,7 +9,7 @@ export function CarouselProjectList({ listRef, itemsRef }) {
         style={{
           fontFamily: '"DM Sans", ui-sans-serif, system-ui, sans-serif',
         }}
-        className="pointer-events-none absolute right-[12vw] top-[2.4vh] z-10 flex flex-col items-start text-right leading-[1.4] tracking-[0.01em] text-[var(--ink)] opacity-0 max-sm:hidden"
+        className="pointer-events-none absolute right-[12dvw] top-[2.4dvh] z-10 flex flex-col items-start text-right leading-[1.4] tracking-[0.01em] text-[var(--ink)] opacity-0 max-sm:hidden"
       >
         {PROJECTS.map((p, i) => (
           <li

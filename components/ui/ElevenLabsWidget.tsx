@@ -9,31 +9,25 @@ export function ElevenLabsWidget() {
   const lenis = useLenis();
 
   useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout;
+    let scrollTimeout: NodeJS.Timeout | null = null;
 
     const handleScroll = () => {
       setIsVisible(false);
-      clearTimeout(scrollTimeout);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
         setIsVisible(true);
       }, 500); // 500ms delay after scrolling stops
     };
 
+    window.addEventListener("scroll", handleScroll, { passive: true });
     if (lenis) {
-        lenis.on('scroll', handleScroll);
-        window.addEventListener("scroll", handleScroll, { passive: true });
-    } else {
-        window.addEventListener("scroll", handleScroll, { passive: true });
+      lenis.on("scroll", handleScroll);
     }
 
     return () => {
-      if (lenis) {
-          lenis.off('scroll', handleScroll);
-          window.removeEventListener("scroll", handleScroll);
-      } else {
-          window.removeEventListener("scroll", handleScroll);
-      }
-      clearTimeout(scrollTimeout);
+      if (lenis) lenis.off("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
     };
   }, [lenis]);
 

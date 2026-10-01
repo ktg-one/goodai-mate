@@ -47,7 +47,7 @@ export function CTA() {
                     transition={{ duration: 0.8, delay: 0.2 }}
                     className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
                 >
-                    <Button asChild size="lg" className="rounded-full px-8 h-14 text-sm sm:text-base font-bold bg-brand-coral text-brand-navy hover:bg-brand-paper transition-all shadow-[0_0_25px_rgba(255,111,97,0.35)]">
+                    <Button asChild size="lg" className="rounded-full px-8 h-14 text-sm sm:text-base font-bold bg-brand-coral text-brand-paper hover:bg-brand-paper hover:text-brand-ink transition-colors shadow-[0_0_25px_rgba(255,111,97,0.35)]">
                         <a href={PHONE_HREF} className="flex items-center gap-2.5">
                             <PhoneCall className="w-4 h-4" />
                             Call Voice Agent: {PHONE_DISPLAY}

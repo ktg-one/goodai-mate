@@ -10,16 +10,18 @@ export function BrandedElevenLabsWidget() {
   const lenis = useLenis();
 
   useEffect(() => {
-    let scrollStopTimer: NodeJS.Timeout;
+    let scrollStopTimer: NodeJS.Timeout | null = null;
 
     const handleScroll = () => {
       const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const heroThreshold = window.innerHeight * 0.65;
+      const heroThreshold =
+        ((window.visualViewport && window.visualViewport.height) ||
+          window.innerHeight) * 0.65;
 
       setPastHero(scrollY > heroThreshold);
       setIsScrolling(true);
 
-      clearTimeout(scrollStopTimer);
+      if (scrollStopTimer) clearTimeout(scrollStopTimer);
       scrollStopTimer = setTimeout(() => {
         setIsScrolling(false);
       }, 350);
@@ -32,13 +34,19 @@ export function BrandedElevenLabsWidget() {
       lenis.on("scroll", handleScroll);
     }
     window.addEventListener("scroll", handleScroll, { passive: true });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", handleScroll);
+    }
 
     return () => {
-      clearTimeout(scrollStopTimer);
+      if (scrollStopTimer) clearTimeout(scrollStopTimer);
       if (lenis) {
         lenis.off("scroll", handleScroll);
       }
       window.removeEventListener("scroll", handleScroll);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", handleScroll);
+      }
     };
   }, [lenis]);
 

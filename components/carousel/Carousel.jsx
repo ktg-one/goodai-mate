@@ -11,7 +11,7 @@ export default function Carousel({ hero = false }) {
   return (
     <section
       aria-label="Good'Ai work and services"
-      className={hero ? "carousel-hero-stage relative isolate overflow-hidden bg-[var(--paper)]" : "relative isolate h-screen min-h-[640px] overflow-hidden bg-[var(--paper)]"}
+      className={hero ? "carousel-hero-stage relative isolate w-full overflow-hidden bg-[var(--paper)]" : "relative isolate min-h-[max(640px,100dvh)] w-full overflow-hidden bg-[var(--paper)]"}
       style={{
         "--ink": "var(--brand-ink)",
         "--paper": "var(--brand-paper)",

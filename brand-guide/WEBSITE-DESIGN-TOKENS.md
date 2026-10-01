@@ -158,7 +158,7 @@ Navigation: inline mobile disclosure with aria-expanded and Escape-to-close with
 
 Workflow: three pressed-state scenario buttons, an immediate local run/reset action, and a polite completion status. It neither sends messages nor reads real client data. Full dashboard tabs use Radix keyboard navigation. Rule switches support Space/Enter through native buttons and announce checked state.
 
-Disclosure: native details/summary for questions. Hover and focus keep the text readable; the plus changes when open. There are no form inputs on this site; the central enquiry action opens the existing Google Form.
+Disclosure: native details/summary for questions. Hover and focus keep the text readable; the plus changes when open. The central enquiry action opens the dedicated contact page intake form.
 
 Voice: explicitly opt-in. Loading and script failure are described inline; a successful script load exposes the existing provider widget. A live conversation and microphone permission require the visitor’s action. No loading skeleton is needed for static site copy.
 

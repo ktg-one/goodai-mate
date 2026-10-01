@@ -87,3 +87,5 @@ Generation: built-in image tool, model version not exposed. The requested
 transparent icon is raster artwork, not a layered SVG. The exact prompt is in
 `docs/logo-generation-prompt.md`. No claim of trademark clearance or
 production-ready vector geometry is made.
+
+ 

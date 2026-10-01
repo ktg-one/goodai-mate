@@ -41,9 +41,9 @@ export function FAQ() {
                 </motion.div>
 
                 <Accordion type="single" collapsible className="w-full">
-                    {faqs.map((faq, index) => (
-                        <AccordionItem key={index} value={`item-${index}`}>
-                            <AccordionTrigger className="text-lg text-left focus-visible:ring-2 focus-visible:ring-brand-coral focus-visible:outline-none px-2 rounded">{faq.question}</AccordionTrigger>
+                    {faqs.map((faq) => (
+                        <AccordionItem key={faq.question} value={faq.question}>
+                            <AccordionTrigger className="text-lg text-left">{faq.question}</AccordionTrigger>
                             <AccordionContent className="text-brand-ink/70 text-base leading-relaxed">
                                 {faq.answer}
                             </AccordionContent>

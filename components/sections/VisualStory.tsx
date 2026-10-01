@@ -29,6 +29,7 @@ const storySteps = [
 export function VisualStory() {
     const containerRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
+    const visualRef = useRef<HTMLDivElement>(null);
     const [activeChapter, setActiveChapter] = useState(0);
 
     useEffect(() => {
@@ -38,12 +39,14 @@ export function VisualStory() {
                 trigger: triggerRef.current,
                 start: "top top",
                 end: "bottom bottom",
-                pin: ".story-visual",
-                scrub: true,
+                pin: visualRef.current,
+                scrub: 1,
+                anticipatePin: 1,
+                invalidateOnRefresh: true,
             });
 
             // Animate text sections opacity
-            const sections = gsap.utils.toArray<HTMLElement>(".story-text-section");
+            const sections = gsap.utils.toArray<HTMLElement>(".story-text-section", containerRef.current);
             sections.forEach((section) => {
                 gsap.fromTo(
                     section,
@@ -51,22 +54,24 @@ export function VisualStory() {
                     {
                         opacity: 1,
                         y: 0,
+                        ease: "none",
                         scrollTrigger: {
                             trigger: section,
-                            start: "top center",
-                            end: "bottom center",
-                            scrub: true,
+                            start: "top 82%",
+                            end: "top 34%",
+                            scrub: 1,
+                            invalidateOnRefresh: true,
                         },
                     }
                 );
             });
 
             // Change visual colors based on scroll position - simplified approach
-            storySteps.forEach((step, i) => {
+            sections.forEach((section, i) => {
                 ScrollTrigger.create({
-                    trigger: `.story-text-${i}`,
-                    start: "top center",
-                    end: "bottom center",
+                    trigger: section,
+                    start: "top 70%",
+                    end: "bottom 35%",
                     onEnter: () => setActiveChapter(i),
                     onEnterBack: () => setActiveChapter(i),
                 });
@@ -85,8 +90,8 @@ export function VisualStory() {
                     <div className="flex flex-col">
                         {storySteps.map((step, index) => (
                             <div
-                                key={index}
-                                className={`story-text-section story-text-${index} h-screen flex flex-col justify-center px-8 md:px-20`}
+                                key={step.title}
+                                className={`story-text-section story-text-${index} min-h-[100dvh] flex flex-col justify-center px-8 md:px-20`}
                             >
                                 <span className="text-sm font-mono text-brand-coral mb-4">0{index + 1}</span>
                                 <h3 className="text-4xl md:text-6xl font-bold mb-6 tracking-wide">{step.title}</h3>
@@ -99,9 +104,9 @@ export function VisualStory() {
                 </div>
 
                 {/* Right Side: Sticky Visual */}
-                <div className="hidden md:flex story-visual w-1/2 h-screen sticky top-0 bg-brand-paper border-l border-brand-ink items-center justify-center overflow-hidden">
+                <div ref={visualRef} className="hidden md:flex story-visual w-1/2 h-[100dvh] min-h-[100dvh] sticky top-0 bg-brand-paper border-l border-brand-ink items-center justify-center overflow-hidden">
                     {/* Chapter Visuals */}
-                    <div className="sticky top-0 h-screen w-full flex items-center justify-center p-8">
+                    <div className="sticky top-0 h-[100dvh] min-h-[100dvh] w-full flex items-center justify-center p-8">
                         <div className="relative w-full aspect-square overflow-hidden border border-brand-ink shadow-[8px_8px_0_var(--brand-coral)]">
                             <AnimatePresence mode="wait">
                                 <motion.div
