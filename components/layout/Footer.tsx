@@ -24,15 +24,15 @@ export function Footer() {
                 <div className="flex flex-col gap-4">
                     <h4 className="font-semibold text-sm">Good&apos;Ai</h4>
                     <Link href="#story" className="text-sm text-brand-paper/65 hover:text-brand-coral">Our approach</Link>
-                    <Link href="https://goodai.up.railway.app/" className="text-sm text-brand-paper/65 hover:text-brand-coral">Field notes</Link>
+                    <a href="https://goodai.up.railway.app/" target="_blank" rel="noopener noreferrer" className="text-sm text-brand-paper/65 hover:text-brand-coral">Field notes</a>
                     <Link href="#testimonials" className="text-sm text-brand-paper/65 hover:text-brand-coral">What we work on</Link>
-                    <Link href={SURVEY_URL} className="text-sm text-brand-paper/65 hover:text-brand-coral">Contact</Link>
+                    <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-brand-paper/65 hover:text-brand-coral">Contact</a>
                 </div>
 
                 <div className="flex flex-col gap-4">
                     <h4 className="font-semibold text-sm">Legal</h4>
-                    <Link href="#" className="text-sm text-brand-paper/65 hover:text-brand-coral">Privacy</Link>
-                    <Link href="#" className="text-sm text-brand-paper/65 hover:text-brand-coral">Terms</Link>
+                    <Link href="/privacy" className="text-sm text-brand-paper/65 hover:text-brand-coral">Privacy</Link>
+                    <Link href="/terms" className="text-sm text-brand-paper/65 hover:text-brand-coral">Terms</Link>
                 </div>
             </div>
 

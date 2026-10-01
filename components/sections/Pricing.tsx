@@ -62,7 +62,7 @@ export function Pricing() {
                             </ul>
                         </div>
                         <Button asChild variant="outline" className="w-full rounded-full py-6 border-brand-ink bg-brand-paper text-brand-ink hover:bg-brand-eucalyptus transition-colors">
-                            <a href={SURVEY_URL}>Tell us your problem</a>
+                            <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer">Tell us your problem</a>
                         </Button>
                     </div>
 
@@ -82,7 +82,7 @@ export function Pricing() {
                             </ul>
                         </div>
                         <Button asChild className="w-full rounded-full py-6 bg-brand-coral text-brand-ink hover:bg-brand-paper transition-colors font-medium">
-                            <a href={SURVEY_URL}>Talk through a sprint</a>
+                            <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer">Talk through a sprint</a>
                         </Button>
                     </div>
 
@@ -96,7 +96,7 @@ export function Pricing() {
                             </ul>
                         </div>
                         <Button asChild variant="outline" className="w-full rounded-full py-6 border-brand-ink bg-brand-paper text-brand-ink hover:bg-brand-eucalyptus transition-colors">
-                            <a href={SURVEY_URL}>Talk to us</a>
+                            <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer">Talk to us</a>
                         </Button>
                     </div>
 
