@@ -171,6 +171,10 @@ export function TrilletVoiceWidget({
 
       const data = await response.json();
 
+      if (!response.ok || data.error) {
+        throw new Error(data.error || "Voice call initialization failed");
+      }
+
       if (data.mode === "authenticated" && data.connection) {
         // Secure server-minted room join
         await agent.joinRoom(data);
