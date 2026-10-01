@@ -2,15 +2,46 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
-import { SURVEY_URL, PHONE_HREF, PHONE_DISPLAY } from "./links";
+import { SURVEY_URL, PHONE_HREF, PHONE_DISPLAY, isValidTelUri, isValidExternalUrl } from "./links";
 
 test("SURVEY_URL is a valid HTTPS Google Form URL", () => {
   assert.ok(SURVEY_URL.startsWith("https://docs.google.com/forms/"));
   assert.doesNotThrow(() => new URL(SURVEY_URL));
+  assert.strictEqual(isValidExternalUrl(SURVEY_URL), true);
 });
 
 test("PHONE_HREF is a valid tel: URI", () => {
   assert.ok(PHONE_HREF.startsWith("tel:+"));
+  assert.strictEqual(isValidTelUri(PHONE_HREF), true);
+});
+
+test("isValidTelUri correctly validates E.164 tel: URIs", () => {
+  // Happy paths
+  assert.strictEqual(isValidTelUri(PHONE_HREF), true);
+  assert.strictEqual(isValidTelUri("tel:+61877414191"), true);
+  assert.strictEqual(isValidTelUri("tel:+12125550199"), true);
+
+  // Failure cases / Boundary conditions
+  assert.strictEqual(isValidTelUri("tel:0877414191"), false, "Missing leading + sign");
+  assert.strictEqual(isValidTelUri("tel:+012345"), false, "Country code cannot start with 0");
+  assert.strictEqual(isValidTelUri("tel:+1234567890123456"), false, "Exceeds 15 digits");
+  assert.strictEqual(isValidTelUri("javascript:alert(1)"), false, "Non-tel protocol");
+  assert.strictEqual(isValidTelUri(""), false, "Empty string");
+  assert.strictEqual(isValidTelUri("   "), false, "Whitespace string");
+});
+
+test("isValidExternalUrl correctly validates HTTP/HTTPS URLs", () => {
+  // Happy paths
+  assert.strictEqual(isValidExternalUrl(SURVEY_URL), true);
+  assert.strictEqual(isValidExternalUrl("https://example.com"), true);
+  assert.strictEqual(isValidExternalUrl("http://localhost:3000"), true);
+
+  // Failure cases / Boundary conditions
+  assert.strictEqual(isValidExternalUrl("ftp://example.com"), false, "Non-HTTP/HTTPS protocol");
+  assert.strictEqual(isValidExternalUrl("javascript:alert(1)"), false, "Script injection attempt");
+  assert.strictEqual(isValidExternalUrl("/relative/path"), false, "Relative URL path");
+  assert.strictEqual(isValidExternalUrl("not-a-url"), false, "Plain string");
+  assert.strictEqual(isValidExternalUrl(""), false, "Empty string");
 });
 
 test("PHONE_DISPLAY is formatted", () => {
