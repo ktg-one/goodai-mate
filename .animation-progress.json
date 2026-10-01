@@ -1,0 +1,63 @@
+[
+  {
+    "id": "header-nav-links",
+    "component": "components/layout/Navbar.tsx",
+    "type": "hover/underline",
+    "status": "completed",
+    "notes": "Implemented Framer Motion layoutId dynamic hover underline animation with GPU-accelerated transforms (scaleX, opacity), prefers-reduced-motion compliance via useReducedMotion, and smooth >=1.0s movement duration curves."
+  },
+  {
+    "id": "hero-cta-buttons",
+    "component": "components/sections/Hero.tsx",
+    "type": "hover/magnetic",
+    "status": "pending"
+  },
+  {
+    "id": "interactive-workflow-canvas",
+    "component": "components/ui/InteractiveWorkflowCanvas.tsx",
+    "type": "line/draw",
+    "status": "pending"
+  },
+  {
+    "id": "features-cards",
+    "component": "components/sections/Features.tsx",
+    "type": "hover/card-tilt",
+    "status": "pending"
+  },
+  {
+    "id": "pricing-cards",
+    "component": "components/sections/Pricing.tsx",
+    "type": "hover/card-scale",
+    "status": "pending"
+  },
+  {
+    "id": "faq-accordion",
+    "component": "components/sections/FAQ.tsx",
+    "type": "micro-interaction/expand",
+    "status": "pending"
+  },
+  {
+    "id": "cta-section-buttons",
+    "component": "components/sections/CTA.tsx",
+    "type": "hover/pulse-glow",
+    "status": "pending"
+  },
+  {
+    "id": "footer-nav-links",
+    "component": "components/layout/Footer.tsx",
+    "type": "hover/underline",
+    "status": "pending"
+  },
+  {
+    "id": "voice-widget-waveform",
+    "component": "components/ui/BrandedElevenLabsWidget.tsx",
+    "type": "micro-interaction/waveform",
+    "status": "pending"
+  },
+  {
+    "id": "services-carousel",
+    "component": "components/sections/ServicesCarousel.tsx",
+    "type": "scroll/parallax",
+    "status": "pending"
+  }
+]
