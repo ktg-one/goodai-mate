@@ -77,7 +77,7 @@ export function TrilletVoiceWidget({
   const startPolling = useCallback(() => {
     let lastCount = 0;
     pollIntervalRef.current = setInterval(() => {
-      if (!agentRef.current || status !== "connected") return;
+      if (!agentRef.current) return;
       try {
         const list = agentRef.current.getTranscripts?.() || [];
         for (let i = lastCount; i < list.length; i++) {
