@@ -18,6 +18,7 @@ export function SussTheFussCard() {
   const [contact, setContact] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const toggleChip = (id: string) => {
     setSelected((prev) =>
@@ -25,15 +26,32 @@ export function SussTheFussCard() {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!contact.trim()) return;
     setSubmitting(true);
-    // Simulate swift receipt
-    setTimeout(() => {
-      setSubmitting(false);
+    setError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          headaches: selected.map((id) => HEADACHES.find((h) => h.id === id)?.label ?? id),
+          note: fussNote,
+          contact,
+          website: new FormData(e.currentTarget).get("website") ?? "",
+        }),
+      });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(data.error || "We couldn’t send that just now.");
+      }
       setSubmitted(true);
-    }, 450);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "We couldn’t send that just now.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -146,6 +164,9 @@ export function SussTheFussCard() {
               </button>
             </div>
           </div>
+
+          <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="sr-only" />
+          {error && <p role="alert" className="text-sm text-brand-coral">{error}</p>}
 
           {/* Mate-ship Trust Bar */}
           <div className="suss-trust">

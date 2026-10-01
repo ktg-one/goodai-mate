@@ -49,18 +49,24 @@ export function Preloader() {
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.45, ease: "easeOut" }}
-                    className="fixed inset-0 z-[99999] flex items-center justify-center bg-black text-white"
+                    className="fixed inset-0 z-[99999] flex items-center justify-center bg-brand-paper text-brand-ink"
                     role="status"
                     aria-label="Loading Good'Ai"
                 >
                     <div className="flex flex-col items-center">
-                        <span className="font-display text-5xl md:text-7xl leading-none">Good&apos;Ai</span>
+                        <motion.span
+                            initial={{ opacity: 0, y: 18 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                            className="wordmark wordmark-loading"
+                            aria-hidden="true"
+                        >Good<span className="brand-apostrophe">’</span>Ai<span className="brand-period">.</span></motion.span>
                         <motion.div
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: [0, 0.72, 1] }}
                             transition={{ duration: 1.2, times: [0, 0.75, 1], ease: [0.76, 0, 0.24, 1] }}
                             transformTemplate={({ scaleX }) => `scaleX(${scaleX})`}
-                            className="mt-8 h-px w-48 origin-left bg-white"
+                            className="mt-8 h-px w-48 origin-left bg-brand-coral"
                         />
                     </div>
                 </motion.div>

@@ -251,6 +251,7 @@ em {
 .brand-apostrophe,.brand-period {
   color: var(--rust);
 }
+.wordmark-loading { font-size: clamp(56px, 9vw, 96px); }
 .desktop-nav {
   display: flex;
   align-items: center;

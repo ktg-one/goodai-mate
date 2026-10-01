@@ -31,6 +31,9 @@ export function createSketchbookDocument(assetBaseUrl = "/sketchbook/", { pages,
     "stage.addEventListener('pointerdown',e=>{\n  if(e.button!==0)return;",
     "stage.addEventListener('pointerdown',e=>{\n  if(e.button!==0||e.target.closest('.sb-arrow'))return;",
   );
+  // The intro riffle is slow, fast-forward, slow. The canonical ends are 0.26s a
+  // flip, too quick to read the plates; give the first and last flips 0.6s.
+  html = html.replace("dur:0.26-0.19*bell", "dur:0.6-0.52*bell");
   const withAssets = html.replaceAll("sketchbook/", base);
   return withAssets
     .replace("</head>", `${HOST_STYLE}</head>`)
