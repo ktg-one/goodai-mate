@@ -51,7 +51,7 @@ function walk(dir) {
       failures.push(`TRIPWIRE_STORY: ${relative} uses toggleActions for narrative motion.`);
     }
 
-    if (/pin:\s*true/.test(source) && !/end:\s*(?:["'`]|\()/.test(source)) {
+    if (/pin:\s*true/.test(source) && !/\bend\s*:/.test(source)) {
       failures.push(`UNBOUNDED_PIN: ${relative} pins content without an explicit end.`);
     }
 
