@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   Play,
   RotateCcw,
@@ -247,6 +247,7 @@ export function InteractiveWorkflowCanvas({
   const [step, setStep] = useState<number>(0); // 0 = idle, 1 = trigger, 2 = ai, 3 = actions, 4 = complete
   const [soundEnabled, setSoundEnabled] = useState(true);
   const timerRef = useRef<NodeJS.Timeout[]>([]);
+  const shouldReduceMotion = useReducedMotion();
 
   const scenario = SCENARIOS.find((s) => s.id === activeScenarioId) || SCENARIOS[0];
 
@@ -399,7 +400,74 @@ export function InteractiveWorkflowCanvas({
       </div>
 
       {/* Canvas Area: n8n Connected Nodes */}
-      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center py-4">
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center py-2">
+        {/* Dynamic Animated Connecting SVG Lines between Nodes (Desktop Overlay) */}
+        <div className="absolute inset-0 pointer-events-none hidden lg:block z-20">
+          <svg className="w-full h-full overflow-visible" viewBox="0 0 1000 300" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="gradient-trigger-ai" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="var(--brand-coral)" />
+                <stop offset="100%" stopColor="var(--brand-teal)" />
+              </linearGradient>
+              <linearGradient id="gradient-ai-action" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="var(--brand-teal)" />
+                <stop offset="100%" stopColor="var(--brand-paper)" />
+              </linearGradient>
+            </defs>
+
+            {/* Connection Line 1: Trigger -> AI Brain */}
+            <path
+              d="M 250 150 L 333 150"
+              stroke="var(--brand-paper)"
+              strokeOpacity="0.15"
+              strokeWidth="2"
+              strokeDasharray="4 4"
+              fill="none"
+            />
+            <motion.path
+              d="M 250 150 L 333 150"
+              stroke="url(#gradient-trigger-ai)"
+              strokeWidth="3"
+              strokeLinecap="round"
+              fill="none"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{
+                pathLength: step >= 2 ? 1 : 0,
+                opacity: step >= 2 ? 1 : 0,
+              }}
+              transition={{
+                duration: shouldReduceMotion ? 0 : 1.2,
+                ease: "easeInOut",
+              }}
+            />
+
+            {/* Connection Line 2: AI Brain -> Parallel Branch Actions */}
+            <path
+              d="M 583 150 L 666 150"
+              stroke="var(--brand-paper)"
+              strokeOpacity="0.15"
+              strokeWidth="2"
+              strokeDasharray="4 4"
+              fill="none"
+            />
+            <motion.path
+              d="M 583 150 L 666 150"
+              stroke="url(#gradient-ai-action)"
+              strokeWidth="3"
+              strokeLinecap="round"
+              fill="none"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{
+                pathLength: step >= 3 ? 1 : 0,
+                opacity: step >= 3 ? 1 : 0,
+              }}
+              transition={{
+                duration: shouldReduceMotion ? 0 : 1.2,
+                ease: "easeInOut",
+              }}
+            />
+          </svg>
+        </div>
         
         {/* Node 1: Inbound Trigger */}
         <div className="lg:col-span-3 flex flex-col items-center">
