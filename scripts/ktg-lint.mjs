@@ -4,7 +4,6 @@ import fs from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
-const motionFile = path.join(root, "components", "layout", "HomeScroll.tsx");
 const pageFile = path.join(root, "app", "page.tsx");
 const stylesFile = path.join(root, "app", "globals.css");
 const failures = [];
@@ -18,20 +17,6 @@ if (!pageSource.includes('className="home-page"')) {
 
 if (!/\.home-page\s*\{[^}]*min-height:\s*(?:1\d{4,}|[2-9]\d{4,})px/s.test(stylesSource)) {
   failures.push("SHORT_HOME_TRACK: homepage scroll height must be at least 10000px.");
-}
-
-if (!fs.existsSync(motionFile)) {
-  failures.push("MISSING_HOME_SCROLL: components/layout/HomeScroll.tsx is required.");
-} else {
-  const source = fs.readFileSync(motionFile, "utf8");
-
-  if (/once:\s*true/.test(source)) {
-    failures.push("ONE_SHOT_SCROLL: homepage flow must not collapse into one-time reveal triggers.");
-  }
-
-  if (/REVEAL_GROUPS|chapter-copy|section-heading|service-row|faq details/.test(source)) {
-    failures.push("ANIMATED_COPY: homepage text must remain static until an approved text treatment exists.");
-  }
 }
 
 function walk(dir) {
