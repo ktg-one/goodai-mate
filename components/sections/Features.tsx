@@ -1,10 +1,19 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Zap, Shield, PhoneCall, Workflow } from "lucide-react";
+import { useState, useRef, MouseEvent } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { Zap, Shield, PhoneCall, Workflow, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const features = [
+interface Feature {
+    title: string;
+    description: string;
+    icon: LucideIcon;
+    accent: string;
+    className: string;
+}
+
+const features: Feature[] = [
     {
         title: "24/7 AI Voice Agents",
         description: "An authentic Australian voice agent answers every call within two rings, qualifies callers, and books confirmed slots directly into your calendar.",
@@ -35,6 +44,75 @@ const features = [
     },
 ];
 
+function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
+    const Icon = feature.icon;
+    const ref = useRef<HTMLDivElement | null>(null);
+    const shouldReduceMotion = useReducedMotion();
+    const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+
+    const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+        if (shouldReduceMotion || !ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const mouseX = e.clientX - centerX;
+        const mouseY = e.clientY - centerY;
+
+        const rotateX = (-mouseY / (rect.height / 2)) * 10;
+        const rotateY = (mouseX / (rect.width / 2)) * 10;
+
+        setTilt({ rotateX, rotateY });
+    };
+
+    const handleMouseLeave = () => {
+        setTilt({ rotateX: 0, rotateY: 0 });
+    };
+
+    return (
+        <motion.div
+            ref={ref}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            animate={
+                shouldReduceMotion
+                    ? {}
+                    : {
+                          rotateX: tilt.rotateX,
+                          rotateY: tilt.rotateY,
+                      }
+            }
+            transition={{
+                duration: 1.0,
+                type: "spring",
+                stiffness: 80,
+                damping: 20,
+            }}
+            style={{ transformStyle: "preserve-3d", perspective: 1000 }}
+            className={cn(
+                "p-8 md:p-10 border border-brand-ink bg-brand-paper relative group overflow-hidden flex flex-col justify-between shadow-[6px_6px_0_var(--brand-ink)] hover:shadow-[8px_8px_0_var(--brand-coral)] transition-shadow duration-300",
+                feature.className
+            )}
+        >
+            <div className="flex items-center justify-between mb-8" style={{ transform: "translateZ(20px)" }}>
+                <div className={cn("p-3 border border-brand-ink", feature.accent)}>
+                    <Icon className="w-6 h-6 text-brand-ink" />
+                </div>
+                <span className="text-xs font-mono text-brand-ink/50">0{index + 1}</span>
+            </div>
+
+            <div style={{ transform: "translateZ(30px)" }}>
+                <h3 className="text-2xl md:text-3xl font-bold mb-3 tracking-tight">{feature.title}</h3>
+                <p className="text-brand-ink/75 leading-relaxed text-sm md:text-base font-light">
+                    {feature.description}
+                </p>
+            </div>
+        </motion.div>
+    );
+}
+
 export function Features() {
     return (
         <section id="features" className="min-h-[100dvh] flex flex-col justify-center py-24 px-6 bg-brand-paper text-brand-ink">
@@ -61,36 +139,9 @@ export function Features() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {features.map((feature, index) => {
-                        const Icon = feature.icon;
-                        return (
-                            <motion.div
-                                key={feature.title}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
-                                className={cn(
-                                    "p-8 md:p-10 border border-brand-ink bg-brand-paper relative group overflow-hidden flex flex-col justify-between shadow-[6px_6px_0_var(--brand-ink)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[8px_8px_0_var(--brand-coral)] transition-all",
-                                    feature.className
-                                )}
-                            >
-                                <div className="flex items-center justify-between mb-8">
-                                    <div className={cn("p-3 border border-brand-ink", feature.accent)}>
-                                        <Icon className="w-6 h-6 text-brand-ink" />
-                                    </div>
-                                    <span className="text-xs font-mono text-brand-ink/50">0{index + 1}</span>
-                                </div>
-
-                                <div>
-                                    <h3 className="text-2xl md:text-3xl font-bold mb-3 tracking-tight">{feature.title}</h3>
-                                    <p className="text-brand-ink/75 leading-relaxed text-sm md:text-base font-light">
-                                        {feature.description}
-                                    </p>
-                                </div>
-                            </motion.div>
-                        );
-                    })}
+                    {features.map((feature, index) => (
+                        <FeatureCard key={feature.title} feature={feature} index={index} />
+                    ))}
                 </div>
             </div>
         </section>
