@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpRight, Check, Sparkles, PhoneCall, Receipt, MessageSquareReply, CopySlash, Clock, Mail } from "lucide-react";
+import { ArrowUpRight, Check, Sparkles, PhoneCall, Receipt, MessageSquareReply, CopySlash, Clock, Mail, Loader2 } from "lucide-react";
 
 const HEADACHES = [
   { id: "calls", label: "Missed Calls & Voicemails", icon: PhoneCall },
@@ -73,7 +73,7 @@ export function SussTheFussCard() {
       </div>
 
       {submitted ? (
-        <div className="suss-success">
+        <div className="suss-success" role="status" aria-live="polite">
           <div className="suss-success-icon" aria-hidden="true">
             <Check size={28} />
           </div>
@@ -159,8 +159,17 @@ export function SussTheFussCard() {
                 disabled={submitting || !contact.trim()}
                 className="button suss-submit"
               >
-                {submitting ? "Sorting..." : "We’ll Suss the Fuss"}
-                <ArrowUpRight size={18} />
+                {submitting ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" aria-hidden="true" />
+                    <span>Sorting...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>We’ll Suss the Fuss</span>
+                    <ArrowUpRight size={18} />
+                  </>
+                )}
               </button>
             </div>
           </div>
