@@ -24,7 +24,8 @@
     "id": "features-cards",
     "component": "components/sections/Features.tsx",
     "type": "hover/card-tilt",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion 3D card tilt animation with perspective transform (rotateX, rotateY), translateZ depth layering, prefers-reduced-motion compliance via useReducedMotion, and spring transition duration curve >= 1.0s."
   },
   {
     "id": "pricing-cards",
