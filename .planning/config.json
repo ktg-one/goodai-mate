@@ -15,7 +15,7 @@
   "verification": {
     "lint_command": "npm run lint",
     "build_command": "npm run build",
-    "test_command": null,
+    "test_command": "npm run test",
     "typecheck_command": null,
     "verify_before_commit": true
   },
@@ -61,7 +61,7 @@
   },
   
   "environment": {
-    "node_version": "18+",
+    "node_version": ">=20.9.0",
     "npm_version": "10+"
   },
   

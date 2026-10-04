@@ -1,9 +1,18 @@
 # Project State
 
-**Last updated:** 2026-10-04 (hive office session of 2026-10-02 committed and pushed — see next section)
+**Last updated:** 2026-10-04 (pricing removed, tests wired and passing, docs realigned — see next section)
 **Branch:** `revert/hero-tree-to-static-image` (PR #249, pushed; through commit 057712f). `main` on GitHub is a different line — see "GitHub".
 **Milestone:** v1.0 Launch — see `.planning/ROADMAP.md`
 **Site status:** not open yet; no live traffic. Next.js app = goodai.au (once the domain moves).
+
+## 2026-10-04 — cleanup session
+
+- **Pricing removed properly, not just hidden.** The 2026-10-02 session hid prices at the render sites but left `price`, `priceNote` and `range` in `lib/services.ts` (STATE.md line 14 said "data is unchanged"). All three fields are now stripped from the data itself and from every reference: `ServiceCard`, `ServicesCarousel`, the services page hero and all five `/services/[slug]` pages. The site publishes no prices at any layer, so a future render site can't reintroduce them by accident.
+- **Tests wired and green** — 9 pass via `npm run test`; `npm run check` = lint (0 errors) + motion lint + tests.
+- **Real bug found and fixed:** the footer's external `Field notes` anchor had no `target="_blank"` and no `rel="noopener noreferrer"`. The old link test *should* have caught it but failed earlier on `href={SURVEY_URL}`, which is internal now.
+- **Drift fixed:** `.planning/config.json` said `node_version: 18+` (Next 16 needs `>=20.9.0`) and `test_command: null`.
+- **Docs realigned to the code:** `PROJECT.md` (real architecture map, parked components, correct colour tokens, `npm run check` gate) and `ROADMAP.md` (Phase 1 done-work + open questions, Phase 5 corrected from "plans `/api/lead`" to "shipped as `/api/contact`, webhook and rate limit outstanding").
+- **Still needs Kevin:** the `klint/` orphan gitlink (see ROADMAP Phase 1), and whether to delete or park the old-design components — `Pricing.tsx` is now doubly redundant.
 
 ## 2026-10-02 — hive office session (committed + pushed as 057712f, 2026-10-04)
 
@@ -28,10 +37,10 @@ Agents (god, Jake, Gina, temps) worked in this tree, then Kevin took webdev back
 - **Parked components (restored 2026-10-04, unimported):** 36 files culled as "dead code" were brought back because they are still wanted and simply not rebuilt into the Perth design yet. Nothing imports them, so the build is unaffected. Old-design page sections: `ProductDemo`, `Features`, `Pricing`, `TechSpecs`, `Testimonials`, `VisualStory`, `InfiniteMarquee`, `CTA`, `FAQ`, `Hero`, `Footer`, `Navbar`. shadcn primitives to keep: `tabs`, `button`, `card`, `badge`, `avatar`, `accordion`, `sheet`, `switch`, `separator`. Old voice stack, superseded by Trillet: `ElevenLabsWidget`, `BrandedElevenLabsWidget`, `BrandedVoiceWidget`. `ProductDemo` is the **automation** demo (Today / Jobs / Rules tabs), not voice — `WorkflowPreview` is its Today tab and is already live on the homepage. Prune deliberately later, with the rebuild in view.
 - **Preloader:** brand wordmark `Good’Ai.` (paper bg, ink text, rust apostrophe/dot) with a fade-up.
 - **Motion:** Lenis + preloader + pinned `ScrollStory` only. A scroll jerk after the story was reported and is **not diagnosed** (candidates: ScrollTrigger.refresh on font load / layout shift, the sketchbook iframe, wheel inertia). Seam between sketchbook bottom (`#ece7dc`) and hero is visible; fix proposed (fade the bottom of `.perth-sketchbook`), not applied.
-- **Leads:** `/contact` now POSTs to `app/api/contact/route.ts` → Resend, from `Good'Ai <mate@goodai.au>` to `hello@goodai.au` (override `CONTACT_TO_EMAIL`). Fails honestly (503/502) when the key is missing. Not tested with a real send.
+- **Leads:** `/contact` now POSTs to `app/api/contact/route.ts` → Resend, from `Good'Ai <mate@goodai.au>` to `hello@goodai.au` (override `CONTACT_TO_EMAIL`). Honeypot on `website`. Fails honestly (503/502) when the key is missing. Not tested with a real send. **No webhook and no rate limiting** — `LEAD_WEBHOOK_URL` was never wired, and the ROADMAP's `/api/lead` route was replaced by `/api/contact`.
 - **Voice:** Trillet widget only on `/demo`, never tested with a real call.
 - **Lint:** `lint:motion` enforces the 10000px `.home-page` floor and THREE listener teardown, and skips missing dirs. GSAP is live (`ScrollStory`, `SmoothScroll`, `Preloader`, `carousel/ring`) but its ScrollTrigger tripwires were removed because nothing trips them — no file uses `toggleActions` or an unbounded `pin`, and `HomeScroll.tsx` (the `once: true` rule) is parked. `npm run lint` = 0 errors, 149 warnings, up from 40: the restored parked components carry ~109 old-design `no-arbitrary-values` warnings. None ship, since nothing imports them. `story-text-section` / `story-visual` are allow-listed again for the restored `VisualStory.tsx`.
-- **Tests (broken before the merge, not by it):** `lib/services.test.ts` and `lib/links.test.ts` fail with `ERR_MODULE_NOT_FOUND` — they import `"./services"` extensionless, which Node's ESM resolver rejects. `AutomationDock.test.ts` asserted a component `main` had already deleted (replaced by `TopDock.tsx`), so it was stale upstream; removed. There is no `test` script in `package.json`, so none of this ever ran in CI. Fix is small: add `.ts` extensions and a `test` script.
+- **Tests (fixed 2026-10-04):** were failing with `ERR_MODULE_NOT_FOUND` — they imported `"./services"` extensionless, which Node's ESM resolver rejects — and there was no `test` script in `package.json`, so none of it ever ran. Now: explicit `.ts` extensions, a `test` script running `node --test --experimental-strip-types "lib/*.test.ts"`, and `npm run check` chaining lint + motion lint + tests. 9 tests pass. The link tests also asserted `target="_blank"` on every anchor, which had been failing since `SURVEY_URL` became the internal `/contact` route; they now only require target/rel on external `https?://` anchors and only scan components the app actually renders.
 
 ## Story plan for the sketchbook (Kevin, 2026-10-01)
 
@@ -47,6 +56,7 @@ Needs new art: door/handle/mug frames, cheers close-up. About 9–10 frames in t
 - `services` must be created by Kevin in `/admin/data` (Data table; no collection-creation tool for the MCP or the in-admin Copilot). Field ids exactly: `slug, name, line, description, price, priceNote, items, detail, range, order`. Data tables have no publish status, so the plugin lists them unfiltered. After the table exists, Claude can fill the 5 services over the MCP from `lib/services.ts`.
 - Posts audit: 19 published, fields title/slug/body(HTML)/featuredMedia/seoTitle/seoDescription. Gaps: no real publish date (all `2026-08-16` import time), no excerpt, no author/category; some slugs don't match titles; one title typo ("Australia s"). Proposed: add `publishDate` + `excerpt`. Bylines "By Kevin Tan" are legacy; leave.
 - **Not built yet:** `lib/instatic.ts` client (an earlier write was blocked), wiring home/services/sitemap to it, `/blog` + `/blog/[slug]` pages, Footer "Field notes" link → `/blog`. Services stay in `lib/services.ts` as fallback until Instatic has entries.
+- **"Field notes" link is wrong right now:** it points at `https://goodai.up.railway.app/`, which is the **Instatic admin host**, not a public page — it was probably a copy-paste of the admin URL above. Fix when `/blog` ships; don't leave the CMS admin URL in the public footer.
 
 ## Decided 2026-09-30 / 10-01
 

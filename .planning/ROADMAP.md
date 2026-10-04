@@ -10,15 +10,15 @@
 - **Waves**: phases in the same wave touch different files and can run in parallel (separate worktrees).
   A wave starts only when every phase in the previous wave is merged.
 - **Scroll motion rules (Kevin):** ~3 viewport heights of scroll per animation; enter → held, readable middle → exit, with calm space top and bottom; nothing faster than ~1.5s; every ScrollTrigger states its `start`/`end` explicitly with a comment.
-- Every phase gate includes `npm run lint` + `npm run build` clean, and desktop (1440) + mobile (390) screenshots with no horizontal overflow.
+- Every phase gate includes `npm run check` (lint + motion lint + tests) and `npm run build` clean, plus desktop (1440) + mobile (390) screenshots with no horizontal overflow.
 - Site is **not open yet** — no live traffic, so nothing here is an incident.
 
-**Open gate:** the site can go live as soon as Phases 1 and 5 are done (clean baseline + a CTA form that really delivers leads) and a quick Phase 7 smoke check passes. Everything else ships after opening.
+**Open gate:** the site can go live as soon as Phase 1 is closed and a quick Phase 7 smoke check passes. Phase 5's email delivery is live; adding its rate limit is recommended before opening.
 
 | Wave | Phase | Status |
 |---|---|---|
-| 1 | 1. Baseline commit & cleanup | Ready |
-| 2 | 5. Lead capture that actually sends — **gates opening** | Needs email + webhook target |
+| 1 | 1. Baseline commit & cleanup | In progress — pricing removed, tests wired; klint trackedness still open |
+| 2 | 5. Lead capture that actually sends | Done (email) — webhook + rate limit outstanding |
 | 2 | 3. Scroll motion restored | Ready after wave 1 |
 | 2 | 4. Voice agent site-wide | Needs Trillet keys in `.env.local` |
 | 2 | 2. Scroll-story art matches the words | Blocked — decision (may be absorbed by Phase 9) |
@@ -33,9 +33,19 @@
 
 Everything else branches from this, so it runs alone.
 
-- Commit the work in the tree: ThreeUI sketchbook with Perth plates (`components/studio/PerthSketchbook.tsx`, `src/shaders/sketchbook/`, `public/sketchbook/plates/`), the text-only hero with the golden-spiral study (`components/studio/HeroStudy.tsx`), tree removal.
-- Delete dead code: `components/studio/SketchbookFlip.tsx` + `.sbf*` CSS, `components/studio/HeroTree.tsx`, `components/layout/HomeScroll.tsx` (tree-only, now a no-op) and its mount in `app/page.tsx`, `.hero-figure*` / `.image-seal` CSS, `.hero-figure` rules in the preloader block of `app/globals.css`.
-- Decide what stays untracked (`klint/`, `.agents/`, `bun.lock`, `skills-lock.json`) — ask Kevin, don't guess.
+Done 2026-10-04:
+
+- **Pricing removed everywhere.** `price`, `priceNote` and `range` stripped from the five services in `lib/services.ts`, along with every reference (`ServiceCard`, `ServicesCarousel`, the services page hero, and all five `/services/[slug]` pages). The site no longer publishes prices anywhere. `lib/services.test.ts` guards this.
+- **Tests are wired and runnable.** `npm run test` runs `node --test --experimental-strip-types "lib/*.test.ts"` (9 tests: 7 link tests, 2 service tests). `npm run check` now chains lint + motion lint + tests. All green.
+- **Test imports use explicit `.ts` extensions**, which is what makes `--experimental-strip-types` resolve them.
+- **One real accessibility/security bug fixed:** the footer's external `Field notes` link to `goodai.up.railway.app` had no `target="_blank"` and no `rel="noopener noreferrer"`. Now present in `components/studio/Shell.tsx`.
+- **Link tests corrected.** They asserted every anchor had `target="_blank"`, which fails on internal links and had been failing on `href={SURVEY_URL}` since that became the internal `/contact` route. They now only require `target`/`rel` on genuinely external `https?://` anchors, and only check components the app actually renders.
+
+Still open — **ask Kevin, don't guess:**
+
+- **`klint/` trackedness.** `klint` is in the index as an orphan gitlink (mode `160000`) with **no `.gitmodules`**. A clone of this repo will not populate it and cannot resolve the commit. `klint` is also a nested git repo with uncommitted work (`.oxlintrc.json`, `bin/ktg-lint.mjs`, `design-system.lint.json`, `instructions/AGENTS.md`) and an untracked `node_modules/`. Two valid end-states: (a) give it a real remote and add `.gitmodules`, or (b) commit its work inside `klint`, then `git rm --cached klint` + gitignore it as a local-only tool. Option (b) matches STATE.md listing `klint/**` as deliberately uncommitted. Cannot be resolved without knowing the intended remote.
+- **Parking the old-design components.** `components/sections/ProductDemo.tsx`, `Features.tsx`, `Pricing.tsx`, `Testimonials.tsx`, `VisualStory.tsx` and the pre-Perth `Hero.tsx` are all still present and unimported. `Pricing.tsx` is now doubly redundant — it renders pricing for a site that has none. Decide delete vs keep-as-source before the next build, since they contribute the 149 lint warnings.
+- `bun.lock`, `skills-lock.json`, `.agents/` trackedness is still undecided.
 
 **Gate:** lint + build clean; home renders the same as before cleanup.
 
@@ -71,16 +81,20 @@ Commit 1dac4ea removed the scroll reveals from `components/studio/StudioMotion.t
 
 **Gate:** call works on desktop Chrome and mobile Safari; mic permission denial handled; Lighthouse performance not reduced.
 
-## Phase 5 — Lead capture that actually sends (Wave 2)
+## Phase 5 — Lead capture that actually sends (Wave 2) — MOSTLY DONE
 
-`components/studio/SussTheFussCard.tsx` fakes submission (`setTimeout` → "We've got it"); nothing is delivered.
+Shipped 2026-10-01, replacing the fake `SussTheFussCard` submission:
 
-- `app/api/lead/route.ts`: validate, rate-limit, honeypot; deliver by email to Kevin and POST to `LEAD_WEBHOOK_URL`.
-- Form adds business name and website (optional) next to the existing contact, headaches and note.
-- Failure shows an honest error plus the phone number, never a fake success.
+- `app/api/contact/route.ts`: honeypot, Resend delivery to `CONTACT_TO_EMAIL` (default `hello@goodai.au`), and an honest failure that shows Kevin's email and phone instead of a fake success. Never reports success unless Resend accepted the message.
+- The route replaced the planned `app/api/lead/route.ts`; do not re-add `/api/lead`.
 
-**Needs from Kevin:** email provider + destination address; webhook target (n8n or other).
-**Gate:** a test submission arrives by email and at the webhook.
+Still outstanding:
+
+- **Webhook delivery.** `LEAD_WEBHOOK_URL` is not wired. If the n8n target still matters, add the POST here alongside the Resend send.
+- **Rate limiting.** No throttle on the endpoint yet. Worth adding before opening.
+
+**Needs from Kevin:** confirm whether the webhook target is still wanted.
+**Gate:** a test submission arrives by email — done; and at the webhook — not applicable unless reinstated.
 
 ## Phase 6 — "Quick dive": email in, light research back (Wave 3) — BLOCKED on decisions
 

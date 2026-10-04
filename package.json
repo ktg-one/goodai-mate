@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "lint:motion": "node scripts/ktg-lint.mjs",
-    "check": "npm run lint && npm run lint:motion",
+    "check": "npm run lint && npm run lint:motion && npm run test",
+    "test": "node --test --experimental-strip-types \"lib/*.test.ts\"",
     "doctor": "npx react-doctor@latest"
   },
   "dependencies": {

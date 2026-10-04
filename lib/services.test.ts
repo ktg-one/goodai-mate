@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { services, getServiceBySlug } from "./services";
+import { services, getServiceBySlug } from "./services.ts";
 
 test("services array contains valid non-empty service items", () => {
   assert.ok(Array.isArray(services));
@@ -11,11 +11,8 @@ test("services array contains valid non-empty service items", () => {
     assert.ok(typeof service.name === "string" && service.name.length > 0);
     assert.ok(typeof service.line === "string" && service.line.length > 0);
     assert.ok(typeof service.description === "string" && service.description.length > 0);
-    assert.ok(typeof service.price === "string" && service.price.length > 0);
-    assert.ok(typeof service.priceNote === "string" && service.priceNote.length > 0);
     assert.ok(Array.isArray(service.items) && service.items.length > 0);
     assert.ok(typeof service.detail === "string" && service.detail.length > 0);
-    assert.ok(typeof service.range === "string" && service.range.length > 0);
   }
 });
 

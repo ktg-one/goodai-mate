@@ -2,9 +2,9 @@
 
 ## Overview
 
-**Good'Ai** is an ultra-premium, high-fidelity marketing site and landing page experience that demonstrates advanced frontend engineering. Originally developed as **Zenith Interface**, this project serves as the Good'Ai public sales surface.
+**Good'Ai** is a marketing site and landing page experience for a Perth business that takes admin off tradespeople and small operators: phone answering, quoting and follow-ups. Built with Next.js 16 App Router, React 19, TypeScript, Tailwind CSS v4, Framer Motion, GSAP/ScrollTrigger and Lenis.
 
-The site embodies an "Upper Class" aesthetic inspired by high-end fashion editorials and architectural precision, built with Next.js 16 App Router, React 19, TypeScript, Tailwind CSS v4, Framer Motion, and GSAP.
+The site is mid-rebuild. The current design is the Perth sketchbook concept — a ThreeUI sketchbook hero, a hand-written voice, "suss the fuss" as the intake call to action. The August 2026 "Zenith Interface" framing below is history; the code is the current truth.
 
 ## Purpose
 
@@ -25,7 +25,7 @@ The site embodies an "Upper Class" aesthetic inspired by high-end fashion editor
 - Live operational data
 - Real client integrations
 - Authenticated user flows
-- Backend services (this is a static marketing site)
+- Backend services beyond two API routes (`/api/contact` → Resend, `/api/voice/call` → Trillet)
 
 ## Key Technical Decisions
 
@@ -44,10 +44,14 @@ The site embodies an "Upper Class" aesthetic inspired by high-end fashion editor
 ## Brand Design System
 
 ### Color Tokens
+Declared in the `@theme` block in `app/globals.css` (mirrors DESIGN.md):
 - `brand-ink` - Primary dark/black color
-- `brand-paper` - Primary light/white background
-- `brand-coral` - Accent color (used for shadows, highlights)
-- `brand-eucalyptus` - Secondary accent color
+- `brand-paper` - Primary light/background
+- `brand-coral` - Accent (shadows, highlights)
+- `brand-eucalyptus` - Secondary accent
+- `brand-eucalyptus-ink`, `brand-teal` - extended accents
+- `brand-line`, `brand-surface` - borders and raised surfaces
+- `brand-navy` - legacy alias of `brand-ink`; prefer `brand-ink`
 
 ### Typography
 - System fonts with fallback stack
@@ -61,16 +65,25 @@ The site embodies an "Upper Class" aesthetic inspired by high-end fashion editor
 
 ```
 .
-├── app/                    # Next.js App Router pages
+├── app/                       # Next.js App Router pages
+│   ├── page.tsx               # home
+│   ├── contact/ demo/ lab/ privacy/ terms/
+│   ├── services/[slug]/       # 5 service pages, SSG
+│   └── api/                   # contact (Resend), voice/call (Trillet)
 ├── components/
-│   ├── sections/          # Page sections (Hero, ProductDemo, Features, etc.)
-│   ├── ui/               # Reusable UI components (Radix-based)
-│   └── ...
-├── lib/                   # Utilities and helpers
-├── public/                # Static assets
-├── styles/                # Global styles (if any)
-└── .planning/              # GSD workflow artifacts
+│   ├── sections/              # Hero, ServicesCarousel (live) + parked old-design
+│   ├── studio/                # sketchbook, hero study, voice, workflow, shell
+│   ├── ui/                    # shadcn primitives + project widgets
+│   ├── carousel/              # ThreeUI carousel (vendored, has LICENSE)
+│   └── providers/             # LazyMotionProvider
+├── src/shaders/               # ThreeUI sketchbook + shader sources
+├── lib/                       # services, links, utils (+ *.test.ts)
+├── public/sketchbook/plates/  # hero sketchbook plates (webp)
+├── public/assets/sketches/    # hero sketchbook source spreads (png, tracked)
+└── .planning/                 # GSD workflow artifacts
 ```
+
+**Parked components.** `components/sections/` and `components/ui/` still hold the pre-Perth components (ProductDemo, Features, Pricing, Testimonials, VisualStory, Hero, Navbar, Footer, and the shadcn primitives). They are unimported, kept as source material for the rebuild. Nothing imports them, so the build is unaffected; they do add lint warnings.
 
 ## Constraints
 
@@ -93,18 +106,21 @@ From AGENTS.md:
 ## Verification
 
 ```bash
-npm run lint
-npm run build
+npm run check   # lint + lint:motion + tests
+npm run build   # must pass
 ```
+
+`npm run check` is the gate before handing off. `npm run lint` must report 0 errors (warnings are design-contract advisories, not blockers).
 
 For visual work: inspect the changed section at mobile and desktop widths.
 
 ## External References
 
 - [AGENTS.md](../AGENTS.md) - Project-specific agent instructions (takes priority)
-- [README.md](../README.md) - Original Zenith Interface documentation
+- [README.md](../README.md) - Original Zenith Interface documentation, largely superseded; the code is the current truth
+- [DESIGN.md](../DESIGN.md) - Brand design system tokens and rationale
 
 ---
 *Created: 2026-08-26*  
-*Last Updated: 2026-08-26*  
+*Last Updated: 2026-10-04*  
 *GSD Version: Initial Setup*
