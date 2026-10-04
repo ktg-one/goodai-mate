@@ -77,7 +77,7 @@ export function TrilletVoiceWidget({
   const startPolling = useCallback(() => {
     let lastCount = 0;
     pollIntervalRef.current = setInterval(() => {
-      if (!agentRef.current || status !== "connected") return;
+      if (!agentRef.current) return;
       try {
         const list = agentRef.current.getTranscripts?.() || [];
         for (let i = lastCount; i < list.length; i++) {
@@ -170,6 +170,10 @@ export function TrilletVoiceWidget({
       }
 
       const data = await response.json();
+
+      if (!response.ok || data.error) {
+        throw new Error(data.error || "Voice call initialization failed");
+      }
 
       if (data.mode === "authenticated" && data.connection) {
         // Secure server-minted room join

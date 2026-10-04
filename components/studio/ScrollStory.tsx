@@ -28,7 +28,7 @@ export function ScrollStory() {
           const paths = scene.querySelectorAll<SVGPathElement>("[data-ink]");
           paths.forEach(path => { const length = path.getTotalLength(); gsap.set(path, { strokeDasharray: length, strokeDashoffset: length }); });
           gsap.set(scene, { opacity: index === 0 ? 1 : 0 });
-          const timeline = gsap.timeline({ scrollTrigger: { trigger: steps[index], start: "top 70%", end: "bottom 30%", scrub: 0.8, invalidateOnRefresh: true } });
+          const timeline = gsap.timeline({ scrollTrigger: { trigger: steps[index], start: "top 70%", end: "bottom 70%", scrub: 0.8, invalidateOnRefresh: true } });
           // 0.0 -> 0.15: Smooth entrance
           timeline.to(scene, { opacity: 1, duration: 0.15, ease: "power1.out" }, 0)
             // 0.10 -> 0.45: Ink lines draw to completion

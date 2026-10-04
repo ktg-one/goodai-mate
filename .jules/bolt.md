@@ -10,3 +10,7 @@
 ## 2024-05-24 - Memoize Inline Maps
 **Learning:** Hardcoded arrays placed directly inside functional components are recreated on every render, causing React to unnecessarily recreate elements during list mappings.
 **Action:** Extract inline constant arrays to module scope and wrap their list mappings with `useMemo` to prevent redundant O(N) operations and minimize DOM reconciliation overhead.
+
+## 2026-09-21 - Optimize Global Event Listeners and Spring Config in CustomCursor
+**Learning:** Including reactive state variables in `useEffect` dependency arrays when handling global window events (such as `mousemove`) causes event listeners to be unbound and re-bound on state updates, leading to listener churn. Additionally, declaring config objects inside render functions breaks referential equality on every render.
+**Action:** Extract static config objects to module scope and use functional state updates inside event handlers to keep effect dependencies minimal and avoid unnecessary listener teardown.
