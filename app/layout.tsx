@@ -5,6 +5,7 @@ import "./studio-controls.css";
 import { StudioHeader, StudioFooter } from "@/components/studio/Shell";
 import { SmoothScroll } from "@/components/studio/SmoothScroll";
 import { Preloader } from "@/components/ui/Preloader";
+import { LazyMotionProvider } from "@/components/providers/LazyMotionProvider";
 
 function resolveSiteUrl() {
   try {
@@ -49,5 +50,5 @@ export const metadata: Metadata = {
   },
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en-AU"><body><Preloader /><a className="skip-link" href="#main">Skip to content</a><StudioHeader /><main id="main">{children}</main><StudioFooter /><SmoothScroll /></body></html>;
+  return <html lang="en-AU"><body><LazyMotionProvider><Preloader /><a className="skip-link" href="#main">Skip to content</a><StudioHeader /><main id="main">{children}</main><StudioFooter /><SmoothScroll /></LazyMotionProvider></body></html>;
 }

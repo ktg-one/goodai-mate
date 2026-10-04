@@ -11,14 +11,13 @@ const eslintConfig = defineConfig([
     plugins: { shadcn },
     settings: {
       shadcn: {
-        note: "Brand tokens are declared in app/globals.css (@theme block): brand-ink, brand-paper, brand-coral, brand-eucalyptus, brand-navy, brand-line, brand-surface. See BRAND.md.",
+        note: "Palette: app/globals.css @theme (mirrors DESIGN.md) - brand-ink, brand-paper, brand-coral, brand-eucalyptus, brand-eucalyptus-ink, brand-teal, brand-line, brand-surface; brand-navy = legacy alias of brand-ink. Not app/tokens/*.css.",
       },
     },
     rules: {
       // Bug-finding: classes that generate no CSS and colors outside the
       // theme fail lint. Plain-CSS classes from app/studio-controls.css and
-      // @designcodeio/threeui are allow-listed; story-text-section and
-      // story-visual are GSAP selectors in VisualStory.tsx, not styles.
+      // @designcodeio/threeui are allow-listed.
       "shadcn/no-unknown-classes": ["error", {
         allow: [
           "contact-phone",
@@ -28,8 +27,6 @@ const eslintConfig = defineConfig([
           "voice-phone",
           "pen-underline",
           "threeui-background",
-          "story-text-section",
-          "story-visual",
         ],
       }],
       "shadcn/no-raw-colors": "error",
@@ -55,8 +52,8 @@ const eslintConfig = defineConfig([
   },
   // Inline styles: content surfaces (pages, sections, layout) must style
   // through classes. Motion primitives (components/ui, components/studio,
-  // components/carousel, shaders) position themselves with GSAP / Framer
-  // Motion and are exempt.
+  // components/carousel, shaders) position themselves with Framer Motion
+  // and are exempt.
   {
     files: ["app/**", "components/sections/**", "components/layout/**"],
     rules: { "shadcn/no-inline-styles": "warn" },
@@ -71,6 +68,11 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Kilo worktree copies duplicate every file; lint the main tree only.
     ".kilo/**",
+    // Agent office runtime (hive harness scripts), not site code.
+    "hive/**",
+    // Parked copies of removed components (incl. old GSAP VisualStory); not
+    // imported or built.
+    "docs/components/**",
   ]),
 ]);
 

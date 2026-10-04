@@ -1,9 +1,23 @@
 # Project State
 
-**Last updated:** 2026-10-01
+**Last updated:** 2026-10-02 (hive office session — see next section)
 **Branch:** `revert/hero-tree-to-static-image` (PR #249, pushed; commit e0ec5d5 and later). `main` on GitHub is a different line — see "GitHub".
 **Milestone:** v1.0 Launch — see `.planning/ROADMAP.md`
 **Site status:** not open yet; no live traffic. Next.js app = goodai.au (once the domain moves).
+
+## 2026-10-02 — hive office session (all UNCOMMITTED; review before commit)
+
+Agents (god, Jake, Gina, temps) worked in this tree, then Kevin took webdev back. Nothing was committed or pushed.
+
+- **Build:** `npm run build` passes again (checked 2026-10-02). Before that it failed because `components/` had been moved into `docs/components/` on 1 Oct after commit e0ec5d5. Nobody knows who moved them.
+- **components/:** Jake used `git restore` on 28 files that pages import: the carousel (all of it), `sections/ServicesCarousel`, and studio `Shell`, `PerthSketchbook`, `ScrollStory`, `HeroStudy` and others. 35 other files are still deleted. `docs/components/` (untracked parked copies) was left untouched, so the restored files now exist twice.
+- **Copy (Gina):** `app/page.tsx` text rewritten to say what we do, and all prices hidden ("Talk to us"). `app/services/[slug]/page.tsx` hides price/range/priceNote. `lib/services.ts` data is unchanged. The scroll-story lines are proposed in `.planning/COPY.md` but NOT applied to `ScrollStory.tsx`.
+- **Lint:** the GSAP/ScrollTrigger checks were removed from `scripts/ktg-lint.mjs` and the GSAP selectors from `eslint.config.mjs`. Ignores now include `hive/**` and `docs/components/**`. The `CLAUDE.md` lint section was updated. `npm run check` exits 0.
+- **klint/** (its own git repo): rewritten to the Good'Ai design system from DESIGN.md (`design-system.lint.json`, `.oxlintrc.json`, `instructions/AGENTS.md`, `bin/ktg-lint.mjs`). It needs a `.gitignore` before committing (it has `node_modules/`).
+- **New planning files:** `SITE-MAP.md` (routes and imports map), `OFFER.md` (offer draft from web research; weak, so redo it from Kevin's own market research), `COPY.md`, `BRAIN-DUMP.md` (Kevin's raw requests from 2026-10-02).
+- **Kevin's decisions, 2026-10-02:** the services and prices in `lib/services.ts` are legacy. The new offer is 4 buy paths: Workflows, Voice agent, Consult, Integrations. Workflows are sold as a "Top 10" catalogue drawn down from a retainer. Never compete on the A$99 voice floor. Prices stay hidden until the offer is agreed.
+- **Flip book:** new pages are in `public/assets/sketches/` (01-stress x3, mess, mess2). They were NOT added. Note: this conflicts with the story plan below (inbox, pain crops, door/mug, Fremantle). Kevin to decide.
+- **Parked hive cards:** GST-3 restore leftovers, GST-5 SVG shapes (plugin plus signature file unknown), GST-6 flip book, GST-9 4-path site. The office is now the analysis/strategy team, not webdev.
 
 ## Where things are
 
