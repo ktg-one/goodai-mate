@@ -1,13 +1,13 @@
 # Project State
 
-**Last updated:** 2026-10-02 (hive office session — see next section)
-**Branch:** `revert/hero-tree-to-static-image` (PR #249, pushed; commit e0ec5d5 and later). `main` on GitHub is a different line — see "GitHub".
+**Last updated:** 2026-10-04 (hive office session of 2026-10-02 committed and pushed — see next section)
+**Branch:** `revert/hero-tree-to-static-image` (PR #249, pushed; through commit 057712f). `main` on GitHub is a different line — see "GitHub".
 **Milestone:** v1.0 Launch — see `.planning/ROADMAP.md`
 **Site status:** not open yet; no live traffic. Next.js app = goodai.au (once the domain moves).
 
-## 2026-10-02 — hive office session (all UNCOMMITTED; review before commit)
+## 2026-10-02 — hive office session (committed + pushed as 057712f, 2026-10-04)
 
-Agents (god, Jake, Gina, temps) worked in this tree, then Kevin took webdev back. Nothing was committed or pushed.
+Agents (god, Jake, Gina, temps) worked in this tree, then Kevin took webdev back. `npm run lint` (0 errors) and `npm run build` (17 routes) both pass on the result.
 
 - **Build:** `npm run build` passes again (checked 2026-10-02). Before that it failed because `components/` had been moved into `docs/components/` on 1 Oct after commit e0ec5d5. Nobody knows who moved them.
 - **components/:** Jake used `git restore` on 28 files that pages import: the carousel (all of it), `sections/ServicesCarousel`, and studio `Shell`, `PerthSketchbook`, `ScrollStory`, `HeroStudy` and others. 35 other files are still deleted. `docs/components/` (untracked parked copies) was left untouched, so the restored files now exist twice.
@@ -16,7 +16,7 @@ Agents (god, Jake, Gina, temps) worked in this tree, then Kevin took webdev back
 - **klint/** (its own git repo): rewritten to the Good'Ai design system from DESIGN.md (`design-system.lint.json`, `.oxlintrc.json`, `instructions/AGENTS.md`, `bin/ktg-lint.mjs`). It needs a `.gitignore` before committing (it has `node_modules/`).
 - **New planning files:** `SITE-MAP.md` (routes and imports map), `OFFER.md` (offer draft from web research; weak, so redo it from Kevin's own market research), `COPY.md`, `BRAIN-DUMP.md` (Kevin's raw requests from 2026-10-02).
 - **Kevin's decisions, 2026-10-02:** the services and prices in `lib/services.ts` are legacy. The new offer is 4 buy paths: Workflows, Voice agent, Consult, Integrations. Workflows are sold as a "Top 10" catalogue drawn down from a retainer. Never compete on the A$99 voice floor. Prices stay hidden until the offer is agreed.
-- **Flip book:** new pages are in `public/assets/sketches/` (01-stress x3, mess, mess2). They were NOT added. Note: this conflicts with the story plan below (inbox, pain crops, door/mug, Fremantle). Kevin to decide.
+- **Flip book:** new spreads are in `public/assets/sketches/` (01-stress x3, mess, mess2) and committed — they are the hero's source art, alongside perth-*.png and bg-wash.jpg. The hero itself renders the plates cut from them, `public/sketchbook/plates/*.webp`, via `components/studio/PerthSketchbook.tsx` → `src/shaders/sketchbook/Sketchbook.tsx` with `assetBaseUrl="/sketchbook/"`. New art still wanted for the story plan below (door/handle/mug, cheers close-up); the inbox pain crops come from the existing inbox plate, no new art.
 - **Parked hive cards:** GST-3 restore leftovers, GST-5 SVG shapes (plugin plus signature file unknown), GST-6 flip book, GST-9 4-path site. The office is now the analysis/strategy team, not webdev.
 
 ## Where things are
@@ -29,7 +29,7 @@ Agents (god, Jake, Gina, temps) worked in this tree, then Kevin took webdev back
 - **Motion:** Lenis + preloader + pinned `ScrollStory` only. A scroll jerk after the story was reported and is **not diagnosed** (candidates: ScrollTrigger.refresh on font load / layout shift, the sketchbook iframe, wheel inertia). Seam between sketchbook bottom (`#ece7dc`) and hero is visible; fix proposed (fade the bottom of `.perth-sketchbook`), not applied.
 - **Leads:** `/contact` now POSTs to `app/api/contact/route.ts` → Resend, from `Good'Ai <mate@goodai.au>` to `hello@goodai.au` (override `CONTACT_TO_EMAIL`). Fails honestly (503/502) when the key is missing. Not tested with a real send.
 - **Voice:** Trillet widget only on `/demo`, never tested with a real call.
-- **Lint:** `lint:motion` still enforces the 10000px `.home-page` floor and requires `components/layout/HomeScroll.tsx` (untracked, dead code). Kevin says these belong to a full scroll story, not this site — proposed trimming to the generic checks (pin needs `end`, no `toggleActions` in story files, THREE listener teardown); not done.
+- **Lint:** `lint:motion` now enforces only the 10000px `.home-page` floor and THREE listener teardown, and skips missing dirs. The GSAP/ScrollTrigger checks are gone along with the GSAP code; re-add them if ScrollTrigger returns. `npm run lint` = 0 errors, 39 warnings (all `no-arbitrary-values` design-contract noise).
 
 ## Story plan for the sketchbook (Kevin, 2026-10-01)
 
@@ -55,7 +55,7 @@ Needs new art: door/handle/mug frames, cheers close-up. About 9–10 frames in t
 
 ## GitHub
 
-`ktg-one/goodai-mate` `main` has 16 bot commits (Jules/Bolt/Palette) not in this branch; this branch has 7+ not in `main`. ~40 stale bot PRs open. Kevin thinks this branch should be the canonical `main`. **Not done** — needs explicit go-ahead to force-push; plan: tag old `main` as `backup/main-2026-10-01`, run `npm run check` + `npm run build`, then `git push --force-with-lease origin <branch>:main`. Untracked folders deliberately not committed: `.agents/ .claude/ .codegraph/ klint/ bun.lock skills-lock.json public/assets/sketches/ public/brand/hero public/sketchbook/perth*.png components/layout/HomeScroll.tsx components/studio/SketchbookFlip.tsx`.
+`ktg-one/goodai-mate` `main` has 16 bot commits (Jules/Bolt/Palette) not in this branch; this branch has 7+ not in `main`. ~40 stale bot PRs open. Kevin thinks this branch should be the canonical `main`. **Not done** — needs explicit go-ahead to force-push; plan: tag old `main` as `backup/main-2026-10-01`, run `npm run check` + `npm run build`, then `git push --force-with-lease origin <branch>:main`. Local-only, deliberately not committed: `.agents/ .claude/ .codegraph/ klint/ bun.lock skills-lock.json public/brand/hero public/sketchbook/perth*.png components/layout/HomeScroll.tsx components/studio/SketchbookFlip.tsx`, plus the agent runtime now covered by `.gitignore` (`.serena/ hive/ palace/ roster.json roster-backups/ hallways.json docs/components/`). `public/assets/sketches/` **is** tracked — it is the hero's source art.
 
 ## Open decisions (Kevin)
 
