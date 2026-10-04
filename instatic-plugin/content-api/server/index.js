@@ -7,12 +7,13 @@
 // Field values live under `cells` keyed by fieldId, so a cell is `cells.slug`,
 // not `slug`. list() returns `{ entries, totalCount }` -- NOT `records`.
 //
-// IMPORTANT — consumers must POST. Instatic's plugin SDK documents no
-// public GET: every `api.cms.routes.public.*` example in the official docs
-// is `.post` (subscribe, webhook). The capability-gated `.get`/`.patch`/
-// `.delete` forms all require a logged-in caller and the matching core
-// capability, so they are not reachable anonymously. The site reading this
-// feed is a server-side fetch and can POST like any other client.
+// Both verbs are registered. An earlier draft removed GET on the belief that
+// Instatic had no public GET — that was wrong. The SDK type
+// (src/core/plugin-sdk/types/serverApi.ts) declares all four verbs under
+// `routes.public`, and the docs describe the shape as intended for
+// "public read APIs (sitemaps, robots, search)". GET is the natural verb for a
+// read feed; POST stays registered because it is verified working against the
+// installed host, so either verb works.
 //
 // posts is a routable post type (has publish status); services is a plain Data
 // table, which has no workflow/status, so it is listed unfiltered.
@@ -43,5 +44,6 @@ export function activate(api) {
     };
 
     pub.post(`/${table}`, handler);
+    pub.get(`/${table}`, handler);
   }
 }

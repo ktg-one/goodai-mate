@@ -6,16 +6,6 @@
 // read-only — schema mutation needs `cms.content.tables.manage`, and there is
 // no reason to grant that on a feed that only reads.
 //
-// Idempotent by design: if a `services` table already exists at all (any kind)
-// this does nothing and changes nothing. That protects hand-made tables and
-// existing rows. Delete the table first if you want this to recreate it.
-//
-// The existence check is deliberately paranoid. `tables.list()` has been seen
-// returning both a bare array and a `{ tables: [...] }` envelope depending on
-// SDK version, so normalise both. And the create is wrapped: a UNIQUE
-// violation on (branch_id, slug) is the authoritative "already there" signal,
-// so it is swallowed rather than failing the install.
-//
 // Field mapping onto lib/services.ts:
 //   title -> name     (postType built-in, mandatory)
 //   slug  -> slug     (postType built-in, mandatory; a post type with no slug
@@ -23,6 +13,15 @@
 //   line, description, items, detail, order -> custom fields
 // `price`, `priceNote` and `range` are intentionally absent: pricing was
 // removed from the site on 2026-10-04.
+//
+// SDK shapes, verified against src/core/plugin-sdk/types/serverApi.ts:
+//   api.cms.content.tables.get(slug)  -> Promise<ContentTableSchema | null>
+//   api.cms.content.tables.list()     -> Promise<ReadonlyArray<ContentTableSummary>>
+//                                        (a BARE array, not { tables })
+//   api.cms.content.tables.create(in) -> Promise<ContentTableSchema>
+//                                        (the table itself, not { table })
+//   api.plugin.log                    -> (...args: unknown[]) => void
+//                                        (a plain function, no .info method)
 
 const TABLE_SLUG = "services";
 
@@ -39,41 +38,56 @@ const CUSTOM_FIELDS = [
   { id: "order", label: "Order", type: "number" },
 ];
 
-function slugOf(table) {
-  return typeof table?.slug === "string" ? table.slug.trim().toLowerCase() : "";
+function log(api, message) {
+  // log is a plain variadic function; older drafts wrongly called .info().
+  try {
+    api.plugin.log(`[services-schema] ${message}`);
+  } catch {
+    /* logging must never fail an install */
+  }
 }
 
-function alreadyExists(listResult) {
-  const rows = Array.isArray(listResult)
-    ? listResult
-    : Array.isArray(listResult?.tables)
-      ? listResult.tables
-      : [];
-  return rows.some((t) => slugOf(t) === TABLE_SLUG);
+async function findExisting(api) {
+  const { tables } = api.cms.content;
+
+  // Primary: direct lookup, no shape guessing at all.
+  try {
+    const found = await tables.get(TABLE_SLUG);
+    if (found) return found;
+  } catch (error) {
+    log(api, `tables.get() failed (${String(error?.message ?? error)})`);
+  }
+
+  // Fallback: list() returns a bare array per the SDK types. Normalise the
+  // envelope shape too, so an older/newer host cannot slip past the guard.
+  try {
+    const listed = await tables.list();
+    const rows = Array.isArray(listed)
+      ? listed
+      : Array.isArray(listed?.tables)
+        ? listed.tables
+        : [];
+    const hit = rows.find((t) => typeof t?.slug === "string" && t.slug.trim().toLowerCase() === TABLE_SLUG);
+    return hit ?? null;
+  } catch (error) {
+    log(api, `tables.list() failed (${String(error?.message ?? error)})`);
+    return null;
+  }
 }
 
 function isUniqueViolation(error) {
-  const message = String(error?.message ?? error ?? "");
-  return /UNIQUE constraint failed/i.test(message);
+  return /UNIQUE constraint failed/i.test(String(error?.message ?? error ?? ""));
 }
 
 export async function activate(api) {
-  const tables = api.cms.content.tables;
-  const log = api.plugin.log?.info?.bind(api.plugin.log) ?? (() => {});
-
-  try {
-    if (alreadyExists(await tables.list())) {
-      log(`[services-schema] '${TABLE_SLUG}' already exists — left untouched`);
-      return;
-    }
-  } catch (error) {
-    // Listing is a convenience, not a guarantee. Fall through and let the
-    // create attempt be the real test.
-    log(`[services-schema] list() failed (${String(error?.message ?? error)}); attempting create anyway`);
+  const existing = await findExisting(api);
+  if (existing) {
+    log(api, `'${TABLE_SLUG}' already exists (kind=${existing.kind ?? "unknown"}) — left untouched`);
+    return;
   }
 
   try {
-    const created = await tables.create({
+    const created = await api.cms.content.tables.create({
       slug: TABLE_SLUG,
       name: "Services",
       kind: "postType",
@@ -84,13 +98,15 @@ export async function activate(api) {
       fields: CUSTOM_FIELDS,
     });
 
+    // create() resolves to the ContentTableSchema itself.
     log(
-      `[services-schema] created postType '${TABLE_SLUG}' with ${CUSTOM_FIELDS.length} custom fields` +
-        (created?.table?.id ? ` (table ${created.table.id})` : "")
+      api,
+      `created postType '${TABLE_SLUG}' with ${CUSTOM_FIELDS.length} custom fields` +
+        (created?.id ? ` (table ${created.id})` : "")
     );
   } catch (error) {
     if (isUniqueViolation(error)) {
-      log(`[services-schema] '${TABLE_SLUG}' was already present — left untouched`);
+      log(api, `'${TABLE_SLUG}' was already present — left untouched`);
       return;
     }
     throw error;
