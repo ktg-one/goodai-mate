@@ -1,7 +1,7 @@
 {
   "id": "goodai.services-schema",
   "name": "Good'Ai services schema",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "apiVersion": 1,
   "description": "Creates the 'services' post-type collection with the fields the site reads. Safe to re-install: does nothing if the table already exists.",
   "permissions": ["cms.content.tables.manage", "cms.content.read"],
