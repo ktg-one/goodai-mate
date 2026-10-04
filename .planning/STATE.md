@@ -50,15 +50,18 @@ Arc: pain → pain → pain → question → leave the pains → sunshine. Light
 4. The pains cancel one by one ("ding ding"), logo travels to the door, hand opens it, door handle becomes a beer mug, mugs clash (zoomed cheers frame), then flick to the Fremantle brewery (exists).
 Needs new art: door/handle/mug frames, cheers close-up. About 9–10 frames in the run. Existing office plate is too bright for a "pain" and was dropped. Open: stop at the last page vs keep looping with a scroll cue (not decided).
 
-## Headless content (Instatic) — decided 2026-10-01
+## Headless content (Instatic) — CONSTRAINED, 2026-10-04
 
-- Next.js is goodai.au. Instatic (Railway project BLOG, service `corebunch/instatic:latest`, admin `goodai.up.railway.app/admin`) is the content backend: blog posts and a `services` Data table. Next owns all design/tokens. If it looks worse, swap back.
-- Instatic has no public API (publishes HTML; session-cookie admin API). Workaround: plugin `instatic-plugin/content-api/` (id `goodai.content-api`, v0.1.2) exposing public `/posts` and `/services` under `/admin/api/cms/plugins/goodai.content-api/runtime/`. Zip: `instatic-plugin/goodai-content-api.plugin.zip` (forward-slash entries). **Only v0.1.0 (old, wrong routes) was ever uploaded; 0.1.2 needs re-uploading by Kevin** — the MCP has no plugin tools. Plugin written from docs, never run; public GET is undocumented (POST always registered).
-- `services` must be created by Kevin in `/admin/data` (Data table; no collection-creation tool for the MCP or the in-admin Copilot). **Field ids: `slug, name, line, description, items, detail, order`** — `price`, `priceNote` and `range` were dropped on 2026-10-04 when pricing was removed from `lib/services.ts`; they are no longer in the schema. Add them back only if Kevin decides the CMS should hold prices that the site still does not render. Data tables have no publish status, so the plugin lists them unfiltered. After the table exists, Claude can fill the 5 services over the MCP from `lib/services.ts`.
-- Instatic serves **both** the blog posts and the `services` data. One CMS, two content types.
-- Posts audit: 19 published, fields title/slug/body(HTML)/featuredMedia/seoTitle/seoDescription. Gaps: no real publish date (all `2026-08-16` import time), no excerpt, no author/category; some slugs don't match titles; one title typo ("Australia s"). Proposed: add `publishDate` + `excerpt`. Bylines "By Kevin Tan" are legacy; leave.
-- **Not built yet:** `lib/instatic.ts` client (an earlier write was blocked), wiring home/services/sitemap to it, `/blog` + `/blog/[slug]` pages, Footer "Field notes" link → `/blog`. Services stay in `lib/services.ts` as fallback until Instatic has entries.
-- **"Field notes" link is wrong right now:** it points at `https://goodai.up.railway.app/`, which is the **Instatic admin host**, not a public page — it was probably a copy-paste of the admin URL above. Fix when `/blog` ships; don't leave the CMS admin URL in the public footer.
+**Kevin's constraint, 2026-10-04: we do not get console control of the backend. Instatic is minimal and we cannot configure it.**
+
+**Consequence: the CMS plan below is dead. Drop it.**
+
+- Next.js is goodai.au and owns all design/tokens. Instatic (Railway project BLOG, admin `goodai.up.railway.app/admin`) holds blog posts, but we cannot reliably read them.
+- **Services are permanently sourced from `lib/services.ts`.** Not a "fallback until Instatic has entries" — it is the source of truth. The `services` Data table will not be created. `lib/services.ts` is therefore the permanent home of the service copy, which is also why removing `price`/`priceNote`/`range` from it on 2026-10-04 was the right call.
+- **Why it can't work:** Instatic has no public API (it publishes HTML; its API is session-cookie admin only). The workaround was a custom plugin (`instatic-plugin/content-api/`, id `goodai.content-api`) exposing public `/posts` and `/services` under `/admin/api/cms/plugins/goodai.content-api/runtime/`. Every step needs admin console access we don't have — uploading the plugin (only v0.1.0 with wrong routes ever went up), creating the Data table, and confirming whether public GET is reachable at all (undocumented; the plugin registers POST only). The plugin was written from docs and never successfully run. Do not invest further in it.
+- **Posts audit (19 published, for the record):** fields title/slug/body(HTML)/featuredMedia/seoTitle/seoDescription. Gaps: no real publish date (all `2026-08-16` import time), no excerpt, no author/category; some slugs don't match titles; one title typo ("Australia s").
+- **Still undecided: the blog.** With no read path from Instatic, `/blog` + `/blog/[slug]` cannot be fed from the CMS. Options are (a) drop the blog from v1.0 and remove the footer link, (b) point the link at wherever Instatic publishes HTML, if a public URL exists, (c) keep posts in the repo as TS/MDX that Kevin edits. Needs Kevin's answer.
+- **"Field notes" link is wrong right now:** it points at `https://goodai.up.railway.app/`, the **Instatic admin host**, not a public page — almost certainly a copy-paste of the admin URL. It must not stay in the public footer.
 
 ## Decided 2026-09-30 / 10-01
 
