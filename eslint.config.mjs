@@ -17,7 +17,8 @@ const eslintConfig = defineConfig([
     rules: {
       // Bug-finding: classes that generate no CSS and colors outside the
       // theme fail lint. Plain-CSS classes from app/studio-controls.css and
-      // @designcodeio/threeui are allow-listed.
+      // @designcodeio/threeui are allow-listed; story-text-section and
+      // story-visual are GSAP selectors in VisualStory.tsx, not styles.
       "shadcn/no-unknown-classes": ["error", {
         allow: [
           "contact-phone",
@@ -27,6 +28,8 @@ const eslintConfig = defineConfig([
           "voice-phone",
           "pen-underline",
           "threeui-background",
+          "story-text-section",
+          "story-visual",
         ],
       }],
       "shadcn/no-raw-colors": "error",

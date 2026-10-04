@@ -1,19 +1,16 @@
 import Link from "next/link";
-import { ArrowUpRight, MoveDown, Plus, Check, Headphones, Workflow, MessagesSquare, Network, ScanSearch, Asterisk } from "lucide-react";
+import { ArrowUpRight, Plus, Check, Headphones, Workflow, MessagesSquare, Network, ScanSearch, Asterisk } from "lucide-react";
 import { SURVEY_URL, PHONE_DISPLAY, PHONE_HREF } from "@/lib/links";
 import { services } from "@/lib/services";
 import { WorkflowPreview } from "@/components/studio/WorkflowPreview";
 import { ScrollStory } from "@/components/studio/ScrollStory";
 import { PerthSketchbook } from "@/components/studio/PerthSketchbook";
-import { HeroStudy } from "@/components/studio/HeroStudy";
+import { Hero } from "@/components/sections/Hero";
 const serviceIcons = [Headphones, Workflow, MessagesSquare, Network, ScanSearch];
 export default function Home() {
   return <div className="home-page">
     <PerthSketchbook />
-    <section className="hero shell">
-        <div className="hero-copy"><h1>Good work.<br /><em>More life.</em></h1><p className="hero-description">Knock off early. We take the admin off your hands: phone answering, quoting, follow-ups.<br className="desktop-break" /> Go see the kids.</p><Link href={SURVEY_URL} className="button hero-button">Let’s suss the fuss <ArrowUpRight size={20} /></Link><Link href="/demo" className="text-link hero-voice-link">See the voice + automation demo <Headphones size={17} /></Link><p className="handwritten hero-handnote">Go on. Knock off early.<svg viewBox="0 0 140 45" fill="none" aria-hidden="true"><path d="M4 16c31 21 83 19 123-5m-16-4 20 2-9 17"/></svg></p><div className="hero-bottom"><span className="location-dot" /> Perth, Australia. Working everywhere.<a href="#services" aria-label="Explore our services"><MoveDown size={19} /></a></div></div>
-      <HeroStudy />
-    </section>
+    <Hero />
     <div className="promise-strip"><div className="shell"><span>Less chasing.</span><Asterisk className="small-spark" aria-hidden="true"/><span>Less copying.</span><Asterisk className="small-spark" aria-hidden="true"/><span>More getting on with it.</span></div></div>
     <section className="empathy shell" id="been-tough">
       <div className="section-heading"><h2>It’s been a lot,<br /><em>hasn’t it?</em></h2><p>The quotes you chase. The details you type twice.<br />The phone you answer after hours.</p></div>
