@@ -1,7 +1,7 @@
 {
   "id": "goodai.content-api",
   "name": "Good'Ai content API",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "apiVersion": 1,
   "description": "Read-only public JSON feed of published posts and services for the Next.js site.",
   "permissions": ["cms.routes", "cms.routes.public", "cms.content.read"],
