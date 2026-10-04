@@ -56,11 +56,17 @@ Needs new art: door/handle/mug frames, cheers close-up. About 9–10 frames in t
 - **Kevin installed the plugins 2026-10-04** (content-api plus the others), following a video walkthrough. So the CMS route is live after all — the earlier "we have no console control" reading was wrong and was reverted.
 - Plugin source is `instatic-plugin/content-api/server/index.js`, shipped as `goodai-content-api.plugin.zip`. It mounts at `/admin/api/cms/plugins/goodai.content-api/runtime/` and serves `/posts` (published only) and `/services` as `{ table, records, totalCount }`. Entries come back as `{ id, slug, cells: { <fieldId>: value } }`, so field access is `cells.price`, not `price`.
 - **Known fragility:** the handler registers POST unconditionally and registers GET *only if the host exposes `pub.get`*. Public GET was undocumented when this was written. Until a real GET is confirmed working, nothing can rely on it.
-- **Still unconfirmed:** (1) the public URL to fetch from, (2) whether GET actually responds, (3) whether the `services` Data table now exists.
+- **Tested from outside 2026-10-04, both methods 404:**
+  - `GET  /admin/api/cms/plugins/goodai.content-api/runtime/posts` → 404
+  - `POST /admin/api/cms/plugins/goodai.content-api/runtime/posts` → 404
+  - `POST /admin/api/cms/plugins/goodai.content-api/runtime/services` → 404
+
+  **This does not prove the plugin is missing.** An unauthenticated 404 on an `/admin/api/` path is consistent with either (a) the plugin not being installed/enabled under that id, or (b) the plugin being installed but admin routes hidden from unauthenticated callers. Cannot be distinguished from outside. Kevin has to check in the admin UI: is `goodai.content-api` listed and enabled, and does the plugin UI expose a public base URL? Until then `lib/instatic.ts` has nothing reliable to call.
 - **Field ids for the `services` table: `slug, name, line, description, items, detail, order`** — `price`, `priceNote` and `range` were dropped on 2026-10-04 when pricing was removed from `lib/services.ts`. Add them back only if Kevin decides the CMS should hold prices the site does not render.
 - Posts audit (19 published, for the record): fields title/slug/body(HTML)/featuredMedia/seoTitle/seoDescription. Gaps: no real publish date (all `2026-08-16` import time), no excerpt, no author/category; some slugs don't match titles; one title typo ("Australia s").
 - **Not built yet:** `lib/instatic.ts` client, wiring home/services/sitemap to it, `/blog` + `/blog/[slug]` pages, and the footer "Field notes" link. Note the service pages are currently `generateStaticParams` off `lib/services.ts` with no `revalidate` — if the CMS becomes the source of truth, a build-time fetch would mean CMS edits need a redeploy to appear.
-- **"Field notes" link is wrong right now:** it points at `https://goodai.up.railway.app/`, the **Instatic admin host**, not a public page. Must not stay in the public footer.
+- **The footer "Field notes" link is CORRECT.** Verified 2026-10-04 by fetching it: `https://goodai.up.railway.app/` is the **published public blog** ("GOOD AI • FIELD GUIDE FOR THE FUTURE", 19 essays, newsletter signup) — not an admin page. The admin is the separate `/admin` subpath. An earlier note here wrongly called it "the CMS admin host"; that was a misreading of the `/admin` suffix and has been removed. The only real defect was the missing `target="_blank"` / `rel="noopener noreferrer"`, now fixed.
+- **This means `/blog` + `/blog/[slug]` are not needed for v1.0.** The blog is already published and live at its own URL. Building a native blog route would duplicate content that already renders. Revisit only if you want the essays inside goodai.au for SEO.
 
 ## Decided 2026-09-30 / 10-01
 
