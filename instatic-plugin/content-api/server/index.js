@@ -3,8 +3,15 @@
 //   /posts and /services -> { table, records, totalCount }
 // Records are Instatic entries: { id, slug, cells: { <fieldId>: value }, ... }.
 // Plugin handlers receive { req, body, user } only (no path params), so each
-// table gets its own fixed route. The docs only show POST on public routes, so
-// POST is always registered and GET is added when the host exposes it.
+// table gets its own fixed route.
+//
+// IMPORTANT — consumers must POST. Instatic's plugin SDK documents no
+// public GET: every `api.cms.routes.public.*` example in the official docs
+// is `.post` (subscribe, webhook). The capability-gated `.get`/`.patch`/
+// `.delete` forms all require a logged-in caller and the matching core
+// capability, so they are not reachable anonymously. The site reading this
+// feed is a server-side fetch and can POST like any other client.
+//
 // posts is a routable post type (has publish status); services is a plain Data
 // table, which has no workflow/status, so it is listed unfiltered.
 const TABLES = { posts: { status: "published" }, services: {} };
@@ -34,6 +41,5 @@ export function activate(api) {
     };
 
     pub.post(`/${table}`, handler);
-    if (typeof pub.get === "function") pub.get(`/${table}`, handler);
   }
 }
