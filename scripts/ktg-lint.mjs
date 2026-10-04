@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
-// Motion/layout contract checks. GSAP/ScrollTrigger rules (HomeScroll,
-// toggleActions, pin without end) were removed while no GSAP is in use;
-// re-add them when ScrollTrigger comes back.
+// Motion/layout contract checks. GSAP/ScrollTrigger rules (HomeScroll
+// `once: true`, `toggleActions` in story files, `pin: true` without an
+// explicit `end`) were removed because nothing trips them: HomeScroll.tsx
+// is gone, and ScrollStory/SmoothScroll/Preloader use neither toggleActions
+// nor an unbounded pin. GSAP is still live in those three - re-add the
+// checks if narrative motion comes back.
 
 import fs from "node:fs";
 import path from "node:path";

@@ -52,8 +52,8 @@ const eslintConfig = defineConfig([
   },
   // Inline styles: content surfaces (pages, sections, layout) must style
   // through classes. Motion primitives (components/ui, components/studio,
-  // components/carousel, shaders) position themselves with Framer Motion
-  // and are exempt.
+  // components/carousel, shaders) position themselves with GSAP / Framer
+  // Motion and are exempt.
   {
     files: ["app/**", "components/sections/**", "components/layout/**"],
     rules: { "shadcn/no-inline-styles": "warn" },
