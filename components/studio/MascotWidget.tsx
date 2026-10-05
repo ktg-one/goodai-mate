@@ -59,9 +59,11 @@ export function MascotWidget() {
       )}
 
       {/* Mascot character */}
-      <button 
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => setOpen((prev) => !prev)}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen((prev) => !prev); } }}
         className="cursor-pointer transition-transform hover:scale-105 active:scale-95 drop-shadow-md bg-transparent border-0 p-0"
         title="Say g'day to Goodie!"
         aria-expanded={open}
@@ -73,7 +75,7 @@ export function MascotWidget() {
           size={110}
           label="Goodie — Good'Ai mascot"
         />
-      </button>
+      </div>
     </aside>
   );
 }
