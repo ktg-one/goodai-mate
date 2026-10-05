@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
@@ -31,6 +31,21 @@ export function VisualStory() {
     const triggerRef = useRef<HTMLDivElement>(null);
     const visualRef = useRef<HTMLDivElement>(null);
     const [activeChapter, setActiveChapter] = useState(0);
+
+    const renderedStorySteps = useMemo(() => {
+        return storySteps.map((step, index) => (
+            <div
+                key={step.title}
+                className={`story-text-section story-text-${index} min-h-[100dvh] flex flex-col justify-center px-8 md:px-20`}
+            >
+                <span className="text-sm font-mono text-brand-coral mb-4">0{index + 1}</span>
+                <h3 className="text-4xl md:text-6xl font-bold mb-6 tracking-wide">{step.title}</h3>
+                <p className="text-xl text-brand-paper/75 leading-relaxed max-w-md">
+                    {step.description}
+                </p>
+            </div>
+        ));
+    }, []);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -88,18 +103,7 @@ export function VisualStory() {
                 {/* Left Side: Scrolling Text */}
                 <div className="w-full md:w-1/2 py-24 md:py-0">
                     <div className="flex flex-col">
-                        {storySteps.map((step, index) => (
-                            <div
-                                key={step.title}
-                                className={`story-text-section story-text-${index} min-h-[100dvh] flex flex-col justify-center px-8 md:px-20`}
-                            >
-                                <span className="text-sm font-mono text-brand-coral mb-4">0{index + 1}</span>
-                                <h3 className="text-4xl md:text-6xl font-bold mb-6 tracking-wide">{step.title}</h3>
-                                <p className="text-xl text-brand-paper/75 leading-relaxed max-w-md">
-                                    {step.description}
-                                </p>
-                            </div>
-                        ))}
+                        {renderedStorySteps}
                     </div>
                 </div>
 
