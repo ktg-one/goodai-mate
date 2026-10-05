@@ -31,7 +31,8 @@
     "id": "pricing-cards",
     "component": "components/sections/Pricing.tsx",
     "type": "hover/card-scale",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion whileHover card scale and elevation transforms (scale, translateY, dynamic shadow), prefers-reduced-motion compliance via useReducedMotion, and smooth >=1.0s movement duration curves."
   },
   {
     "id": "faq-accordion",

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,8 @@ const EXECUTIVE_ITEMS = ["Workflow mapped", "Automation built", "Edge cases test
 const VIP_ITEMS = ["New workflows", "System upkeep", "Team questions", "Practical improvements"];
 
 export function Pricing() {
+    const shouldReduceMotion = useReducedMotion();
+
     const renderedStandardItems = useMemo(() => {
         return STANDARD_ITEMS.map(item => (
             <li key={item} className="flex items-center gap-3">
@@ -53,7 +55,14 @@ export function Pricing() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Standard Member */}
-                    <div className="p-10 bg-brand-paper border border-brand-ink shadow-[4px_4px_0_var(--brand-ink)] flex flex-col justify-between h-full">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        whileHover={shouldReduceMotion ? {} : { scale: 1.03, y: -6 }}
+                        transition={{ duration: 1.0, ease: "easeOut" }}
+                        className="p-10 bg-brand-paper border border-brand-ink shadow-[4px_4px_0_var(--brand-ink)] flex flex-col justify-between h-full hover:shadow-[8px_8px_0_var(--brand-ink)] transition-shadow duration-300"
+                    >
                         <div>
                             <h3 className="text-lg font-medium tracking-widest uppercase mb-4 text-brand-coral">First chat</h3>
                             <div className="text-5xl font-light mb-8 text-brand-ink">No charge</div>
@@ -64,10 +73,17 @@ export function Pricing() {
                         <Button asChild variant="outline" className="w-full rounded-full py-6 border-brand-ink bg-brand-paper text-brand-ink hover:bg-brand-eucalyptus transition-colors">
                             <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer">Tell us your problem</a>
                         </Button>
-                    </div>
+                    </motion.div>
 
                     {/* Executive Member - Metallic/Premium */}
-                    <div className="relative p-10 bg-brand-ink text-brand-paper shadow-[8px_8px_0_var(--brand-coral)] flex flex-col justify-between h-full md:scale-105 border border-brand-ink overflow-hidden">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        whileHover={shouldReduceMotion ? {} : { scale: 1.08, y: -6 }}
+                        transition={{ duration: 1.0, ease: "easeOut" }}
+                        className="relative p-10 bg-brand-ink text-brand-paper shadow-[8px_8px_0_var(--brand-coral)] flex flex-col justify-between h-full md:scale-105 border border-brand-ink overflow-hidden hover:shadow-[12px_12px_0_var(--brand-coral)] transition-shadow duration-300"
+                    >
 
                         <div>
                             <div className="flex justify-between items-start mb-4">
@@ -84,10 +100,17 @@ export function Pricing() {
                         <Button asChild className="w-full rounded-full py-6 bg-brand-coral text-brand-ink hover:bg-brand-paper transition-colors font-medium">
                             <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer">Talk through a sprint</a>
                         </Button>
-                    </div>
+                    </motion.div>
 
                     {/* V.I.P. */}
-                    <div className="p-10 bg-brand-paper border border-brand-ink shadow-[4px_4px_0_var(--brand-ink)] flex flex-col justify-between h-full">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        whileHover={shouldReduceMotion ? {} : { scale: 1.03, y: -6 }}
+                        transition={{ duration: 1.0, ease: "easeOut" }}
+                        className="p-10 bg-brand-paper border border-brand-ink shadow-[4px_4px_0_var(--brand-ink)] flex flex-col justify-between h-full hover:shadow-[8px_8px_0_var(--brand-ink)] transition-shadow duration-300"
+                    >
                         <div>
                             <h3 className="text-lg font-medium tracking-widest uppercase mb-4 text-brand-eucalyptus-ink">Ongoing support</h3>
                             <div className="text-5xl font-light mb-8 text-brand-ink">As needed</div>
@@ -98,7 +121,7 @@ export function Pricing() {
                         <Button asChild variant="outline" className="w-full rounded-full py-6 border-brand-ink bg-brand-paper text-brand-ink hover:bg-brand-eucalyptus transition-colors">
                             <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer">Talk to us</a>
                         </Button>
-                    </div>
+                    </motion.div>
 
                 </div>
             </div>
