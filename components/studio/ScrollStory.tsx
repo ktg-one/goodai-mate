@@ -24,6 +24,21 @@ export function ScrollStory() {
       media.add("(min-width: 761px) and (prefers-reduced-motion: no-preference)", () => {
         const scenes = scope.querySelectorAll<HTMLElement>(".story-canvas [data-scene]");
         const steps = scope.querySelectorAll<HTMLElement>(".scroll-chapter");
+        const canvas = scope.querySelector<HTMLElement>(".story-canvas");
+
+        if (canvas) {
+          ScrollTrigger.create({
+            trigger: scope.querySelector<HTMLElement>(".story-layout"),
+            start: "top 120px",
+            end: "bottom bottom",
+            pin: canvas,
+            pinSpacing: false,
+            scrub: 1,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          });
+        }
+
         scenes.forEach((scene, index) => {
           const paths = scene.querySelectorAll<SVGPathElement>("[data-ink]");
           paths.forEach(path => { const length = path.getTotalLength(); gsap.set(path, { strokeDasharray: length, strokeDashoffset: length }); });
