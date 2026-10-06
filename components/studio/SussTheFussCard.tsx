@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { PHONE_DISPLAY, PHONE_HREF, LEAD_EMAIL, LEAD_EMAIL_HREF } from "@/lib/links";
 import { ArrowUpRight, Check, Sparkles, PhoneCall, Receipt, MessageSquareReply, CopySlash, Clock, Mail, Loader2 } from "lucide-react";
 
 const HEADACHES = [
@@ -160,7 +161,22 @@ export function SussTheFussCard() {
         </div>
 
         <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="sr-only" />
-        {error && <p role="alert" className="text-sm text-brand-coral">{error}</p>}
+        {error && (
+          <div role="alert" className="text-sm text-brand-coral space-y-2">
+            <p>{error}</p>
+            <p className="text-brand-ink/80">
+              Prefer a human?{" "}
+              <a href={PHONE_HREF} className="underline underline-offset-2">
+                Call {PHONE_DISPLAY}
+              </a>
+              {" "}or{" "}
+              <a href={LEAD_EMAIL_HREF} className="underline underline-offset-2">
+                {LEAD_EMAIL}
+              </a>
+              .
+            </p>
+          </div>
+        )}
 
         {submitted && (
           <div className="suss-success-note" role="status" aria-live="polite">

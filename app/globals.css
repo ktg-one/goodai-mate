@@ -2245,3 +2245,10 @@ em {
 .sbf-meta { width: min(1100px, 100%); display: flex; justify-content: space-between; align-items: baseline; padding: 0 4%; color: var(--muted); }
 .sbf-caption { margin: 0; }
 .sbf-count { font-size: 13px; letter-spacing: .12em; font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ping,
+  .animate-pulse {
+    animation: none;
+  }
+}
