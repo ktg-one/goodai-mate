@@ -1,6 +1,6 @@
 "use client";
 
-import { useScroll, useVelocity, useTransform, useSpring, motion } from "framer-motion";
+import { useScroll, useVelocity, useTransform, useSpring, m } from "framer-motion";
 
 export function Noise() {
     const { scrollY } = useScroll();
@@ -14,7 +14,7 @@ export function Noise() {
     const opacity = useTransform(smoothVelocity, [-2000, 0, 2000], [0.15, 0.03, 0.15]);
 
     return (
-        <motion.div
+        <m.div
             style={{ opacity }}
             className="pointer-events-none fixed inset-0 z-[9999] opacity-[0.03] mix-blend-overlay"
         >
@@ -29,6 +29,6 @@ export function Noise() {
                 </filter>
                 <rect width="100%" height="100%" filter="url(#noiseFilter)" />
             </svg>
-        </motion.div>
+        </m.div>
     );
 }

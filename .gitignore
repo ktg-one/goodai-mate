@@ -54,3 +54,5 @@ next-env.d.ts
 
 # parked copies of removed components, kept locally for reference
 /docs/components/
+
+/.venv/

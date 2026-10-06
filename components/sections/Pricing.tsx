@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -42,20 +42,20 @@ export function Pricing() {
         <section id="pricing" className="py-40 px-6 bg-brand-paper text-brand-ink">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-20">
-                    <motion.h2
+                    <m.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                         className="text-4xl md:text-6xl font-medium tracking-wide mb-6"
                     >
                         Ways to work together.
-                    </motion.h2>
+                    </m.h2>
                     <p className="text-brand-ink/70 text-lg font-light">Start small. Fix the right thing. Build from there.</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Standard Member */}
-                    <motion.div
+                    <m.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -73,10 +73,10 @@ export function Pricing() {
                         <Button asChild variant="outline" className="w-full rounded-full py-6 border-brand-ink bg-brand-paper text-brand-ink hover:bg-brand-eucalyptus transition-colors">
                             <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer">Tell us your problem</a>
                         </Button>
-                    </motion.div>
+                    </m.div>
 
                     {/* Executive Member - Metallic/Premium */}
-                    <motion.div
+                    <m.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -100,10 +100,10 @@ export function Pricing() {
                         <Button asChild className="w-full rounded-full py-6 bg-brand-coral text-brand-ink hover:bg-brand-paper transition-colors font-medium">
                             <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer">Talk through a sprint</a>
                         </Button>
-                    </motion.div>
+                    </m.div>
 
                     {/* V.I.P. */}
-                    <motion.div
+                    <m.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -121,7 +121,7 @@ export function Pricing() {
                         <Button asChild variant="outline" className="w-full rounded-full py-6 border-brand-ink bg-brand-paper text-brand-ink hover:bg-brand-eucalyptus transition-colors">
                             <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer">Talk to us</a>
                         </Button>
-                    </motion.div>
+                    </m.div>
 
                 </div>
             </div>

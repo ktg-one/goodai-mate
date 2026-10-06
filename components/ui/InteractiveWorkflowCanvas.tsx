@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { m, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   Play,
   RotateCcw,
@@ -424,7 +424,7 @@ export function InteractiveWorkflowCanvas({
               strokeDasharray="4 4"
               fill="none"
             />
-            <motion.path
+            <m.path
               d="M 250 150 L 333 150"
               stroke="url(#gradient-trigger-ai)"
               strokeWidth="3"
@@ -450,7 +450,7 @@ export function InteractiveWorkflowCanvas({
               strokeDasharray="4 4"
               fill="none"
             />
-            <motion.path
+            <m.path
               d="M 583 150 L 666 150"
               stroke="url(#gradient-ai-action)"
               strokeWidth="3"
@@ -609,7 +609,7 @@ export function InteractiveWorkflowCanvas({
       {/* Completion Banner */}
       <AnimatePresence>
         {step === 4 && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
@@ -629,7 +629,7 @@ export function InteractiveWorkflowCanvas({
             <span className="font-mono text-xs uppercase px-3 py-1 rounded bg-brand-teal text-brand-navy font-bold">
               0 Human Minutes Wasted
             </span>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

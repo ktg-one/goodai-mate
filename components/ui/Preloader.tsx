@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -44,7 +44,7 @@ export function Preloader() {
     return (
         <AnimatePresence mode="wait">
             {isLoading && (
-                <motion.div
+                <m.div
                     key="preloader"
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -54,14 +54,14 @@ export function Preloader() {
                     aria-label="Loading Good'Ai"
                 >
                     <div className="flex flex-col items-center">
-                        <motion.span
+                        <m.span
                             initial={{ opacity: 0, y: 18 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                             className="wordmark wordmark-loading"
                             aria-hidden="true"
-                        >Good<span className="brand-apostrophe">’</span>Ai<span className="brand-period">.</span></motion.span>
-                        <motion.div
+                        >Good<span className="brand-apostrophe">’</span>Ai<span className="brand-period">.</span></m.span>
+                        <m.div
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: [0, 0.72, 1] }}
                             transition={{ duration: 1.2, times: [0, 0.75, 1], ease: [0.76, 0, 0.24, 1] }}
@@ -69,7 +69,7 @@ export function Preloader() {
                             className="mt-8 h-px w-48 origin-left bg-brand-coral"
                         />
                     </div>
-                </motion.div>
+                </m.div>
             )}
         </AnimatePresence>
     );

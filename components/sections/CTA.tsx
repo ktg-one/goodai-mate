@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, PhoneCall } from "lucide-react";
 import { SURVEY_URL, PHONE_HREF, PHONE_DISPLAY } from "@/lib/links";
@@ -9,7 +9,7 @@ export function CTA() {
     return (
         <section className="min-h-[100dvh] flex flex-col justify-center py-24 px-6 bg-brand-ink text-brand-paper overflow-hidden relative border-y border-brand-paper/20">
             <div className="max-w-4xl mx-auto text-center relative z-10 w-full">
-                <motion.div
+                <m.div
                     initial={{ opacity: 0, y: 15 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -17,9 +17,9 @@ export function CTA() {
                     className="inline-block px-3.5 py-1 rounded-full border border-brand-paper/20 bg-brand-paper/5 text-xs font-mono uppercase tracking-widest text-brand-coral mb-6"
                 >
                     Ready to reclaim your time?
-                </motion.div>
+                </m.div>
 
-                <motion.h2
+                <m.h2
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -28,9 +28,9 @@ export function CTA() {
                 >
                     What&apos;s eating <br />
                     <span className="text-brand-coral">your week?</span>
-                </motion.h2>
+                </m.h2>
 
-                <motion.p
+                <m.p
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -38,9 +38,9 @@ export function CTA() {
                     className="text-lg md:text-2xl text-brand-paper/75 mb-12 max-w-2xl mx-auto font-light leading-relaxed"
                 >
                     Tell us what gets copied, chased, or done twice. We&apos;ll build the voice agent and n8n workflow that sorts it forever.
-                </motion.p>
+                </m.p>
 
-                <motion.div
+                <m.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
@@ -59,7 +59,7 @@ export function CTA() {
                             Tell us what&apos;s eating your time <ArrowRight className="w-4 h-4 ml-1" />
                         </a>
                     </Button>
-                </motion.div>
+                </m.div>
             </div>
         </section>
     );

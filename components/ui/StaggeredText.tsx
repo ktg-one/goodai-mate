@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface StaggeredTextProps {
     children: string;
@@ -24,7 +24,7 @@ export function StaggeredText({
                 const count = (counts.get(letter) ?? 0) + 1;
                 counts.set(letter, count);
                 return (
-                <motion.span
+                <m.span
                     key={`${letter}-${count}`}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -37,7 +37,7 @@ export function StaggeredText({
                     className="inline-block"
                 >
                     {letter === " " ? "\u00A0" : letter}
-                </motion.span>
+                </m.span>
             )})}
         </span>
     );

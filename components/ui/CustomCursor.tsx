@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { m, useMotionValue, useSpring } from "framer-motion";
 
 const SPRING_CONFIG = { damping: 25, stiffness: 700 };
 
@@ -38,7 +38,7 @@ export function CustomCursor() {
     }, [mouseX, mouseY]);
 
     return (
-        <motion.div
+        <m.div
             className="fixed top-0 left-0 w-8 h-8 rounded-full bg-white text-black pointer-events-none z-[10000] mix-blend-difference hidden md:flex items-center justify-center font-[10px]"
             style={{
                 x: cursorX,
@@ -47,6 +47,6 @@ export function CustomCursor() {
             }}
         >
             {/* Optional: Small inner dot or ring */}
-        </motion.div>
+        </m.div>
     );
 }

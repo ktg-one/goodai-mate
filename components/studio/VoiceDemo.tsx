@@ -1,13 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useSyncExternalStore } from "react";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/links";
-import { TrilletVoiceWidget } from "./TrilletVoiceWidget";
+
+const emptySubscribe = () => () => {};
 
 export function VoiceDemo() {
-  const [enabled, setEnabled] = useState(false);
+  const hasWindow = useSyncExternalStore(emptySubscribe, () => true, () => false);
+
+  // Check if voice widget is enabled (we can't directly check the launcher state,
+  // but we can show appropriate UI based on the expected behavior)
+  const showVoiceIndicator = hasWindow;
 
   return (
     <section className="voice-panel" id="voice" aria-labelledby="voice-title">
@@ -35,28 +40,25 @@ export function VoiceDemo() {
           <span>Or try it in your browser below.</span>
         </a>
 
-        {!enabled ? (
-          <button
-            type="button"
-            className="button cursor-pointer"
-            onClick={() => setEnabled(true)}
-          >
-            Try the voice agent <ArrowUpRight size={17} />
-          </button>
-        ) : (
+        <button
+          type="button"
+          className="button cursor-pointer"
+          onClick={() => {
+            // Trigger the global voice widget - for now just scroll instructions
+            // The user can use the floating launcher in the bottom-right corner
+            window.dispatchEvent(new CustomEvent("openVoiceWidget"));
+          }}
+        >
+          Try the voice agent <ArrowUpRight size={17} />
+        </button>
+
+        {showVoiceIndicator && (
           <div className="rounded-xl border border-brand-paper/20 bg-brand-paper/10 p-3 flex items-center gap-3">
             <span className="flex h-2.5 w-2.5 rounded-full bg-brand-teal animate-pulse" />
             <span className="text-xs font-mono text-brand-paper">
-              Voice assistant active in the bottom-right corner.
+              Voice assistant available in the bottom-right corner.
             </span>
           </div>
-        )}
-
-        {enabled && (
-          <TrilletVoiceWidget
-            agentName="Darling Good"
-            autoOpen={true}
-          />
         )}
 
         <Link href="/contact" className="text-link">

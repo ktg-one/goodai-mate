@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -113,7 +113,7 @@ export function VisualStory() {
                     <div className="sticky top-0 h-[100dvh] min-h-[100dvh] w-full flex items-center justify-center p-8">
                         <div className="relative w-full aspect-square overflow-hidden border border-brand-ink shadow-[8px_8px_0_var(--brand-coral)]">
                             <AnimatePresence mode="wait">
-                                <motion.div
+                                <m.div
                                     key={activeChapter}
                                     initial={{ opacity: 0, scale: 1.1 }}
                                     animate={{ opacity: 1, scale: 1 }}
@@ -128,7 +128,7 @@ export function VisualStory() {
                                             0{activeChapter + 1}
                                         </h3>
                                     </div>
-                                </motion.div>
+                                </m.div>
                             </AnimatePresence>
                         </div>
                     </div>
