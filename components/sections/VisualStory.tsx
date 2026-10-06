@@ -15,13 +15,13 @@ const storySteps = [
         image: "bg-brand-coral",
     },
     {
-        title: "We sort the handoffs",
-        description: "The right task starts when the right thing happens.",
+        title: "Palm it off",
+        description: "Admin, bookings, phone calls, socials, anything digital.",
         image: "bg-brand-eucalyptus",
     },
     {
         title: "Knock off early",
-        description: "Routine work gets handled. Your team deals with what actually needs a human.",
+        description: "Give us the shitty jobs",
         image: "bg-brand-paper",
     },
 ];

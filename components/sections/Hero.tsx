@@ -30,7 +30,7 @@ export function Hero() {
           </Link>
         </Magnetic>
         <p className="handwritten hero-handnote">
-          Go on. Knock off early.
+          Leave it with us.
           <svg viewBox="0 0 140 45" fill="none" aria-hidden="true">
             <path d="M4 16c31 21 83 19 123-5m-16-4 20 2-9 17" />
           </svg>

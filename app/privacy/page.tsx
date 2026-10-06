@@ -74,9 +74,9 @@ export default function Privacy() {
       <p>
         Hosting and delivery services (for example the platform that serves this
         site) may process technical request data such as IP address, user agent,
-        and timestamps needed to deliver pages and protect against abuse. This
-        site does not add third-party advertising or analytics scripts in the
-        current build.
+        and timestamps needed to deliver pages and protect against abuse. We use
+        privacy-friendly Vercel Analytics without cookies to understand site
+        usage. This site does not add third-party advertising scripts.
       </p>
 
       <h2>Questions or requests</h2>

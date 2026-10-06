@@ -8,9 +8,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const chapters = [
-  { title: "Call it a day.", copy: "Another day done. Leave the follow-ups, copying and chasing with us.", note: "This is home.", caption: "Perth. Another day done." },
-  { title: "Go on. Knock off early.", copy: "Pick up the kids. Be there for what matters. The routine work can keep moving without taking the rest of your day.", note: "Go see the kids.", caption: "What matters is waiting." },
-  { title: "We got you.", copy: "See your mates. Have a proper arvo. Good work should leave room for a life outside it.", note: "Your time is yours.", caption: "Less busywork. More living." },
+  { title: "Call it a day.", copy: "Leave the follow-ups, copying and chasing with us.", note: "This is home.", caption: "Perth, end of the day." },
+  { title: "Go on. Head home.", copy: "Pick up the kids. Be there for the good stuff. The routine work can keep moving without taking the rest of your day.", note: "The good bit starts now.", caption: "What matters is waiting." },
+  { title: "We got you.", copy: "See your mates. Have a proper arvo. Good work should leave room for a life outside it.", note: "Your time is yours.", caption: "Nothing left to chase." },
 ];
 
 export function ScrollStory() {
