@@ -122,26 +122,26 @@ type Scenario = {
 export const SCENARIOS: Scenario[] = [
   {
     id: "speed-to-lead",
-    title: "Instant Speed-to-Lead",
-    badge: "#1 Most Requested",
+    title: "Speed-to-lead example",
+    badge: "Illustrative demo",
     description: "Inbound website inquiry automatically parsed, SMS dispatched, job logged in CRM.",
-    timeSavings: "Saves ~12 hrs/week & captures 80% more deals",
+    timeSavings: "Illustrative — not a measured outcome",
     nodes: {
       trigger: {
         title: "Website Form Webhook",
-        subtitle: "Inbound: Subiaco Commercial A/C Quote",
+        subtitle: "Inbound: sample commercial quote request",
         icon: Mail,
       },
       ai: {
         title: "Good'Ai Intent Classifier",
         subtitle: "Parsing urgency, scope & location",
-        extractedData: ["Client: Matt D. (0412 882 ...)", "Service: Commercial HVAC", "Urgency: HIGH — Today"],
+        extractedData: ["Client: Sample name", "Service: Commercial HVAC", "Urgency: HIGH — Today"],
       },
       action1: {
         title: "Twilio Instant SMS",
-        subtitle: "Fired in 0.4s",
+        subtitle: "SMS dispatched",
         icon: MessageSquare,
-        detail: "G'day Matt, received your Subiaco A/C request. Pick a 10m consult slot here: cal.com/goodai/matt",
+        detail: "G'day — received your quote request. Pick a short consult slot when you are free.",
       },
       action2: {
         title: "ServiceM8 / Xero Sync",
@@ -153,26 +153,26 @@ export const SCENARIOS: Scenario[] = [
         title: "Slack / WhatsApp Alert",
         subtitle: "On-Call Tech Notified",
         icon: Bell,
-        detail: "High-value lead auto-routed to Dave with 1-tap accept button.",
+        detail: "Lead auto-routed to on-call with a one-tap accept button.",
       },
     },
   },
   {
     id: "voice-agent",
-    title: "24/7 Voice Agent Call",
+    title: "After-hours voice agent call",
     badge: "Voice Automation",
     description: "Customer calls (08) 7741 4191 after hours. AI answers, qualifies, and books appointment.",
-    timeSavings: "Zero missed calls while on the tools",
+    timeSavings: "Example: calls covered while on the tools",
     nodes: {
       trigger: {
         title: "Inbound Call (08) 7741 4191",
-        subtitle: "Caller: Sarah, Emergency Plumbing",
+        subtitle: "Caller: sample emergency plumbing enquiry",
         icon: PhoneCall,
       },
       ai: {
         title: "Good'Ai Voice Synthesizer",
         subtitle: "Australian conversational speech",
-        extractedData: ["Caller: Sarah K.", "Issue: Burst hot water system", "Address: 42 Hay St, Subiaco"],
+        extractedData: ["Caller: Sample name", "Issue: Burst hot water system", "Address: Example street, Perth"],
       },
       action1: {
         title: "Cal.com Dispatch",
@@ -182,15 +182,15 @@ export const SCENARIOS: Scenario[] = [
       },
       action2: {
         title: "Booking SMS Confirmation",
-        subtitle: "Sent in 0.2s",
+        subtitle: "SMS confirmation sent",
         icon: MessageSquare,
-        detail: "Sarah, your emergency plumbing slot is confirmed for tomorrow 8:30am with Dave.",
+        detail: "Your emergency plumbing slot is confirmed for tomorrow morning with the on-call tech.",
       },
       alert: {
         title: "Urgent Alert to Master Plumber",
         subtitle: "Instant Dispatch",
         icon: Bell,
-        detail: "Morning call-out ready in Subiaco. Parts list auto-generated.",
+        detail: "Morning call-out ready. Parts list drafted for the job.",
       },
     },
   },

@@ -5,6 +5,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { Mascot } from "page-mascot";
 import { Phone, MessageSquare, Mic, X } from "lucide-react";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/links";
 
 const TrilletVoiceWidget = dynamic(
   () => import("./TrilletVoiceWidget").then((mod) => mod.TrilletVoiceWidget),
@@ -82,13 +83,13 @@ export function MascotWidget() {
                   <Mic size={13} className="text-brand-coral" />
                   <span>Talk with our AI voice agent</span>
                 </button>
-                <a 
-                  href="tel:+61877414198"
+                <a
+                  href={PHONE_HREF}
                   className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-white font-medium hover:opacity-90 transition text-xs"
                   style={{ background: "#ab4b3d" }}
                 >
                   <Phone size={13} />
-                  <span>Call demo line (08 7741 4198)</span>
+                  <span>Call {PHONE_DISPLAY}</span>
                 </a>
                 <Link 
                   href="/contact"
