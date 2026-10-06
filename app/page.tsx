@@ -6,7 +6,9 @@ import { WorkflowPreview } from "@/components/studio/WorkflowPreview";
 import { ScrollStory } from "@/components/studio/ScrollStory";
 import { PerthSketchbook } from "@/components/studio/PerthSketchbook";
 import { Hero } from "@/components/sections/Hero";
+
 const serviceIcons = [Headphones, Workflow, MessagesSquare, Network, ScanSearch];
+
 export default function Home() {
   return <div className="home-page">
     <PerthSketchbook />
