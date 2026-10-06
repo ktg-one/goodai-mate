@@ -5,8 +5,9 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export const metadata = {
-  title: "Studio Lab | Good'Ai Experiments",
+  title: "Lab",
   description: "Experimental 3D Services Carousel, ThreeUI Animated Top Dock, and ThreeUI Generative Tree.",
+  robots: { index: false, follow: false },
 };
 
 export default function LabPage() {

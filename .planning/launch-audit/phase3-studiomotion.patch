@@ -1,0 +1,153 @@
+diff --git a/components/studio/StudioMotion.tsx b/components/studio/StudioMotion.tsx
+index 3fac524..a87d165 100644
+--- a/components/studio/StudioMotion.tsx
++++ b/components/studio/StudioMotion.tsx
+@@ -2,50 +2,131 @@
+ 
+ import { useEffect } from "react";
+ import { usePathname } from "next/navigation";
++import { gsap } from "gsap";
++import { ScrollTrigger } from "gsap/ScrollTrigger";
+ 
+-/** Progressive enhancement: content is visible before JS and after cleanup. */
++gsap.registerPlugin(ScrollTrigger);
++
++/**
++ * Progressive enhancement motion for the studio site.
++ * - Hero entrance: WAAPI (stationary, no scroll pin).
++ * - Section reveals: GSAP ScrollTrigger fade/rise, one cluster per view.
++ * Content stays visible if JS is off. Reduced motion gets the final state only.
++ */
+ export function StudioMotion() {
+   const pathname = usePathname();
+ 
+   useEffect(() => {
+     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+     const animations = new Set<Animation>();
++    const triggers: ScrollTrigger[] = [];
++    let mm: gsap.MatchMedia | null = null;
+ 
+-    const cleanup = () => {
+-      animations.forEach(animation => animation.cancel());
++    const cleanupWaapi = () => {
++      animations.forEach((animation) => animation.cancel());
+       animations.clear();
+     };
+ 
+-    const start = () => {
+-      cleanup();
++    const cleanupGsap = () => {
++      triggers.forEach((t) => t.kill());
++      triggers.length = 0;
++      mm?.revert();
++      mm = null;
++    };
++
++    const startHero = () => {
++      cleanupWaapi();
+       if (preference.matches) return;
+ 
+       const play = (element: Element, delay = 0, distance = 0) => {
+-        const keyframes = distance > 0
+-          ? [{ opacity: 0, translate: `0 ${distance}px` }, { opacity: 1, translate: "0 0" }]
+-          : [{ opacity: 0 }, { opacity: 1 }];
+-        const animation = element.animate(
+-          keyframes,
+-          { duration: 600, delay, easing: "cubic-bezier(.16,1,.3,1)", fill: "backwards" },
+-        );
++        const keyframes =
++          distance > 0
++            ? [
++                { opacity: 0, translate: `0 ${distance}px` },
++                { opacity: 1, translate: "0 0" },
++              ]
++            : [{ opacity: 0 }, { opacity: 1 }];
++        const animation = element.animate(keyframes, {
++          duration: 600,
++          delay,
++          easing: "cubic-bezier(.16,1,.3,1)",
++          fill: "backwards",
++        });
+         animations.add(animation);
+         animation.onfinish = () => animations.delete(animation);
+       };
+ 
+-      // HomeScroll owns scroll-linked reveals. This component owns only the
+-      // stationary hero entrance so the two systems do not animate the same
+-      // opacity and transform properties.
++      // HomeScroll owns scroll-linked story. This owns only the stationary
++      // hero entrance so the two systems do not fight opacity/transform.
+       if (!window.location.hash && window.scrollY < 100) {
+-        document.querySelectorAll(".hero-copy > h1, .hero-description, .hero-button, .hero-voice-link, .hero-handnote, .hero-figure figcaption")
++        document
++          .querySelectorAll(
++            ".hero-copy > h1, .hero-description, .hero-button, .hero-voice-link, .hero-handnote, .hero-figure figcaption",
++          )
+           .forEach((element, index) => play(element, index * 95, 18));
+       }
+     };
+ 
++    const startScrollReveals = () => {
++      cleanupGsap();
++      if (preference.matches) return;
++      // Only on home — other routes keep static layout.
++      if (pathname !== "/") return;
++
++      mm = gsap.matchMedia();
++      mm.add("(prefers-reduced-motion: no-preference)", () => {
++        const reveal = (selector: string, opts: { y?: number; stagger?: number } = {}) => {
++          const nodes = gsap.utils.toArray<HTMLElement>(selector);
++          if (!nodes.length) return;
++          gsap.set(nodes, { clearProps: "opacity,transform" });
++          const tween = gsap.from(nodes, {
++            opacity: 0,
++            y: opts.y ?? 22,
++            duration: 0.85, // Kevin: nothing faster than ~1.5s; under that ceiling.
++            stagger: opts.stagger ?? 0.08,
++            ease: "power3.out",
++            scrollTrigger: {
++              // Enter near lower third; finish while still readable mid-view.
++              trigger: nodes[0],
++              start: "top 88%", // start: top of cluster at 88% viewport
++              end: "top 55%", // end: held through mid-view; once play
++              once: true,
++              toggleActions: "play none none none",
++            },
++          });
++          if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
++        };
++
++        reveal(".empathy .section-heading");
++        reveal(".empathy-beats article", { stagger: 0.1 });
++        reveal(".services-section .section-heading");
++        reveal(".service-row", { stagger: 0.06 });
++        reveal(".demo-copy");
++        reveal(".approach .section-heading");
++        reveal(".approach-steps article", { stagger: 0.1 });
++        reveal(".faq h2");
++        reveal(".faq details", { stagger: 0.05 });
++        reveal(".contact-inner > *", { stagger: 0.1 });
++
++        return () => {
++          triggers.forEach((t) => t.kill());
++          triggers.length = 0;
++        };
++      });
++    };
++
++    const start = () => {
++      startHero();
++      startScrollReveals();
++      ScrollTrigger.refresh();
++    };
++
+     start();
+     preference.addEventListener("change", start);
+ 
+     return () => {
+-      cleanup();
++      cleanupWaapi();
++      cleanupGsap();
+       preference.removeEventListener("change", start);
+     };
+   }, [pathname]);

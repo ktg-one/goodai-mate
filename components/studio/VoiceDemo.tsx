@@ -24,8 +24,8 @@ export function VoiceDemo() {
           <em>a thousand buzzwords.</em>
         </h2>
         <p>
-          Meet the Good’Ai voice agent. Try a live conversation and get a feel for what a 24/7 AI
-          assistant brings to your trade or local business.
+          Meet the Good’Ai voice agent. Try a live conversation and get a feel for how an AI
+          voice assistant can cover the phone when you are on the tools.
         </p>
         <p className="voice-disclosure">
           Powered by Trillet AI &amp; Grok Realtime audio intelligence. Audio and transcripts are

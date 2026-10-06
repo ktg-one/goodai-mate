@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Check } from "lucide-react";
 import { getServiceBySlug, services } from "@/lib/services";
 import { SURVEY_URL } from "@/lib/links";
+import { ogDefaults, twitterDefaults } from "@/lib/seo";
 
 export function generateStaticParams() {
   return services.map(({ slug }) => ({ slug }));
@@ -15,9 +16,24 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
   const service = getServiceBySlug(slug);
+  const path = service ? `/services/${service.slug}` : "/services";
+  const title = service?.name ?? "Service not found";
+  const description = service?.description;
   return {
-    title: service?.name ?? "Service not found",
-    description: service?.description,
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: {
+      ...ogDefaults,
+      title,
+      description,
+      url: path,
+    },
+    twitter: {
+      ...twitterDefaults,
+      title,
+      description,
+    },
   };
 }
 
@@ -58,16 +74,11 @@ export default async function ServicePage({
           </div>
         </div>
         <aside className="detail-aside">
-          <h2>{service.price}</h2>
-          <p>{service.priceNote}</p>
-          <a
-            href={SURVEY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="button"
-          >
+          <h2>Scoped to your business.</h2>
+          <p>We quote after we understand the work. No public price list.</p>
+          <Link href={SURVEY_URL} className="button">
             Tell us what you need <ArrowUpRight size={20} />
-          </a>
+          </Link>
           <p>
             Start with our short business enquiry form. We’ll use what you share
             to understand the problem and the right next step.
@@ -81,7 +92,10 @@ export default async function ServicePage({
       </div>
       <div className="price-detail">
         <h2>A clear scope. An agreed plan.</h2>
-        <p>{service.range}</p>
+        <p>
+          Inclusions, hand-off rules and any third-party costs are agreed in
+          writing before work starts.
+        </p>
         <p>
           Third-party subscriptions, usage and ongoing support are discussed
           before you commit.

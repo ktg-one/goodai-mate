@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { limitRequest } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,14 @@ const escapeHtml = (value: string) =>
  * unless Resend accepted the message.
  */
 export async function POST(request: Request) {
+  const limited = limitRequest(request, "contact", { limit: 5, globalLimit: 40, windowMs: 60_000 });
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: "Too many enquiries just now. Wait a minute, or call us." },
+      { status: 429, headers: { "Retry-After": String(limited.retryAfterSec) } },
+    );
+  }
+
   const body = await request.json().catch(() => null);
   if (!body || typeof body !== "object") {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
