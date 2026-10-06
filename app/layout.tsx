@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 
 import "./globals.css";
 import "./studio-controls.css";
@@ -63,5 +64,5 @@ const localBusinessJsonLd = {
   areaServed: "Perth, Western Australia",
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en-AU"><body><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd).replace(/</g, "\\u003c") }} /><LazyMotionProvider><Preloader /><a className="skip-link" href="#main">Skip to content</a><StudioHeader /><main id="main">{children}</main><StudioFooter /><MascotWidget /><SmoothScroll /></LazyMotionProvider></body></html>;
+  return <html lang="en-AU"><body><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd).replace(/</g, "\\u003c") }} /><LazyMotionProvider><Preloader /><a className="skip-link" href="#main">Skip to content</a><StudioHeader /><main id="main">{children}</main><StudioFooter /><MascotWidget /><SmoothScroll /></LazyMotionProvider><Analytics /></body></html>;
 }
