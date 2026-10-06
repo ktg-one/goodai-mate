@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, MouseEvent } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { Zap, Shield, PhoneCall, Workflow, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -69,7 +69,7 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
     };
 
     return (
-        <motion.div
+        <m.div
             ref={ref}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -109,7 +109,7 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
                     {feature.description}
                 </p>
             </div>
-        </motion.div>
+        </m.div>
     );
 }
 
@@ -118,7 +118,7 @@ export function Features() {
         <section id="features" className="min-h-[100dvh] flex flex-col justify-center py-24 px-6 bg-brand-paper text-brand-ink">
             <div className="max-w-7xl mx-auto w-full">
                 <div className="mb-16 md:flex justify-between items-end">
-                    <motion.h2
+                    <m.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -126,8 +126,8 @@ export function Features() {
                         className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.1]"
                     >
                         Voice that answers. <br /> <span className="text-brand-coral">Workflows that finish.</span>
-                    </motion.h2>
-                    <motion.p
+                    </m.h2>
+                    <m.p
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -135,7 +135,7 @@ export function Features() {
                         className="text-brand-ink/75 max-w-sm mt-6 md:mt-0 text-base md:text-lg font-light leading-relaxed"
                     >
                         Built for businesses that want fewer missed opportunities, faster turnaround, and their evenings back.
-                    </motion.p>
+                    </m.p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

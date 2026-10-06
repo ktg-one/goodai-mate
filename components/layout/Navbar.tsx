@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { m, useScroll, useMotionValueEvent } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,7 @@ export function Navbar() {
     });
 
     return (
-        <motion.header
+        <m.header
             variants={{
                 visible: { y: 0, opacity: 1 },
                 hidden: { y: -20, opacity: 0 },
@@ -136,7 +136,7 @@ export function Navbar() {
                                         <SheetClose key={link.name} asChild>
                                             <Link
                                                 href={link.href}
-                                                className="text-4xl font-light hover:italic transition-all"
+                                                className="text-4xl font-light hover:italic transition-colors"
                                             >
                                                 {link.name}
                                             </Link>
@@ -148,6 +148,6 @@ export function Navbar() {
                     </Sheet>
                 </div>
             </div>
-        </motion.header>
+        </m.header>
     );
 }

@@ -11,7 +11,7 @@ const eslintConfig = defineConfig([
     plugins: { shadcn },
     settings: {
       shadcn: {
-        note: "Brand tokens are declared in app/globals.css (@theme block): brand-ink, brand-paper, brand-coral, brand-eucalyptus, brand-navy, brand-line, brand-surface. See BRAND.md.",
+        note: "Palette: app/globals.css @theme (mirrors DESIGN.md) - brand-ink, brand-paper, brand-coral, brand-eucalyptus, brand-eucalyptus-ink, brand-teal, brand-line, brand-surface; brand-navy = legacy alias of brand-ink. Not app/tokens/*.css.",
       },
     },
     rules: {
@@ -71,6 +71,11 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Kilo worktree copies duplicate every file; lint the main tree only.
     ".kilo/**",
+    // Agent office runtime (hive harness scripts), not site code.
+    "hive/**",
+    // Parked copies of removed components (incl. old GSAP VisualStory); not
+    // imported or built.
+    "docs/components/**",
   ]),
 ]);
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import {
     Accordion,
     AccordionContent,
@@ -33,7 +33,7 @@ export function FAQ() {
     return (
         <section id="faq" className="py-24 px-6 bg-brand-paper text-brand-ink border-t border-brand-ink">
             <div className="max-w-3xl mx-auto">
-                <motion.div
+                <m.div
                     initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -41,11 +41,11 @@ export function FAQ() {
                     className="text-center mb-12"
                 >
                     <h2 className="text-3xl md:text-4xl font-bold mb-4">Straight answers.</h2>
-                </motion.div>
+                </m.div>
 
                 <Accordion type="single" collapsible className="w-full">
                     {faqs.map((faq, index) => (
-                        <motion.div
+                        <m.div
                             key={faq.question}
                             initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -64,7 +64,7 @@ export function FAQ() {
                                     {faq.answer}
                                 </AccordionContent>
                             </AccordionItem>
-                        </motion.div>
+                        </m.div>
                     ))}
                 </Accordion>
             </div>

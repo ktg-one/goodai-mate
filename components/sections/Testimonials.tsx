@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { StaggeredText } from "@/components/ui/StaggeredText";
 
@@ -29,7 +29,7 @@ export function Testimonials() {
     return (
         <section id="testimonials" className="py-24 px-6 bg-brand-paper text-brand-ink border-t border-brand-ink">
             <div className="max-w-7xl mx-auto">
-                <motion.div
+                <m.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
@@ -38,11 +38,11 @@ export function Testimonials() {
                     <h2 className="text-3xl md:text-5xl font-bold mb-4">
                         <StaggeredText stagger={0.03}>The work we take off your plate.</StaggeredText>
                     </h2>
-                </motion.div>
+                </m.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {testimonials.map((t, i) => (
-                        <motion.div
+                        <m.div
                             key={t.initials}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -66,7 +66,7 @@ export function Testimonials() {
                                     </div>
                                 </CardContent>
                             </Card>
-                        </motion.div>
+                        </m.div>
                     ))}
                 </div>
             </div>

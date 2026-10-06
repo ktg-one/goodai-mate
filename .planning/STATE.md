@@ -1,38 +1,115 @@
 # Project State
 
-**Last updated:** 2026-09-30
-**Branch:** `revert/hero-tree-to-static-image` (uncommitted work — Phase 1 commits it)
+**Last updated:** 2026-10-04 (pricing removed, tests wired and passing, docs realigned — see next section)
+**Branch:** `revert/hero-tree-to-static-image` (PR #249, pushed; through commit 057712f). `main` on GitHub is a different line — see "GitHub".
 **Milestone:** v1.0 Launch — see `.planning/ROADMAP.md`
-**Site status:** not open yet; no live traffic.
+**Site status:** not open yet; no live traffic. Next.js app = goodai.au (once the domain moves).
+
+## 2026-10-04 — cleanup session
+
+- **Pricing removed properly, not just hidden.** The 2026-10-02 session hid prices at the render sites but left `price`, `priceNote` and `range` in `lib/services.ts` (STATE.md line 14 said "data is unchanged"). All three fields are now stripped from the data itself and from every reference: `ServiceCard`, `ServicesCarousel`, the services page hero and all five `/services/[slug]` pages. The site publishes no prices at any layer, so a future render site can't reintroduce them by accident.
+- **Tests wired and green** — 9 pass via `npm run test`; `npm run check` = lint (0 errors) + motion lint + tests.
+- **Real bug found and fixed:** the footer's external `Field notes` anchor had no `target="_blank"` and no `rel="noopener noreferrer"`. The old link test *should* have caught it but failed earlier on `href={SURVEY_URL}`, which is internal now.
+- **Drift fixed:** `.planning/config.json` said `node_version: 18+` (Next 16 needs `>=20.9.0`) and `test_command: null`.
+- **Docs realigned to the code:** `PROJECT.md` (real architecture map, parked components, correct colour tokens, `npm run check` gate) and `ROADMAP.md` (Phase 1 done-work + open questions, Phase 5 corrected from "plans `/api/lead`" to "shipped as `/api/contact`, webhook and rate limit outstanding").
+- **Still needs Kevin:** the `klint/` orphan gitlink (see ROADMAP Phase 1), and whether to delete or park the old-design components — `Pricing.tsx` is now doubly redundant.
+
+## 2026-10-02 — hive office session (committed + pushed as 057712f, 2026-10-04)
+
+Agents (god, Jake, Gina, temps) worked in this tree, then Kevin took webdev back. `npm run lint` (0 errors) and `npm run build` (17 routes) both pass on the result.
+
+- **Build:** `npm run build` passes again (checked 2026-10-02). Before that it failed because `components/` had been moved into `docs/components/` on 1 Oct after commit e0ec5d5. Nobody knows who moved them.
+- **components/:** Jake used `git restore` on 28 files that pages import: the carousel (all of it), `sections/ServicesCarousel`, and studio `Shell`, `PerthSketchbook`, `ScrollStory`, `HeroStudy` and others. 35 other files are still deleted. `docs/components/` (untracked parked copies) was left untouched, so the restored files now exist twice.
+- **Copy (Gina):** `app/page.tsx` text rewritten to say what we do, and all prices hidden ("Talk to us"). `app/services/[slug]/page.tsx` hides price/range/priceNote. `lib/services.ts` data is unchanged. The scroll-story lines are proposed in `.planning/COPY.md` but NOT applied to `ScrollStory.tsx`.
+- **Lint:** the GSAP/ScrollTrigger checks were removed from `scripts/ktg-lint.mjs` and the GSAP selectors from `eslint.config.mjs`. Ignores now include `hive/**` and `docs/components/**`. The `CLAUDE.md` lint section was updated. `npm run check` exits 0.
+- **klint/** (its own git repo): rewritten to the Good'Ai design system from DESIGN.md (`design-system.lint.json`, `.oxlintrc.json`, `instructions/AGENTS.md`, `bin/ktg-lint.mjs`). It needs a `.gitignore` before committing (it has `node_modules/`).
+- **New planning files:** `SITE-MAP.md` (routes and imports map), `OFFER.md` (offer draft from web research; weak, so redo it from Kevin's own market research), `COPY.md`, `BRAIN-DUMP.md` (Kevin's raw requests from 2026-10-02).
+- **Kevin's decisions, 2026-10-02:** the services and prices in `lib/services.ts` are legacy. The new offer is 4 buy paths: Workflows, Voice agent, Consult, Integrations. Workflows are sold as a "Top 10" catalogue drawn down from a retainer. Never compete on the A$99 voice floor. Prices stay hidden until the offer is agreed.
+- **Flip book:** new spreads are committed in `public/assets/sketches/` (01-stress x3, mess, mess2) next to perth-*.png and bg-wash.jpg. **They are not in the hero yet** — nothing references them; they are art waiting to be cut into plates. The hero still runs on the 2 cut plates wired in `components/studio/PerthSketchbook.tsx` (`plates/the-inbox.webp`, `plates/fremantle.webp`), with 5 more cut plates already sitting unused in `public/sketchbook/plates/`. Kevin expects ~5 more images once the whole set is put together. Story arc and the frames that need new art are below.
+- **Parked hive cards:** GST-3 restore leftovers, GST-5 SVG shapes (plugin plus signature file unknown), GST-6 flip book, GST-9 4-path site. The office is now the analysis/strategy team, not webdev.
 
 ## Where things are
 
-- **Top of home:** ThreeUI sketchbook (`components/studio/PerthSketchbook.tsx` → `src/shaders/sketchbook/`) with 7 Perth plates cut to transparent WebP in `public/sketchbook/plates/`. Intro flips from the busywork sketches and lands on Cottesloe.
-  - `sketchbookDocument.js` accepts `{ pages, land }` and patches the canonical source's arrow-click bug (stage pointer capture swallowed arrow clicks).
-  - `next.config.ts` sends CORS headers for `/sketchbook/*.woff2` (the iframe is sandboxed, origin `null`).
-- **Hero:** text-only, with a faint golden-spiral study on aged paper (`components/studio/HeroStudy.tsx`, `.hero::before` in `globals.css`). The photo was removed.
-- **Tree:** removed from home. Still on `/lab`. `HeroTree.tsx` and `HomeScroll.tsx` are dead code (Phase 1).
-- **Motion:** Lenis + preloader + the pinned scroll story only. Scroll reveals were removed in 1dac4ea (Phase 3).
-- **Voice:** Trillet widget exists, only on `/demo`, never tested with a real call (Phase 4).
-- **Leads:** the `/contact` form fakes success; nothing is sent (Phase 5).
+- **Top of home:** ThreeUI sketchbook (`components/studio/PerthSketchbook.tsx` → `src/shaders/sketchbook/`). Pages are now **2**: the inbox plate (tradie with phone calls) and the Fremantle brewery; `land={1}`. Other cut plates still in `public/sketchbook/plates/` (the-office, city-freeway, kings-park, swan-river, cottesloe).
+  - The book loops forever (`(idx+1)%M`). Intro riffle is slow→fast→slow; first/last flips were slowed from 0.26s to 0.6s via a patch in `sketchbookDocument.js`. Phones / reduced motion skip it and open on the landing page.
+  - `sketchbookDocument.js` patches: arrow-click bug, riffle timing. `next.config.ts` sends CORS headers for `/sketchbook/*.woff2`.
+- **Hero:** `components/sections/Hero.tsx` — copy lives in the component, the three CTAs are wrapped in `<Magnetic>` (`components/ui/MagneticButton.tsx`), and it still renders `<HeroStudy />`, the faint golden-spiral study. Was inline in `app/page.tsx` until the 2026-10-04 merge with `main`.
+- **Parked components decision, 2026-10-04: KEEP them, and `docs/components/` is deleted.** The old-design page sections (`ProductDemo`, `Features`, `Pricing`, `TechSpecs`, `Testimonials`, `VisualStory`, `InfiniteMarquee`, `CTA`, `FAQ`, `Hero`, `Footer`, `Navbar`) and the superseded voice stack stay in `components/` as reuse material — nothing imports them, so the build is unaffected, and they carry ~109 of the 149 lint warnings.
+- **The duplicate snapshot is gone.** `docs/components/` held 66 files, of which 47 differed in content from `components/` — it was a stale *pre-redesign* snapshot, not a copy. It was gitignored (`.gitignore:56`) so it had no history of its own, while all 67 files under `components/` are tracked and their prior versions (including the deleted `HeroTree.tsx`) are recoverable from git history. No unique filenames existed in it, so nothing was lost. `components/` is now the single home for reuse.
+- **`components/sections/Pricing.tsx` is doubly redundant** — it renders pricing for a site that publishes none.
+- **Preloader:** brand wordmark `Good’Ai.` (paper bg, ink text, rust apostrophe/dot) with a fade-up.
+- **Motion:** Lenis + preloader + pinned `ScrollStory` only. A scroll jerk after the story was reported and is **not diagnosed** (candidates: ScrollTrigger.refresh on font load / layout shift, the sketchbook iframe, wheel inertia). Seam between sketchbook bottom (`#ece7dc`) and hero is visible; fix proposed (fade the bottom of `.perth-sketchbook`), not applied.
+- **Leads:** `/contact` now POSTs to `app/api/contact/route.ts` → Resend, from `Good'Ai <mate@goodai.au>` to `hello@goodai.au` (override `CONTACT_TO_EMAIL`). Honeypot on `website`. Fails honestly (503/502) when the key is missing. Not tested with a real send. **No webhook and no rate limiting** — `LEAD_WEBHOOK_URL` was never wired, and the ROADMAP's `/api/lead` route was replaced by `/api/contact`.
+- **Voice:** Trillet widget only on `/demo`, never tested with a real call.
+- **Lint:** `lint:motion` enforces the 10000px `.home-page` floor and THREE listener teardown, and skips missing dirs. GSAP is live (`ScrollStory`, `SmoothScroll`, `Preloader`, `carousel/ring`) but its ScrollTrigger tripwires were removed because nothing trips them — no file uses `toggleActions` or an unbounded `pin`, and `HomeScroll.tsx` (the `once: true` rule) is parked. `npm run lint` = 0 errors, 149 warnings, up from 40: the restored parked components carry ~109 old-design `no-arbitrary-values` warnings. None ship, since nothing imports them. `story-text-section` / `story-visual` are allow-listed again for the restored `VisualStory.tsx`.
+- **Tests (fixed 2026-10-04):** were failing with `ERR_MODULE_NOT_FOUND` — they imported `"./services"` extensionless, which Node's ESM resolver rejects — and there was no `test` script in `package.json`, so none of it ever ran. Now: explicit `.ts` extensions, `allowImportingTsExtensions` in `tsconfig.json` (without it `npm run build` fails type checking), a `test` script running `node --test --experimental-strip-types "lib/*.test.ts"`, and `npm run check` chaining lint + motion lint + tests. 9 tests pass. The link tests also asserted `target="_blank"` on every anchor, which had been failing since `SURVEY_URL` became the internal `/contact` route; they now only require target/rel on external `https?://` anchors and only scan components the app actually renders.
+- **The intake chain is intact and was not touched:** `SURVEY_URL = "/contact"` in `lib/links.ts` → `/contact` renders `<SussTheFussCard />` ("We'll Suss the Fuss") → `POST /api/contact` → Resend. `lib/links.ts` itself was never modified.
 
-## Decided 2026-09-30
+## Story plan for the sketchbook (Kevin, 2026-10-01)
 
-- **No n8n for the site.** Instant work (demo email, lead alert) happens in a Next.js API route. Heavier work (deep dive, follow-ups) goes to an agent + skill on a schedule using the Google Workspace CLI. n8n on Railway (`gai-n8n-new`) is parked.
-- **Email via Resend.** Visitor-facing mail comes from `Good'Ai <mate@goodai.au>`, signed "Big Kev, Founder". Lead alerts go to `hello@goodai.au` (changed 2026-10-01 from `bigkev@` — Kevin doesn't want his name public; override with `CONTACT_TO_EMAIL`), with reply-to set to the lead. `sorted@` is reserved for invoices later. No personal name on the site yet.
-- **Content:** Instatic, self-hosted on Railway (BLOG project), admin `goodai.up.railway.app/admin`, posts at `/posts/<slug>`. Next.js keeps the intro, scroll story and demo.
+Arc: pain → pain → pain → question → leave the pains → sunshine. Light moves cold/dim → warm.
+1. Inbox plate (exists). 2–3. Pain crops cut from the same inbox plate (phone badges, laptop, paper stacks) — no new art.
+4. The pains cancel one by one ("ding ding"), logo travels to the door, hand opens it, door handle becomes a beer mug, mugs clash (zoomed cheers frame), then flick to the Fremantle brewery (exists).
+Needs new art: door/handle/mug frames, cheers close-up. About 9–10 frames in the run. Existing office plate is too bright for a "pain" and was dropped. Open: stop at the last page vs keep looping with a scroll cue (not decided).
 
-**Blocking the build:** `RESEND_API_KEY` in `.env.local` and goodai.au verified in Resend.
+## Headless content (Instatic) — plugins installed 2026-10-04
+
+- Next.js is goodai.au and owns all design/tokens. Instatic (Railway project BLOG, admin `goodai.up.railway.app/admin`) is the content backend: blog posts and a `services` Data table.
+- **Kevin installed the plugins 2026-10-04** (content-api plus the others), following a video walkthrough. So the CMS route is live after all — the earlier "we have no console control" reading was wrong and was reverted.
+- Plugin source is `instatic-plugin/content-api/server/index.js`, shipped as `goodai-content-api.plugin.zip`. It mounts at `/admin/api/cms/plugins/goodai.content-api/runtime/` and serves `/posts` (published only) and `/services` as `{ table, records, totalCount }`. Entries come back as `{ id, slug, cells: { <fieldId>: value } }`, so field access is `cells.price`, not `price`.
+- **Known fragility:** the handler registers POST unconditionally and registers GET *only if the host exposes `pub.get`*. Public GET was undocumented when this was written. Until a real GET is confirmed working, nothing can rely on it.
+- **VERIFIED WORKING 2026-10-04 14:28.** After the 0.1.2 upload, both routes return 200 anonymously:
+  - `POST /runtime/posts` → `totalCount: 19` — these are the real blog posts.
+  - `POST /runtime/services` → `totalCount: 2` — **test rows only**, not real service content.
+
+  The route path, POST-only assumption and plugin install are all confirmed correct. Nothing here is hypothetical any more.
+- **Bug found and fixed: `list()` returns `entries`, not `records`.** The live response had a correct `totalCount` but an empty `records` array, because the handler read `result.records ?? []` while the SDK's `ContentListResultSchema` is `{ entries, totalCount }`. A wrong key plus a `?? []` fallback hid the failure behind a valid-looking response. Fixed in `0.1.3` — **re-upload the zip to pick it up.**
+- **Services remain sourced from `lib/services.ts`.** The CMS `services` table holds 2 test rows and has no real content. Filling it in is optional future work, not a blocker.
+- **The `services` table needs `kind: 'postType'`, and the admin UI can't do it.** Kevin tried: a table created in the Data workspace is `kind: 'data'`, which has no publish workflow (no publish button, so it stays private) and cannot be added to a post collection. Per `content-storage.md`: `postType` lives in the Content workspace with built-ins `title`/`slug`/`body`/`featuredMedia`/`seoTitle`/`seoDescription` and a draft/published/unpublished/scheduled workflow; `data` has none of that. Changing an existing table's kind is not available either. The SDK can do it — `api.cms.content.tables.create()` takes `kind`, gated behind `cms.content.tables.manage`.
+- **`instatic-plugin/services-schema/` (v0.1.0) provisions it** — id `goodai.services-schema`, zip `instatic-plugin/goodai-services-schema.plugin.zip`. Deliberately a *separate* plugin from the read-only feed: schema mutation needs `cms.content.tables.manage`, and there is no reason to grant that on a plugin that only reads. Idempotent — if a `services` table exists at any kind it does nothing, so hand-made tables and existing rows are safe. Delete the table first if you want it recreated.
+- **Field mapping:** post-type `title` → `lib/services.ts` `name`, `slug` → `slug`, plus custom `line`, `description`, `items` (repeater of text), `detail`, `order`. No price fields, consistent with pricing being removed.
+- **Verified SDK shapes** (`src/core/plugin-sdk/types/serverApi.ts`) — read this, do not infer from doc examples:
+  - `content.tables.list()` → `Promise<ReadonlyArray<ContentTableSummary>>` — a **bare array**, not `{ tables }`. Assuming the envelope caused a real UNIQUE-constraint install failure on 2026-10-04.
+  - `content.tables.get(slug)` → `Promise<ContentTableSchema | null>` — the clean existence check; use this first.
+  - `content.tables.create(input)` → `Promise<ContentTableSchema>` — the table itself, **not** `{ table }`.
+  - `content.table(slug).list(opts)` → `{ entries, totalCount }` — **not** `records`.
+  - `plugin.log` is `(...args: unknown[]) => void` — a plain function, **no** `.info()`.
+  - `routes.public` declares **all four verbs** (`get`/`post`/`patch`/`delete`). An earlier claim that public GET does not exist was wrong — it does, and the docs describe it as intended for public read APIs.
+- **Live feed state, checked 2026-10-04 after both installs:** `POST /runtime/posts` → 200, `totalCount: 19`; `POST /runtime/services` → 200, `totalCount: 2`. The `entries` key was still absent, i.e. content-api 0.1.3 had not been uploaded at that point, and the schema plugin correctly skipped because a `services` table already exists.
+- **Zips to upload:** `goodai-content-api.plugin.zip` → 0.1.4 (adds the `entries` fix plus GET alongside POST), `goodai-services-schema.plugin.zip` → 0.1.2 (correct `tables.get`/`list`/`create` shapes and `plugin.log`).
+- **STOPPED DELIBERATELY, 2026-10-04. Do not pick this back up as unfinished work.** The CMS detour ran to four plugin versions chasing a "correct" schema for a table the site does not read. Kevin's `services` data table is fine as-is — keep it, install nothing, delete nothing.
+  - Site services come from `lib/services.ts`. They always have. No CMS involved.
+  - Blog posts are unlinked from the site by Kevin's decision (audience mismatch); they render at their own URL.
+  - `goodai-content-api.plugin.zip` at 0.1.4 is **not installed** and does not need to be. The live feed returns `records: []` instead of `entries`, which is harmless because nothing reads it. Upload only if and when `lib/instatic.ts` is actually written.
+  - `goodai-services-schema.plugin.zip` at 0.1.2 is **optional and not recommended now**. It only matters if services become the CMS source of truth.
+  - Revisit only if Kevin decides services should live in the CMS as the live source. At that point: delete the test table, install the schema plugin, write `lib/instatic.ts`. Until then this is dormant by choice.
+- **Slug must stay exactly `services`** — both plugins address the table by slug. A different slug returns empty while still looking healthy.
+- **Privacy note:** `services` is listed *unfiltered* (no status filter, because plain Data tables have none), so **every row in that table is readable by anyone on the internet** via that public POST route. `posts` is filtered to `status: "published"`, so drafts are safe. Do not put anything confidential in the `services` table.
+- **Field ids for the `services` table: `slug, name, line, description, items, detail, order`** — `price`, `priceNote` and `range` were dropped on 2026-10-04 when pricing was removed from `lib/services.ts`. Add them back only if Kevin decides the CMS should hold prices the site does not render.
+- Posts audit (19 published, for the record): fields title/slug/body(HTML)/featuredMedia/seoTitle/seoDescription. Gaps: no real publish date (all `2026-08-16` import time), no excerpt, no author/category; some slugs don't match titles; one title typo ("Australia s").
+- **Not built yet:** `lib/instatic.ts` client, wiring home/services/sitemap to it, `/blog` + `/blog/[slug]` pages, and the footer "Field notes" link. Note the service pages are currently `generateStaticParams` off `lib/services.ts` with no `revalidate` — if the CMS becomes the source of truth, a build-time fetch would mean CMS edits need a redeploy to appear.
+- **The footer "Field notes" link has been REMOVED (2026-10-04).** It pointed at `https://goodai.up.railway.app/`, which is the published public blog ("GOOD AI • FIELD GUIDE FOR THE FUTURE", 19 essays). The link was technically correct but a poor fit: the blog is AI-research and AI-sovereignty essays, while the audience is Perth tradespeople and small operators who will not know terms like Gemini or agent memory. Kevin's call — the audience would be put off. The blog stays up and reachable by direct URL; it is just not linked from the site.
+- **The blog is not linked from goodai.au.** `/blog` + `/blog/[slug]` are also not needed for v1.0 — the content already renders at its own URL, and a native route would duplicate it. Revisit only if the essays are ever rewritten for this audience.
+
+## Decided 2026-09-30 / 10-01
+
+- **No n8n for the site.** Instant work in Next.js API routes; heavier follow-ups via an agent + skill using the Google Workspace CLI (`gws`). n8n on Railway (`gai-n8n-new`) is parked. Composio is only a remembered preference in CompanyOS wiki; nothing built.
+- **Email via Resend.** Visitor-facing mail from `mate@goodai.au`. Lead alerts to `hello@goodai.au` — **not** `bigkev@` (Kevin doesn't want his name public). STATE previously planned "Big Kev, Founder" as the visitor sign-off; this conflicts and is **undecided** — no visitor confirmation is sent yet.
+
+**Blocking launch:** `RESEND_API_KEY` (in `.env.local` and Vercel env) and goodai.au verified in Resend; `hello@goodai.au` alias to exist in Workspace.
+
+## GitHub
+
+`ktg-one/goodai-mate` `main` has 16 bot commits (Jules/Bolt/Palette) not in this branch; this branch has 7+ not in `main`. ~40 stale bot PRs open. Kevin thinks this branch should be the canonical `main`. **Not done** — needs explicit go-ahead to force-push; plan: tag old `main` as `backup/main-2026-10-01`, run `npm run check` + `npm run build`, then `git push --force-with-lease origin <branch>:main`. Local-only, deliberately not committed: `.agents/ .claude/ .codegraph/ klint/ bun.lock skills-lock.json public/brand/hero public/sketchbook/perth*.png components/layout/HomeScroll.tsx components/studio/SketchbookFlip.tsx`, plus the agent runtime now covered by `.gitignore` (`.serena/ hive/ palace/ roster.json roster-backups/ hallways.json docs/components/`). `public/assets/sketches/` **is** tracked — it is the hero's source art.
 
 ## Open decisions (Kevin)
 
-1. Scroll-story art: option a / b / c (Phase 2).
-2. Lead delivery: email provider + address, webhook target (Phase 5).
+1. Sketchbook ending (stop vs loop + cue) and new plates; page transition (crossfade via React `<ViewTransition>`, no config needed in Next 16) — proposed, not built.
+2. Services pricing, order (voice agents, then workflows first), nav "Contact us" at the top — Kevin is retrieving pricing / doing market research.
 3. Quick-dive output, runtime, model, cost cap, review step (Phase 6).
-4. Which untracked folders get committed (`klint/`, `.agents/`, `bun.lock`, `skills-lock.json`).
+4. Visitor email sign-off (see above).
 
 ## Next
 
-Open gate = Phase 1 + Phase 5 (working CTA form) + smoke check. Run Phase 1 alone, then Phase 5 first in Wave 2.
-Brand direction after opening: Phase 8 (sun-moving plant shadow) and Phase 9 (Kevin's handwriting drawn down the page on scroll).
+Kevin: upload plugin 0.1.2; create `services` table; add `publishDate`/`excerpt` to posts; set Resend key; make plates. Then Claude: fill services, write `lib/instatic.ts` + `/blog`, fix sketchbook seam, trim lint:motion.
 Also running: original Aug-26 site at `../goodai-original` (git worktree, `npm run dev` on :3001) for reference only.

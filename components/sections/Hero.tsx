@@ -16,8 +16,8 @@ export function Hero() {
           <em>More life.</em>
         </h1>
         <p className="hero-description">
-          Knock off early. We’ll sort it.
-          <br className="desktop-break" /> Admin? Give us the work. Go see the kids.
+          Knock off early. We take the admin off your hands: phone answering, quoting, follow-ups.
+          <br className="desktop-break" /> Go see the kids.
         </p>
         <Magnetic strength={0.35}>
           <Link href={SURVEY_URL} className="button hero-button">

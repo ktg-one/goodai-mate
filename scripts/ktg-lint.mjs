@@ -1,10 +1,16 @@
 #!/usr/bin/env node
 
+// Motion/layout contract checks. GSAP/ScrollTrigger rules (HomeScroll
+// `once: true`, `toggleActions` in story files, `pin: true` without an
+// explicit `end`) were removed because nothing trips them: HomeScroll.tsx
+// is gone, and ScrollStory/SmoothScroll/Preloader use neither toggleActions
+// nor an unbounded pin. GSAP is still live in those three - re-add the
+// checks if narrative motion comes back.
+
 import fs from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
-const motionFile = path.join(root, "components", "layout", "HomeScroll.tsx");
 const pageFile = path.join(root, "app", "page.tsx");
 const stylesFile = path.join(root, "app", "globals.css");
 const failures = [];
@@ -20,21 +26,8 @@ if (!/\.home-page\s*\{[^}]*min-height:\s*(?:1\d{4,}|[2-9]\d{4,})px/s.test(styles
   failures.push("SHORT_HOME_TRACK: homepage scroll height must be at least 10000px.");
 }
 
-if (!fs.existsSync(motionFile)) {
-  failures.push("MISSING_HOME_SCROLL: components/layout/HomeScroll.tsx is required.");
-} else {
-  const source = fs.readFileSync(motionFile, "utf8");
-
-  if (/once:\s*true/.test(source)) {
-    failures.push("ONE_SHOT_SCROLL: homepage flow must not collapse into one-time reveal triggers.");
-  }
-
-  if (/REVEAL_GROUPS|chapter-copy|section-heading|service-row|faq details/.test(source)) {
-    failures.push("ANIMATED_COPY: homepage text must remain static until an approved text treatment exists.");
-  }
-}
-
 function walk(dir) {
+  if (!fs.existsSync(dir)) return;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (["node_modules", ".next", ".next-dev", ".git", "klint"].includes(entry.name)) continue;
     const fullPath = path.join(dir, entry.name);
@@ -46,14 +39,6 @@ function walk(dir) {
 
     const source = fs.readFileSync(fullPath, "utf8");
     const relative = path.relative(root, fullPath);
-
-    if (/ScrollTrigger/.test(source) && /toggleActions/.test(source) && /(Story|Stage|Narrative)/i.test(relative)) {
-      failures.push(`TRIPWIRE_STORY: ${relative} uses toggleActions for narrative motion.`);
-    }
-
-    if (/pin:\s*true/.test(source) && !/\bend\s*:/.test(source)) {
-      failures.push(`UNBOUNDED_PIN: ${relative} pins content without an explicit end.`);
-    }
 
     if ((/new THREE\./.test(source) || /@react-three\/fiber/.test(source)) &&
         /addEventListener/.test(source) && !/removeEventListener/.test(source)) {
@@ -72,4 +57,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log("[KTG-LINT] Passed: 10000px homepage floor, static copy, and bounded motion contracts.");
+console.log("[KTG-LINT] Passed: 10000px homepage floor and THREE listener teardown.");

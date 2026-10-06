@@ -42,3 +42,17 @@ next-env.d.ts
 
 /.next-dev/
 /.npm-cache/
+
+# local agent tooling, not site code
+/.serena/
+/hive/
+/palace/
+/roster.json
+/roster-backups/
+/hallways.json
+/nul
+
+# parked copies of removed components, kept locally for reference
+/docs/components/
+
+/.venv/

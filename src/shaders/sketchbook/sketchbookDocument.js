@@ -33,7 +33,10 @@ export function createSketchbookDocument(assetBaseUrl = "/sketchbook/", { pages,
   );
   // The intro riffle is slow, fast-forward, slow. The canonical ends are 0.26s a
   // flip, too quick to read the plates; give the first and last flips 0.6s.
-  html = html.replace("dur:0.26-0.19*bell", "dur:0.6-0.52*bell");
+html = html.replace(
+    "const steps=M+LAND;",
+    "const steps=LAND;"
+  );
   const withAssets = html.replaceAll("sketchbook/", base);
   return withAssets
     .replace("</head>", `${HOST_STYLE}</head>`)

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface InfiniteMarqueeProps {
@@ -36,7 +36,7 @@ export function InfiniteMarquee({
         <div className={cn("relative w-full overflow-hidden bg-brand-coral py-6 border-y border-brand-ink select-none", className)}>
             {/* Gradient Masks for Edge Blur */}
 
-            <motion.div
+            <m.div
                 className="flex whitespace-nowrap"
                 animate={{ x: [0, -1000] }} // Arbitrary large number, better implemented with percent or measure
                 style={{ width: "max-content" }}
@@ -51,7 +51,7 @@ export function InfiniteMarquee({
             >
                 {/* Render items 4 times to ensure no gaps on large screens */}
                 {renderedItems}
-            </motion.div>
+            </m.div>
         </div>
     );
 }

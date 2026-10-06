@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Mic, MicOff, PhoneOff, Sparkles, X, Volume2, ChevronUp } from "lucide-react";
+import { Mic, MicOff, PhoneOff, Sparkles, X, Volume2 } from "lucide-react";
 import type { TrilletAgent as TrilletAgentType } from "@trillet-ai/web-sdk";
 
 interface TranscriptMessage {
@@ -15,6 +15,8 @@ interface TrilletVoiceWidgetProps {
   workspaceId?: string;
   agentName?: string;
   autoOpen?: boolean;
+  onClose?: () => void;
+  hideTrigger?: boolean;
 }
 
 export function TrilletVoiceWidget({
@@ -22,6 +24,8 @@ export function TrilletVoiceWidget({
   workspaceId = process.env.NEXT_PUBLIC_TRILLET_WORKSPACE_ID || "",
   agentName = "Darling Good",
   autoOpen = false,
+  onClose,
+  hideTrigger = false,
 }: TrilletVoiceWidgetProps) {
   const [isOpen, setIsOpen] = useState(autoOpen);
   const [status, setStatus] = useState<"idle" | "connecting" | "connected" | "disconnected" | "error">("idle");
@@ -91,7 +95,7 @@ export function TrilletVoiceWidget({
         // Safe fallback if transcripts method is not ready
       }
     }, 500);
-  }, [status, addMessage]);
+  }, [addMessage]);
 
   const connectVoice = async () => {
     if (connectInFlightRef.current || status === "connected") return;
@@ -235,15 +239,15 @@ export function TrilletVoiceWidget({
   return (
     <>
       {/* Floating Trigger Bubble */}
-      <aside aria-label="Voice Assistant Launcher" className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-        {!isOpen && (
+      <aside aria-label="Voice Assistant Launcher" className="fixed bottom-4 right-4 z-50 flex flex-col items-end sm:bottom-6 sm:right-6">
+        {!hideTrigger && !isOpen && (
           <button
             type="button"
             onClick={() => {
               setIsOpen(true);
               if (status === "idle") connectVoice();
             }}
-            className="group relative flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-navy border border-brand-paper/30 shadow-2xl transition-[border-color,transform] duration-300 hover:scale-105 hover:border-brand-coral cursor-pointer"
+            className="group relative flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-ink border border-brand-paper/30 shadow-2xl transition-all duration-300 hover:scale-105 hover:border-brand-coral cursor-pointer"
             aria-label="Open Voice Assistant"
           >
             {status === "connected" && (
@@ -259,13 +263,13 @@ export function TrilletVoiceWidget({
         {/* Voice Agent Slide-Up Panel */}
         {isOpen && (
           <div
-            className="w-[360px] sm:w-[400px] max-w-[calc(100dvw-32px)] rounded-2xl bg-brand-navy border border-brand-paper/20 shadow-2xl overflow-hidden flex flex-col transition-[opacity,transform,border-color] duration-300 animate-in fade-in slide-in-from-bottom-6"
+            className="w-90 sm:w-100 max-w-screen-sm rounded-2xl bg-brand-ink border border-brand-paper/20 shadow-2xl overflow-hidden flex flex-col transition-all duration-300 animate-in fade-in slide-in-from-bottom-6"
             style={{ maxHeight: "560px" }}
             role="region"
             aria-label="Good'Ai Voice Agent"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-brand-paper/15 bg-brand-navy/90 backdrop-blur-md">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-brand-paper/15 bg-brand-ink/90 backdrop-blur-md">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-paper/10 text-brand-coral border border-brand-paper/15">
                   <Sparkles className="h-4 w-4" />
@@ -284,7 +288,7 @@ export function TrilletVoiceWidget({
                           : "bg-brand-paper/30"
                       }`}
                     />
-                    <span className="text-[11px] font-mono text-brand-paper/70 tracking-wide">
+                    <span className="text-xs font-mono text-brand-paper/70 tracking-wide">
                       {statusLabel}
                     </span>
                   </div>
@@ -293,7 +297,11 @@ export function TrilletVoiceWidget({
 
               <button
                 type="button"
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  setIsOpen(false);
+                  endCall();
+                  onClose?.();
+                }}
                 className="flex h-8 w-8 items-center justify-center rounded-lg text-brand-paper/60 hover:text-brand-paper hover:bg-brand-paper/10 transition-colors"
                 aria-label="Close voice panel"
               >
@@ -302,7 +310,7 @@ export function TrilletVoiceWidget({
             </div>
 
             {/* Transcript Display Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[200px] max-h-[280px] bg-brand-navy/40">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-50 max-h-70 bg-brand-ink/40">
               {transcripts.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center p-6 text-brand-paper/50">
                   <Volume2 className="h-8 w-8 mb-2 text-brand-paper/30" />
@@ -327,12 +335,12 @@ export function TrilletVoiceWidget({
                     }`}
                   >
                     {msg.role === "system" ? (
-                      <span className="text-[10px] font-mono bg-brand-paper/10 text-brand-paper/60 px-2.5 py-1 rounded-full text-center">
+                      <span className="text-xs font-mono bg-brand-paper/10 text-brand-paper/60 px-2.5 py-1 rounded-full text-center">
                         {msg.text}
                       </span>
                     ) : (
                       <div
-                        className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-xs leading-relaxed ${
+                        className={`max-w-xs rounded-2xl px-3.5 py-2 text-xs leading-relaxed ${
                           msg.role === "user"
                             ? "bg-brand-coral text-brand-paper font-medium rounded-br-xs"
                             : "bg-brand-paper/15 text-brand-paper border border-brand-paper/15 rounded-bl-xs"
@@ -348,11 +356,11 @@ export function TrilletVoiceWidget({
             </div>
 
             {/* Audio Waveform Visualizer */}
-            <div className="flex items-center justify-center gap-1.5 py-3 border-t border-brand-paper/10 bg-brand-navy/70">
+            <div className="flex items-center justify-center gap-1.5 py-3 border-t border-brand-paper/10 bg-brand-ink/70">
               {[0, 1, 2, 3, 4, 5, 6].map((i) => (
                 <span
                   key={i}
-                  className={`w-1 rounded-full transition-[height,background-color] duration-200 ${
+                  className={`w-1 rounded-full transition-all duration-200 ${
                     isSpeaking
                       ? "bg-brand-coral animate-pulse"
                       : status === "connected"
@@ -368,7 +376,7 @@ export function TrilletVoiceWidget({
             </div>
 
             {/* Bottom Controls */}
-            <div className="p-4 border-t border-brand-paper/15 bg-brand-navy flex items-center justify-between gap-3">
+            <div className="p-4 border-t border-brand-paper/15 bg-brand-ink flex items-center justify-between gap-3">
               {status === "connected" ? (
                 <>
                   <button
