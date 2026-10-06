@@ -29,18 +29,18 @@ Two linters, both encode the design:
 - `DESIGN.md` (tokens/typography/components front-matter) and `BRAND.md`. Palette lives in `app/globals.css` `@theme`; legacy token names map: `brand-ink` = olive ink, `brand-paper` = paper, `brand-coral` = terracotta, `brand-eucalyptus` = sage.
 - **Do not use `app/tokens/*.css`** — different navy/coral/teal palette, not imported.
 - Fonts: Manrope (UI), Fraunces italic (emphasis), Vibes (handwritten). Spelling is `Good'Ai`.
-- Never invent testimonials, outcomes, pricing, or compliance claims. `ProductDemo.tsx` is example data, never live.
+- Never invent testimonials, outcomes, pricing, or compliance claims.
 - Motion: responsive, keyboard-focusable, honors `prefers-reduced-motion`. Scroll rules (Kevin): ~3 viewport heights per animation, held readable middle, nothing faster than ~1.5s, every ScrollTrigger states `start`/`end` with a comment.
 
 ## Architecture
 
 - `app/page.tsx` is the whole homepage, written as dense single-line JSX inside a `.home-page` container whose scroll height is set in `globals.css` (lint enforces ≥10000px). Order: PerthSketchbook intro → hero → promise strip → empathy → `ScrollStory` (pinned) → services list → workflow demo → approach → FAQ → contact.
-- Content is data-driven from `lib/services.ts` (5 services: voice agents, automation, custom assistants, AI integration, opportunity audit — slug, price, range strings). Homepage rows and `app/services/[slug]/page.tsx` both read it; `serviceIcons` in `page.tsx` is index-matched to that array, so reordering services means reordering icons. Pricing copy is also hardcoded in the FAQ in `page.tsx` and in `components/sections/Pricing.tsx`.
+- Content is data-driven from `lib/services.ts` (5 services: voice agents, automation, custom assistants, AI integration, opportunity audit — slug, copy, items; no prices). Homepage rows and `app/services/[slug]/page.tsx` both read it; `serviceIcons` in `page.tsx` is index-matched to that array, so reordering services means reordering icons.
 - `lib/links.ts`: single source for CTA target (`SURVEY_URL` → `/contact`) and phone number. All CTAs must use these.
 - `components/studio/*` — current site components (ScrollStory, PerthSketchbook, HeroStudy, WorkflowPreview, voice widgets, Shell). `components/sections/*` and much of `components/ui/*` are carried over from the upstream Zenith template and mostly unused by the current home. `HeroTree.tsx`/`HomeScroll.tsx` are dead code on home (tree remains on `/lab`).
 - `src/shaders/` — ThreeUI sketchbook (WebGL in a sandboxed iframe; `sketchbookDocument.js` patches an upstream click bug; `next.config.ts` adds CORS for `/sketchbook/*.woff2`). Plates in `public/sketchbook/plates/`.
-- Voice: Trillet web SDK (`@trillet-ai/web-sdk`) via `components/studio/TrilletVoiceWidget.tsx` and `app/api/voice/call/route.ts`; only on `/demo`. ElevenLabs widgets also exist.
-- `/contact` form currently fakes success (nothing sent). Planned: Resend from a Next.js API route, no n8n.
+- Voice: Trillet web SDK (`@trillet-ai/web-sdk`) via `components/studio/TrilletVoiceWidget.tsx` and `app/api/voice/call/route.ts`; mounted site-wide via `MascotWidget`.
+- `/contact` form posts to `app/api/contact/route.ts`, which sends via Resend to `CONTACT_TO_EMAIL` (default `hello@goodai.au`). Honeypot + in-process rate limit (`lib/rate-limit.ts`); on failure it shows the phone/email instead of fake success. No n8n.
 
 ## Planning state
 

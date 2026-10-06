@@ -7,6 +7,7 @@ import { SmoothScroll } from "@/components/studio/SmoothScroll";
 import { Preloader } from "@/components/ui/Preloader";
 import { LazyMotionProvider } from "@/components/providers/LazyMotionProvider";
 import { MascotWidget } from "@/components/studio/MascotWidget";
+import { PHONE_E164, LEAD_EMAIL } from "@/lib/links";
 
 function resolveSiteUrl() {
   try {
@@ -50,6 +51,17 @@ export const metadata: Metadata = {
     images: ["/brand/coastal-phone.webp"],
   },
 };
+const localBusinessJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: "Good'Ai",
+  url: siteUrl,
+  description: "AI voice agents and automation studio.",
+  telephone: PHONE_E164,
+  email: LEAD_EMAIL,
+  address: { "@type": "PostalAddress", addressLocality: "Perth", addressRegion: "WA", addressCountry: "AU" },
+  areaServed: "Perth, Western Australia",
+};
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en-AU"><body><LazyMotionProvider><Preloader /><a className="skip-link" href="#main">Skip to content</a><StudioHeader /><main id="main">{children}</main><StudioFooter /><MascotWidget /><SmoothScroll /></LazyMotionProvider></body></html>;
+  return <html lang="en-AU"><body><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd).replace(/</g, "\\u003c") }} /><LazyMotionProvider><Preloader /><a className="skip-link" href="#main">Skip to content</a><StudioHeader /><main id="main">{children}</main><StudioFooter /><MascotWidget /><SmoothScroll /></LazyMotionProvider></body></html>;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { Mascot } from "page-mascot";
@@ -18,6 +18,7 @@ const TrilletVoiceWidget = dynamic(
 export function MascotWidget() {
   const [open, setOpen] = useState(false);
   const [voiceOpen, setVoiceOpen] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleOpenVoice = () => {
@@ -27,6 +28,10 @@ export function MascotWidget() {
     window.addEventListener("openVoiceWidget", handleOpenVoice);
     return () => window.removeEventListener("openVoiceWidget", handleOpenVoice);
   }, []);
+
+  useEffect(() => {
+    if (open) panelRef.current?.focus();
+  }, [open]);
 
   return (
     <>
@@ -49,6 +54,9 @@ export function MascotWidget() {
           {/* Speech bubble on toggle */}
           {open && (
             <div 
+              ref={panelRef}
+              id="goodie-panel"
+              tabIndex={-1}
               role="region"
               aria-label="Goodie quick chat"
               className="p-4 rounded-2xl shadow-xl border max-w-72 text-xs font-sans flex flex-col gap-2.5 backdrop-blur-sm"
@@ -118,6 +126,7 @@ export function MascotWidget() {
             className="cursor-pointer transition-transform hover:scale-105 active:scale-95 drop-shadow-md bg-transparent border-0 p-0"
             title="Say g'day to Goodie!"
             aria-expanded={open}
+            aria-controls="goodie-panel"
             aria-label="Chat with Goodie"
           >
             <Mascot
