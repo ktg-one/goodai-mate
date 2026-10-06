@@ -1,11 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { InteractiveWorkflowCanvas } from "@/components/ui/InteractiveWorkflowCanvas";
 import { VoiceDemo } from "@/components/studio/VoiceDemo";
+import { ogDefaults, twitterDefaults } from "@/lib/seo";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Voice + automation demo",
   description: "Call the voice agent and watch the automation that follows.",
+  alternates: { canonical: "/demo" },
+  openGraph: {
+    ...ogDefaults,
+    title: "Voice + automation demo — Good'Ai",
+    description: "Call the voice agent and watch the automation that follows.",
+    url: "/demo",
+  },
+  twitter: {
+    ...twitterDefaults,
+    title: "Voice + automation demo — Good'Ai",
+    description: "Call the voice agent and watch the automation that follows.",
+  },
 };
 
 export default function DemoPage() {
@@ -36,5 +50,3 @@ export default function DemoPage() {
     </>
   );
 }
-
-

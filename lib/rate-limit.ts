@@ -8,7 +8,7 @@
 type Bucket = { timestamps: number[] };
 
 const buckets = new Map<string, Bucket>();
-const MAX_KEYS = 5_000;
+export const MAX_KEYS = 5_000;
 let opsSinceSweep = 0;
 
 export type RateLimitResult = {
@@ -21,14 +21,6 @@ function sweepExpired(now: number, windowMs: number) {
   for (const [key, bucket] of buckets) {
     bucket.timestamps = bucket.timestamps.filter((t) => t > now - windowMs);
     if (bucket.timestamps.length === 0) buckets.delete(key);
-  }
-}
-
-function enforceCap() {
-  while (buckets.size > MAX_KEYS) {
-    const oldest = buckets.keys().next().value;
-    if (oldest === undefined) break;
-    buckets.delete(oldest);
   }
 }
 
@@ -55,19 +47,30 @@ export function rateLimit(
       bucket = undefined;
     }
   }
-  if (!bucket) bucket = { timestamps: [] };
+
+  if (!bucket) {
+    if (buckets.size >= MAX_KEYS) {
+      sweepExpired(now, windowMs);
+    }
+    if (buckets.size >= MAX_KEYS && !buckets.has(key)) {
+      return {
+        ok: false,
+        remaining: 0,
+        retryAfterSec: Math.ceil(windowMs / 1000),
+      };
+    }
+    bucket = { timestamps: [] };
+  }
 
   if (bucket.timestamps.length >= limit) {
     const oldest = bucket.timestamps[0] ?? now;
     const retryAfterSec = Math.max(1, Math.ceil((oldest + windowMs - now) / 1000));
     buckets.set(key, bucket);
-    enforceCap();
     return { ok: false, remaining: 0, retryAfterSec };
   }
 
   bucket.timestamps.push(now);
   buckets.set(key, bucket);
-  enforceCap();
   return {
     ok: true,
     remaining: Math.max(0, limit - bucket.timestamps.length),
@@ -75,22 +78,36 @@ export function rateLimit(
   };
 }
 
+const IP_REGEX = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$|^[0-9a-fA-F:]+$/;
+
 /**
  * Trusted client IP for rate keys.
- * Prefer platform `x-real-ip`, then the rightmost X-Forwarded-For hop
- * (closest to our edge). Never trust the leftmost XFF (client-spoofable).
- * Returns null when nothing usable is present.
+ * Derives client IP only when proxy headers are validated / trusted.
+ * In production, requires explicit TRUST_PROXY="true" or edge environment
+ * (Vercel / Railway). Never trusts malformed or client-spoofable IP strings.
  */
 export function clientIp(request: Request): string | null {
+  const isProd = process.env.NODE_ENV === "production";
+  const trustProxy = isProd
+    ? process.env.TRUST_PROXY === "true" ||
+      process.env.VERCEL === "1" ||
+      Boolean(process.env.RAILWAY_ENVIRONMENT) ||
+      Boolean(process.env.RAILWAY_STATIC_URL)
+    : process.env.TRUST_PROXY !== "false";
+
+  if (!trustProxy) {
+    return null;
+  }
+
   const real = request.headers.get("x-real-ip")?.trim();
-  if (real) return real;
+  if (real && IP_REGEX.test(real)) return real;
 
   const xf = request.headers.get("x-forwarded-for");
   if (xf) {
     const parts = xf
       .split(",")
       .map((p) => p.trim())
-      .filter(Boolean);
+      .filter((p) => IP_REGEX.test(p));
     if (parts.length > 0) return parts[parts.length - 1] ?? null;
   }
   return null;
@@ -129,5 +146,4 @@ export function _resetRateLimitForTests(): void {
 
 export function _forceSweepForTests(windowMs = 60_000): void {
   sweepExpired(Date.now(), windowMs);
-  enforceCap();
 }

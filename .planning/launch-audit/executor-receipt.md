@@ -14,7 +14,7 @@
 | `app/api/contact/route.ts` | 5/min/IP → 429 |
 | `app/api/voice/call/route.ts` | 6/min/IP; allowlist; fail-closed 503; generic errors |
 | `next.config.ts` | security headers + poweredByHeader false |
-| `.env.example` | scrubbed secret; full env docs |
+| `.env.example` | created template with placeholders; secret keys removed |
 | `lib/services.ts` | price fields removed |
 | `lib/links.ts` | LEAD_EMAIL only (phone digits untouched) |
 | `app/services/[slug]/page.tsx` | no prices; internal Link; canonical |

@@ -4,7 +4,7 @@ Code on `phase/01b-launch-blockers` is launch-blocker complete (Round 2 gates gr
 
 ## Do these in order (30–45 min)
 
-1. **Rotate Resend** if the old key ever lived in git history (`.env.example` was scrubbed; history may still hold it).
+1. **Rotate Resend** if the old key ever lived in git history (`.env.example` placeholder added and real key removed from tracked template; history may still hold it).
 2. **Create `.env.local`** from `.env.example` and set at least:
    - `RESEND_API_KEY`
    - `CONTACT_TO_EMAIL=hello@goodai.au` (or your real inbox)

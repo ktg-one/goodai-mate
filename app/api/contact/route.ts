@@ -18,7 +18,7 @@ export async function POST(request: Request) {
   const limited = limitRequest(request, "contact", { limit: 5, globalLimit: 40, windowMs: 60_000 });
   if (!limited.ok) {
     return NextResponse.json(
-      { error: "Too many enquiries just now. Wait a minute, or call us." },
+      { error: "Too many enquiries just now. Please call or email us directly." },
       { status: 429, headers: { "Retry-After": String(limited.retryAfterSec) } },
     );
   }
@@ -46,7 +46,10 @@ export async function POST(request: Request) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.error("[Contact API] RESEND_API_KEY is not set; lead not sent.");
-    return NextResponse.json({ error: "We couldn't send that just now. Please call us instead." }, { status: 503 });
+    return NextResponse.json(
+      { error: "We couldn't send that just now. Please call or email us directly." },
+      { status: 503 },
+    );
   }
 
   const lines = [
@@ -69,7 +72,10 @@ export async function POST(request: Request) {
 
   if (!res || !res.ok) {
     console.error("[Contact API] Resend rejected the lead:", res ? await res.text().catch(() => res.status) : "network error");
-    return NextResponse.json({ error: "We couldn't send that just now. Please call us instead." }, { status: 502 });
+    return NextResponse.json(
+      { error: "We couldn't send that just now. Please call or email us directly." },
+      { status: 502 },
+    );
   }
 
   return NextResponse.json({ ok: true });

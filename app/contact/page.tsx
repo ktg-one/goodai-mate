@@ -1,11 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, PhoneCall } from "lucide-react";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/links";
 import { SussTheFussCard } from "@/components/studio/SussTheFussCard";
+import { ogDefaults, twitterDefaults } from "@/lib/seo";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Contact Good'Ai",
   description: "Start with the messy bit so we can find the bottleneck.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    ...ogDefaults,
+    title: "Contact Good'Ai",
+    description: "Start with the messy bit so we can find the bottleneck.",
+    url: "/contact",
+  },
+  twitter: {
+    ...twitterDefaults,
+    title: "Contact Good'Ai",
+    description: "Start with the messy bit so we can find the bottleneck.",
+  },
 };
 
 export default function ContactPage() {

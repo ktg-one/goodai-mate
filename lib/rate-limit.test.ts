@@ -4,6 +4,7 @@ import {
   rateLimit,
   clientIp,
   limitRequest,
+  MAX_KEYS,
   _bucketCountForTests,
   _resetRateLimitForTests,
   _forceSweepForTests,
@@ -77,11 +78,18 @@ test("expired buckets are deleted on sweep (no empty Map leak)", () => {
   assert.equal(_bucketCountForTests(), 0);
 });
 
-test("bucket map enforces a hard cap via eviction", () => {
+test("bucket map enforces MAX_KEYS cap without evicting active keys", () => {
   _resetRateLimitForTests();
-  for (let i = 0; i < 50; i++) {
+  const totalToInsert = MAX_KEYS + 50;
+  for (let i = 0; i < totalToInsert; i++) {
     rateLimit(`cap-${i}`, { limit: 1, windowMs: 60_000 });
   }
-  assert.ok(_bucketCountForTests() <= 5000);
-  assert.equal(_bucketCountForTests(), 50);
+  assert.equal(_bucketCountForTests(), MAX_KEYS);
+  // Existing key within MAX_KEYS range should still exist and be blocked (limit=1)
+  const existingRes = rateLimit("cap-0", { limit: 1, windowMs: 60_000 });
+  assert.equal(existingRes.ok, false);
+  // Brand new key when map is full should be rejected without adding new entry
+  const newKeyRes = rateLimit("brand-new-key", { limit: 1, windowMs: 60_000 });
+  assert.equal(newKeyRes.ok, false);
+  assert.equal(_bucketCountForTests(), MAX_KEYS);
 });

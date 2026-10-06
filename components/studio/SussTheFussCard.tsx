@@ -162,15 +162,15 @@ export function SussTheFussCard() {
 
         <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="sr-only" />
         {error && (
-          <div role="alert" className="text-sm text-brand-coral space-y-2">
-            <p>{error}</p>
-            <p className="text-brand-ink/80">
-              Prefer a human?{" "}
-              <a href={PHONE_HREF} className="underline underline-offset-2">
+          <div role="alert" className="text-sm text-brand-coral space-y-2 rounded-md p-3 bg-brand-coral/10 border border-brand-coral/30">
+            <p className="font-medium">{error}</p>
+            <p className="text-brand-ink/90 flex flex-wrap items-center gap-x-2 gap-y-1">
+              <span>You can reach us directly:</span>
+              <a href={PHONE_HREF} className="font-semibold underline underline-offset-2 hover:text-brand-coral">
                 Call {PHONE_DISPLAY}
               </a>
-              {" "}or{" "}
-              <a href={LEAD_EMAIL_HREF} className="underline underline-offset-2">
+              <span>or email</span>
+              <a href={LEAD_EMAIL_HREF} className="font-semibold underline underline-offset-2 hover:text-brand-coral">
                 {LEAD_EMAIL}
               </a>
               .
