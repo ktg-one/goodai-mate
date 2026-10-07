@@ -14,10 +14,10 @@ const pages: SketchbookPage[] = [
   { file: "8-sketch.png", title: "admin, emails, bookings, calls, invoices, posting socials, anything digital!", place: "" },
   { file: "9-sketch.png", title: "Knock off early! AI can be pretty sweet when done right", place: "" },
   { file: "10-sketch.png", title: "Cheers! *thinks* the world as we know it is gonna change", place: "" },
-  { file: "11-sketch.png", title: "So why not control what we can, palm it off to Goodie", place: "" },
-  { file: "12-sketch.png", title: "And why not have a bit of fun with it?", place: "" },
-  { file: "13-sketch.png", title: "", place: "" },
-  { file: "14-sketch.png", title: "And brace ourselves with the ones who matter", place: "" },
+  { file: "11-sketch.png", title: "So why not control what we can?", place: "" },
+  { file: "12-sketch.png", title: "And have a bit of fun with it. Palm off to Goodie! ", place: "" },
+  { file: "13-sketch.png", title: "Because your quality time belongs...", place: "" },
+  { file: "14-sketch.png", title: "... with the ones who matter", place: "" },
 ];
 
 export function PerthSketchbook() {
