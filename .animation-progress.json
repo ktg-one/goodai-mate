@@ -45,7 +45,8 @@
     "id": "cta-section-buttons",
     "component": "components/sections/CTA.tsx",
     "type": "hover/pulse-glow",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion continuous pulse-glow box-shadow animation loops, scale/shadow transforms on whileHover and whileTap, smooth >=1.0s movement duration curves, and prefers-reduced-motion compliance via useReducedMotion."
   },
   {
     "id": "footer-nav-links",
