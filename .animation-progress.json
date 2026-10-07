@@ -50,9 +50,10 @@
   },
   {
     "id": "footer-nav-links",
-    "component": "components/layout/Footer.tsx",
+    "component": "components/studio/Shell.tsx",
     "type": "hover/underline",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion hover underline animation for StudioFooter navigation and policy links with scaleX/opacity transforms, duration curve >= 1.0s (1.0s cubic-bezier ease), and prefers-reduced-motion compliance via useReducedMotion."
   },
   {
     "id": "voice-widget-waveform",
