@@ -24,10 +24,19 @@ export function Hero() {
     const ctx = gsap.context(() => {
       media.add("(min-width: 761px) and (prefers-reduced-motion: no-preference)", () => {
         const copy = scope.querySelector<HTMLElement>(".hero-copy");
+        const heading = scope.querySelector<HTMLElement>(".hero-copy h1");
+        const desc = scope.querySelector<HTMLElement>(".hero-description");
+        const actions = scope.querySelectorAll<HTMLElement>(".hero-button, .hero-voice-link");
+        const handnote = scope.querySelector<HTMLElement>(".hero-handnote");
+        const handnotePath = scope.querySelector<SVGPathElement>(".hero-handnote svg path");
+        const bottom = scope.querySelector<HTMLElement>(".hero-bottom");
         const study = scope.querySelector<HTMLElement>(".hero-study");
         const spiralLine = scope.querySelector<SVGPathElement>(".hero-study-line");
-        const handnotePath = scope.querySelector<SVGPathElement>(".hero-handnote svg path");
         const branch = branchRef.current;
+
+        // Initial entrance state for the words: start below with zero opacity
+        const textElements = [heading, desc, ...Array.from(actions), handnote, bottom].filter(Boolean);
+        gsap.set(textElements, { opacity: 0, y: 32 });
 
         if (spiralLine) {
           const len = spiralLine.getTotalLength();
@@ -46,12 +55,12 @@ export function Hero() {
           });
         }
 
-        // Master Timeline: 3 full viewports (300% = 3 wheel scrolls) of deliberate reading & choreography
+        // Master Timeline: Doubled timing (5 full viewport heights = 500vh) for deep, luxurious scroll pacing
         const master = gsap.timeline({
           scrollTrigger: {
             trigger: scope,
             start: "top top",
-            end: "+=260%",
+            end: () => `+=${window.innerHeight * 5}`,
             pin: true,
             pinSpacing: true,
             scrub: 1,
@@ -60,36 +69,56 @@ export function Hero() {
           },
         });
 
-        // BEAT 1 (0.00 -> 0.35): Arrival & Golden Spiral Draw
+        // BEAT 1 (0.00 -> 0.38): Spiral Draws, Plant Unfurls, and Words Fade In Together
         if (spiralLine) {
           master.to(spiralLine, { strokeDashoffset: 0, duration: 0.35, ease: "none" }, 0);
         }
         if (study) {
-          master.to(study, { rotation: 10, scale: 1.04, duration: 1.0, ease: "none" }, 0);
+          master.to(study, { rotation: 12, scale: 1.05, duration: 1.0, ease: "none" }, 0);
         }
 
-        // BEAT 2 (0.25 -> 0.70): Reading Dwell + Eucalyptus Branch Grows Upward
-        if (handnotePath) {
-          master.to(handnotePath, { strokeDashoffset: 0, duration: 0.25, ease: "power1.out" }, 0.25);
-        }
+        // The plant climbs upward alongside the words
         if (branch) {
           master.to(branch, {
             clipPath: "inset(0% 0% 0% 0%)",
             scale: 1,
-            opacity: 0.14,
-            duration: 0.45,
+            opacity: 0.15,
+            duration: 0.35,
             ease: "power1.out",
-          }, 0.28);
+          }, 0.04);
         }
 
-        // BEAT 3 (0.75 -> 1.00): Graceful handoff to the next section
+        // Words arrive in harmonious sequence alongside the rising branch
+        if (heading) {
+          master.to(heading, { opacity: 1, y: 0, duration: 0.18, ease: "power2.out" }, 0.04);
+        }
+        if (desc) {
+          master.to(desc, { opacity: 1, y: 0, duration: 0.18, ease: "power2.out" }, 0.10);
+        }
+        if (actions.length) {
+          master.to(actions, { opacity: 1, y: 0, stagger: 0.04, duration: 0.16, ease: "power2.out" }, 0.16);
+        }
+        if (handnote) {
+          master.to(handnote, { opacity: 1, y: 0, duration: 0.14, ease: "power2.out" }, 0.20);
+        }
+        if (handnotePath) {
+          master.to(handnotePath, { strokeDashoffset: 0, duration: 0.14, ease: "power1.out" }, 0.24);
+        }
+        if (bottom) {
+          master.to(bottom, { opacity: 1, y: 0, duration: 0.14, ease: "power2.out" }, 0.22);
+        }
+
+        // BEAT 2 (0.38 -> 0.84): Extended Reading Dwell (Complete Stillness for Reading)
+        // Everything is fully settled and readable across ~2.5 viewports of scroll.
+
+        // BEAT 3 (0.84 -> 1.00): Graceful handoff to the next section
         if (copy) {
           master.to(copy, {
             opacity: 0.2,
-            y: -30,
-            duration: 0.25,
+            y: -35,
+            duration: 0.16,
             ease: "power1.in",
-          }, 0.75);
+          }, 0.84);
         }
       });
     }, scope);
