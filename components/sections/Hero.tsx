@@ -24,19 +24,10 @@ export function Hero() {
     const ctx = gsap.context(() => {
       media.add("(min-width: 761px) and (prefers-reduced-motion: no-preference)", () => {
         const copy = scope.querySelector<HTMLElement>(".hero-copy");
-        const heading = scope.querySelector<HTMLElement>(".hero-copy h1");
-        const desc = scope.querySelector<HTMLElement>(".hero-description");
-        const actions = scope.querySelectorAll<HTMLElement>(".hero-button, .hero-voice-link");
-        const handnote = scope.querySelector<HTMLElement>(".hero-handnote");
-        const handnotePath = scope.querySelector<SVGPathElement>(".hero-handnote svg path");
-        const bottom = scope.querySelector<HTMLElement>(".hero-bottom");
         const study = scope.querySelector<HTMLElement>(".hero-study");
         const spiralLine = scope.querySelector<SVGPathElement>(".hero-study-line");
+        const handnotePath = scope.querySelector<SVGPathElement>(".hero-handnote svg path");
         const branch = branchRef.current;
-
-        // Initial entrance state for the words: start below with zero opacity
-        const textElements = [heading, desc, ...Array.from(actions), handnote, bottom].filter(Boolean);
-        gsap.set(textElements, { opacity: 0, y: 32 });
 
         if (spiralLine) {
           const len = spiralLine.getTotalLength();
@@ -55,7 +46,7 @@ export function Hero() {
           });
         }
 
-        // Master Timeline: 5 full viewport heights of total pinned scroll budget
+        // Master Timeline: 5 full viewport heights of total pinned reading & storytelling budget
         const master = gsap.timeline({
           scrollTrigger: {
             trigger: scope,
@@ -69,57 +60,37 @@ export function Hero() {
           },
         });
 
-        // BEAT 1 (0.00 -> 0.12): Rapid Entrance — Words and Plant Snap to 100% Full Opacity Right Away
+        // BEAT 1 (0.00 -> 0.25): Eucalyptus Branch Climbs & Golden Spiral Draws
         if (spiralLine) {
-          master.to(spiralLine, { strokeDashoffset: 0, duration: 0.12, ease: "none" }, 0);
+          master.to(spiralLine, { strokeDashoffset: 0, duration: 0.22, ease: "none" }, 0);
         }
         if (study) {
           master.to(study, { rotation: 10, scale: 1.04, duration: 1.0, ease: "none" }, 0);
         }
-
-        // The plant unfurls quickly to full height
         if (branch) {
           master.to(branch, {
             clipPath: "inset(0% 0% 0% 0%)",
             scale: 1,
-            opacity: 0.18,
-            duration: 0.12,
+            opacity: 0.20,
+            duration: 0.25,
             ease: "power2.out",
-          }, 0.01);
-        }
-
-        // Words reach 100% bold opacity within the first flick
-        if (heading) {
-          master.to(heading, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out" }, 0.01);
-        }
-        if (desc) {
-          master.to(desc, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out" }, 0.03);
-        }
-        if (actions.length) {
-          master.to(actions, { opacity: 1, y: 0, stagger: 0.02, duration: 0.08, ease: "power2.out" }, 0.05);
-        }
-        if (handnote) {
-          master.to(handnote, { opacity: 1, y: 0, duration: 0.06, ease: "power2.out" }, 0.06);
+          }, 0);
         }
         if (handnotePath) {
-          master.to(handnotePath, { strokeDashoffset: 0, duration: 0.08, ease: "power1.out" }, 0.07);
-        }
-        if (bottom) {
-          master.to(bottom, { opacity: 1, y: 0, duration: 0.06, ease: "power2.out" }, 0.07);
+          master.to(handnotePath, { strokeDashoffset: 0, duration: 0.15, ease: "power1.out" }, 0.08);
         }
 
-        // BEAT 2 (0.12 -> 0.94): Massive Pinned Stillness
-        // From 0.12 to 0.94 (82% of the entire pin!), everything stays at 100% opacity,
-        // rock-solid and still for reading.
+        // BEAT 2 (0.25 -> 0.92): Complete Pinned Reading Dwell
+        // Words are 100% solid, fully legible, and locked in place across ~4 viewports of scroll.
 
-        // BEAT 3 (0.94 -> 1.00): Only in the final 6% right before unpinning does it release
+        // BEAT 3 (0.92 -> 1.00): Graceful release into the promise strip & empathy
         if (copy) {
           master.to(copy, {
             opacity: 0.2,
             y: -25,
-            duration: 0.06,
+            duration: 0.08,
             ease: "power1.in",
-          }, 0.94);
+          }, 0.92);
         }
       });
     }, scope);
