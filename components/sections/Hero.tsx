@@ -42,70 +42,82 @@ export function Hero() {
           gsap.set(handnotePath, { strokeDasharray: handnoteLen, strokeDashoffset: handnoteLen });
         }
 
-        // Pinned scrub timeline: scroll wheel is the scrub bar.
-        // Screen is physically pinned until all animations finish.
+        // 1. gsap.timeline - paused: true, ease: "power1.out"
         const master = gsap.timeline({
+          paused: true,
+          defaults: {
+            ease: "power1.out",
+          },
           scrollTrigger: {
+            // 2. Scrolltrigger box, start and end
             trigger: scope,
             start: "top top",
-            end: "+=100%",
+            end: "+=250%",
+
+            // 3. toggleactions play pause resume reset, toggle class active
+            toggleActions: "play pause resume reset",
+            toggleClass: "active",
+
+            // 4. scrub = true
+            scrub: true,
+
+            // 5. pin = true (just before starting your animations)
             pin: true,
-            scrub: 1,
             anticipatePin: 1,
             invalidateOnRefresh: true,
           },
-          defaults: {
-            ease: "none",
-          },
         });
 
-        // 1. Plant unfurls on the right
+        // 6. animations movement duration
+        // Act 1: Plant unfurls on the right
         if (branch) {
           master.fromTo(
             branch,
             { clipPath: "inset(100% 0% 0% 0%)", scale: 0.94, opacity: 0 },
-            { clipPath: "inset(0% 0% 0% 0%)", scale: 1, opacity: 0.22, duration: 2 },
+            { clipPath: "inset(0% 0% 0% 0%)", scale: 1, opacity: 0.22, duration: 3 },
             0
           );
         }
 
-        // 2. Golden spiral draws and study rotates right alongside
+        // Act 2: Golden spiral draws + study rotates early alongside the plant
         if (spiralLine) {
           master.fromTo(
             spiralLine,
             { strokeDashoffset: spiralLen },
-            { strokeDashoffset: 0, duration: 2 },
-            0
+            { strokeDashoffset: 0, duration: 3 },
+            0.5
           );
         }
         if (study) {
           master.fromTo(
             study,
             { rotation: 0, scale: 0.96 },
-            { rotation: 12, scale: 1.05, duration: 2 },
-            0
+            { rotation: 12, scale: 1.05, duration: 3 },
+            0.5
           );
         }
 
-        // 3. Heading and text rise and lock in
+        // Act 3: Words rise and lock in
         if (heading) {
-          master.fromTo(heading, { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: 2 }, 0);
+          master.fromTo(heading, { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: 3 }, 1.5);
         }
         if (desc) {
-          master.fromTo(desc, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 2 }, 0.2);
+          master.fromTo(desc, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 3 }, 2.0);
         }
         if (actions.length) {
-          master.fromTo(actions, { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.1, duration: 2 }, 0.4);
+          master.fromTo(actions, { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.2, duration: 2.5 }, 2.5);
         }
+
+        // Act 4: Hand-drawn arrow sketches under "Leave it with us."
         if (handnote) {
-          master.fromTo(handnote, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 1.5 }, 0.6);
+          master.fromTo(handnote, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 2 }, 3.0);
         }
         if (handnotePath) {
           master.fromTo(
             handnotePath,
             { strokeDashoffset: handnoteLen },
-            { strokeDashoffset: 0, duration: 1.5 },
-            0.8
+            { strokeDashoffset: 0, duration: 2 },
+            3.5
           );
         }
       });
