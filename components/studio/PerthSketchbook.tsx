@@ -23,7 +23,7 @@ const pages: SketchbookPage[] = [
 export function PerthSketchbook() {
   return (
     <section className="perth-sketchbook" aria-label="Perth sketchbook">
-      <Sketchbook assetBaseUrl="/assets/sketches/" pages={pages} land={14} title="Perth sketchbook" />
+      <Sketchbook assetBaseUrl="/assets/sketches/" pages={pages} land={0} title="Perth sketchbook" />
     </section>
   );
 }
