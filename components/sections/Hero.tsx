@@ -42,70 +42,70 @@ export function Hero() {
           gsap.set(handnotePath, { strokeDasharray: handnoteLen, strokeDashoffset: handnoteLen });
         }
 
-        // Timeline tied directly to ScrollTrigger with play pause resume reset
-        // Triggers as soon as the hero enters 80% of the viewport, plays to 100% completion, and stays visible.
+        // Pinned scrub timeline: scroll wheel is the scrub bar.
+        // Screen is physically pinned until all animations finish.
         const master = gsap.timeline({
           scrollTrigger: {
             trigger: scope,
-            start: "top 80%",
-            end: "bottom 15%",
-            toggleActions: "play pause resume reset",
+            start: "top top",
+            end: "+=100%",
+            pin: true,
+            scrub: 1,
+            anticipatePin: 1,
             invalidateOnRefresh: true,
           },
           defaults: {
-            ease: "power2.out",
+            ease: "none",
           },
         });
 
-        // 1. Heading and text rise and fade in
-        if (heading) {
-          master.fromTo(heading, { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: 1.1 }, 0);
-        }
-        if (desc) {
-          master.fromTo(desc, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 1.1 }, 0.15);
-        }
-        if (actions.length) {
-          master.fromTo(actions, { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.1, duration: 1.0 }, 0.3);
-        }
-        if (handnote) {
-          master.fromTo(handnote, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 1.0 }, 0.45);
-        }
-
-        // 2. The plant unfurls upward at the same time
+        // 1. Plant unfurls on the right
         if (branch) {
           master.fromTo(
             branch,
             { clipPath: "inset(100% 0% 0% 0%)", scale: 0.94, opacity: 0 },
-            { clipPath: "inset(0% 0% 0% 0%)", scale: 1, opacity: 0.22, duration: 1.6 },
-            0.05
+            { clipPath: "inset(0% 0% 0% 0%)", scale: 1, opacity: 0.22, duration: 2 },
+            0
           );
         }
 
-        // 3. Golden spiral draws in alongside
+        // 2. Golden spiral draws and study rotates right alongside
         if (spiralLine) {
           master.fromTo(
             spiralLine,
             { strokeDashoffset: spiralLen },
-            { strokeDashoffset: 0, duration: 1.5, ease: "none" },
-            0.1
+            { strokeDashoffset: 0, duration: 2 },
+            0
           );
         }
         if (study) {
           master.fromTo(
             study,
             { rotation: 0, scale: 0.96 },
-            { rotation: 12, scale: 1.05, duration: 2.2, ease: "none" },
+            { rotation: 12, scale: 1.05, duration: 2 },
             0
           );
         }
 
-        // 4. Handwritten arrow finishes
+        // 3. Heading and text rise and lock in
+        if (heading) {
+          master.fromTo(heading, { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: 2 }, 0);
+        }
+        if (desc) {
+          master.fromTo(desc, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 2 }, 0.2);
+        }
+        if (actions.length) {
+          master.fromTo(actions, { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.1, duration: 2 }, 0.4);
+        }
+        if (handnote) {
+          master.fromTo(handnote, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 1.5 }, 0.6);
+        }
         if (handnotePath) {
           master.fromTo(
             handnotePath,
             { strokeDashoffset: handnoteLen },
-            { strokeDashoffset: 0, duration: 1.1, ease: "power1.out" },
-            0.55
+            { strokeDashoffset: 0, duration: 1.5 },
+            0.8
           );
         }
       });
