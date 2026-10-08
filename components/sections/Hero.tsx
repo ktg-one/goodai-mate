@@ -23,91 +23,90 @@ export function Hero() {
     const media = gsap.matchMedia();
     const ctx = gsap.context(() => {
       media.add("(min-width: 761px) and (prefers-reduced-motion: no-preference)", () => {
-        const copy = scope.querySelector<HTMLElement>(".hero-copy");
+        const heading = scope.querySelector<HTMLElement>(".hero-copy h1");
+        const desc = scope.querySelector<HTMLElement>(".hero-description");
+        const actions = scope.querySelectorAll<HTMLElement>(".hero-button, .hero-voice-link");
+        const handnote = scope.querySelector<HTMLElement>(".hero-handnote");
         const study = scope.querySelector<HTMLElement>(".hero-study");
         const spiralLine = scope.querySelector<SVGPathElement>(".hero-study-line");
         const handnotePath = scope.querySelector<SVGPathElement>(".hero-handnote svg path");
         const branch = branchRef.current;
 
+        const spiralLen = spiralLine ? spiralLine.getTotalLength() : 0;
+        const handnoteLen = handnotePath ? handnotePath.getTotalLength() : 0;
+
         if (spiralLine) {
-          const len = spiralLine.getTotalLength();
-          gsap.set(spiralLine, { strokeDasharray: len, strokeDashoffset: len });
+          gsap.set(spiralLine, { strokeDasharray: spiralLen, strokeDashoffset: spiralLen });
         }
         if (handnotePath) {
-          const hLen = handnotePath.getTotalLength();
-          gsap.set(handnotePath, { strokeDasharray: hLen, strokeDashoffset: hLen });
-        }
-        if (branch) {
-          gsap.set(branch, {
-            clipPath: "inset(100% 0% 0% 0%)",
-            scale: 0.94,
-            opacity: 0,
-            transformOrigin: "bottom right",
-          });
+          gsap.set(handnotePath, { strokeDasharray: handnoteLen, strokeDashoffset: handnoteLen });
         }
 
-        // Master Timeline: 5 full viewport heights of total pinned reading & storytelling budget
+        // Timeline tied directly to ScrollTrigger with play pause resume reset
+        // Triggers as soon as the hero enters 80% of the viewport, plays to 100% completion, and stays visible.
         const master = gsap.timeline({
           scrollTrigger: {
             trigger: scope,
-            start: "top top",
-            end: () => `+=${window.innerHeight * 5}`,
-            pin: true,
-            pinSpacing: true,
-            scrub: 1,
-            anticipatePin: 1,
+            start: "top 80%",
+            end: "bottom 15%",
+            toggleActions: "play pause resume reset",
             invalidateOnRefresh: true,
+          },
+          defaults: {
+            ease: "power2.out",
           },
         });
 
-        // BEAT 1: The right one (branch) and the second one (spiral) start together early
-        // All durations are > 1 second so every phase has visible weight and smooth travel
-        if (branch) {
-          master.to(branch, {
-            clipPath: "inset(0% 0% 0% 0%)",
-            scale: 1,
-            opacity: 0.22,
-            duration: 2.0, // > 1 second
-            ease: "power2.out",
-          }, 0);
+        // 1. Heading and text rise and fade in
+        if (heading) {
+          master.fromTo(heading, { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: 1.1 }, 0);
+        }
+        if (desc) {
+          master.fromTo(desc, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 1.1 }, 0.15);
+        }
+        if (actions.length) {
+          master.fromTo(actions, { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.1, duration: 1.0 }, 0.3);
+        }
+        if (handnote) {
+          master.fromTo(handnote, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 1.0 }, 0.45);
         }
 
-        // The second one (spiral draw + study) starts earlier right at 0
+        // 2. The plant unfurls upward at the same time
+        if (branch) {
+          master.fromTo(
+            branch,
+            { clipPath: "inset(100% 0% 0% 0%)", scale: 0.94, opacity: 0 },
+            { clipPath: "inset(0% 0% 0% 0%)", scale: 1, opacity: 0.22, duration: 1.6 },
+            0.05
+          );
+        }
+
+        // 3. Golden spiral draws in alongside
         if (spiralLine) {
-          master.to(spiralLine, {
-            strokeDashoffset: 0,
-            duration: 1.8, // > 1 second
-            ease: "none",
-          }, 0);
+          master.fromTo(
+            spiralLine,
+            { strokeDashoffset: spiralLen },
+            { strokeDashoffset: 0, duration: 1.5, ease: "none" },
+            0.1
+          );
         }
         if (study) {
-          master.to(study, {
-            rotation: 12,
-            scale: 1.05,
-            duration: 3.5, // > 1 second
-            ease: "none",
-          }, 0);
+          master.fromTo(
+            study,
+            { rotation: 0, scale: 0.96 },
+            { rotation: 12, scale: 1.05, duration: 2.2, ease: "none" },
+            0
+          );
         }
+
+        // 4. Handwritten arrow finishes
         if (handnotePath) {
-          master.to(handnotePath, {
-            strokeDashoffset: 0,
-            duration: 1.2, // > 1 second
-            ease: "power1.out",
-          }, 0.2);
-        }
-
-        // BEAT 2: Pinned Reading Dwell Hold
-        // Holds completely stable for reading across the majority of the 500vh pin
-        master.to({}, { duration: 5.0 }); // 5 seconds of rock-solid dwell
-
-        // BEAT 3: Graceful release into the next section
-        if (copy) {
-          master.to(copy, {
-            opacity: 0.2,
-            y: -30,
-            duration: 1.2, // > 1 second
-            ease: "power1.in",
-          });
+          master.fromTo(
+            handnotePath,
+            { strokeDashoffset: handnoteLen },
+            { strokeDashoffset: 0, duration: 1.1, ease: "power1.out" },
+            0.55
+          );
         }
       });
     }, scope);
