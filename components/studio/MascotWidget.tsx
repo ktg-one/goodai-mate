@@ -7,8 +7,8 @@ import { Mascot } from "page-mascot";
 import { Phone, MessageSquare, Mic, X } from "lucide-react";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/links";
 
-const TrilletVoiceWidget = dynamic(
-  () => import("./TrilletVoiceWidget").then((mod) => mod.TrilletVoiceWidget),
+const ElevenLabsMascot = dynamic(
+  () => import("./ElevenLabsMascot").then((mod) => mod.ElevenLabsMascot),
   {
     ssr: false,
     loading: () => null,
@@ -37,12 +37,7 @@ export function MascotWidget() {
     <>
       {/* Voice Assistant Panel - rendered seamlessly without a colliding duplicate button */}
       {voiceOpen && (
-        <TrilletVoiceWidget
-          agentName="Talk to us"
-          autoOpen={true}
-          hideTrigger={true}
-          onClose={() => setVoiceOpen(false)}
-        />
+        <ElevenLabsMascot onClose={() => setVoiceOpen(false)} />
       )}
 
       {/* Mascot Companion */}
