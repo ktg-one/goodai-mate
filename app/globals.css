@@ -318,11 +318,26 @@ em {
 .hero {
   position: relative;
   isolation: isolate;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  padding-block: 150px 64px;
-  min-height: 115dvh;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: 80px 48px;
+  min-height: 100dvh;
+}
+.hero-growing-branch {
+  position: absolute;
+  right: -24px;
+  bottom: 0;
+  width: min(280px, 24vw);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+@media (max-width: 760px) {
+  .hero-growing-branch {
+    display: none;
+  }
 }
 /* Aged-paper wash behind the hero: fibre grain plus a warm sepia vignette. */
 .hero::before {
