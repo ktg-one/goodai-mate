@@ -55,7 +55,7 @@ export function Hero() {
           });
         }
 
-        // Master Timeline: Doubled timing (5 full viewport heights = 500vh) for deep, luxurious scroll pacing
+        // Master Timeline: 5 full viewport heights of total pinned scroll budget
         const master = gsap.timeline({
           scrollTrigger: {
             trigger: scope,
@@ -69,56 +69,57 @@ export function Hero() {
           },
         });
 
-        // BEAT 1 (0.00 -> 0.38): Spiral Draws, Plant Unfurls, and Words Fade In Together
+        // BEAT 1 (0.00 -> 0.12): Rapid Entrance — Words and Plant Snap to 100% Full Opacity Right Away
         if (spiralLine) {
-          master.to(spiralLine, { strokeDashoffset: 0, duration: 0.35, ease: "none" }, 0);
+          master.to(spiralLine, { strokeDashoffset: 0, duration: 0.12, ease: "none" }, 0);
         }
         if (study) {
-          master.to(study, { rotation: 12, scale: 1.05, duration: 1.0, ease: "none" }, 0);
+          master.to(study, { rotation: 10, scale: 1.04, duration: 1.0, ease: "none" }, 0);
         }
 
-        // The plant climbs upward alongside the words
+        // The plant unfurls quickly to full height
         if (branch) {
           master.to(branch, {
             clipPath: "inset(0% 0% 0% 0%)",
             scale: 1,
-            opacity: 0.15,
-            duration: 0.35,
-            ease: "power1.out",
-          }, 0.04);
+            opacity: 0.18,
+            duration: 0.12,
+            ease: "power2.out",
+          }, 0.01);
         }
 
-        // Words arrive in harmonious sequence alongside the rising branch
+        // Words reach 100% bold opacity within the first flick
         if (heading) {
-          master.to(heading, { opacity: 1, y: 0, duration: 0.18, ease: "power2.out" }, 0.04);
+          master.to(heading, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out" }, 0.01);
         }
         if (desc) {
-          master.to(desc, { opacity: 1, y: 0, duration: 0.18, ease: "power2.out" }, 0.10);
+          master.to(desc, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out" }, 0.03);
         }
         if (actions.length) {
-          master.to(actions, { opacity: 1, y: 0, stagger: 0.04, duration: 0.16, ease: "power2.out" }, 0.16);
+          master.to(actions, { opacity: 1, y: 0, stagger: 0.02, duration: 0.08, ease: "power2.out" }, 0.05);
         }
         if (handnote) {
-          master.to(handnote, { opacity: 1, y: 0, duration: 0.14, ease: "power2.out" }, 0.20);
+          master.to(handnote, { opacity: 1, y: 0, duration: 0.06, ease: "power2.out" }, 0.06);
         }
         if (handnotePath) {
-          master.to(handnotePath, { strokeDashoffset: 0, duration: 0.14, ease: "power1.out" }, 0.24);
+          master.to(handnotePath, { strokeDashoffset: 0, duration: 0.08, ease: "power1.out" }, 0.07);
         }
         if (bottom) {
-          master.to(bottom, { opacity: 1, y: 0, duration: 0.14, ease: "power2.out" }, 0.22);
+          master.to(bottom, { opacity: 1, y: 0, duration: 0.06, ease: "power2.out" }, 0.07);
         }
 
-        // BEAT 2 (0.38 -> 0.84): Extended Reading Dwell (Complete Stillness for Reading)
-        // Everything is fully settled and readable across ~2.5 viewports of scroll.
+        // BEAT 2 (0.12 -> 0.94): Massive Pinned Stillness
+        // From 0.12 to 0.94 (82% of the entire pin!), everything stays at 100% opacity,
+        // rock-solid and still for reading.
 
-        // BEAT 3 (0.84 -> 1.00): Graceful handoff to the next section
+        // BEAT 3 (0.94 -> 1.00): Only in the final 6% right before unpinning does it release
         if (copy) {
           master.to(copy, {
             opacity: 0.2,
-            y: -35,
-            duration: 0.16,
+            y: -25,
+            duration: 0.06,
             ease: "power1.in",
-          }, 0.84);
+          }, 0.94);
         }
       });
     }, scope);
