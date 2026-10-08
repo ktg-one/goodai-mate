@@ -41,11 +41,8 @@ export function Magnetic({
             onMouseLeave={handleMouseLeave}
             animate={{ x: position.x, y: position.y }}
             transition={{
-                type: "spring",
-                stiffness: 80,
-                damping: 20,
-                mass: 1,
                 duration: 1.0,
+                ease: "easeOut",
             }}
             className={cn("inline-block", className)}
         >
@@ -92,11 +89,8 @@ export function MagneticButton({
             onMouseLeave={handleMouseLeave}
             animate={{ x: position.x, y: position.y }}
             transition={{
-                type: "spring",
-                stiffness: 80,
-                damping: 20,
-                mass: 1,
                 duration: 1.0,
+                ease: "easeOut",
             }}
             className={cn("focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-coral outline-none", className)}
             {...props}

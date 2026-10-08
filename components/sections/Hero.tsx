@@ -37,11 +37,9 @@ export function Hero() {
         </p>
         <div className="hero-bottom">
           <span className="location-dot" /> Perth, Australia. Working everywhere.
-          <Magnetic strength={0.4}>
-            <a href="#services" aria-label="Explore our services">
-              <MoveDown size={19} />
-            </a>
-          </Magnetic>
+          <a href="#services" aria-label="Explore our services">
+            <MoveDown size={19} />
+          </a>
         </div>
       </div>
       <HeroStudy />
