@@ -44,7 +44,7 @@ export function createSketchbookDocument(assetBaseUrl = "/sketchbook/", { pages,
   const base = assetBaseUrl.endsWith("/") ? assetBaseUrl : `${assetBaseUrl}/`;
   let html = CANONICAL_SKETCHBOOK_HTML;
   if (pages?.length) {
-    const landAt = Math.min(Math.max(land ?? 0, 0), pages.length - 1);
+    const landAt = land === pages.length ? 0 : Math.min(Math.max(land ?? 0, 0), pages.length - 1);
     html = html
       .replace(/const PAGES=\[[\s\S]*?\];/, () => `const PAGES=${JSON.stringify(pages).replaceAll("<", "\\u003c")};`)
       .replace(/LAND=\d+;/, `LAND=${landAt};`);
@@ -58,7 +58,7 @@ export function createSketchbookDocument(assetBaseUrl = "/sketchbook/", { pages,
   // The intro riffle flips through all pages in the sketchbook and lands on the designated page (0 = first page).
   html = html.replace(
     "const steps=M+LAND;",
-    "const steps=(LAND===0?M:M+LAND);"
+    "const steps=LAND===0?M:LAND;"
   );
   // Smooth caption crossfade without dead zone or sudden disappearing gap:
   html = html.replace(
