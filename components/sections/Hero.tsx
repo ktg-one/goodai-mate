@@ -60,37 +60,54 @@ export function Hero() {
           },
         });
 
-        // BEAT 1 (0.00 -> 0.25): Eucalyptus Branch Climbs & Golden Spiral Draws
-        if (spiralLine) {
-          master.to(spiralLine, { strokeDashoffset: 0, duration: 0.22, ease: "none" }, 0);
-        }
-        if (study) {
-          master.to(study, { rotation: 10, scale: 1.04, duration: 1.0, ease: "none" }, 0);
-        }
+        // BEAT 1: The right one (branch) and the second one (spiral) start together early
+        // All durations are > 1 second so every phase has visible weight and smooth travel
         if (branch) {
           master.to(branch, {
             clipPath: "inset(0% 0% 0% 0%)",
             scale: 1,
-            opacity: 0.20,
-            duration: 0.25,
+            opacity: 0.22,
+            duration: 2.0, // > 1 second
             ease: "power2.out",
           }, 0);
         }
+
+        // The second one (spiral draw + study) starts earlier right at 0
+        if (spiralLine) {
+          master.to(spiralLine, {
+            strokeDashoffset: 0,
+            duration: 1.8, // > 1 second
+            ease: "none",
+          }, 0);
+        }
+        if (study) {
+          master.to(study, {
+            rotation: 12,
+            scale: 1.05,
+            duration: 3.5, // > 1 second
+            ease: "none",
+          }, 0);
+        }
         if (handnotePath) {
-          master.to(handnotePath, { strokeDashoffset: 0, duration: 0.15, ease: "power1.out" }, 0.08);
+          master.to(handnotePath, {
+            strokeDashoffset: 0,
+            duration: 1.2, // > 1 second
+            ease: "power1.out",
+          }, 0.2);
         }
 
-        // BEAT 2 (0.25 -> 0.92): Complete Pinned Reading Dwell
-        // Words are 100% solid, fully legible, and locked in place across ~4 viewports of scroll.
+        // BEAT 2: Pinned Reading Dwell Hold
+        // Holds completely stable for reading across the majority of the 500vh pin
+        master.to({}, { duration: 5.0 }); // 5 seconds of rock-solid dwell
 
-        // BEAT 3 (0.92 -> 1.00): Graceful release into the promise strip & empathy
+        // BEAT 3: Graceful release into the next section
         if (copy) {
           master.to(copy, {
             opacity: 0.2,
-            y: -25,
-            duration: 0.08,
+            y: -30,
+            duration: 1.2, // > 1 second
             ease: "power1.in",
-          }, 0.92);
+          });
         }
       });
     }, scope);
