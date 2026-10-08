@@ -20,7 +20,7 @@ export function createSketchbookDocument(assetBaseUrl = "/sketchbook/", { pages,
   const base = assetBaseUrl.endsWith("/") ? assetBaseUrl : `${assetBaseUrl}/`;
   let html = CANONICAL_SKETCHBOOK_HTML;
   if (pages?.length) {
-    const landAt = Math.min(Math.max(land ?? pages.length - 1, 0), pages.length - 1);
+    const landAt = land === pages.length ? 0 : Math.min(Math.max(land ?? 0, 0), pages.length - 1);
     html = html
       .replace(/const PAGES=\[[\s\S]*?\];/, () => `const PAGES=${JSON.stringify(pages).replaceAll("<", "\\u003c")};`)
       .replace(/LAND=\d+;/, `LAND=${landAt};`);
@@ -35,7 +35,7 @@ export function createSketchbookDocument(assetBaseUrl = "/sketchbook/", { pages,
   // flip, too quick to read the plates; give the first and last flips 0.6s.
 html = html.replace(
     "const steps=M+LAND;",
-    "const steps=LAND;"
+    "const steps=LAND===0?M:LAND;"
   );
   const withAssets = html.replaceAll("sketchbook/", base);
   return withAssets
