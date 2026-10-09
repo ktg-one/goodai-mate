@@ -127,7 +127,7 @@ export function SketchbookFlip() {
       </div>
 
       <div className="sbf-meta">
-        <p className="handwritten sbf-caption" aria-live="polite">{spreads[shown].caption}</p>
+        <p className="sbf-caption" aria-live="polite">{spreads[shown].caption}</p>
         <span className="sbf-count">{String(shown + 1).padStart(2, "0")} / {String(spreads.length).padStart(2, "0")}</span>
       </div>
     </section>

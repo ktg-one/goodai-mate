@@ -2390,7 +2390,7 @@ em {
 .sbf-hit-next { right: 2%; cursor: e-resize; }
 .sbf-hit:disabled { cursor: default; }
 .sbf-meta { width: min(1100px, 100%); display: flex; justify-content: space-between; align-items: baseline; padding: 0 4%; color: var(--muted); }
-.sbf-caption { margin: 0; }
+.sbf-caption { margin: 0; font-family: var(--font-studio-sans), sans-serif; font-size: 15px; font-weight: 500; color: var(--muted); transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
 .sbf-count { font-size: 13px; letter-spacing: .12em; font-variant-numeric: tabular-nums; }
 
 @media (prefers-reduced-motion: reduce) {
