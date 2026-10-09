@@ -66,6 +66,7 @@
     "id": "services-carousel",
     "component": "components/sections/ServicesCarousel.tsx",
     "type": "scroll/parallax",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion scroll parallax animation using useScroll and useSpring smooth duration curves (>=1.0s), vertical y-axis and scale transforms on carousel stage, floating ambient background parallax layers, and prefers-reduced-motion compliance via useReducedMotion."
   }
 ]
