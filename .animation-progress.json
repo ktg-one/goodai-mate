@@ -57,9 +57,10 @@
   },
   {
     "id": "voice-widget-waveform",
-    "component": "components/ui/BrandedElevenLabsWidget.tsx",
+    "component": "components/studio/TrilletVoiceWidget.tsx",
     "type": "micro-interaction/waveform",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion organic waveform visualizer bar scaleY and opacity keyframe loops with transformOrigin bottom, slide-up panel AnimatePresence entrance, prefers-reduced-motion compliance via useReducedMotion, and smooth >=1.0s movement duration curves."
   },
   {
     "id": "services-carousel",

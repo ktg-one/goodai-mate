@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Mic, MicOff, PhoneOff, Sparkles, X, Volume2 } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import type { TrilletAgent as TrilletAgentType } from "@trillet-ai/web-sdk";
 
 interface TranscriptMessage {
@@ -226,6 +227,8 @@ export function TrilletVoiceWidget({
     scrollToBottom();
   }, [transcripts]);
 
+  const shouldReduceMotion = useReducedMotion();
+
   useEffect(() => {
     return () => {
       stopPolling();
@@ -261,121 +264,164 @@ export function TrilletVoiceWidget({
         )}
 
         {/* Voice Agent Slide-Up Panel */}
-        {isOpen && (
-          <div
-            className="w-90 sm:w-100 max-w-screen-sm rounded-2xl bg-brand-ink border border-brand-paper/20 shadow-2xl overflow-hidden flex flex-col transition-all duration-300 animate-in fade-in slide-in-from-bottom-6"
-            style={{ maxHeight: "560px" }}
-            role="region"
-            aria-label="Good'Ai Voice Agent"
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-brand-paper/15 bg-brand-ink/90 backdrop-blur-md">
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-paper/10 text-brand-coral border border-brand-paper/15">
-                  <Sparkles className="h-4 w-4" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-sm text-brand-paper leading-tight">{agentName}</h3>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span
-                      className={`h-2 w-2 rounded-full ${
-                        status === "connected"
-                          ? "bg-brand-teal animate-pulse"
-                          : status === "connecting"
-                          ? "bg-brand-coral animate-ping"
-                          : status === "error"
-                          ? "bg-destructive"
-                          : "bg-brand-paper/30"
-                      }`}
-                    />
-                    <span className="text-xs font-mono text-brand-paper/70 tracking-wide">
-                      {statusLabel}
-                    </span>
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
+              transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+              className="w-90 sm:w-100 max-w-screen-sm rounded-2xl bg-brand-ink border border-brand-paper/20 shadow-2xl overflow-hidden flex flex-col"
+              style={{ maxHeight: "560px" }}
+              role="region"
+              aria-label="Good'Ai Voice Agent"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-5 py-4 border-b border-brand-paper/15 bg-brand-ink/90 backdrop-blur-md">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-paper/10 text-brand-coral border border-brand-paper/15">
+                    <Sparkles className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-sm text-brand-paper leading-tight">{agentName}</h3>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span
+                        className={`h-2 w-2 rounded-full ${
+                          status === "connected"
+                            ? "bg-brand-teal animate-pulse"
+                            : status === "connecting"
+                            ? "bg-brand-coral animate-ping"
+                            : status === "error"
+                            ? "bg-destructive"
+                            : "bg-brand-paper/30"
+                        }`}
+                      />
+                      <span className="text-xs font-mono text-brand-paper/70 tracking-wide">
+                        {statusLabel}
+                      </span>
+                    </div>
                   </div>
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsOpen(false);
+                    endCall();
+                    onClose?.();
+                  }}
+                  className="flex h-8 w-8 items-center justify-center rounded-lg text-brand-paper/60 hover:text-brand-paper hover:bg-brand-paper/10 transition-colors"
+                  aria-label="Close voice panel"
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </div>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setIsOpen(false);
-                  endCall();
-                  onClose?.();
-                }}
-                className="flex h-8 w-8 items-center justify-center rounded-lg text-brand-paper/60 hover:text-brand-paper hover:bg-brand-paper/10 transition-colors"
-                aria-label="Close voice panel"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
-            {/* Transcript Display Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-50 max-h-70 bg-brand-ink/40">
-              {transcripts.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-center p-6 text-brand-paper/50">
-                  <Volume2 className="h-8 w-8 mb-2 text-brand-paper/30" />
-                  <p className="text-xs font-mono">
-                    {status === "idle"
-                      ? 'Tap "Start Call" below to begin talking with our Australian AI voice agent.'
-                      : status === "connecting"
-                      ? "Establishing WebRTC audio stream..."
-                      : "Listening... Speak naturally."}
-                  </p>
-                </div>
-              ) : (
-                transcripts.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={`flex flex-col ${
-                      msg.role === "user"
-                        ? "items-end"
-                        : msg.role === "assistant"
-                        ? "items-start"
-                        : "items-center"
-                    }`}
-                  >
-                    {msg.role === "system" ? (
-                      <span className="text-xs font-mono bg-brand-paper/10 text-brand-paper/60 px-2.5 py-1 rounded-full text-center">
-                        {msg.text}
-                      </span>
-                    ) : (
-                      <div
-                        className={`max-w-xs rounded-2xl px-3.5 py-2 text-xs leading-relaxed ${
-                          msg.role === "user"
-                            ? "bg-brand-coral text-brand-paper font-medium rounded-br-xs"
-                            : "bg-brand-paper/15 text-brand-paper border border-brand-paper/15 rounded-bl-xs"
-                        }`}
-                      >
-                        {msg.text}
-                      </div>
-                    )}
+              {/* Transcript Display Area */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-50 max-h-70 bg-brand-ink/40">
+                {transcripts.length === 0 ? (
+                  <div className="h-full flex flex-col items-center justify-center text-center p-6 text-brand-paper/50">
+                    <Volume2 className="h-8 w-8 mb-2 text-brand-paper/30" />
+                    <p className="text-xs font-mono">
+                      {status === "idle"
+                        ? 'Tap "Start Call" below to begin talking with our Australian AI voice agent.'
+                        : status === "connecting"
+                        ? "Establishing WebRTC audio stream..."
+                        : "Listening... Speak naturally."}
+                    </p>
                   </div>
-                ))
-              )}
-              <div ref={transcriptEndRef} />
-            </div>
+                ) : (
+                  transcripts.map((msg) => (
+                    <div
+                      key={msg.id}
+                      className={`flex flex-col ${
+                        msg.role === "user"
+                          ? "items-end"
+                          : msg.role === "assistant"
+                          ? "items-start"
+                          : "items-center"
+                      }`}
+                    >
+                      {msg.role === "system" ? (
+                        <span className="text-xs font-mono bg-brand-paper/10 text-brand-paper/60 px-2.5 py-1 rounded-full text-center">
+                          {msg.text}
+                        </span>
+                      ) : (
+                        <div
+                          className={`max-w-xs rounded-2xl px-3.5 py-2 text-xs leading-relaxed ${
+                            msg.role === "user"
+                              ? "bg-brand-coral text-brand-paper font-medium rounded-br-xs"
+                              : "bg-brand-paper/15 text-brand-paper border border-brand-paper/15 rounded-bl-xs"
+                          }`}
+                        >
+                          {msg.text}
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
+                <div ref={transcriptEndRef} />
+              </div>
 
-            {/* Audio Waveform Visualizer */}
-            <div className="flex items-center justify-center gap-1.5 py-3 border-t border-brand-paper/10 bg-brand-ink/70">
-              {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-                <span
-                  key={i}
-                  className={`w-1 rounded-full transition-all duration-200 ${
-                    isSpeaking
-                      ? "bg-brand-coral animate-pulse"
-                      : status === "connected"
-                      ? "bg-brand-teal/60"
-                      : "bg-brand-paper/20"
-                  }`}
-                  style={{
-                    height: isSpeaking ? `${12 + ((i * 7) % 18)}px` : "6px",
-                    animationDelay: `${i * 120}ms`,
-                  }}
-                />
-              ))}
-            </div>
+              {/* Audio Waveform Visualizer */}
+              <div className="flex items-center justify-center gap-1.5 py-3 border-t border-brand-paper/10 bg-brand-ink/70">
+                {[0, 1, 2, 3, 4, 5, 6].map((i) => {
+                  const isCoral = isSpeaking;
+                  const isTeal = !isSpeaking && status === "connected";
 
-            {/* Bottom Controls */}
+                  return (
+                    <motion.span
+                      key={i}
+                      className={`w-1 h-6 rounded-full transition-colors duration-500 ${
+                        isCoral
+                          ? "bg-brand-coral"
+                          : isTeal
+                          ? "bg-brand-teal/70"
+                          : "bg-brand-paper/20"
+                      }`}
+                      style={{ transformOrigin: "bottom" }}
+                      animate={
+                        shouldReduceMotion
+                          ? { scaleY: 0.5, opacity: 0.8 }
+                          : isSpeaking
+                          ? {
+                              scaleY: [0.3, 1.6, 0.6, 1.9, 0.4],
+                              opacity: [0.8, 1, 0.85, 1, 0.8],
+                            }
+                          : status === "connected"
+                          ? {
+                              scaleY: [0.4, 0.9, 0.5, 1.0, 0.4],
+                              opacity: [0.5, 0.85, 0.6, 0.9, 0.5],
+                            }
+                          : { scaleY: 0.25, opacity: 0.4 }
+                      }
+                      transition={
+                        shouldReduceMotion
+                          ? { duration: 1.0 }
+                          : isSpeaking
+                          ? {
+                              repeat: Infinity,
+                              repeatType: "reverse",
+                              duration: 1.2 + (i % 3) * 0.2,
+                              delay: i * 0.15,
+                              ease: "easeInOut",
+                            }
+                          : status === "connected"
+                          ? {
+                              repeat: Infinity,
+                              repeatType: "reverse",
+                              duration: 1.5 + (i % 2) * 0.3,
+                              delay: i * 0.12,
+                              ease: "easeInOut",
+                            }
+                          : { duration: 1.0, ease: "easeInOut" }
+                      }
+                    />
+                  );
+                })}
+              </div>
+
+              {/* Bottom Controls */}
             <div className="p-4 border-t border-brand-paper/15 bg-brand-ink flex items-center justify-between gap-3">
               {status === "connected" ? (
                 <>
@@ -414,8 +460,9 @@ export function TrilletVoiceWidget({
                 </button>
               )}
             </div>
-          </div>
+          </motion.div>
         )}
+      </AnimatePresence>
       </aside>
     </>
   );
