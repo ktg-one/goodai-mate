@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { m, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
 
@@ -17,6 +17,7 @@ const Carousel = dynamic(() => import("@/components/carousel/Carousel"), {
 export default function ServicesCarousel({ hero = false }: { hero?: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
+  const [isTransforming, setIsTransforming] = useState(false);
 
   // Scroll parallax tracking
   const { scrollYProgress } = useScroll({
@@ -53,12 +54,16 @@ export default function ServicesCarousel({ hero = false }: { hero?: boolean }) {
           <m.div
             aria-hidden="true"
             className="pointer-events-none absolute -top-12 -left-12 z-0 h-64 w-64 rounded-full bg-brand-coral/10 blur-3xl"
-            style={{ y: bgY1, rotate: bgRotate, willChange: "transform" }}
+            style={{ y: bgY1, rotate: bgRotate, willChange: isTransforming ? "transform" : "auto" }}
+            onMouseEnter={() => setIsTransforming(true)}
+            onAnimationEnd={() => setIsTransforming(false)}
           />
           <m.div
             aria-hidden="true"
             className="pointer-events-none absolute -bottom-12 -right-12 z-0 h-80 w-80 rounded-full bg-brand-teal/10 blur-3xl"
-            style={{ y: bgY2, rotate: bgRotate, willChange: "transform" }}
+            style={{ y: bgY2, rotate: bgRotate, willChange: isTransforming ? "transform" : "auto" }}
+            onMouseEnter={() => setIsTransforming(true)}
+            onAnimationEnd={() => setIsTransforming(false)}
           />
         </>
       )}
@@ -69,8 +74,10 @@ export default function ServicesCarousel({ hero = false }: { hero?: boolean }) {
         style={{
           y: stageY,
           scale: stageScale,
-          willChange: "transform",
+          willChange: isTransforming ? "transform" : "auto",
         }}
+        onMouseEnter={() => setIsTransforming(true)}
+        onAnimationEnd={() => setIsTransforming(false)}
       >
         <Carousel hero={hero} />
       </m.div>
