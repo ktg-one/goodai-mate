@@ -4,16 +4,25 @@ import { useState } from "react";
 import Script from "next/script";
 import { X } from "lucide-react";
 
-// Existing, already-configured Good'Ai agent on the ElevenLabs Conversational AI
-// platform. Not created or modified here — just wired in.
-const ELEVENLABS_AGENT_ID = "agent_8501m0h2hvh0edr99jkqzr4rw53n";
+// Default ElevenLabs agent ID fallback if environment variable is not provided.
+const DEFAULT_ELEVENLABS_AGENT_ID = "agent_8501m0h2hvh0edr99jkqzr4rw53n";
 const ELEVENLABS_EMBED_SRC = "https://unpkg.com/@elevenlabs/convai-widget-embed";
+
+export function getElevenLabsAgentId(propAgentId?: string): string {
+  return (
+    propAgentId ||
+    process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID ||
+    DEFAULT_ELEVENLABS_AGENT_ID
+  );
+}
 
 interface ElevenLabsMascotProps {
   onClose?: () => void;
+  agentId?: string;
 }
 
-export function ElevenLabsMascot({ onClose }: ElevenLabsMascotProps) {
+export function ElevenLabsMascot({ onClose, agentId }: ElevenLabsMascotProps) {
+  const resolvedAgentId = getElevenLabsAgentId(agentId);
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
   return (
@@ -38,7 +47,7 @@ export function ElevenLabsMascot({ onClose }: ElevenLabsMascotProps) {
         <X className="h-4 w-4" />
       </button>
 
-      <elevenlabs-convai agent-id={ELEVENLABS_AGENT_ID} />
+      <elevenlabs-convai agent-id={resolvedAgentId} />
 
       {!scriptLoaded && (
         <span className="sr-only" role="status">
