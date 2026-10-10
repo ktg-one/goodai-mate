@@ -3,11 +3,7 @@
 import { useState } from "react";
 import Script from "next/script";
 import { X } from "lucide-react";
-
-// Existing, already-configured Good'Ai agent on the ElevenLabs Conversational AI
-// platform. Not created or modified here — just wired in.
-const ELEVENLABS_AGENT_ID = "agent_8501m0h2hvh0edr99jkqzr4rw53n";
-const ELEVENLABS_EMBED_SRC = "https://unpkg.com/@elevenlabs/convai-widget-embed";
+import { ELEVENLABS_AGENT_ID, ELEVENLABS_EMBED_SRC } from "@/lib/elevenlabs";
 
 interface ElevenLabsMascotProps {
   onClose?: () => void;
