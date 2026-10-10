@@ -68,7 +68,6 @@ export async function POST(request: Request) {
   }).catch(() => null);
 
   if (!res || !res.ok) {
-    console.error("[Contact API] Resend rejected the lead:", res ? await res.text().catch(() => res.status) : "network error");
     return NextResponse.json({ error: "We couldn't send that just now. Please call us instead." }, { status: 502 });
   }
 
