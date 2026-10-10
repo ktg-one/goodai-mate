@@ -66,6 +66,7 @@
     "id": "services-carousel",
     "component": "components/sections/ServicesCarousel.tsx",
     "type": "scroll/parallax",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion scroll parallax effect on Services Carousel with GPU-accelerated transforms (translateY, rotate) driven by scrollYProgress, >=1.0s spring physics, 3D WebGL duration parameter tuning, and prefers-reduced-motion compliance via useReducedMotion."
   }
 ]

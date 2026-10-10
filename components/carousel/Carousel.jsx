@@ -1,15 +1,34 @@
 "use client";
 
+import { useRef } from "react";
+import { m, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
 import { useCarousel } from "./useCarousel";
 import { CarouselFallback } from "./CarouselFallback";
 import { CarouselProjectList } from "./CarouselProjectList";
 import { CarouselLabels } from "./CarouselLabels";
 
 export default function Carousel({ hero = false }) {
+  const sectionRef = useRef(null);
   const { containerRef, listRef, itemsRef, loaderRef, liveRef, cutRef, metaRef } = useCarousel(hero);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const rawY = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+  const rawRotate = useTransform(scrollYProgress, [0, 1], [-1.5, 1.5]);
+  const shouldReduceMotion = useReducedMotion();
+
+  const smoothY = useSpring(rawY, { stiffness: 30, damping: 20 });
+  const smoothRotate = useSpring(rawRotate, { stiffness: 30, damping: 20 });
+
+  const y = shouldReduceMotion ? 0 : smoothY;
+  const rotate = shouldReduceMotion ? 0 : smoothRotate;
 
   return (
     <section
+      ref={sectionRef}
       aria-label="Good'Ai work and services"
       className={hero ? "carousel-hero-stage relative isolate w-full overflow-hidden bg-[var(--paper)]" : "relative isolate min-h-[max(640px,100dvh)] w-full overflow-hidden bg-[var(--paper)]"}
       style={{
@@ -20,7 +39,10 @@ export default function Carousel({ hero = false }) {
     >
       <CarouselFallback />
 
-      <div className="contents motion-reduce:hidden">
+      <m.div
+        style={{ y, rotate }}
+        className="relative w-full h-full min-h-[inherit] motion-reduce:hidden will-change-transform"
+      >
         {/* Vertical touch panning remains available to the page; horizontal
             movement is reserved for the carousel drag. */}
         <div
@@ -74,7 +96,7 @@ export default function Carousel({ hero = false }) {
             </filter>
           </defs>
         </svg>
-      </div>
+      </m.div>
     </section>
   );
 }

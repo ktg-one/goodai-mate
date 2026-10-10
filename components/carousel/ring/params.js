@@ -72,7 +72,7 @@ export function defaultParams() {
     holdAfter: 0,
     loaderChase: 0.18,
     loaderBottom: 1, // vh
-    loaderOut: 0.45, // seconds to fade once the hold lets go
+    loaderOut: 1.0, // seconds to fade once the hold lets go
 
     // -- entry timing ----------------------------------------------------
     stagger: 0.34,
@@ -99,9 +99,9 @@ export function defaultParams() {
     maxSpeed: 12, // rad/s, so one flick cannot run away
     dragSpeed: 1,
     snap: true, // settle with a plane facing front
-    snapTime: 0.8, // run-in, once the flick itself is spent
+    snapTime: 1.0, // run-in, once the flick itself is spent
     snapFrom: 1, // rad/s under which the ring commits to a slot
-    pickTime: 0.55, // click-to-centre: seconds for one slot, root-scaled
+    pickTime: 1.0, // click-to-centre: seconds for one slot, root-scaled
     pickEase: "power3.inOut",
 
     // -- the intro heading, in the scene ---------------------------------
@@ -112,12 +112,12 @@ export function defaultParams() {
     textTracking: 0, // em
     textColor: "#202B3D",
     textAt: 0.42, // fraction of the spread
-    textTime: 0.95,
+    textTime: 1.0,
     textStagger: 0.015,
     textEase: "power4.out",
     textOut: true,
     textOutAt: -0.5, // seconds relative to the ring landing; negative = early
-    textOutTime: 0.7,
+    textOutTime: 1.0,
     textOutEase: "power2.in",
 
     // -- the meta either side of the ring --------------------------------
