@@ -2229,9 +2229,14 @@ em {
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.suss-chip:hover {
+.suss-chip:hover,
+.suss-chip:focus-visible {
   border-color: var(--rust);
   background: var(--wash);
+}
+.suss-chip:focus-visible {
+  outline: 2px solid var(--rust);
+  outline-offset: 2px;
 }
 .suss-chip.is-selected {
   background: var(--ink);
