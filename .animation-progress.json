@@ -66,6 +66,7 @@
     "id": "services-carousel",
     "component": "components/sections/ServicesCarousel.tsx",
     "type": "scroll/parallax",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion scroll-driven parallax animations with GPU-accelerated y-translations, smooth spring physics (damping: 30, stiffness: 45) for >=1.0s movement duration curves, and prefers-reduced-motion compliance via useReducedMotion."
   }
 ]
