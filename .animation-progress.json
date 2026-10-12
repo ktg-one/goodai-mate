@@ -66,6 +66,7 @@
     "id": "services-carousel",
     "component": "components/sections/ServicesCarousel.tsx",
     "type": "scroll/parallax",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion scroll-driven parallax reveal effect using useScroll, useTransform (y, scale, opacity), entrance transition duration of 1.2s, GPU-accelerated transforms, and prefers-reduced-motion compliance via useReducedMotion."
   }
 ]
