@@ -1,20 +1,9 @@
 import { NextResponse } from "next/server";
 import { createCall, type TrilletRoomDetails } from "@trillet-ai/web-sdk/server";
 import { limitRequest } from "@/lib/rate-limit";
+import { isAgentAllowed } from "@/lib/voice";
 
 export const dynamic = "force-dynamic";
-
-function allowedAgentIds(): Set<string> {
-  const ids = new Set<string>();
-  const primary = process.env.NEXT_PUBLIC_TRILLET_AGENT_ID?.trim();
-  if (primary) ids.add(primary);
-  const extra = process.env.TRILLET_ALLOWED_AGENT_IDS?.split(",") ?? [];
-  for (const id of extra) {
-    const t = id.trim();
-    if (t) ids.add(t);
-  }
-  return ids;
-}
 
 /**
  * Backend Voice Agent Session Minting Route
@@ -34,7 +23,6 @@ export async function POST(request: Request) {
 
     const body = await request.json().catch(() => ({}));
     const apiKey = process.env.TRILLET_API_KEY;
-    const allow = allowedAgentIds();
     const requested =
       typeof body.agentId === "string" && body.agentId.trim()
         ? body.agentId.trim().slice(0, 80)
@@ -48,7 +36,7 @@ export async function POST(request: Request) {
     }
 
     // Empty allowlist = reject everything (fail closed). Never pass through client agentId.
-    if (!requested || !allow.has(requested)) {
+    if (!requested || !isAgentAllowed(requested)) {
       return NextResponse.json({ error: "Unknown voice agent." }, { status: 400 });
     }
 
