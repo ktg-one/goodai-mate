@@ -33,5 +33,12 @@ export function formatLeadPayload(input: ProcessLeadInput) {
     isSpam,
     replyTo: EMAIL_RE.test(contact) ? contact : undefined,
     html: lines.join(""),
+    webhookPayload: {
+      contact,
+      note,
+      headaches,
+      submittedAt: new Date().toISOString(),
+      source: "goodai-contact-form",
+    },
   };
 }
