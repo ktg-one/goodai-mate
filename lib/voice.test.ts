@@ -26,6 +26,7 @@ test("allowedAgentIds parses primary and extra allowed agent IDs", () => {
 
 test("isAgentAllowed fails closed on empty or missing agent IDs", () => {
   const origPrimary = process.env.NEXT_PUBLIC_TRILLET_AGENT_ID;
+  const origExtra = process.env.TRILLET_ALLOWED_AGENT_IDS;
   delete process.env.NEXT_PUBLIC_TRILLET_AGENT_ID;
   delete process.env.TRILLET_ALLOWED_AGENT_IDS;
 
@@ -34,6 +35,10 @@ test("isAgentAllowed fails closed on empty or missing agent IDs", () => {
     assert.equal(isAgentAllowed("some-agent"), false);
   } finally {
     if (origPrimary !== undefined) process.env.NEXT_PUBLIC_TRILLET_AGENT_ID = origPrimary;
+    else delete process.env.NEXT_PUBLIC_TRILLET_AGENT_ID;
+
+    if (origExtra !== undefined) process.env.TRILLET_ALLOWED_AGENT_IDS = origExtra;
+    else delete process.env.TRILLET_ALLOWED_AGENT_IDS;
   }
 });
 
