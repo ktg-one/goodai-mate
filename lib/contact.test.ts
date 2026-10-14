@@ -65,3 +65,18 @@ test("EMAIL_RE validates email formats accurately", () => {
   assert.equal(EMAIL_RE.test("0412 345 678"), false);
   assert.equal(EMAIL_RE.test("invalid-email"), false);
 });
+
+test("formatLeadPayload includes webhookPayload with correct structure", () => {
+  const result = formatLeadPayload({
+    contact: "mate@goodai.au",
+    note: "Need help with workflow automation",
+    headaches: ["Manual data entry"],
+  });
+
+  assert.equal(result.webhookPayload.contact, "mate@goodai.au");
+  assert.equal(result.webhookPayload.note, "Need help with workflow automation");
+  assert.deepEqual(result.webhookPayload.headaches, ["Manual data entry"]);
+  assert.equal(result.webhookPayload.source, "goodai-contact-form");
+  assert.ok(typeof result.webhookPayload.submittedAt === "string");
+  assert.ok(!isNaN(Date.parse(result.webhookPayload.submittedAt)));
+});

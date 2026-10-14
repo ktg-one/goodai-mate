@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
 
-  const { contact, isSpam, replyTo, html } = formatLeadPayload(body);
+  const { contact, isSpam, replyTo, html, webhookPayload } = formatLeadPayload(body);
 
   // Honeypot: bots fill the hidden field. Pretend nothing happened, send nothing.
   if (isSpam) {
@@ -39,6 +39,17 @@ export async function POST(request: Request) {
   if (!apiKey) {
     console.error("[Contact API] RESEND_API_KEY is not set; lead not sent.");
     return NextResponse.json({ error: "We couldn't send that just now. Please call us instead." }, { status: 503 });
+  }
+
+  const webhookUrl = process.env.LEAD_WEBHOOK_URL;
+  if (webhookUrl) {
+    fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(webhookPayload),
+    }).catch((err) => {
+      console.error("[Contact API] LEAD_WEBHOOK_URL delivery failed:", err);
+    });
   }
 
   const res = await fetch("https://api.resend.com/emails", {
