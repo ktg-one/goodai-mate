@@ -75,5 +75,18 @@
     "type": "line/draw",
     "status": "completed",
     "notes": "Implemented Framer Motion animated line draw-in separators with scaleX on scroll, staggered spec card entrance transitions, hover elevation, prefers-reduced-motion compliance via useReducedMotion, and smooth duration curves >= 1.0s."
+  },
+  {
+    "id": "suss-the-fuss-card",
+    "component": "components/studio/SussTheFussCard.tsx",
+    "type": "micro-interaction/chip-toggle",
+    "status": "completed",
+    "notes": "Implemented Framer Motion interactive chip toggle micro-interactions with GPU-accelerated whileHover/whileTap scale and offset transforms, AnimatePresence checkmark entrance, submit button motion, 1.0s movement duration curves, and prefers-reduced-motion compliance via useReducedMotion."
+  },
+  {
+    "id": "workflow-preview",
+    "component": "components/studio/WorkflowPreview.tsx",
+    "type": "micro-interaction/step-transition",
+    "status": "pending"
   }
 ]
