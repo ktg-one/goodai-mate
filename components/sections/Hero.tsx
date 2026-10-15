@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight, Headphones, MoveDown } from "lucide-react";
+import { ArrowUpRight, MoveDown } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SURVEY_URL } from "@/lib/links";
@@ -143,11 +143,7 @@ export function Hero() {
             Let’s suss the fuss <ArrowUpRight size={20} />
           </Link>
         </Magnetic>
-        <Magnetic strength={0.25}>
-          <Link href="/demo" className="text-link hero-voice-link">
-            See the voice + automation demo <Headphones size={17} />
-          </Link>
-        </Magnetic>
+
         <p className="handwritten hero-handnote">
           Leave it with us.
           <svg viewBox="0 0 140 45" fill="none" aria-hidden="true">
