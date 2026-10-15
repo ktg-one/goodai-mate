@@ -33,9 +33,7 @@ export default function ContactPage() {
               <PhoneCall size={16} />
               Call {PHONE_DISPLAY}
             </a>
-            <Link href="/demo" className="inline-flex items-center gap-2 text-link">
-              See the voice + automation demo <ArrowUpRight size={16} />
-            </Link>
+
           </div>
         </div>
 

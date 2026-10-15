@@ -83,11 +83,7 @@ export default async function ServicePage({
             Start with our short business enquiry form. We’ll use what you share
             to understand the problem and the right next step.
           </p>
-          {service.slug === "voice-agents" && (
-            <Link href="/demo#voice" className="text-link">
-              Explore the voice demo <ArrowUpRight size={17} />
-            </Link>
-          )}
+
         </aside>
       </div>
       <div className="price-detail">

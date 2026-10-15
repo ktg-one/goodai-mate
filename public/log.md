@@ -10,3 +10,4 @@
 - [x] Converted `ScrollStory` (`#features`) into a pinned GSAP ScrollTrigger timeline (`pin: true`, `pinSpacing: true`, `scrub: 1`) across a 3200px scroll track with chapter reading holds.
 - [x] Expanded all main sections (`.hero`, `.scroll-story`, `.services-section`, `.demo-section`, `.voice-home`, `.approach`, `.faq`, `.contact-section`) to `min-height: 100vh` and 120px–160px vertical padding, expanding total document scroll height to ~11,000px+ and eliminating section overlap.
 - [x] Updated Perth sketchbook flip animation sequence to flip through all story pages and fall one extra page onto the first picture (`1-sketch.webp`).
+- [x] Hidden /demo page (returns 404 via notFound()) and updated navigation links across the site until ready.
