@@ -39,7 +39,7 @@ Use paper and olive for most of the composition, with restrained rust accents. D
 
 ## Wordmark
 
-Primary: **goodai-wordmark.svg**. Also supplied: all-ink and paper reversed versions, each with a transparent PNG alternative. Do not stretch or add shadows. Leave at least half the capital G height around it. Keep it at least 120 px wide digitally or 25 mm in print.
+Primary: **goodai-wordmark.svg** (with transparent PNG alternative **goodai-wordmark.png** and icon mark **goodai-icon.svg**). Do not stretch or add shadows. Leave at least half the capital G height around it. Keep it at least 120 px wide digitally or 25 mm in print.
 
 Use **Good’Ai** in designed copy and **Good'Ai** where a plain apostrophe is needed. The terminal dot belongs to the wordmark. The exported mark converts the current Manrope lettering into paths with the site's tight spacing.
 

@@ -130,6 +130,7 @@ global:
   sectionSpace: "{spacing.xl}"
   contactBackgroundColor: "{colors.secondary}"
   contactTextColor: "{colors.on-secondary}"
+  accentTextColor: "{colors.sage-deep}"
 ---
 
 ## Overview
