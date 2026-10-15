@@ -1,0 +1,58 @@
+/* Good'Ai canonical tokens → goodai-studio bridge.
+   Imported after globals.css in app/layout.tsx:
+     import "./goodai-tokens.css";
+   Canonical palette, typography (Fraunces Soft Wonk, Manrope, Vibes), radii, and spacing. */
+:root {
+  /* Core four (canon) */
+  --ink: #333b32;
+  --rust: #a44328;
+  --paper: #eceee4;
+  --sage: #dce3cc;
+
+  /* Supporting palette (canon) */
+  --rust-hover: #8f3d31;
+  --muted: #5c665e;
+  --line: #d6d6c8;
+  --wash: #eceadf;
+  --white: #fcfaf4;
+  --sage-deep: #5f7058;
+  --success: #42583b;
+
+  /* Semantic brand aliases */
+  --brand-ink: var(--ink);
+  --brand-paper: var(--paper);
+  --brand-coral: var(--rust);
+  --brand-eucalyptus: var(--sage);
+  --brand-eucalyptus-ink: var(--sage-deep);
+  --brand-navy: var(--ink);
+  --brand-teal: var(--sage-deep);
+  --brand-line: var(--line);
+  --brand-surface: var(--white);
+
+  /* Fonts — Manrope, variable Fraunces (SOFT/WONK), and Vibes self-hosted in /fonts */
+  --font-studio-sans: "Manrope";
+  --font-studio-serif: "Fraunces";
+  --font-studio-handwritten: "Vibes";
+
+  /* Radii & spacing scale from WEBSITE-DESIGN-TOKENS.md */
+  --radius-sm: 4px;
+  --radius-md: 5px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+  --radius: var(--radius-lg);
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 40px;
+  --space-xl: 80px;
+}
+
+/* Fraunces Soft Wonk on expressive italic headline phrases and seals.
+   Backed by /fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf */
+h1 em,
+h2 em,
+.image-seal {
+  font-family: var(--font-studio-serif), Georgia, serif;
+  font-style: italic;
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+}

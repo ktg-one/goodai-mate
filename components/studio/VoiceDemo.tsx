@@ -28,7 +28,7 @@ export function VoiceDemo() {
           voice assistant can cover the phone when you are on the tools.
         </p>
         <p className="voice-disclosure">
-          Powered by Trillet AI &amp; Grok Realtime audio intelligence. Audio and transcripts are
+          Powered by conversational AI audio intelligence. Audio and transcripts are
           processed in real-time. You choose when to start or end the call.
         </p>
       </div>

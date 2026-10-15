@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 
 import "./globals.css";
+import "./goodai-tokens.css";
 import "./studio-controls.css";
 import { StudioHeader, StudioFooter } from "@/components/studio/Shell";
 import { SmoothScroll } from "@/components/studio/SmoothScroll";

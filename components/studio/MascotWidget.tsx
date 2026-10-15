@@ -53,7 +53,7 @@ export function MascotWidget() {
               id="goodie-panel"
               tabIndex={-1}
               role="region"
-              aria-label="Goodie quick chat"
+              aria-label="Goodie quick actions"
               className="p-4 rounded-2xl shadow-xl border max-w-72 text-xs font-sans flex flex-col gap-2.5 backdrop-blur-sm"
               style={{ background: "#f6f3ea", color: "#2f3a33", borderColor: "#d8dfca" }}
             >
@@ -122,7 +122,7 @@ export function MascotWidget() {
             title="Say g'day to Goodie!"
             aria-expanded={open}
             aria-controls="goodie-panel"
-            aria-label="Chat with Goodie"
+            aria-label="Goodie — quick actions"
           >
             <Mascot
               directions="/mascots/goodie/directions.png"
