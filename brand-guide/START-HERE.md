@@ -15,20 +15,24 @@ Canva documents presentation imports and eligible custom-font plans in its [uplo
 
 | Name | HEX | RGB | Use |
 |---|---|---|---|
-| Paper | #F7F5ED | 247, 245, 237 | Default background |
-| Dark olive | #333B32 | 51, 59, 50 | Headings, body, dark backgrounds |
-| Rust | #A4432B | 164, 67, 43 | Primary CTA, punctuation, emphasis |
-| Sage | #DCE3CC | 220, 227, 204 | Supporting surfaces |
-| Muted olive | #63685D | 99, 104, 93 | Supporting text |
-| Divider | #D5D6CA | 213, 214, 202 | Rules and borders |
-| Warm white | #FFFEF9 | 255, 254, 249 | Raised interactive surfaces |
+| Paper | #ECEEE4 | 236, 238, 228 | Default background (`--paper`) |
+| Dark olive | #333B32 | 51, 59, 50 | Headings, body, dark backgrounds (`--ink`) |
+| Rust | #A44328 | 164, 67, 40 | Primary CTA, punctuation, emphasis (`--rust`) |
+| Rust hover | #8F3D31 | 143, 61, 49 | Primary interactive hover (`--rust-hover`) |
+| Sage | #DCE3CC | 220, 227, 204 | Supporting surfaces (`--sage`) |
+| Deep sage | #5F7058 | 95, 112, 88 | Accent & secondary ink (`--sage-deep`) |
+| Muted olive | #5C665E | 92, 102, 94 | Supporting text (`--muted`) |
+| Divider | #D6D6C8 | 214, 214, 200 | Rules and borders (`--line`) |
+| Wash | #ECEADF | 236, 234, 223 | Subtle surface wash (`--wash`) |
+| Warm white | #FCFAF4 | 252, 250, 244 | Raised interactive surfaces (`--white`) |
+| Success | #42583B | 66, 88, 59 | Completion states (`--success`) |
 
-Use paper and olive for most of the composition, with restrained rust accents. Ink on paper measures 10.61:1 contrast, rust on paper 5.63:1, and muted olive on paper 5.24:1. Divider colour is unsuitable for essential text. RGB values are for screens; confirm print colour with your printer and paper stock.
+Use paper and olive for most of the composition, with restrained rust accents. Divider colour is unsuitable for essential text. RGB values are for screens; confirm print colour with your printer and paper stock.
 
 ## Typography and spacing
 
 - **Manrope Regular**: body copy. **Medium**: headings. **SemiBold**: controls and labels. Bold is included for stronger emphasis and the wordmark source.
-- **Fraunces Italic**: one expressive phrase within a headline. Preserve the rest in Manrope.
+- **Fraunces Italic (Soft Wonk — `"SOFT" 100, "WONK" 1`)**: one expressive phrase within a headline, using the variable font in `/fonts/Fraunces/`. Preserve the rest in Manrope.
 - **Vibes**: reassuring asides such as “Go on. Knock off early.” Do not use it for prices, legal text or instructions.
 - On a 1920 × 1080 design, start with a 96–132 px main heading, 32–40 px supporting copy and 48–64 px handwriting. Adjust for the channel and check at actual viewing size. These are production starting points, not the website's responsive CSS sizes.
 - Keep at least 80 px of outer space on a 1920 px canvas. Use one clear headline, one useful point and one primary action. Avoid filling every gap.
