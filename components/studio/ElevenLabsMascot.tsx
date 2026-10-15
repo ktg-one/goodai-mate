@@ -20,7 +20,7 @@ export function ElevenLabsMascot({ onClose }: ElevenLabsMascotProps) {
       {/* Loads the ElevenLabs custom element definition once per page load. */}
       <Script
         src={ELEVENLABS_EMBED_SRC}
-        strategy="lazyOnload"
+        strategy="afterInteractive"
         onLoad={() => setScriptLoaded(true)}
         onReady={() => setScriptLoaded(true)}
       />

@@ -85,11 +85,14 @@ export function SketchbookFlip() {
     <section className="sbf" aria-roledescription="carousel" aria-label="Perth sketchbook">
       <div
         className="sbf-book"
-        tabIndex={0}
-        onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
+        onTouchStart={(e) => {
+          const touch = e.touches[0];
+          if (touch) touchX.current = touch.clientX;
+        }}
         onTouchEnd={(e) => {
-          if (touchX.current === null) return;
-          const dx = e.changedTouches[0].clientX - touchX.current;
+          const touch = e.changedTouches[0];
+          if (touchX.current === null || !touch) return;
+          const dx = touch.clientX - touchX.current;
           touchX.current = null;
           if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
         }}

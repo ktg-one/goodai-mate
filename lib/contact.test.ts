@@ -1,6 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { formatLeadPayload, escapeHtml, EMAIL_RE } from "./contact.ts";
+import {
+  formatLeadPayload,
+  escapeHtml,
+  EMAIL_RE,
+  LEAD_SUBJECT,
+  LEAD_SUBJECT_TAG,
+  resolveLeadRecipients,
+  sendViaGmailSmtp,
+} from "./contact.ts";
 
 test("formatLeadPayload identifies spam when website honeypot is populated", () => {
   const result = formatLeadPayload({
@@ -65,3 +73,31 @@ test("EMAIL_RE validates email formats accurately", () => {
   assert.equal(EMAIL_RE.test("0412 345 678"), false);
   assert.equal(EMAIL_RE.test("invalid-email"), false);
 });
+
+test("LEAD_SUBJECT includes the [Good'Ai lead] Gmail-watcher tag", () => {
+  assert.ok(LEAD_SUBJECT.startsWith(LEAD_SUBJECT_TAG));
+});
+
+test("resolveLeadRecipients merges and deduplicates CONTACT_TO_EMAIL, GMAIL_TO_EMAIL, and GMAIL_USER", () => {
+  assert.deepEqual(resolveLeadRecipients({}), ["hello@goodai.au"]);
+  assert.deepEqual(
+    resolveLeadRecipients({
+      CONTACT_TO_EMAIL: "hello@goodai.au, kevin@goodai.au",
+      GMAIL_TO_EMAIL: "kevin@goodai.au",
+      GMAIL_USER: "workspace@goodai.au",
+    }),
+    ["hello@goodai.au", "kevin@goodai.au", "workspace@goodai.au"],
+  );
+});
+
+test("sendViaGmailSmtp rejects invalid credentials before opening a socket", async () => {
+  const res = await sendViaGmailSmtp({
+    user: "not-an-email",
+    appPassword: "",
+    to: ["hello@goodai.au"],
+    subject: LEAD_SUBJECT,
+    html: "<p>Test</p>",
+  });
+  assert.equal(res.ok, false);
+});
+
