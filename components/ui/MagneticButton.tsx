@@ -45,7 +45,6 @@ export function Magnetic({
                 stiffness: 80,
                 damping: 20,
                 mass: 1,
-                duration: 1.0,
             }}
             className={cn("inline-block", className)}
         >
@@ -96,7 +95,6 @@ export function MagneticButton({
                 stiffness: 80,
                 damping: 20,
                 mass: 1,
-                duration: 1.0,
             }}
             className={cn("focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-coral outline-none", className)}
             {...props}

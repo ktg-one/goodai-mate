@@ -1,23 +1,24 @@
 ---
-name: Good'Ai — Good work. More life.
+name: Good'Ai — Get back to life, we'll sort the rest.
 version: alpha
 colors:
-  primary: "#a4432b"
-  primary-hover: "#873821"
-  on-primary: "#f7f5ed"
-  neutral: "#f7f5ed"
+  primary: "#a44328"
+  primary-hover: "#8f3d31"
+  on-primary: "#eceee4"
+  neutral: "#eceee4"
   on-neutral: "#333b32"
   secondary: "#dce3cc"
   on-secondary: "#333b32"
-  surface: "#fffef9"
-  wash: "#eceee3"
-  muted: "#63685d"
-  line: "#d5d6ca"
+  surface: "#fcfaf4"
+  wash: "#eceadf"
+  muted: "#5c665e"
+  line: "#d6d6c8"
+  sage-deep: "#5f7058"
   success: "#42583b"
 typography:
   h1: { fontFamily: Manrope, fontSize: "clamp(62px, 6.9vw, 104px)", fontWeight: 500, lineHeight: "1.02", letterSpacing: "-0.04em" }
   h2: { fontFamily: Manrope, fontSize: "clamp(36px, 4vw, 58px)", fontWeight: 500, lineHeight: "1.08", letterSpacing: "-0.04em" }
-  expressive: { fontFamily: Fraunces, fontStyle: italic, fontWeight: 400, letterSpacing: "-0.035em" }
+  expressive: { fontFamily: Fraunces, fontStyle: italic, fontWeight: 400, fontVariationSettings: '"SOFT" 100, "WONK" 1', letterSpacing: "-0.035em" }
   handwritten: { fontFamily: Vibes, fontSize: "29px", fontWeight: 400, lineHeight: "1.3", letterSpacing: "0" }
   body-lg: { fontFamily: Manrope, fontSize: "17px", fontWeight: 400, lineHeight: "1.8" }
   body-md: { fontFamily: Manrope, fontSize: "15px", fontWeight: 400, lineHeight: "1.85" }
@@ -129,6 +130,7 @@ global:
   sectionSpace: "{spacing.xl}"
   contactBackgroundColor: "{colors.secondary}"
   contactTextColor: "{colors.on-secondary}"
+  accentTextColor: "{colors.sage-deep}"
 ---
 
 ## Overview
@@ -140,7 +142,7 @@ Primary provides the rust accent in the photograph, wordmark punctuation and cal
 Measured contrast ratios: on-neutral/neutral 10.61:1; muted/neutral 5.24:1; primary/neutral 5.63:1; on-neutral/secondary 8.77:1; muted/surface 5.67:1; muted/wash 4.88:1; success/secondary 5.91:1. No colour-only state: completion uses a check and status text; switches expose aria-checked.
 
 ## Typography
-Manrope carries navigation, services and instructions. Fraunces italic gives the human promise a distinct voice. The original Vibes handwriting adds brief reassuring asides, including “Go on. Knock off early.” All three are locally hosted, with their OFL licenses retained. Keep handwriting out of navigation, prices and essential instructions. Large display typography is reserved for the hero and closing invitation; supporting text remains compact and sentence case. Use tabular numbers for prices. The wordmark is a deliberate optical lettering exception with tighter tracking; do not apply its spacing to body text.
+Manrope carries navigation, services and instructions. Fraunces soft-wonk gives the human promise a distinct voice. The original Vibes handwriting adds brief reassuring asides, including “Go on. Knock off early.” All three are locally hosted, with their OFL licenses retained. Keep handwriting out of navigation, prices and essential instructions. Large display typography is reserved for the hero and closing invitation; supporting text remains compact and sentence case. Use tabular numbers for prices. The wordmark is a deliberate optical lettering exception with tighter tracking; do not apply its spacing to body text.
 
 ## Layout
 Maximum content width 1440px. Outer gutters: 52px desktop, 32px tablet, 20px mobile and 16px narrow mobile. Breakpoints at 1600, 1100, 760 and 390px. Hero and demo use unequal two-column grids; on mobile they stack in reading order. Services become a single index with price under the title. Main navigation becomes an inline disclosure. The photo has an explicit width to prevent aspect-ratio minimum sizing from forcing horizontal scroll.

@@ -9,19 +9,19 @@ const securityHeaders = [
     key: "Permissions-Policy",
     value: "camera=(), geolocation=(), microphone=(self), payment=()",
   },
-  // CSP kept permissive enough for Next + inline styles + sketchbook iframe + Trillet.
+  // CSP kept permissive enough for Next + inline styles + sketchbook iframe + ElevenLabs + Trillet.
   // Tighten once a full asset inventory is locked for Phase 7.
   {
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-      "style-src 'self' 'unsafe-inline'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://unpkg.com https://cdn.jsdelivr.net https://elevenlabs.io https://*.elevenlabs.io",
+      "style-src 'self' 'unsafe-inline' https:",
       "img-src 'self' data: blob: https:",
-      "font-src 'self' data:",
+      "font-src 'self' data: https:",
       "connect-src 'self' https: wss:",
-      "media-src 'self' blob: https:",
-      "frame-src 'self' blob:",
+      "media-src 'self' data: blob: https:",
+      "frame-src 'self' blob: https://elevenlabs.io https://*.elevenlabs.io",
       "worker-src 'self' blob:",
       "object-src 'none'",
       "base-uri 'self'",

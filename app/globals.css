@@ -35,16 +35,17 @@ html[data-loading="true"] .hero-figure {
 :root {
   --font-studio-sans: "Manrope";
   --font-studio-serif: "Fraunces";
-  --paper: #f7f5ed;
+  --font-studio-handwritten: "Vibes";
+  --paper: #eceee4;
   --ink: #333b32;
-  --rust: #a4432b;
-  --rust-hover: #873821;
-  --muted: #63685d;
-  --line: #d5d6ca;
-  --wash: #eceee3;
-  --white: #fffef9;
+  --rust: #a44328;
+  --rust-hover: #8f3d31;
+  --muted: #5c665e;
+  --line: #d6d6c8;
+  --wash: #eceadf;
+  --white: #fcfaf4;
   --sage: #dce3cc;
-  --sage-deep: #5d7058;
+  --sage-deep: #5f7058;
   --success: #42583b;
   --brand-ink: var(--ink);
   --brand-paper: var(--paper);
@@ -184,7 +185,9 @@ h1,h2 {
 }
 h1 em,h2 em {
   font-family: var(--font-studio-serif),serif;
+  font-style: italic;
   font-weight: 400;
+  font-variation-settings: "SOFT" 100, "WONK" 1;
   letter-spacing: -.035em;
 }
 h2 {
@@ -2229,9 +2232,14 @@ em {
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.suss-chip:hover {
+.suss-chip:hover,
+.suss-chip:focus-visible {
   border-color: var(--rust);
   background: var(--wash);
+}
+.suss-chip:focus-visible {
+  outline: 2px solid var(--rust);
+  outline-offset: 2px;
 }
 .suss-chip.is-selected {
   background: var(--ink);

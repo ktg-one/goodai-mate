@@ -53,9 +53,9 @@ export default function Privacy() {
 
       <h2>Voice demo</h2>
       <p>
-        Optional browser voice demos use <strong>Trillet AI</strong> to run a
+        Optional browser voice demos use an AI voice platform to run a
         short-lived voice session. Audio (and any transcript the service
-        produces) is processed by Trillet and its model providers for the call.
+        produces) is processed by the platform and its model providers for the call.
         You choose when to start and end the call. Do not share confidential
         client data in a demo call.
       </p>

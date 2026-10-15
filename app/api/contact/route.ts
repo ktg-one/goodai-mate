@@ -1,18 +1,21 @@
 import { NextResponse } from "next/server";
 import { limitRequest } from "@/lib/rate-limit";
+import {
+  EMAIL_RE,
+  FROM,
+  FROM_FALLBACK,
+  LEAD_SUBJECT,
+  formatLeadPayload,
+  resolveLeadRecipients,
+  sendViaGmailSmtp,
+} from "@/lib/contact";
+import { sendLeadWebhook } from "@/lib/lead-webhook";
 
 export const dynamic = "force-dynamic";
 
-const FROM = "Good'Ai <mate@goodai.au>";
-const LEAD_TO = process.env.CONTACT_TO_EMAIL || "hello@goodai.au";
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const escapeHtml = (value: string) =>
-  value.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string);
-
 /**
- * Lead alert: emails the enquiry to LEAD_TO via Resend. Never reports success
- * unless Resend accepted the message.
+ * Lead alert: emails the enquiry via Resend and/or direct Google Workspace Gmail SMTP,
+ * plus optional signed webhook. Never reports success unless at least one mail transport accepted it.
  */
 export async function POST(request: Request) {
   const limited = limitRequest(request, "contact", { limit: 5, globalLimit: 40, windowMs: 60_000 });
@@ -28,49 +31,103 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
 
+  const { contact, note, headaches, isSpam, replyTo, html, text } = formatLeadPayload(body);
+
   // Honeypot: bots fill the hidden field. Pretend nothing happened, send nothing.
-  if (typeof body.website === "string" && body.website.trim()) {
+  if (isSpam) {
     return NextResponse.json({ ok: true });
   }
-
-  const contact = typeof body.contact === "string" ? body.contact.trim().slice(0, 200) : "";
-  const note = typeof body.note === "string" ? body.note.trim().slice(0, 4000) : "";
-  const headaches = Array.isArray(body.headaches)
-    ? body.headaches.filter((h: unknown): h is string => typeof h === "string").slice(0, 12).map((h: string) => h.slice(0, 80))
-    : [];
 
   if (!contact) {
     return NextResponse.json({ error: "Add a mobile number or email so we can reply." }, { status: 400 });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    console.error("[Contact API] RESEND_API_KEY is not set; lead not sent.");
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const gmailUser = process.env.GMAIL_USER?.trim();
+  const gmailPass = process.env.GMAIL_APP_PASSWORD?.trim();
+  const hasGmailSmtp = Boolean(gmailUser && gmailPass);
+
+  if (!apiKey && !hasGmailSmtp) {
+    console.error("[Contact API] Neither RESEND_API_KEY nor GMAIL_USER/GMAIL_APP_PASSWORD is set; lead not sent.");
     return NextResponse.json({ error: "We couldn't send that just now. Please call us instead." }, { status: 503 });
   }
 
-  const lines = [
-    `<p><strong>Contact:</strong> ${escapeHtml(contact)}</p>`,
-    `<p><strong>Headaches:</strong> ${headaches.length ? escapeHtml(headaches.join(", ")) : "none selected"}</p>`,
-    `<p><strong>Note:</strong><br>${note ? escapeHtml(note).replace(/\n/g, "<br>") : "none"}</p>`,
-  ];
+  const recipients = resolveLeadRecipients();
+  let resendOk = false;
+  let resendError = "";
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: FROM,
-      to: [LEAD_TO],
-      reply_to: EMAIL_RE.test(contact) ? contact : undefined,
-      subject: "New Good'Ai enquiry",
-      html: lines.join(""),
-    }),
-  }).catch(() => null);
+  if (apiKey) {
+    let res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: FROM,
+        to: recipients,
+        reply_to: replyTo,
+        subject: LEAD_SUBJECT,
+        html,
+      }),
+    }).catch(() => null);
 
-  if (!res || !res.ok) {
-    console.error("[Contact API] Resend rejected the lead:", res ? await res.text().catch(() => res.status) : "network error");
+    // If custom domain is unverified (403), fallback to Resend's default onboarding domain
+    if (res && res.status === 403) {
+      console.warn("[Contact API] Custom domain rejected (403). Retrying with onboarding@resend.dev fallback.");
+      res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          from: FROM_FALLBACK,
+          to: recipients,
+          reply_to: replyTo,
+          subject: `${LEAD_SUBJECT} (Fallback)`,
+          html,
+        }),
+      }).catch(() => null);
+    }
+
+    if (res && res.ok) {
+      resendOk = true;
+    } else {
+      resendError = res ? await res.text().catch(() => String(res.status)) : "network error";
+    }
+  }
+
+  let gmailOk = false;
+  let gmailError = "";
+  if (hasGmailSmtp && gmailUser && gmailPass) {
+    const smtpRes = await sendViaGmailSmtp({
+      user: gmailUser,
+      appPassword: gmailPass,
+      to: recipients,
+      replyTo,
+      subject: LEAD_SUBJECT,
+      html,
+      text,
+    });
+    gmailOk = smtpRes.ok;
+    if (!smtpRes.ok) {
+      gmailError = smtpRes.error ?? "Gmail SMTP error";
+    }
+  }
+
+  if (!resendOk && !gmailOk) {
+    console.error("[Contact API] CRITICAL_LEAD_LOSS_PREVENTION - All mail transports rejected the lead:", {
+      resendError: resendError || "not configured",
+      gmailError: gmailError || "not configured",
+      lead: { contact, headaches, note, timestamp: new Date().toISOString() },
+    });
     return NextResponse.json({ error: "We couldn't send that just now. Please call us instead." }, { status: 502 });
   }
 
+  await sendLeadWebhook({
+    name: "",
+    email: EMAIL_RE.test(contact) ? contact : "",
+    phone: EMAIL_RE.test(contact) ? "" : contact,
+    message: [headaches.length ? `Headaches: ${headaches.join(", ")}` : "", note].filter(Boolean).join("\n"),
+    source: "contact",
+    submittedAt: new Date().toISOString(),
+  });
+
   return NextResponse.json({ ok: true });
 }
+

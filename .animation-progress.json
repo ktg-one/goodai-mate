@@ -67,6 +67,13 @@
     "component": "components/sections/ServicesCarousel.tsx",
     "type": "scroll/parallax",
     "status": "completed",
-    "notes": "Implemented Framer Motion scroll-driven parallax animations with GPU-accelerated y-translations, smooth spring physics (damping: 30, stiffness: 45) for >=1.0s movement duration curves, and prefers-reduced-motion compliance via useReducedMotion."
+    "notes": "Implemented Framer Motion scroll parallax animation using useScroll scrollYProgress, GPU-accelerated useTransform parallax offsets (translateY, scale, opacity), prefers-reduced-motion compliance via useReducedMotion, and smooth movement duration curves."
+  },
+  {
+    "id": "tech-specs-cards",
+    "component": "components/sections/TechSpecs.tsx",
+    "type": "line/draw",
+    "status": "completed",
+    "notes": "Implemented Framer Motion animated line draw-in separators with scaleX on scroll, staggered spec card entrance transitions, hover elevation, prefers-reduced-motion compliance via useReducedMotion, and smooth duration curves >= 1.0s."
   }
 ]
