@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { PHONE_DISPLAY, PHONE_HREF, LEAD_EMAIL, LEAD_EMAIL_HREF } from "@/lib/links";
 import { ArrowUpRight, Check, Sparkles, PhoneCall, Receipt, MessageSquareReply, CopySlash, Clock, Mail, Loader2 } from "lucide-react";
 
@@ -158,6 +159,17 @@ export function SussTheFussCard() {
               )}
             </button>
           </div>
+          <p className="text-xs text-brand-ink/70 mt-2 leading-tight">
+            By submitting an enquiry, you agree to our{" "}
+            <Link href="/terms" className="underline hover:text-brand-coral">
+              Terms of Use
+            </Link>{" "}
+            and acknowledge our{" "}
+            <Link href="/privacy" className="underline hover:text-brand-coral">
+              Privacy Policy
+            </Link>
+            .
+          </p>
         </div>
 
         <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="sr-only" />

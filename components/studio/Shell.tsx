@@ -3,7 +3,17 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, ArrowRight, Menu, X } from "lucide-react";
 import { m, useReducedMotion } from "framer-motion";
-import { SURVEY_URL, PHONE_DISPLAY, PHONE_HREF } from "@/lib/links";
+import {
+  SURVEY_URL,
+  PHONE_DISPLAY,
+  PHONE_HREF,
+  LEAD_EMAIL,
+  LEAD_EMAIL_HREF,
+  POLICY_EMAIL,
+  POLICY_EMAIL_HREF,
+  PRIVACY_EMAIL,
+  PRIVACY_EMAIL_HREF,
+} from "@/lib/links";
 export function Brand({ large = false }: { large?: boolean }) {
   return <span className={large ? "wordmark wordmark-large" : "wordmark"}>Good<span className="brand-apostrophe">’</span>Ai<span className="brand-period">.</span></span>;
 }
@@ -100,12 +110,21 @@ export function StudioFooter() {
         <Link href="/" className="footer-wordmark" aria-label="Good'Ai home">
           <Brand large />
         </Link>
-        <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Good’Ai</span>
-          <span>Less busywork. More living.</span>
-          <div>
-            <FooterAnimatedLink href="/privacy">Privacy</FooterAnimatedLink>
-            <FooterAnimatedLink href="/terms">Terms</FooterAnimatedLink>
+        <div className="footer-bottom flex flex-col gap-2 pt-4 text-xs opacity-90 border-t border-brand-paper/20">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <span>© 2026 Good AI. Perth, Western Australia.</span>
+            <div className="flex items-center gap-3">
+              <FooterAnimatedLink href="/terms">Terms of Use</FooterAnimatedLink>
+              <span>•</span>
+              <FooterAnimatedLink href="/privacy">Privacy Policy</FooterAnimatedLink>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs opacity-80">
+            <span>Contact: <a href={LEAD_EMAIL_HREF} className="underline hover:text-brand-coral">{LEAD_EMAIL}</a></span>
+            <span>•</span>
+            <span>Legal &amp; Policy: <a href={POLICY_EMAIL_HREF} className="underline hover:text-brand-coral">{POLICY_EMAIL}</a></span>
+            <span>•</span>
+            <span>Data &amp; Privacy: <a href={PRIVACY_EMAIL_HREF} className="underline hover:text-brand-coral">{PRIVACY_EMAIL}</a></span>
           </div>
         </div>
       </div>
