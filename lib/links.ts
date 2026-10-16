@@ -8,3 +8,9 @@ export const PHONE_E164 = "+61877414191";
 
 export const LEAD_EMAIL = "hello@goodai.au";
 export const LEAD_EMAIL_HREF = "mailto:hello@goodai.au";
+
+export const POLICY_EMAIL = "policy@goodai.au";
+export const POLICY_EMAIL_HREF = "mailto:policy@goodai.au";
+
+export const PRIVACY_EMAIL = "privacy@goodai.au";
+export const PRIVACY_EMAIL_HREF = "mailto:privacy@goodai.au";

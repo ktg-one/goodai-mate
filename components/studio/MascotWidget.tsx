@@ -86,6 +86,9 @@ export function MascotWidget() {
                   <Mic size={13} className="text-brand-coral" />
                   <span>Talk with our AI voice agent</span>
                 </button>
+                <p className="text-xs text-brand-ink/70 leading-tight">
+                  Notice: Voice streams processed ephemerally via ElevenLabs; not retained for biometric ID.
+                </p>
                 <a
                   href={PHONE_HREF}
                   className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-white font-medium hover:opacity-90 transition text-xs"

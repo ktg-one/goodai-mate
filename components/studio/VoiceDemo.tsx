@@ -27,9 +27,8 @@ export function VoiceDemo() {
           Meet the Good’Ai voice agent. Try a live conversation and get a feel for how an AI
           voice assistant can cover the phone when you are on the tools.
         </p>
-        <p className="voice-disclosure">
-          Powered by conversational AI audio intelligence. Audio and transcripts are
-          processed in real-time. You choose when to start or end the call.
+        <p className="voice-disclosure text-xs opacity-80 leading-relaxed">
+          Notice: Voice input is streamed ephemerally via ElevenLabs global infrastructure for real-time demonstration purposes only. Do not disclose sensitive personal, financial, or confidential information. Voice streams are processed ephemerally and not retained for biometric identification.
         </p>
       </div>
 
