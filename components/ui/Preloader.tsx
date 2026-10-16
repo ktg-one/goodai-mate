@@ -21,7 +21,7 @@ export function Preloader() {
         const fontsReady = document.fonts?.ready.catch(() => undefined) ?? Promise.resolve();
         // Match the progress-line duration so the loader never disappears in
         // the middle of its own animation.
-        const minimumDisplay = new Promise<void>((resolve) => window.setTimeout(resolve, 1200));
+        const minimumDisplay = new Promise<void>((resolve) => window.setTimeout(resolve, 2200));
 
         Promise.all([windowLoaded, fontsReady, minimumDisplay]).then(() => {
             if (disposed) return;
@@ -64,7 +64,7 @@ export function Preloader() {
                         <m.div
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: [0, 0.72, 1] }}
-                            transition={{ duration: 1.2, times: [0, 0.75, 1], ease: [0.76, 0, 0.24, 1] }}
+                            transition={{ duration: 2.2, times: [0, 0.75, 1], ease: [0.76, 0, 0.24, 1] }}
                             transformTemplate={({ scaleX }) => `scaleX(${scaleX})`}
                             className="mt-8 h-px w-48 origin-left bg-brand-coral"
                         />
