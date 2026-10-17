@@ -89,5 +89,12 @@
     "type": "micro-interaction/step-transition",
     "status": "completed",
     "notes": "Implemented Framer Motion step transition animations for scenario switching, staged list item reveal sequence, checkmark icon state transitions, micro-interaction hover/tap transforms, prefers-reduced-motion compliance via useReducedMotion, and smooth >= 1.0s duration curves."
+  },
+  {
+    "id": "voice-demo",
+    "component": "components/studio/VoiceDemo.tsx",
+    "type": "micro-interaction/button-hover",
+    "status": "completed",
+    "notes": "Implemented Framer Motion entrance scroll reveal and micro-interaction hover/tap scale and translate transforms for interactive phone call link, action button, and contact link, with movement duration curves >= 1.0s and prefers-reduced-motion compliance via useReducedMotion."
   }
 ]
