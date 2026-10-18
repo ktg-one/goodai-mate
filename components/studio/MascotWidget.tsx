@@ -121,7 +121,7 @@ export function MascotWidget() {
                 setOpen((prev) => !prev);
               }
             }}
-            className="cursor-pointer transition-transform hover:scale-105 active:scale-95 drop-shadow-md bg-transparent border-0 p-0"
+            className="cursor-pointer transition-transform hover:scale-105 active:scale-95 drop-shadow-md bg-transparent border-0 p-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-coral focus-visible:rounded-full outline-none"
             title="Say g'day to Goodie!"
             aria-expanded={open}
             aria-controls="goodie-panel"
