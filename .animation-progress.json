@@ -89,5 +89,12 @@
     "type": "micro-interaction/step-transition",
     "status": "completed",
     "notes": "Implemented Framer Motion step transition animations for scenario switching, staged list item reveal sequence, checkmark icon state transitions, micro-interaction hover/tap transforms, prefers-reduced-motion compliance via useReducedMotion, and smooth >= 1.0s duration curves."
+  },
+  {
+    "id": "voice-demo-card",
+    "component": "components/studio/VoiceDemo.tsx",
+    "type": "micro-interaction/card-and-pulse",
+    "status": "completed",
+    "notes": "Implemented Framer Motion micro-interactions on callout buttons and phone links using whileHover/whileTap scale and transform offsets, custom teal pulse indicator keyframe loops with 2.0s duration, prefers-reduced-motion compliance via useReducedMotion, and smooth movement duration curves >= 1.0s."
   }
 ]
