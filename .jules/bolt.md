@@ -18,3 +18,7 @@
 ## 2026-10-05 - Memoize VisualStory Step Mapping
 **Learning:** Re-mapping static list structures (like `storySteps`) during every render in components with frequent state updates (such as GSAP ScrollTrigger updates toggling `activeChapter`) causes unnecessary React element recreation and DOM reconciliation overhead.
 **Action:** Wrap static array mapping operations in `useMemo` with empty dependency arrays to preserve referential equality across component re-renders.
+
+## 2026-10-17 - Optimize Sliding Window Timestamp Pruning and Client IP Parsing in Rate Limiter
+**Learning:** Calling `.filter()` on monotonically sorted timestamp arrays in sliding-window rate limiters creates $O(N)$ array allocations on every request check and sweep cycle. Because timestamps are pushed chronologically, expired entries are guaranteed to be at the array head, making in-place queue pruning (`shift()`) $O(1)$ for active windows with zero array allocation overhead. Additionally, parsing multi-hop proxy headers with `.map()` and `.filter()` creates unnecessary heap allocations per request compared to single-pass reverse iteration.
+**Action:** Replace `.filter()` array allocations with in-place queue `shift()` operations in rate limiting checks and sweep routines, and iterate backwards over `x-forwarded-for` header splits to extract client IP without intermediate array allocations.
