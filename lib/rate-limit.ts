@@ -91,9 +91,33 @@ export function rateLimit(
  * (closest to our edge). Never trust the leftmost XFF (client-spoofable).
  * Returns null when nothing usable is present.
  */
+/**
+ * Normalizes IP strings by removing port numbers and surrounding brackets.
+ * Examples:
+ *   "198.51.100.7:44332" -> "198.51.100.7"
+ *   "[2001:db8::1]:8080" -> "2001:db8::1"
+ *   "2001:db8::1"        -> "2001:db8::1"
+ */
+function cleanIp(raw: string): string {
+  const ip = raw.trim();
+  // Handle bracketed IPv6 like [2001:db8::1]:8080 or [2001:db8::1]
+  if (ip.startsWith("[")) {
+    const bracketEnd = ip.indexOf("]");
+    if (bracketEnd !== -1) {
+      return ip.slice(1, bracketEnd);
+    }
+  }
+  // Handle IPv4 with port like 198.51.100.7:44332 (exactly one colon)
+  const colonIndex = ip.indexOf(":");
+  if (colonIndex !== -1 && colonIndex === ip.lastIndexOf(":")) {
+    return ip.slice(0, colonIndex);
+  }
+  return ip;
+}
+
 export function clientIp(request: Request): string | null {
   const real = request.headers.get("x-real-ip")?.trim();
-  if (real) return real;
+  if (real) return cleanIp(real);
 
   const xf = request.headers.get("x-forwarded-for");
   if (xf) {
@@ -102,7 +126,7 @@ export function clientIp(request: Request): string | null {
     const parts = xf.split(",");
     for (let i = parts.length - 1; i >= 0; i--) {
       const hop = parts[i]?.trim();
-      if (hop) return hop;
+      if (hop) return cleanIp(hop);
     }
   }
   return null;
