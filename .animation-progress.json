@@ -96,5 +96,12 @@
     "type": "micro-interaction/button-hover",
     "status": "completed",
     "notes": "Implemented Framer Motion entrance scroll reveal and micro-interaction hover/tap scale and translate transforms for interactive phone call link, action button, and contact link, with movement duration curves >= 1.0s and prefers-reduced-motion compliance via useReducedMotion."
+  },
+  {
+    "id": "mascot-widget",
+    "component": "components/studio/MascotWidget.tsx",
+    "type": "micro-interaction/panel-reveal",
+    "status": "completed",
+    "notes": "Implemented Framer Motion quick action speech bubble panel reveal inside AnimatePresence with GPU-accelerated opacity/scale/translate transforms, micro-interaction button action hover/tap states, mascot hover elevation, 1.0s movement duration curves, explicit focus-visible accessibility styles, and prefers-reduced-motion compliance via useReducedMotion."
   }
 ]
