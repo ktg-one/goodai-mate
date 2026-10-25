@@ -96,5 +96,18 @@
     "type": "micro-interaction/button-hover",
     "status": "completed",
     "notes": "Implemented Framer Motion entrance scroll reveal and micro-interaction hover/tap scale and translate transforms for interactive phone call link, action button, and contact link, with movement duration curves >= 1.0s and prefers-reduced-motion compliance via useReducedMotion."
+  },
+  {
+    "id": "infinite-marquee",
+    "component": "components/sections/InfiniteMarquee.tsx",
+    "type": "scroll/marquee",
+    "status": "completed",
+    "notes": "Implemented Framer Motion seamless -50% infinite translation marquee loop with hover micro-interaction scaling/color transitions, overall container scale offset on hover with 1.0s movement duration curves, and prefers-reduced-motion compliance via useReducedMotion."
+  },
+  {
+    "id": "sketchbook-flip",
+    "component": "components/studio/SketchbookFlip.tsx",
+    "type": "micro-interaction/book-flip",
+    "status": "pending"
   }
 ]
