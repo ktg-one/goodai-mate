@@ -106,9 +106,10 @@
   },
   {
     "id": "empathy-beats",
-    "component": "app/page.tsx",
+    "component": "components/sections/EmpathyBeats.tsx",
     "type": "scroll/fade-in",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion scroll-triggered fade-in and slide-up animations for section heading, staggered beat cards, and handwritten note with GPU-accelerated transforms (opacity, translateY), whileHover lift micro-interactions, >=1.0s movement duration curves, and prefers-reduced-motion compliance via useReducedMotion."
   },
   {
     "id": "services-list",
