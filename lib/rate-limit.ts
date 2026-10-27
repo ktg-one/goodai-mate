@@ -18,8 +18,12 @@ export type RateLimitResult = {
 };
 
 function sweepExpired(now: number, windowMs: number) {
+  const cutoff = now - windowMs;
   for (const [key, bucket] of buckets) {
-    bucket.timestamps = bucket.timestamps.filter((t) => t > now - windowMs);
+    // ⚡ Bolt: Prune expired timestamps in-place to avoid O(N) array allocations per bucket
+    while (bucket.timestamps.length > 0 && bucket.timestamps[0] <= cutoff) {
+      bucket.timestamps.shift();
+    }
     if (bucket.timestamps.length === 0) buckets.delete(key);
   }
 }
@@ -49,7 +53,13 @@ export function rateLimit(
   const cutoff = now - windowMs;
   let bucket = buckets.get(key);
   if (bucket) {
-    bucket.timestamps = bucket.timestamps.filter((t) => t > cutoff);
+    // ⚡ Bolt: Since timestamps are pushed in strictly ascending chronological order,
+    // expired timestamps are guaranteed to be at the head of the array.
+    // Shift expired entries in-place to achieve O(1) time complexity when unexpired
+    // and zero array allocation overhead per check.
+    while (bucket.timestamps.length > 0 && bucket.timestamps[0] <= cutoff) {
+      bucket.timestamps.shift();
+    }
     if (bucket.timestamps.length === 0) {
       buckets.delete(key);
       bucket = undefined;
@@ -81,17 +91,43 @@ export function rateLimit(
  * (closest to our edge). Never trust the leftmost XFF (client-spoofable).
  * Returns null when nothing usable is present.
  */
+/**
+ * Normalizes IP strings by removing port numbers and surrounding brackets.
+ * Examples:
+ *   "198.51.100.7:44332" -> "198.51.100.7"
+ *   "[2001:db8::1]:8080" -> "2001:db8::1"
+ *   "2001:db8::1"        -> "2001:db8::1"
+ */
+function cleanIp(raw: string): string {
+  const ip = raw.trim();
+  // Handle bracketed IPv6 like [2001:db8::1]:8080 or [2001:db8::1]
+  if (ip.startsWith("[")) {
+    const bracketEnd = ip.indexOf("]");
+    if (bracketEnd !== -1) {
+      return ip.slice(1, bracketEnd);
+    }
+  }
+  // Handle IPv4 with port like 198.51.100.7:44332 (exactly one colon)
+  const colonIndex = ip.indexOf(":");
+  if (colonIndex !== -1 && colonIndex === ip.lastIndexOf(":")) {
+    return ip.slice(0, colonIndex);
+  }
+  return ip;
+}
+
 export function clientIp(request: Request): string | null {
   const real = request.headers.get("x-real-ip")?.trim();
-  if (real) return real;
+  if (real) return cleanIp(real);
 
   const xf = request.headers.get("x-forwarded-for");
   if (xf) {
-    const parts = xf
-      .split(",")
-      .map((p) => p.trim())
-      .filter(Boolean);
-    if (parts.length > 0) return parts[parts.length - 1] ?? null;
+    // ⚡ Bolt: Iterate backwards to find the rightmost non-empty IP hop without
+    // allocating intermediate array projections via .map() and .filter().
+    const parts = xf.split(",");
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const hop = parts[i]?.trim();
+      if (hop) return cleanIp(hop);
+    }
   }
   return null;
 }

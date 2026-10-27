@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { m, AnimatePresence, useReducedMotion } from "framer-motion";
 import { PHONE_DISPLAY, PHONE_HREF, LEAD_EMAIL, LEAD_EMAIL_HREF } from "@/lib/links";
 import { ArrowUpRight, Check, Sparkles, PhoneCall, Receipt, MessageSquareReply, CopySlash, Clock, Mail, Loader2 } from "lucide-react";
 
@@ -14,6 +16,7 @@ const HEADACHES = [
 ];
 
 export function SussTheFussCard() {
+  const shouldReduceMotion = useReducedMotion();
   const [selected, setSelected] = useState<string[]>([]);
   const [fussNote, setFussNote] = useState("");
   const [contact, setContact] = useState("");
@@ -85,18 +88,36 @@ export function SussTheFussCard() {
               const isSelected = selected.includes(h.id);
               const Icon = h.icon;
               return (
-                <button
+                <m.button
                   type="button"
                   key={h.id}
                   disabled={submitted}
                   onClick={() => toggleChip(h.id)}
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.03, y: -2 }}
+                  whileTap={shouldReduceMotion ? undefined : { scale: 0.97, y: 0 }}
+                  transition={{
+                    duration: 1.0,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
                   className={`suss-chip ${isSelected ? "is-selected" : ""}`}
                   aria-pressed={isSelected}
                 >
                   <Icon size={15} />
                   <span>{h.label}</span>
-                  {isSelected && <Check size={13} className="chip-check" />}
-                </button>
+                  <AnimatePresence>
+                    {isSelected && (
+                      <m.span
+                        initial={shouldReduceMotion ? undefined : { scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={shouldReduceMotion ? undefined : { scale: 0, opacity: 0 }}
+                        transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+                        className="inline-flex items-center"
+                      >
+                        <Check size={13} className="chip-check" />
+                      </m.span>
+                    )}
+                  </AnimatePresence>
+                </m.button>
               );
             })}
           </div>
@@ -135,9 +156,12 @@ export function SussTheFussCard() {
               placeholder="Mobile number or email"
               className="suss-input"
             />
-            <button
+            <m.button
               type="submit"
               disabled={submitting || submitted}
+              whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -2 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.98, y: 0 }}
+              transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
               className={`button suss-submit ${submitted ? "is-sorted" : ""}`}
             >
               {submitted ? (
@@ -156,8 +180,19 @@ export function SussTheFussCard() {
                   <ArrowUpRight size={17} />
                 </>
               )}
-            </button>
+            </m.button>
           </div>
+          <p className="text-xs text-brand-ink/70 mt-2 leading-tight">
+            By submitting an enquiry, you agree to our{" "}
+            <Link href="/terms" className="underline hover:text-brand-coral">
+              Terms of Use
+            </Link>{" "}
+            and acknowledge our{" "}
+            <Link href="/privacy" className="underline hover:text-brand-coral">
+              Privacy Policy
+            </Link>
+            .
+          </p>
         </div>
 
         <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="sr-only" />
@@ -178,25 +213,35 @@ export function SussTheFussCard() {
           </div>
         )}
 
-        {submitted && (
-          <div className="suss-success-note" role="status" aria-live="polite">
-            <p>
-              <strong>Too easy, mate. We’ve got it.</strong> Knock off early—we’ll take a proper look at what’s eating your week and get back to you today.
-            </p>
-            <button
-              type="button"
-              className="text-link suss-reset"
-              onClick={() => {
-                setSubmitted(false);
-                setSelected([]);
-                setFussNote("");
-                setContact("");
-              }}
+        <AnimatePresence>
+          {submitted && (
+            <m.div
+              initial={shouldReduceMotion ? undefined : { opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
+              transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+              className="suss-success-note"
+              role="status"
+              aria-live="polite"
             >
-              Handball another task ←
-            </button>
-          </div>
-        )}
+              <p>
+                <strong>Too easy, mate. We’ve got it.</strong> Knock off early—we’ll take a proper look at what’s eating your week and get back to you today.
+              </p>
+              <button
+                type="button"
+                className="text-link suss-reset"
+                onClick={() => {
+                  setSubmitted(false);
+                  setSelected([]);
+                  setFussNote("");
+                  setContact("");
+                }}
+              >
+                Handball another task ←
+              </button>
+            </m.div>
+          )}
+        </AnimatePresence>
 
         {/* Mate-ship Trust Bar */}
         <div className="suss-trust">

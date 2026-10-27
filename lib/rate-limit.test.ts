@@ -52,6 +52,18 @@ test("clientIp returns null when no proxy headers", () => {
   assert.equal(clientIp(new Request("http://localhost/")), null);
 });
 
+test("clientIp normalizes port numbers from IPv4 and IPv6 header addresses", () => {
+  const req4 = new Request("http://localhost/", {
+    headers: { "x-real-ip": "198.51.100.7:44332" },
+  });
+  assert.equal(clientIp(req4), "198.51.100.7");
+
+  const req6 = new Request("http://localhost/", {
+    headers: { "x-forwarded-for": "[2001:db8::1]:8080" },
+  });
+  assert.equal(clientIp(req6), "2001:db8::1");
+});
+
 test("limitRequest without IP uses global coarse cap not a shared unknown IP key", () => {
   _resetRateLimitForTests();
   const bare = new Request("http://localhost/api/contact");

@@ -47,6 +47,10 @@ export function ElevenLabsMascot({ onClose }: ElevenLabsMascotProps) {
 
       <elevenlabs-convai agent-id={ELEVENLABS_AGENT_ID} />
 
+      <div className="max-w-xs rounded-xl bg-brand-ink/90 p-2.5 text-xs text-brand-paper/80 shadow-md border border-brand-paper/10 leading-tight">
+        Notice: Voice input is streamed ephemerally via ElevenLabs infrastructure for real-time demonstration purposes only. Do not disclose sensitive personal, financial, or confidential information.
+      </div>
+
       {!scriptLoaded && (
         <span className="sr-only" role="status">
           Loading voice agent…

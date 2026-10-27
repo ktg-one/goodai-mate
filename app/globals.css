@@ -1,4 +1,5 @@
 @import "./studio-fonts.css";
+@import "./tokens/effects.css";
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -375,6 +376,7 @@ em {
   pointer-events: none;
   user-select: none;
   z-index: 0;
+  animation: leafSway 9s ease-in-out infinite;
 }
 @media (max-width: 760px) {
   .hero-growing-branch {
@@ -606,6 +608,7 @@ em {
   pointer-events: none;
   user-select: none;
   z-index: 0;
+  animation: leafSway 9s ease-in-out infinite;
 }
 .beat-illustration {
   display: flex;
@@ -797,6 +800,7 @@ em {
   pointer-events: none;
   user-select: none;
   z-index: 0;
+  animation: blobFloatSlow 12s ease-in-out infinite;
 }
 .demo-grid {
   position: relative;
@@ -954,6 +958,7 @@ em {
   pointer-events: none;
   user-select: none;
   z-index: 0;
+  animation: blobFloatSlow 12s ease-in-out infinite;
 }
 .approach .section-heading,
 .approach-steps,
@@ -2266,9 +2271,14 @@ em {
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.suss-chip:hover {
+.suss-chip:hover,
+.suss-chip:focus-visible {
   border-color: var(--rust);
   background: var(--wash);
+}
+.suss-chip:focus-visible {
+  outline: 2px solid var(--rust);
+  outline-offset: 2px;
 }
 .suss-chip.is-selected {
   background: var(--ink);
