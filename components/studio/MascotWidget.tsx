@@ -30,7 +30,15 @@ export function MascotWidget() {
   }, []);
 
   useEffect(() => {
-    if (open) panelRef.current?.focus();
+    if (!open) return;
+    panelRef.current?.focus();
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [open]);
 
   return (
@@ -52,9 +60,10 @@ export function MascotWidget() {
               ref={panelRef}
               id="goodie-panel"
               tabIndex={-1}
-              role="region"
+              role="dialog"
+              aria-modal="false"
               aria-label="Goodie quick actions"
-              className="p-4 rounded-2xl shadow-xl border max-w-72 text-xs font-sans flex flex-col gap-2.5 backdrop-blur-sm"
+              className="p-4 rounded-2xl shadow-xl border max-w-72 text-xs font-sans flex flex-col gap-2.5 backdrop-blur-sm focus:outline-none"
               style={{ background: "#f6f3ea", color: "#2f3a33", borderColor: "#d8dfca" }}
             >
               <div className="flex items-center justify-between font-bold text-sm">
@@ -65,7 +74,7 @@ export function MascotWidget() {
                 <button 
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="p-1 -mr-1 hover:opacity-70 transition cursor-pointer"
+                  className="p-1 -mr-1 rounded-sm hover:opacity-70 focus-visible:outline-2 focus-visible:outline-brand-coral focus-visible:outline-offset-1 transition cursor-pointer"
                   aria-label="Close dialog"
                 >
                   <X size={14} />
