@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -31,6 +31,7 @@ export function VisualStory() {
     const triggerRef = useRef<HTMLDivElement>(null);
     const visualRef = useRef<HTMLDivElement>(null);
     const [activeChapter, setActiveChapter] = useState(0);
+    const prefersReducedMotion = useReducedMotion();
 
     const renderedStorySteps = useMemo(() => {
         return storySteps.map((step, index) => (
@@ -49,6 +50,15 @@ export function VisualStory() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
+            if (prefersReducedMotion) {
+                // If user prefers reduced motion, set text sections full opacity and omit pinning
+                const sections = gsap.utils.toArray<HTMLElement>(".story-text-section", containerRef.current);
+                sections.forEach((section) => {
+                    gsap.set(section, { opacity: 1, y: 0 });
+                });
+                return;
+            }
+
             // Pin the right side content while scrolling through the steps
             ScrollTrigger.create({
                 trigger: triggerRef.current,
@@ -95,7 +105,7 @@ export function VisualStory() {
         }, containerRef);
 
         return () => ctx.revert();
-    }, []);
+    }, [prefersReducedMotion]);
 
     return (
         <section ref={containerRef} id="story" className="relative bg-brand-ink text-brand-paper">
@@ -111,26 +121,30 @@ export function VisualStory() {
                 <div ref={visualRef} className="hidden md:flex story-visual w-1/2 h-[100dvh] min-h-[100dvh] sticky top-0 bg-brand-paper border-l border-brand-ink items-center justify-center overflow-hidden">
                     {/* Chapter Visuals */}
                     <div className="sticky top-0 h-[100dvh] min-h-[100dvh] w-full flex items-center justify-center p-8">
-                        <div className="relative w-full aspect-square overflow-hidden border border-brand-ink shadow-[8px_8px_0_var(--brand-coral)]">
+                        <m.div
+                            whileHover={prefersReducedMotion ? undefined : { scale: 1.02, transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] } }}
+                            whileTap={prefersReducedMotion ? undefined : { scale: 0.98, transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] } }}
+                            className="relative w-full aspect-square overflow-hidden border border-brand-ink shadow-[8px_8px_0_var(--brand-coral)] cursor-pointer"
+                        >
                             <AnimatePresence mode="wait">
                                 <m.div
                                     key={activeChapter}
-                                    initial={{ opacity: 0, scale: 1.1 }}
+                                    initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 1.08 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.95 }}
-                                    transition={{ duration: 0.6 }}
+                                    exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
+                                    transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
                                     className="absolute inset-0"
                                 >
                                     <div className={cn("h-full w-full", storySteps[activeChapter].image)} />
                                     {/* Overlay Text for context */}
-                                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
                                         <h3 className="text-9xl font-bold text-brand-ink/15 tracking-wide">
                                             0{activeChapter + 1}
                                         </h3>
                                     </div>
                                 </m.div>
                             </AnimatePresence>
-                        </div>
+                        </m.div>
                     </div>
                 </div>
             </div>

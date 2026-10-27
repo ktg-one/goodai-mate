@@ -96,5 +96,30 @@
     "type": "micro-interaction/button-hover",
     "status": "completed",
     "notes": "Implemented Framer Motion entrance scroll reveal and micro-interaction hover/tap scale and translate transforms for interactive phone call link, action button, and contact link, with movement duration curves >= 1.0s and prefers-reduced-motion compliance via useReducedMotion."
+  },
+  {
+    "id": "visual-story",
+    "component": "components/sections/VisualStory.tsx",
+    "type": "scroll/pinned",
+    "status": "completed",
+    "notes": "Implemented GSAP ScrollTrigger pinning and scroll-based section opacity transitions, Framer Motion AnimatePresence active chapter crossfades, whileHover/whileTap micro-interactions, smooth >= 1.0s movement duration curves, and prefers-reduced-motion accessibility compliance."
+  },
+  {
+    "id": "empathy-beats",
+    "component": "app/page.tsx",
+    "type": "scroll/fade-in",
+    "status": "pending"
+  },
+  {
+    "id": "services-list",
+    "component": "app/page.tsx",
+    "type": "hover/card-scale",
+    "status": "pending"
+  },
+  {
+    "id": "approach-steps",
+    "component": "app/page.tsx",
+    "type": "scroll/slide-in",
+    "status": "pending"
   }
 ]
