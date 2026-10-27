@@ -1,4 +1,5 @@
 @import "./studio-fonts.css";
+@import "./tokens/effects.css";
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -336,6 +337,7 @@ em {
   pointer-events: none;
   user-select: none;
   z-index: 0;
+  animation: leafSway 9s ease-in-out infinite;
 }
 @media (max-width: 760px) {
   .hero-growing-branch {
@@ -567,6 +569,7 @@ em {
   pointer-events: none;
   user-select: none;
   z-index: 0;
+  animation: leafSway 9s ease-in-out infinite;
 }
 .beat-illustration {
   display: flex;
@@ -758,6 +761,7 @@ em {
   pointer-events: none;
   user-select: none;
   z-index: 0;
+  animation: blobFloatSlow 12s ease-in-out infinite;
 }
 .demo-grid {
   position: relative;
@@ -915,6 +919,7 @@ em {
   pointer-events: none;
   user-select: none;
   z-index: 0;
+  animation: blobFloatSlow 12s ease-in-out infinite;
 }
 .approach .section-heading,
 .approach-steps,

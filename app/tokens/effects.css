@@ -32,3 +32,47 @@ section:nth-of-type(even),
   background-size: cover;
   background-position: center;
 }
+
+@keyframes leafSway {
+  0%, 100% {
+    transform: translate3d(0px, 0px, 0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate3d(10px, 6px, 0) rotate(1.6deg) scale(1.02);
+  }
+}
+
+@keyframes blobFloatSlow {
+  0%, 100% {
+    transform: translate3d(0px, 0px, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-12px, 10px, 0) scale(1.03);
+  }
+}
+
+@keyframes dashFlow {
+  to {
+    stroke-dashoffset: -48;
+  }
+}
+
+.animate-leaf-sway {
+  animation: leafSway 9s ease-in-out infinite;
+}
+
+.animate-blob-slow {
+  animation: blobFloatSlow 12s ease-in-out infinite;
+}
+
+.animate-dash-flow {
+  animation: dashFlow 1.35s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-leaf-sway,
+  .animate-blob-slow,
+  .animate-dash-flow {
+    animation: none !important;
+  }
+}
