@@ -14,3 +14,4 @@ See mirror at `C:\Users\kevin\Documents\03\state\WEBSITE-STATE.md`.
 - **Canonical Tokens & Fonts**: `brand-guide/goodai-tokens.css`, `app/goodai-tokens.css`, `DESIGN.md`, `brand-guide/WEBSITE-DESIGN-TOKENS.md`, and `/fonts/Fraunces/` (`"SOFT" 100, "WONK" 1`) synced and validated (`node docs/validate-design.cjs` -> 0 missing, 0 orphan).
 - **Mascot Icon**: `brand-guide/assets/goodai-icon.svg` + `app/icon.svg` (1.5 KB vector) and `brand-guide/assets/goodai-icon.png` (transparent 3D Goodie head).
 - **Jules Queue**: Committed at `docs/JULES-HANDOFF-PLAN.md`.
+

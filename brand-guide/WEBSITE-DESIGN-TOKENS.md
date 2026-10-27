@@ -37,19 +37,23 @@ spacing:
   xl: "80px"
 components:
   button-primary:
-    backgroundColor: "{colors.primary}"
+    backgroundColor: "linear-gradient(180deg, {colors.primary}, {colors.primary-hover})"
     textColor: "{colors.on-primary}"
     typography: "{typography.label}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.sm} {spacing.md}"
-    minHeight: "44px"
+    rounded: "{rounded.full}"
+    padding: "7px 9px 7px 20px"
+    gap: "16px"
+    minHeight: "46px"
+    border: "1px solid color-mix(in srgb, {colors.primary} 85%, {colors.on-neutral})"
+    boxShadow: "inset 0 1px #ffffff30, 0 5px 0 color-mix(in srgb, {colors.primary} 65%, {colors.on-neutral}), 0 10px 20px -10px color-mix(in srgb, {colors.on-neutral} 33%, transparent)"
+    trailingBadge: { size: "14px", padding: "6px", rounded: "{rounded.full}", backgroundColor: "{colors.neutral}", iconColor: "{colors.primary}" }
     states:
-      default: { backgroundColor: "{colors.primary}" }
-      hover: { backgroundColor: "{colors.primary-hover}" }
+      default: { backgroundColor: "linear-gradient(180deg, {colors.primary}, {colors.primary-hover})" }
+      hover: { backgroundColor: "{colors.primary-hover}", transform: "translateY(-2px)", trailingBadgeRotate: "45deg" }
       active: { backgroundColor: "{colors.primary-hover}" }
-      pressed: { transform: "translateY(1px)" }
+      pressed: { transform: "translateY(4px)", boxShadow: "inset 0 1px #ffffff20, 0 1px 0 {colors.primary-hover}" }
       disabled: { opacity: 0.5, cursor: not-allowed }
-      focus: { outlineColor: "{colors.primary}", outlineWidth: "2px", outlineOffset: "5px" }
+      focus: { outlineColor: "{colors.primary}", outlineWidth: "2px", outlineOffset: "6px" }
   navigation:
     backgroundColor: "{colors.neutral}"
     textColor: "{colors.on-neutral}"
@@ -151,10 +155,10 @@ Maximum content width 1440px. Outer gutters: 52px desktop, 32px tablet, 20px mob
 Use thin dividers for the page structure. The workflow surface has the only soft elevated shadow. No decorative card grids, backdrop blur or gradient text. Z-index: normal content, sticky navigation 20, skip link 40. The optional third-party voice widget controls its own overlay.
 
 ## Shapes
-Small radii belong to controls and photography; lg belongs to actual interactive panels. Full rounding belongs to the direction arrows, switch track, and the closing circular CTA. Service rows remain open and divided by rules.
+Small radii belong to inputs and photography; lg belongs to actual interactive panels. Full pill rounding (`9999px`) belongs to global `.button` actions (the tactile 3D rust arrow-pill with a circular paper icon badge on the right), direction arrows, switch track, and the closing circular CTA. Service rows remain open and divided by rules.
 
 ## Components
-Seven families are specified in front matter. Shared focus is a visible primary outline with an offset. Every button is at least 44px high; decorative arrow circles are inside whole-row service links. Link states do not invent a disabled navigation destination. Where disabled is inapplicable, the state is explicitly marked rather than presenting an inert link.
+Seven families are specified in front matter. Shared focus is a visible primary outline with an offset. Every global button (`.button`, `<Button>`) uses the navbar tactile 3D arrow-pill design (at least 46px high, rust gradient, 5px bottom keycap lip, and a circular paper trailing SVG badge that rotates 45° on hover and depresses 4px on click); decorative arrow circles are inside whole-row service links. Link states do not invent a disabled navigation destination. Where disabled is inapplicable, the state is explicitly marked rather than presenting an inert link.
 
 Navigation: inline mobile disclosure with aria-expanded and Escape-to-close with focus restored to its trigger. No modal focus trap is needed. Footer keeps contact and legal links accessible.
 

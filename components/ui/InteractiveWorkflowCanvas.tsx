@@ -233,6 +233,301 @@ export const SCENARIOS: Scenario[] = [
   },
 ];
 
+type ScenarioDefinition = (typeof SCENARIOS)[number];
+
+function WorkflowCanvasHeader({
+  scenario,
+  soundEnabled,
+  step,
+  isRunning,
+  onToggleSound,
+  onReset,
+  onRun,
+}: {
+  scenario: ScenarioDefinition;
+  soundEnabled: boolean;
+  step: number;
+  isRunning: boolean;
+  onToggleSound: () => void;
+  onReset: () => void;
+  onRun: () => void;
+}) {
+  return (
+    <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-brand-paper/15 pb-6 mb-6">
+      <div>
+        <div className="flex items-center gap-2 mb-2">
+          <span className="flex h-2 w-2 rounded-full bg-brand-coral animate-pulse" />
+          <span className="font-mono text-xs uppercase tracking-widest text-brand-coral">
+            Live n8n Automation Engine
+          </span>
+        </div>
+        <h3 className="text-xl md:text-2xl font-bold tracking-tight text-brand-paper">
+          {scenario.title}
+        </h3>
+        <p className="text-xs md:text-sm text-brand-paper/70 mt-1 max-w-xl">
+          {scenario.description}
+        </p>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={onToggleSound}
+          aria-label={soundEnabled ? "Mute audio" : "Enable audio"}
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-paper/20 bg-brand-paper/10 text-brand-paper/80 hover:bg-brand-paper/20 transition-colors"
+        >
+          {soundEnabled ? <Volume2 className="h-4 w-4 text-brand-teal" /> : <VolumeX className="h-4 w-4 text-brand-paper/50" />}
+        </button>
+
+        {step === 4 ? (
+          <button
+            type="button"
+            onClick={onReset}
+            className="demo-run text-brand-paper cursor-pointer"
+          >
+            <span>Reset</span>
+            <RotateCcw size={14} />
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={onRun}
+            disabled={isRunning}
+            className="button cursor-pointer"
+          >
+            <span>{isRunning ? "Running Pipeline..." : "Fire Test Trigger"}</span>
+            <Play size={14} className="fill-current" />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function WorkflowConnectionSvg({
+  step,
+  shouldReduceMotion,
+}: {
+  step: number;
+  shouldReduceMotion: boolean | null;
+}) {
+  const duration = shouldReduceMotion ? 0 : 1.2;
+
+  return (
+    <div className="absolute inset-0 pointer-events-none hidden lg:block z-20">
+      <svg className="w-full h-full overflow-visible" viewBox="0 0 1000 300" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="gradient-trigger-ai" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="var(--brand-coral)" />
+            <stop offset="100%" stopColor="var(--brand-teal)" />
+          </linearGradient>
+          <linearGradient id="gradient-ai-action" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="var(--brand-teal)" />
+            <stop offset="100%" stopColor="var(--brand-paper)" />
+          </linearGradient>
+        </defs>
+
+        <path
+          d="M 250 150 L 333 150"
+          stroke="var(--brand-paper)"
+          strokeOpacity="0.15"
+          strokeWidth="2"
+          strokeDasharray="4 4"
+          fill="none"
+        />
+        <m.path
+          d="M 250 150 L 333 150"
+          stroke="url(#gradient-trigger-ai)"
+          strokeWidth="3"
+          strokeLinecap="round"
+          fill="none"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: step >= 2 ? 1 : 0, opacity: step >= 2 ? 1 : 0 }}
+          transition={{ duration, ease: "easeInOut" }}
+        />
+
+        <path
+          d="M 583 150 L 666 150"
+          stroke="var(--brand-paper)"
+          strokeOpacity="0.15"
+          strokeWidth="2"
+          strokeDasharray="4 4"
+          fill="none"
+        />
+        <m.path
+          d="M 583 150 L 666 150"
+          stroke="url(#gradient-ai-action)"
+          strokeWidth="3"
+          strokeLinecap="round"
+          fill="none"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: step >= 3 ? 1 : 0, opacity: step >= 3 ? 1 : 0 }}
+          transition={{ duration, ease: "easeInOut" }}
+        />
+      </svg>
+    </div>
+  );
+}
+
+function WorkflowTriggerNode({
+  trigger,
+  isActive,
+}: {
+  trigger: ScenarioDefinition["nodes"]["trigger"];
+  isActive: boolean;
+}) {
+  const TriggerIcon = trigger.icon;
+
+  return (
+    <div className="lg:col-span-3 flex flex-col items-center">
+      <div
+        className={cn(
+          "w-full rounded-xl border p-4 transition-colors duration-300 relative",
+          isActive
+            ? "border-brand-coral bg-brand-coral/15 shadow-[0_0_25px_rgba(255,111,97,0.3)]"
+            : "border-brand-paper/20 bg-brand-paper/5"
+        )}
+      >
+        <div className="flex items-center justify-between mb-2">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-brand-paper/60 flex items-center gap-1.5">
+            <TriggerIcon className="h-3 w-3 text-brand-coral" /> Trigger Node
+          </span>
+          {isActive && <span className="flex h-1.5 w-1.5 rounded-full bg-brand-coral animate-ping" />}
+        </div>
+        <h4 className="font-bold text-sm text-brand-paper">{trigger.title}</h4>
+        <p className="text-xs text-brand-paper/70 mt-1 font-mono">{trigger.subtitle}</p>
+
+        <div className="mt-3 pt-2 border-t border-brand-paper/10 flex items-center justify-between text-[10px] text-brand-paper/60 font-mono">
+          <span>Status</span>
+          <span className={isActive ? "text-brand-coral font-bold" : "text-brand-paper/40"}>
+            {isActive ? "Dispatched (0.0s)" : "Listening..."}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WorkflowAiNode({
+  ai,
+  isActive,
+}: {
+  ai: ScenarioDefinition["nodes"]["ai"];
+  isActive: boolean;
+}) {
+  return (
+    <div className="lg:col-span-4 flex flex-col items-center">
+      <div
+        className={cn(
+          "w-full rounded-xl border p-4 transition-colors duration-300 relative",
+          isActive
+            ? "border-brand-teal bg-brand-teal/15 shadow-[0_0_25px_rgba(28,171,176,0.3)]"
+            : "border-brand-paper/20 bg-brand-paper/5"
+        )}
+      >
+        <div className="flex items-center justify-between mb-2">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-brand-teal flex items-center gap-1.5">
+            <Sparkles className="h-3 w-3" /> Good&apos;Ai Intelligence
+          </span>
+          {isActive && <span className="font-mono text-[10px] text-brand-teal font-bold">+1.3s</span>}
+        </div>
+        <h4 className="font-bold text-sm text-brand-paper">{ai.title}</h4>
+        <p className="text-xs text-brand-paper/70 mt-0.5">{ai.subtitle}</p>
+
+        <div className="mt-3 space-y-1">
+          {ai.extractedData.map((item) => (
+            <div
+              key={item}
+              className={cn(
+                "text-[10px] font-mono px-2 py-0.5 rounded border transition-colors duration-300",
+                isActive
+                  ? "border-brand-teal/40 bg-brand-teal/10 text-brand-paper"
+                  : "border-brand-paper/10 bg-brand-paper/5 text-brand-paper/40"
+              )}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WorkflowActionStack({
+  nodes,
+  isActive,
+}: {
+  nodes: ScenarioDefinition["nodes"];
+  isActive: boolean;
+}) {
+  const Action1Icon = nodes.action1.icon;
+  const Action2Icon = nodes.action2.icon;
+  const AlertIcon = nodes.alert.icon;
+
+  return (
+    <div className="lg:col-span-5 flex flex-col gap-3">
+      <div
+        className={cn(
+          "rounded-xl border p-3 transition-colors duration-300",
+          isActive
+            ? "border-brand-paper bg-brand-paper/15 shadow-[0_0_20px_rgba(255,240,208,0.2)]"
+            : "border-brand-paper/20 bg-brand-paper/5"
+        )}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Action1Icon className="h-3.5 w-3.5 text-brand-coral" />
+            <span className="font-bold text-xs text-brand-paper">{nodes.action1.title}</span>
+          </div>
+          <span className={cn("text-[10px] font-mono", isActive ? "text-brand-coral font-bold" : "text-brand-paper/40")}>
+            {isActive ? "Sent (+2.8s)" : "Waiting"}
+          </span>
+        </div>
+        <p className="text-[11px] text-brand-paper/70 font-mono mt-1 line-clamp-1">{nodes.action1.detail}</p>
+      </div>
+
+      <div
+        className={cn(
+          "rounded-xl border p-3 transition-colors duration-300",
+          isActive
+            ? "border-brand-teal bg-brand-teal/15 shadow-[0_0_20px_rgba(28,171,176,0.2)]"
+            : "border-brand-paper/20 bg-brand-paper/5"
+        )}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Action2Icon className="h-3.5 w-3.5 text-brand-teal" />
+            <span className="font-bold text-xs text-brand-paper">{nodes.action2.title}</span>
+          </div>
+          <span className={cn("text-[10px] font-mono", isActive ? "text-brand-teal font-bold" : "text-brand-paper/40")}>
+            {isActive ? "Synced (+3.4s)" : "Waiting"}
+          </span>
+        </div>
+        <p className="text-[11px] text-brand-paper/70 font-mono mt-1 line-clamp-1">{nodes.action2.detail}</p>
+      </div>
+
+      <div
+        className={cn(
+          "rounded-xl border p-3 transition-colors duration-300",
+          isActive ? "border-brand-coral bg-brand-coral/15" : "border-brand-paper/20 bg-brand-paper/5"
+        )}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <AlertIcon className="h-3.5 w-3.5 text-brand-coral" />
+            <span className="font-bold text-xs text-brand-paper">{nodes.alert.title}</span>
+          </div>
+          <span className={cn("text-[10px] font-mono", isActive ? "text-brand-coral font-bold" : "text-brand-paper/40")}>
+            {isActive ? "Delivered (+4.0s)" : "Waiting"}
+          </span>
+        </div>
+        <p className="text-[11px] text-brand-paper/70 font-mono mt-1 line-clamp-1">{nodes.alert.detail}</p>
+      </div>
+    </div>
+  );
+}
+
 export function InteractiveWorkflowCanvas({
   selectedScenario,
   onSelectScenario,
@@ -244,17 +539,17 @@ export function InteractiveWorkflowCanvas({
   const activeScenarioId = selectedScenario || internalScenarioId;
 
   const [isRunning, setIsRunning] = useState(false);
-  const [step, setStep] = useState<number>(0); // 0 = idle, 1 = trigger, 2 = ai, 3 = actions, 4 = complete
+  const [step, setStep] = useState<number>(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const timerRef = useRef<NodeJS.Timeout[]>([]);
   const shouldReduceMotion = useReducedMotion();
 
   const scenario = SCENARIOS.find((s) => s.id === activeScenarioId) || SCENARIOS[0];
 
-  const clearTimers = () => {
+  const clearTimers = useCallback(() => {
     timerRef.current.forEach((t) => clearTimeout(t));
     timerRef.current = [];
-  };
+  }, []);
 
   const runSimulation = useCallback(() => {
     clearTimers();
@@ -262,37 +557,28 @@ export function InteractiveWorkflowCanvas({
     setStep(1);
     sound.playPop();
 
-    // Step 1 -> Step 2 (Trigger -> AI Brain: 1.3s to observe the trigger)
     timerRef.current.push(
       setTimeout(() => {
         setStep(2);
         sound.playBlip();
-      }, 1300)
-    );
-
-    // Step 2 -> Step 3 (AI Brain -> Parallel Dispatch: 1.5s to read extracted data)
-    timerRef.current.push(
+      }, 1300),
       setTimeout(() => {
         setStep(3);
         sound.playBlip();
-      }, 2800)
-    );
-
-    // Step 3 -> Step 4 (Actions complete -> Finale: 1.5s to see notifications deliver)
-    timerRef.current.push(
+      }, 2800),
       setTimeout(() => {
         setStep(4);
         setIsRunning(false);
         sound.playChime();
-      }, 4300)
+      }, 4300),
     );
-  }, []);
+  }, [clearTimers]);
 
-  const resetSimulation = () => {
+  const resetSimulation = useCallback(() => {
     clearTimers();
     setStep(0);
     setIsRunning(false);
-  };
+  }, [clearTimers]);
 
   const handleSelectScenario = (id: ScenarioId) => {
     if (onSelectScenario) {
@@ -311,16 +597,10 @@ export function InteractiveWorkflowCanvas({
 
   useEffect(() => {
     return () => clearTimers();
-  }, []);
-
-  const TriggerIcon = scenario.nodes.trigger.icon;
-  const Action1Icon = scenario.nodes.action1.icon;
-  const Action2Icon = scenario.nodes.action2.icon;
-  const AlertIcon = scenario.nodes.alert.icon;
+  }, [clearTimers]);
 
   return (
     <div className="w-full rounded-2xl border border-brand-paper/20 bg-brand-navy p-4 md:p-8 text-brand-paper shadow-2xl relative overflow-hidden">
-      {/* Background n8n dot grid */}
       <div
         className="pointer-events-none absolute inset-0 opacity-15"
         style={{
@@ -329,58 +609,16 @@ export function InteractiveWorkflowCanvas({
         }}
       />
 
-      {/* Top Header & Scenario Switcher */}
-      <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-brand-paper/15 pb-6 mb-6">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="flex h-2 w-2 rounded-full bg-brand-coral animate-pulse" />
-            <span className="font-mono text-xs uppercase tracking-widest text-brand-coral">
-              Live n8n Automation Engine
-            </span>
-          </div>
-          <h3 className="text-xl md:text-2xl font-bold tracking-tight text-brand-paper">
-            {scenario.title}
-          </h3>
-          <p className="text-xs md:text-sm text-brand-paper/70 mt-1 max-w-xl">
-            {scenario.description}
-          </p>
-        </div>
+      <WorkflowCanvasHeader
+        scenario={scenario}
+        soundEnabled={soundEnabled}
+        step={step}
+        isRunning={isRunning}
+        onToggleSound={toggleSound}
+        onReset={resetSimulation}
+        onRun={runSimulation}
+      />
 
-        {/* Controls: Sound & Run */}
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={toggleSound}
-            aria-label={soundEnabled ? "Mute audio" : "Enable audio"}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-paper/20 bg-brand-paper/10 text-brand-paper/80 hover:bg-brand-paper/20 transition-colors"
-          >
-            {soundEnabled ? <Volume2 className="h-4 w-4 text-brand-teal" /> : <VolumeX className="h-4 w-4 text-brand-paper/50" />}
-          </button>
-
-          {step === 4 ? (
-            <button
-              type="button"
-              onClick={resetSimulation}
-              className="flex items-center gap-2 rounded-xl border border-brand-paper/30 bg-brand-paper/10 px-4 py-2 text-xs uppercase font-medium tracking-wider text-brand-paper hover:bg-brand-paper/20 transition-colors"
-            >
-              <RotateCcw className="h-3.5 w-3.5" />
-              Reset
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={runSimulation}
-              disabled={isRunning}
-              className="group flex items-center gap-2 rounded-xl border border-brand-coral bg-brand-coral px-5 py-2.5 text-xs uppercase font-bold tracking-widest text-brand-paper hover:bg-brand-paper hover:text-brand-ink hover:border-brand-paper transition-[background-color,color,border-color] shadow-[0_0_20px_rgba(255,111,97,0.35)] disabled:opacity-50 cursor-pointer"
-            >
-              <Play className="h-3.5 w-3.5 fill-current transition-transform group-hover:scale-110" />
-              {isRunning ? "Running Pipeline..." : "Fire Test Trigger"}
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Scenario Tabs */}
       <div className="relative z-10 flex flex-wrap gap-2 mb-8">
         {SCENARIOS.map((s) => (
           <button
@@ -399,214 +637,13 @@ export function InteractiveWorkflowCanvas({
         ))}
       </div>
 
-      {/* Canvas Area: n8n Connected Nodes */}
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center py-2">
-        {/* Dynamic Animated Connecting SVG Lines between Nodes (Desktop Overlay) */}
-        <div className="absolute inset-0 pointer-events-none hidden lg:block z-20">
-          <svg className="w-full h-full overflow-visible" viewBox="0 0 1000 300" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="gradient-trigger-ai" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="var(--brand-coral)" />
-                <stop offset="100%" stopColor="var(--brand-teal)" />
-              </linearGradient>
-              <linearGradient id="gradient-ai-action" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="var(--brand-teal)" />
-                <stop offset="100%" stopColor="var(--brand-paper)" />
-              </linearGradient>
-            </defs>
-
-            {/* Connection Line 1: Trigger -> AI Brain */}
-            <path
-              d="M 250 150 L 333 150"
-              stroke="var(--brand-paper)"
-              strokeOpacity="0.15"
-              strokeWidth="2"
-              strokeDasharray="4 4"
-              fill="none"
-            />
-            <m.path
-              d="M 250 150 L 333 150"
-              stroke="url(#gradient-trigger-ai)"
-              strokeWidth="3"
-              strokeLinecap="round"
-              fill="none"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{
-                pathLength: step >= 2 ? 1 : 0,
-                opacity: step >= 2 ? 1 : 0,
-              }}
-              transition={{
-                duration: shouldReduceMotion ? 0 : 1.2,
-                ease: "easeInOut",
-              }}
-            />
-
-            {/* Connection Line 2: AI Brain -> Parallel Branch Actions */}
-            <path
-              d="M 583 150 L 666 150"
-              stroke="var(--brand-paper)"
-              strokeOpacity="0.15"
-              strokeWidth="2"
-              strokeDasharray="4 4"
-              fill="none"
-            />
-            <m.path
-              d="M 583 150 L 666 150"
-              stroke="url(#gradient-ai-action)"
-              strokeWidth="3"
-              strokeLinecap="round"
-              fill="none"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{
-                pathLength: step >= 3 ? 1 : 0,
-                opacity: step >= 3 ? 1 : 0,
-              }}
-              transition={{
-                duration: shouldReduceMotion ? 0 : 1.2,
-                ease: "easeInOut",
-              }}
-            />
-          </svg>
-        </div>
-        
-        {/* Node 1: Inbound Trigger */}
-        <div className="lg:col-span-3 flex flex-col items-center">
-          <div
-            className={cn(
-              "w-full rounded-xl border p-4 transition-all duration-300 relative",
-              step >= 1
-                ? "border-brand-coral bg-brand-coral/15 shadow-[0_0_25px_rgba(255,111,97,0.3)]"
-                : "border-brand-paper/20 bg-brand-paper/5"
-            )}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-brand-paper/60 flex items-center gap-1.5">
-                <TriggerIcon className="h-3 w-3 text-brand-coral" /> Trigger Node
-              </span>
-              {step >= 1 && (
-                <span className="flex h-1.5 w-1.5 rounded-full bg-brand-coral animate-ping" />
-              )}
-            </div>
-            <h4 className="font-bold text-sm text-brand-paper">{scenario.nodes.trigger.title}</h4>
-            <p className="text-xs text-brand-paper/70 mt-1 font-mono">{scenario.nodes.trigger.subtitle}</p>
-
-            <div className="mt-3 pt-2 border-t border-brand-paper/10 flex items-center justify-between text-[10px] text-brand-paper/60 font-mono">
-              <span>Status</span>
-              <span className={step >= 1 ? "text-brand-coral font-bold" : "text-brand-paper/40"}>
-                {step >= 1 ? "Dispatched (0.0s)" : "Listening..."}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Node 2: AI Brain Node (Middle) */}
-        <div className="lg:col-span-4 flex flex-col items-center">
-          <div
-            className={cn(
-              "w-full rounded-xl border p-4 transition-all duration-300 relative",
-              step >= 2
-                ? "border-brand-teal bg-brand-teal/15 shadow-[0_0_25px_rgba(28,171,176,0.3)]"
-                : "border-brand-paper/20 bg-brand-paper/5"
-            )}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-brand-teal flex items-center gap-1.5">
-                <Sparkles className="h-3 w-3" /> Good&apos;Ai Intelligence
-              </span>
-              {step >= 2 && (
-                <span className="font-mono text-[10px] text-brand-teal font-bold">+1.3s</span>
-              )}
-            </div>
-            <h4 className="font-bold text-sm text-brand-paper">{scenario.nodes.ai.title}</h4>
-            <p className="text-xs text-brand-paper/70 mt-0.5">{scenario.nodes.ai.subtitle}</p>
-
-            {/* Extracted Data Tags */}
-            <div className="mt-3 space-y-1">
-              {scenario.nodes.ai.extractedData.map((item) => (
-                <div
-                  key={item}
-                  className={cn(
-                    "text-[10px] font-mono px-2 py-0.5 rounded border transition-all duration-300",
-                    step >= 2
-                      ? "border-brand-teal/40 bg-brand-teal/10 text-brand-paper"
-                      : "border-brand-paper/10 bg-brand-paper/5 text-brand-paper/40"
-                  )}
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Parallel Branch Actions (Right Side) */}
-        <div className="lg:col-span-5 flex flex-col gap-3">
-          {/* Action 1: Instant Client Contact */}
-          <div
-            className={cn(
-              "rounded-xl border p-3 transition-all duration-300",
-              step >= 3
-                ? "border-brand-paper bg-brand-paper/15 shadow-[0_0_20px_rgba(255,240,208,0.2)]"
-                : "border-brand-paper/20 bg-brand-paper/5"
-            )}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Action1Icon className="h-3.5 w-3.5 text-brand-coral" />
-                <span className="font-bold text-xs text-brand-paper">{scenario.nodes.action1.title}</span>
-              </div>
-              <span className={cn("text-[10px] font-mono", step >= 3 ? "text-brand-coral font-bold" : "text-brand-paper/40")}>
-                {step >= 3 ? "Sent (+2.8s)" : "Waiting"}
-              </span>
-            </div>
-            <p className="text-[11px] text-brand-paper/70 font-mono mt-1 line-clamp-1">{scenario.nodes.action1.detail}</p>
-          </div>
-
-          {/* Action 2: System Sync */}
-          <div
-            className={cn(
-              "rounded-xl border p-3 transition-all duration-300",
-              step >= 3
-                ? "border-brand-teal bg-brand-teal/15 shadow-[0_0_20px_rgba(28,171,176,0.2)]"
-                : "border-brand-paper/20 bg-brand-paper/5"
-            )}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Action2Icon className="h-3.5 w-3.5 text-brand-teal" />
-                <span className="font-bold text-xs text-brand-paper">{scenario.nodes.action2.title}</span>
-              </div>
-              <span className={cn("text-[10px] font-mono", step >= 3 ? "text-brand-teal font-bold" : "text-brand-paper/40")}>
-                {step >= 3 ? "Synced (+3.4s)" : "Waiting"}
-              </span>
-            </div>
-            <p className="text-[11px] text-brand-paper/70 font-mono mt-1 line-clamp-1">{scenario.nodes.action2.detail}</p>
-          </div>
-
-          {/* Action 3: Team Notification */}
-          <div
-            className={cn(
-              "rounded-xl border p-3 transition-all duration-300",
-              step >= 3
-                ? "border-brand-coral bg-brand-coral/15"
-                : "border-brand-paper/20 bg-brand-paper/5"
-            )}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <AlertIcon className="h-3.5 w-3.5 text-brand-coral" />
-                <span className="font-bold text-xs text-brand-paper">{scenario.nodes.alert.title}</span>
-              </div>
-              <span className={cn("text-[10px] font-mono", step >= 3 ? "text-brand-coral font-bold" : "text-brand-paper/40")}>
-                {step >= 3 ? "Delivered (+4.0s)" : "Waiting"}
-              </span>
-            </div>
-            <p className="text-[11px] text-brand-paper/70 font-mono mt-1 line-clamp-1">{scenario.nodes.alert.detail}</p>
-          </div>
-        </div>
+        <WorkflowConnectionSvg step={step} shouldReduceMotion={shouldReduceMotion} />
+        <WorkflowTriggerNode trigger={scenario.nodes.trigger} isActive={step >= 1} />
+        <WorkflowAiNode ai={scenario.nodes.ai} isActive={step >= 2} />
+        <WorkflowActionStack nodes={scenario.nodes} isActive={step >= 3} />
       </div>
 
-      {/* Completion Banner */}
       <AnimatePresence>
         {step === 4 && (
           <m.div

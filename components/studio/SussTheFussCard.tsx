@@ -137,23 +137,23 @@ export function SussTheFussCard() {
             />
             <button
               type="submit"
-              disabled={submitting || submitted || !contact.trim()}
+              disabled={submitting || submitted}
               className={`button suss-submit ${submitted ? "is-sorted" : ""}`}
             >
               {submitted ? (
                 <>
                   <span>Sorted</span>
-                  <Check size={18} />
+                  <Check size={17} />
                 </>
               ) : submitting ? (
                 <>
-                  <Loader2 size={18} className="animate-spin" aria-hidden="true" />
                   <span>Sorting...</span>
+                  <Loader2 size={17} className="animate-spin" aria-hidden="true" />
                 </>
               ) : (
                 <>
                   <span>Handball your work</span>
-                  <ArrowUpRight size={18} />
+                  <ArrowUpRight size={17} />
                 </>
               )}
             </button>

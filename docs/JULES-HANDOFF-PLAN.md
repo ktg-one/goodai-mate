@@ -66,3 +66,4 @@
      - `03` — **Hand over in plain English.** `"You get a live working system, clear documentation, a team walkthrough, and direct support if anything changes."`
 2. **`components/studio/MascotWidget.tsx`** (Optional — gated by `NEXT_PUBLIC_CHAT_ENABLED=1`):
    - Wire `components/studio/GoodAiChat.tsx` into `MascotWidget.tsx` when `process.env.NEXT_PUBLIC_CHAT_ENABLED === "1"` so visitors who cannot talk out loud can type a question inside Goodie's drawer.
+
