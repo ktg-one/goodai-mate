@@ -1,12 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { ArrowUpRight, Plus, Check, Headphones, Workflow, MessagesSquare, Network, ScanSearch, Asterisk } from "lucide-react";
 import { SURVEY_URL, PHONE_DISPLAY, PHONE_HREF } from "@/lib/links";
 import { services } from "@/lib/services";
 import { WorkflowPreview } from "@/components/studio/WorkflowPreview";
-import { ScrollStory } from "@/components/studio/ScrollStory";
-import { PerthSketchbook } from "@/components/studio/PerthSketchbook";
 import { Hero } from "@/components/sections/Hero";
+
+// Dynamic imports for GSAP-heavy components
+// Note: These are client-only components, so they'll only load on the client
+const ScrollStory = dynamic(() => import("@/components/studio/ScrollStory").then((m) => m.ScrollStory));
+const PerthSketchbook = dynamic(() => import("@/components/studio/PerthSketchbook").then((m) => m.PerthSketchbook));
 
 const serviceIcons = [Headphones, Workflow, MessagesSquare, Network, ScanSearch];
 

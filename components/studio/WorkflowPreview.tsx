@@ -54,6 +54,78 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 type Phase = "idle" | "running" | "done";
 
+function getStatus(phase: Phase, step: number, total: number, doing: string, approved: boolean) {
+  if (phase === "running") return `Step ${step} of ${total}: ${doing}…`;
+  if (phase !== "done") return "Nothing sent. No tools connected.";
+  return approved ? "Approved. In a real setup it would go out now. This demo sends nothing." : "Done. Nothing goes out until you approve it.";
+}
+
+function WorkflowResult({
+  kind,
+  text,
+  approved,
+  onApprove,
+  shouldReduceMotion,
+}: {
+  kind: string;
+  text: string;
+  approved: boolean;
+  onApprove: () => void;
+  shouldReduceMotion: boolean | null;
+}) {
+  return (
+    <m.div
+      className="workflow-result"
+      initial={shouldReduceMotion ? undefined : { opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={shouldReduceMotion ? undefined : { opacity: 0, y: 8 }}
+      transition={{ duration: 1.0, ease: EASE }}
+    >
+      <span className="workflow-result-kind">
+        {kind} · {approved ? "approved" : "waiting for your OK"}
+      </span>
+      <p>“{text}”</p>
+      <button type="button" className="workflow-approve" onClick={onApprove} disabled={approved}>
+        {approved ? <><Check size={14} /> Approved</> : "Approve"}
+      </button>
+    </m.div>
+  );
+}
+
+function WorkflowControls({
+  status,
+  phase,
+  onRun,
+  onReset,
+  shouldReduceMotion,
+}: {
+  status: string;
+  phase: Phase;
+  onRun: () => void;
+  onReset: () => void;
+  shouldReduceMotion: boolean | null;
+}) {
+  const running = phase === "running";
+  const done = phase === "done";
+  return (
+    <div className="workflow-bottom">
+      <p role="status">{status}</p>
+      <m.button
+        type="button"
+        className="demo-run"
+        onClick={done ? onReset : onRun}
+        disabled={running}
+        whileHover={shouldReduceMotion || running ? undefined : { scale: 1.03, y: -2 }}
+        whileTap={shouldReduceMotion || running ? undefined : { scale: 0.97, y: 0 }}
+        transition={{ duration: 1.0, ease: EASE }}
+      >
+        {done ? "Reset" : running ? "Running" : "Run example"}
+        {done ? <RotateCcw size={16} /> : running ? <Loader2 size={17} className="animate-spin" /> : <ArrowRight size={17} />}
+      </m.button>
+    </div>
+  );
+}
+
 export function WorkflowPreview() {
   const shouldReduceMotion = useReducedMotion();
   const [scenario, setScenario] = useState<keyof typeof scenarios>("enquiry");
@@ -94,14 +166,7 @@ export function WorkflowPreview() {
     }
   };
 
-  const status =
-    phase === "running"
-      ? `Step ${active + 1} of ${total}: ${selected.steps[active]?.doing}…`
-      : phase === "done"
-        ? approved
-          ? "Approved. In a real setup it would go out now. This demo sends nothing."
-          : "Done. Nothing goes out until you approve it."
-        : "Nothing sent. No tools connected.";
+  const status = getStatus(phase, active + 1, total, selected.steps[active]?.doing ?? "", approved);
 
   return (
     <div className="workflow-preview">
@@ -165,9 +230,9 @@ export function WorkflowPreview() {
                   {state === "running" && (
                     <m.span
                       className="stage-doing"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
                       transition={{ duration: 0.4, ease: EASE }}
                     >
                       {step.doing}…
@@ -185,40 +250,24 @@ export function WorkflowPreview() {
 
       <AnimatePresence>
         {phase === "done" && (
-          <m.div
+          <WorkflowResult
             key={`${scenario}-result`}
-            className="workflow-result"
-            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={shouldReduceMotion ? undefined : { opacity: 0, y: 8 }}
-            transition={{ duration: 1.0, ease: EASE }}
-          >
-            <span className="workflow-result-kind">
-              {selected.result.kind} · {approved ? "approved" : "waiting for your OK"}
-            </span>
-            <p>“{selected.result.text}”</p>
-            <button type="button" className="workflow-approve" onClick={() => setApproved(true)} disabled={approved}>
-              {approved ? <><Check size={14} /> Approved</> : "Approve"}
-            </button>
-          </m.div>
+            kind={selected.result.kind}
+            text={selected.result.text}
+            approved={approved}
+            onApprove={() => setApproved(true)}
+            shouldReduceMotion={shouldReduceMotion}
+          />
         )}
       </AnimatePresence>
 
-      <div className="workflow-bottom">
-        <p role="status">{status}</p>
-        <m.button
-          type="button"
-          className="demo-run"
-          onClick={phase === "done" ? reset : run}
-          disabled={phase === "running"}
-          whileHover={shouldReduceMotion || phase === "running" ? undefined : { scale: 1.03, y: -2 }}
-          whileTap={shouldReduceMotion || phase === "running" ? undefined : { scale: 0.97, y: 0 }}
-          transition={{ duration: 1.0, ease: EASE }}
-        >
-          {phase === "done" ? "Reset" : phase === "running" ? "Running" : "Run example"}
-          {phase === "done" ? <RotateCcw size={16} /> : phase === "running" ? <Loader2 size={17} className="animate-spin" /> : <ArrowRight size={17} />}
-        </m.button>
-      </div>
+      <WorkflowControls
+        status={status}
+        phase={phase}
+        onRun={run}
+        onReset={reset}
+        shouldReduceMotion={shouldReduceMotion}
+      />
     </div>
   );
 }

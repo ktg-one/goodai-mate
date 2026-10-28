@@ -67,5 +67,11 @@ export default function config(phase: string): NextConfig {
         },
       ];
     },
+    async rewrites() {
+      return [
+        { source: "/posts", destination: "/blog" },
+        { source: "/posts/:slug", destination: "/blog/:slug" },
+      ];
+    },
   };
 }

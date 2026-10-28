@@ -41,6 +41,14 @@ export function MascotWidget() {
     button?.setAttribute("aria-controls", "goodie-panel");
   }, [open, voiceOpen]);
 
+  useEffect(() => {
+    const button = mascotRef.current?.querySelector("button");
+    if (!button) return;
+    const toggle = () => setOpen((prev) => !prev);
+    button.addEventListener("click", toggle);
+    return () => button.removeEventListener("click", toggle);
+  }, [voiceOpen]);
+
   return (
     <>
       {/* Voice Assistant Panel - rendered seamlessly without a colliding duplicate button */}
@@ -118,11 +126,10 @@ export function MascotWidget() {
             </div>
           )}
 
-          {/* Mascot character. <Mascot> renders its own <button>, so the toggle listens
-              for its click bubbling up instead of nesting a second button around it. */}
+          {/* Mascot character. <Mascot> renders its own <button>, so the toggle is
+              attached to that button in an effect instead of nesting a second button around it. */}
           <div
             ref={mascotRef}
-            onClick={() => setOpen((prev) => !prev)}
             className="cursor-pointer transition-transform hover:scale-105 active:scale-95 drop-shadow-md"
             title="Say g'day to Goodie!"
           >

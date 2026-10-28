@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Heart, Maximize2 } from "lucide-react";
 import { SOCIAL_LINKS, SURVEY_URL } from "@/lib/links";
 
@@ -8,11 +8,13 @@ const MACHINE_SRC = "/machine/goodai-machine.html";
 
 export function MachineDemo() {
   const [likes, setLikes] = useState(0);
+  const frameRef = useRef<HTMLIFrameElement>(null);
 
-  // The engine runs in a same-origin iframe and posts a message when its like button is pressed.
+  // Only the machine frame may report likes, so identify it by window reference
+  // rather than by origin.
   useEffect(() => {
     const onMessage = (e: MessageEvent) => {
-      if (e.origin !== window.location.origin) return;
+      if (e.source !== frameRef.current?.contentWindow) return;
       const data = e.data as { type?: string; likes?: number } | null;
       if (data?.type === "goodai-machine:like" && typeof data.likes === "number") setLikes(data.likes);
     };
@@ -24,6 +26,7 @@ export function MachineDemo() {
     <div>
       <div className="machine-frame">
         <iframe
+          ref={frameRef}
           src={MACHINE_SRC}
           title="The admin engine: an illustrative machine where an enquiry goes in and a paid job comes out"
           allow="fullscreen"

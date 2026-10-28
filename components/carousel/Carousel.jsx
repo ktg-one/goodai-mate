@@ -41,7 +41,7 @@ export default function Carousel({ hero = false }) {
 
       <m.div
         style={{ y, rotate }}
-        className="relative w-full h-full min-h-[inherit] motion-reduce:hidden will-change-transform"
+        className="relative w-full h-full min-h-[inherit] motion-reduce:hidden"
       >
         {/* Vertical touch panning remains available to the page; horizontal
             movement is reserved for the carousel drag. */}
