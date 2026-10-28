@@ -10,6 +10,13 @@ export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const escapeHtml = (value: string) =>
   value.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string);
 
+/**
+ * Sanitizes input strings against Spreadsheet Formula Injection (CWE-1236)
+ * by prefixing lines starting with formula trigger characters (=, +, -, @, \t, \r) with '.
+ */
+export const sanitizeFormula = (value: string): string =>
+  value.replace(/^([=+\-@\t\r])/gm, "'$1");
+
 export interface ProcessLeadInput {
   contact?: unknown;
   note?: unknown;
@@ -18,11 +25,15 @@ export interface ProcessLeadInput {
 }
 
 export function formatLeadPayload(input: ProcessLeadInput) {
-  const contact = typeof input.contact === "string" ? input.contact.trim().slice(0, 200) : "";
-  const note = typeof input.note === "string" ? input.note.trim().slice(0, 4000) : "";
-  const headaches = Array.isArray(input.headaches)
+  const rawContact = typeof input.contact === "string" ? input.contact.trim().slice(0, 200) : "";
+  const rawNote = typeof input.note === "string" ? input.note.trim().slice(0, 4000) : "";
+  const rawHeadaches = Array.isArray(input.headaches)
     ? input.headaches.filter((h: unknown): h is string => typeof h === "string").slice(0, 12).map((h: string) => h.slice(0, 80))
     : [];
+
+  const contact = sanitizeFormula(rawContact);
+  const note = sanitizeFormula(rawNote);
+  const headaches = rawHeadaches.map((h) => sanitizeFormula(h));
 
   const isSpam = typeof input.website === "string" && Boolean(input.website.trim());
 
