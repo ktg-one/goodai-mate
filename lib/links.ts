@@ -12,5 +12,9 @@ export const LEAD_EMAIL_HREF = "mailto:hello@goodai.au";
 export const POLICY_EMAIL = "policy@goodai.au";
 export const POLICY_EMAIL_HREF = "mailto:policy@goodai.au";
 
+// Good'Ai's social profiles (shown on /admin-engine after someone likes the machine).
+// Empty until Kevin supplies the real handles; never fill with guesses.
+export const SOCIAL_LINKS: readonly { label: string; href: string }[] = [];
+
 export const PRIVACY_EMAIL = "privacy@goodai.au";
 export const PRIVACY_EMAIL_HREF = "mailto:privacy@goodai.au";

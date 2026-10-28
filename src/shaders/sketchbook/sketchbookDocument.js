@@ -34,13 +34,16 @@ body>.wash{display:block}
 // Hand the wheel to the host instead (see Sketchbook.tsx).
 const WHEEL_BRIDGE = `<script>addEventListener("wheel",function(e){if(e.ctrlKey)return;e.preventDefault();parent.postMessage({type:"sketchbook:wheel",dx:e.deltaX,dy:e.deltaY,mode:e.deltaMode},"*")},{passive:false});</script>`;
 
+// Gate mode (BookGate.tsx): the host turns pages on request and hears every page the reader settles on.
+const GATE_BRIDGE = `<script>window.__gatePage=function(i,n){parent.postMessage({type:"sketchbook:page",i:i,n:n},"*")};addEventListener("message",function(e){if(e.source!==parent||!e.data||e.data.type!=="sketchbook:step")return;var d=e.data.dir,at=turn?turn.to:idx;if(d==="prev"?at===0:at===M-1)return;hideHint();step(d)});</script>`;
+
 /**
  * @param {string} [assetBaseUrl]
- * @param {{ pages?: { file: string; title: string; place: string }[]; land?: number }} [options]
+ * @param {{ pages?: { file: string; title: string; place: string }[]; land?: number; gate?: boolean }} [options]
  *   pages replace the canonical plates (files resolve against assetBaseUrl);
- *   land is the page the intro flip settles on.
+ *   land is the page the intro flip settles on; gate wires the frame to BookGate.
  */
-export function createSketchbookDocument(assetBaseUrl = "/sketchbook/", { pages, land } = {}) {
+export function createSketchbookDocument(assetBaseUrl = "/sketchbook/", { pages, land, gate } = {}) {
   const base = assetBaseUrl.endsWith("/") ? assetBaseUrl : `${assetBaseUrl}/`;
   let html = CANONICAL_SKETCHBOOK_HTML;
   if (pages?.length) {
@@ -65,8 +68,14 @@ export function createSketchbookDocument(assetBaseUrl = "/sketchbook/", { pages,
     "const out=1-Math.max(0,Math.min(1,(t-0.10)/0.28));\n  const inn=Math.max(0,Math.min(1,(t-0.56)/0.30));",
     "const out=Math.max(0,1-t*2);\n  const inn=Math.max(0,Math.min(1,(t-0.35)*2));"
   );
+  if (gate) {
+    // report each settled page (not the intro riffle, not mid-turn), and say the wheel turns pages here
+    html = html
+      .replace("function paint(){\n  book.textContent='';", "function paint(){\n  if(!turn&&!introOn&&window.__gatePage)__gatePage(idx,M);\n  book.textContent='';")
+      .replace("Drag the page to turn · Drag the glass across it", "Scroll, swipe or drag to turn the page");
+  }
   const withAssets = html.replaceAll("sketchbook/", base);
   return withAssets
     .replace("</head>", `${HOST_STYLE}</head>`)
-    .replace("</body>", `${WHEEL_BRIDGE}</body>`);
+    .replace("</body>", `${WHEEL_BRIDGE}${gate ? GATE_BRIDGE : ""}</body>`);
 }

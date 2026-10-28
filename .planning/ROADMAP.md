@@ -118,6 +118,22 @@ The brand is "a lazy summer": a still plant shadow drifting as the sun crosses t
 - Scroll = time of day: shadow angle, length and softness shift, light warms from cool morning (top) to golden knock-off light (contact section). Occasional slow sway. GSAP ScrollTrigger scrub, synced with Lenis.
 - Reduced motion: one static shadow. No layout impact, no main-thread jank (transform/opacity/filter only).
 - Asset: Kevin's banner shadow source if available, otherwise a generated botanical silhouette.
+- **Admin engine at `/admin-engine` (2026-10-28, branch `chore/bun-only`):** interactive invented machine (inbox hopper, job-card press, text bell, invoice stamp, payment till, like flag), linked from header, mobile menu, footer and sitemap. Tool names stay (Kev: we connect Gmail, ServiceM8, SMS, Xero, Stripe). `/demo` stays hidden for a future voice demo. Open: Kev's real social handles for `SOCIAL_LINKS`.
+  - **Parked (Kev, 2026-10-28): rename the machine to Good'Ai's real delivery process once Kev finishes his AI policy and procedure.** Don't start it before then. Direction so far:
+    - Stations walk the client through the phases: problem discovery → tool selection tweaked for the client → implementation → training → testing → iterative feedback → evaluation against the business. Kev says risk measurement and the AIMS (ISO 42001 management system) are still missing from that list.
+    - Main motor = the Good'Ai engine. The process line gets a name too.
+    - The tools differ per client, so show them as examples ("yours will differ"), not as fixed stations.
+    - Use the data section to reassure clients about their data (who owns it, where it goes, whether it's kept or trained on, least data needed).
+    - Human-centred, per Kev's ISO 42001 SME mapping: AI only where required (Levels 0–4), a named person accountable with stop authority, and the line never runs faster than people can check.
+    - Sources: `Documents/03/01-ADMIN/Good-AI-Policy-v0.2-COMBINED.md`, `Documents/03/01-ADMIN/iso42001/`, and the "Problem Runtime and Risk Record" and "AI Problem Discovery Runtime" drafts Kev pasted on 2026-10-28.
+  - **Layers by mode (Kev, 2026-10-28):** each view mode shows a deeper layer, so the client's tools and Good'Ai's process don't fight over the same stations.
+    - Running: what the client sees, their tools doing the admin (examples).
+    - Cut away: Good'Ai's engine inside, the phases, risk measurement and the AIMS.
+    - X-ray: the data layer (what moves, where, who owns it, least data).
+    - Explode: one phase per part, with its named owner.
+    - Break: the failure the policy guards against (e.g. running faster than people can check).
+    - Mechanism: label values and side-panel text switch on `lab.state.cut` / `xray` / `explode`.
+  - Agreed, not built yet: icons on the station plates (Gmail, Xero and Stripe from Simple Icons, CC0; ServiceM8 has none there, so use a drawn mark) and a Good'Ai hub with leads to every station that pulses as each job passes.
 - **Demo-page background (2026-10-28):** Kevin has a finished background from another project (in his cloud storage, not in this repo). First home is `/demo` when that page comes back (`app/demo/page.tsx` calls `notFound()` today). Scope it to that page's own class — not a site-wide `section:nth-of-type(even)` rule. Jules's PR #320 added such a rule pointing at a deleted placeholder (`shape-big-1.svg`, a red circle); it was removed 2026-10-28 because it 404'd on every page.
 
 **Gate:** 60fps on a mid laptop; readable contrast everywhere the shadow passes; Kevin signs off on the look.

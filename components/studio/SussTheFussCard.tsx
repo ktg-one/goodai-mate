@@ -66,11 +66,11 @@ export function SussTheFussCard() {
           <Sparkles size={14} className="text-brand-coral" />
           <span>Palm off your work</span>
         </div>
-        <h2>
+        <h1>
           Admin? <em>Handball the work.</em>
           <br />
           Go see the kids.
-        </h2>
+        </h1>
         <p className="suss-intro">
           Knock off early. We’ll sort it. Tap whatever’s doing your head in or
           write a quick note—no tech jargon required.

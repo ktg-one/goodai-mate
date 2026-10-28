@@ -5,7 +5,7 @@ import { SussTheFussCard } from "@/components/studio/SussTheFussCard";
 
 export const metadata = {
   title: "Contact Good'Ai",
-  description: "Start with the messy bit so we can find the bottleneck.",
+  description: "Tell us what’s taking up your afternoons and where to send the fix.",
 };
 
 export default function ContactPage() {
@@ -17,28 +17,15 @@ export default function ContactPage() {
           Back to Good’Ai
         </Link>
 
-        <div className="mt-6 max-w-3xl">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-            Start with the messy bit.
-            <br />
-            <em>We’ll find the bottleneck.</em>
-          </h1>
-          <p className="mt-5 text-lg md:text-xl text-brand-ink/70 leading-relaxed">
-            Tell us what gets copied, chased, or done twice. If the problem is fuzzy,
-            that’s fine. The form is for sorting the shape of it before we talk tools.
-          </p>
-
-          <div className="mt-6 flex flex-wrap items-center gap-4 text-sm">
-            <a href={PHONE_HREF} className="inline-flex items-center gap-2 text-link">
-              <PhoneCall size={16} />
-              Call {PHONE_DISPLAY}
-            </a>
-
-          </div>
+        <div className="mt-6">
+          <SussTheFussCard />
         </div>
 
-        <div className="mt-12">
-          <SussTheFussCard />
+        <div className="mt-6 flex flex-wrap items-center gap-4 text-sm">
+          <a href={PHONE_HREF} className="inline-flex items-center gap-2 text-link">
+            <PhoneCall size={16} />
+            Rather talk? Call {PHONE_DISPLAY}
+          </a>
         </div>
       </div>
     </main>

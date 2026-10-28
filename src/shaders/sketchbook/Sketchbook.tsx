@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useImperativeHandle, useMemo, useRef, useState, type Ref } from "react";
 import { createSketchbookDocument } from "./sketchbookDocument.js";
 
 export type SketchbookPage = { file: string; title: string; place: string };
+
+/** Turns the page from the host (gate mode). */
+export type SketchbookHandle = { turn: (dir: "next" | "prev") => void };
 
 export type SketchbookProps = {
   assetBaseUrl?: string;
@@ -13,6 +16,11 @@ export type SketchbookProps = {
   /** Page the intro flip settles on. */
   land?: number;
   title?: string;
+  /** Gate mode (PerthSketchbook): the host turns the pages, so wheel input comes here instead of scrolling the page. */
+  gate?: boolean;
+  onPage?: (index: number, count: number) => void;
+  onWheel?: (deltaY: number) => void;
+  ref?: Ref<SketchbookHandle>;
 };
 
 export function Sketchbook({
@@ -21,11 +29,15 @@ export function Sketchbook({
   pages,
   land,
   title = "Interactive sketchbook",
+  gate = false,
+  onPage,
+  onWheel,
+  ref,
 }: SketchbookProps) {
   const [ready, setReady] = useState(false);
   const documentSource = useMemo(
-    () => createSketchbookDocument(assetBaseUrl, { pages, land }),
-    [assetBaseUrl, pages, land],
+    () => createSketchbookDocument(assetBaseUrl, { pages, land, gate }),
+    [assetBaseUrl, pages, land, gate],
   );
 
   // A srcdoc iframe can finish loading before hydration attaches onLoad,
@@ -38,21 +50,32 @@ export function Sketchbook({
 
   // Wheel input forwarded from the frame: replay it on the host so Lenis (or
   // native scrolling when Lenis is off) handles it like any other wheel.
+  // In gate mode it goes to the gate instead, along with each settled page.
   const frame = useRef<HTMLIFrameElement>(null);
+  useImperativeHandle(ref, () => ({
+    turn: (dir) => frame.current?.contentWindow?.postMessage({ type: "sketchbook:step", dir }, "*"),
+  }), []);
   useEffect(() => {
     const onMessage = (e: MessageEvent) => {
-      if (e.source !== frame.current?.contentWindow || e.data?.type !== "sketchbook:wheel") return;
+      if (e.source !== frame.current?.contentWindow) return;
+      if (e.data?.type === "sketchbook:page") {
+        onPage?.(e.data.i as number, e.data.n as number);
+        return;
+      }
+      if (e.data?.type !== "sketchbook:wheel") return;
       const { dx, dy, mode } = e.data as { dx: number; dy: number; mode: number };
-      if (document.documentElement.classList.contains("lenis")) {
+      const unit = mode === 1 ? 16 : mode === 2 ? window.innerHeight : 1;
+      if (onWheel) {
+        onWheel(dy * unit);
+      } else if (document.documentElement.classList.contains("lenis")) {
         window.dispatchEvent(new WheelEvent("wheel", { deltaX: dx, deltaY: dy, deltaMode: mode, cancelable: true }));
       } else {
-        const unit = mode === 1 ? 16 : mode === 2 ? window.innerHeight : 1;
         window.scrollBy({ left: dx * unit, top: dy * unit });
       }
     };
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
-  }, []);
+  }, [onPage, onWheel]);
 
   return (
     <div className={`sketchbook${className ? ` ${className}` : ""}`} data-state={ready ? "ready" : "loading"}>

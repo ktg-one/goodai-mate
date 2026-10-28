@@ -23,9 +23,6 @@ export function Hero() {
     const media = gsap.matchMedia();
     const ctx = gsap.context(() => {
       media.add("(min-width: 761px) and (prefers-reduced-motion: no-preference)", () => {
-        const heading = scope.querySelector<HTMLElement>(".hero-copy h1");
-        const desc = scope.querySelector<HTMLElement>(".hero-description");
-        const actions = scope.querySelectorAll<HTMLElement>(".hero-button, .hero-voice-link");
         const handnote = scope.querySelector<HTMLElement>(".hero-handnote");
         const study = scope.querySelector<HTMLElement>(".hero-study");
         const spiralLine = scope.querySelector<SVGPathElement>(".hero-study-line");
@@ -97,16 +94,8 @@ export function Hero() {
           );
         }
 
-        // Act 3: Words rise and lock in
-        if (heading) {
-          master.fromTo(heading, { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: 3 }, 1.5);
-        }
-        if (desc) {
-          master.fromTo(desc, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 3 }, 2.0);
-        }
-        if (actions.length) {
-          master.fromTo(actions, { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.2, duration: 2.5 }, 2.5);
-        }
+        // Act 3: the words are already in place. The hero is the top of the page now (the sketchbook
+        // opens on its own before it), so they must not wait for a scroll.
 
         // Act 4: Hand-drawn arrow sketches under "Leave it with us."
         if (handnote) {

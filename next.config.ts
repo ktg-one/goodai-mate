@@ -11,24 +11,32 @@ const securityHeaders = [
   },
   // CSP kept permissive enough for Next + inline styles + sketchbook iframe + ElevenLabs + Trillet.
   // Tighten once a full asset inventory is locked for Phase 7.
-  {
-    key: "Content-Security-Policy",
-    value: [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://unpkg.com https://cdn.jsdelivr.net https://elevenlabs.io https://*.elevenlabs.io",
-      "style-src 'self' 'unsafe-inline' https:",
-      "img-src 'self' data: blob: https:",
-      "font-src 'self' data: https:",
-      "connect-src 'self' https: wss:",
-      "media-src 'self' data: blob: https:",
-      "frame-src 'self' blob: https://elevenlabs.io https://*.elevenlabs.io",
-      "worker-src 'self' blob:",
-      "object-src 'none'",
-      "base-uri 'self'",
-      "form-action 'self'",
-      "frame-ancestors 'none'",
-    ].join("; "),
-  },
+  { key: "Content-Security-Policy", value: csp("'none'") },
+];
+
+function csp(frameAncestors: string) {
+  return [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://unpkg.com https://cdn.jsdelivr.net https://elevenlabs.io https://*.elevenlabs.io",
+    "style-src 'self' 'unsafe-inline' https:",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data: https:",
+    "connect-src 'self' https: wss:",
+    "media-src 'self' data: blob: https:",
+    "frame-src 'self' blob: https://elevenlabs.io https://*.elevenlabs.io",
+    "worker-src 'self' blob:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    `frame-ancestors ${frameAncestors}`,
+  ].join("; ");
+}
+
+// The /demo page embeds the admin engine (public/machine/*.html) in an iframe, so only those files
+// may be framed, and only by this site. Listed after the site-wide rule so these values win.
+const machineFrameHeaders = [
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  { key: "Content-Security-Policy", value: csp("'self'") },
 ];
 
 export default function config(phase: string): NextConfig {
@@ -45,8 +53,17 @@ export default function config(phase: string): NextConfig {
           headers: [{ key: "Access-Control-Allow-Origin", value: "*" }],
         },
         {
+          // HOST_STYLE in sketchbookDocument.js loads Fraunces and Manrope from here
+          source: "/brand/:file*.ttf",
+          headers: [{ key: "Access-Control-Allow-Origin", value: "*" }],
+        },
+        {
           source: "/:path*",
           headers: securityHeaders,
+        },
+        {
+          source: "/machine/:path*",
+          headers: machineFrameHeaders,
         },
       ];
     },

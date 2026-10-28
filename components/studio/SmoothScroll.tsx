@@ -67,6 +67,11 @@ export function SmoothScroll() {
         } catch {
           // Ignore malformed selectors in hash fragments.
         }
+      } else if (target.origin === location.origin && target.pathname !== location.pathname) {
+        // Leaving for another page: drop any glide still in flight, or Lenis carries the old scroll
+        // position onto the new page (a CTA clicked mid-scroll landed /contact on its footer).
+        lenis.stop();
+        lenis.start();
       }
     };
 

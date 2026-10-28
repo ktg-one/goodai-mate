@@ -1,7 +1,7 @@
 /* Adapted from ThreeUI Community arrow-pill and Meridian keycap buttons.
    Source and MIT license: docs/threeui-attribution.md. */
-.desktop-nav .header-phone { flex-direction: column; align-items: flex-start; justify-content: center; gap: 0; font-variant-numeric: tabular-nums; }
-.header-phone span, .phone-caption { font-size: 10px; font-weight: 400; color: var(--muted); }
+.header-phone { font-variant-numeric: tabular-nums; }
+.phone-caption { font-size: 10px; font-weight: 400; color: var(--muted); }
 .footer-phone { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
 .voice-phone, .contact-phone { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; padding-block: 12px; }
 .voice-phone { margin-bottom: 18px; }
