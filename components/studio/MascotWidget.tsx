@@ -19,6 +19,7 @@ export function MascotWidget() {
   const [open, setOpen] = useState(false);
   const [voiceOpen, setVoiceOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const mascotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleOpenVoice = () => {
@@ -32,6 +33,13 @@ export function MascotWidget() {
   useEffect(() => {
     if (open) panelRef.current?.focus();
   }, [open]);
+
+  // page-mascot owns the button and takes no ARIA props, so set the disclosure state on it.
+  useEffect(() => {
+    const button = mascotRef.current?.querySelector("button");
+    button?.setAttribute("aria-expanded", String(open));
+    button?.setAttribute("aria-controls", "goodie-panel");
+  }, [open, voiceOpen]);
 
   return (
     <>
@@ -110,28 +118,19 @@ export function MascotWidget() {
             </div>
           )}
 
-          {/* Mascot character */}
+          {/* Mascot character. <Mascot> renders its own <button>, so the toggle listens
+              for its click bubbling up instead of nesting a second button around it. */}
           <div
-            role="button"
-            tabIndex={0}
+            ref={mascotRef}
             onClick={() => setOpen((prev) => !prev)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                setOpen((prev) => !prev);
-              }
-            }}
-            className="cursor-pointer transition-transform hover:scale-105 active:scale-95 drop-shadow-md bg-transparent border-0 p-0"
+            className="cursor-pointer transition-transform hover:scale-105 active:scale-95 drop-shadow-md"
             title="Say g'day to Goodie!"
-            aria-expanded={open}
-            aria-controls="goodie-panel"
-            aria-label="Goodie — quick actions"
           >
             <Mascot
               directions="/mascots/goodie/directions.png"
               reactions="/mascots/goodie/reactions.png"
               size={110}
-              label="Goodie — Good'Ai mascot"
+              label="Goodie — quick actions"
             />
           </div>
         </aside>

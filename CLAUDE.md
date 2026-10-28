@@ -2,49 +2,65 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Good'Ai marketing site (Perth AI voice agents + automation studio). Next.js 16 (App Router) · React 19 · TS · Tailwind v4 · GSAP + Framer Motion + Lenis · Three.js · Radix. Not live yet; no traffic. `AGENTS.md` carries the base rules (read it, including the Next.js warning: this Next version differs from training data — check `node_modules/next/dist/docs/` before writing Next code). `README.md` is a stale upstream template ("Zenith Interface") — ignore it.
+Good'Ai marketing site (Perth AI voice agents + automation studio). Next.js 16 (App Router) · React 19 · TS · Tailwind v4 · GSAP + Framer Motion + Lenis · Three.js · Radix. `AGENTS.md` carries the base rules (read it, including the Next.js warning: this Next version differs from training data — check `node_modules/next/dist/docs/` before writing Next code). `README.md` is a stale upstream template ("Zenith Interface") — ignore it.
+
+## Live site
+
+**Production: https://www.goodai.au** — Vercel project `goodai-mate`, GitHub `ktg-one/goodai-mate` (`origin`; `localorigin` is a local mirror). Treat `main` as production: real visitors, real leads.
+
+- Work on a branch; merge to `main` only after `bun run check` and `bun run build` pass.
+- The lead path is revenue: `lib/links.ts` → `/contact` (`SussTheFussCard`) → `POST /api/contact`. A change that touches it gets a test in `lib/*.test.ts`.
+- Secrets live in Vercel env, never in the repo. Ask Kev before changing env, domains, or CSP in production.
 
 ## Commands
 
 ```bash
-npm run dev           # next dev
-npm run build         # must pass before handoff
-npm run lint          # eslint . — 0 errors required
-npm run lint:motion   # scripts/ktg-lint.mjs — scroll/motion contract checks
-npm run check         # lint + lint:motion
-bash scripts/verify-ctas.sh   # all CTAs must go through lib/links.ts
+bun install           # bun only — bun.lock is the one lockfile
+bun run dev           # next dev
+bun run build         # must pass before handoff
+bun run lint          # eslint . — 0 errors required
+bun run lint:motion   # scripts/ktg-lint.mjs — scroll/motion contract checks
+bun run test          # node --test over lib/*.test.ts
+bun run check         # lint + lint:motion + test
+bun run doctor        # react-doctor
+bash scripts/verify-ctas.sh      # all CTAs must go through lib/links.ts
+node docs/validate-design.cjs    # DESIGN.md ↔ token CSS sync
 ```
 
-No test suite. Lint a single file: `npx eslint path/to/file.tsx`. Both `package-lock.json` and `bun.lock` exist; npm is what the scripts assume.
+Lint a single file: `bunx eslint path/to/file.tsx`. Package manager is **bun** (`packageManager` in `package.json`). Vercel chooses its installer from whichever lockfile it finds, so `package-lock.json` / `pnpm-lock.yaml` are gitignored — a stray one silently switches the production build (Jules's `pnpm-lock.yaml` did this on 2026-10-26).
 
 ## Lint = design contract
 
 Two linters, both encode the design:
 
-- `eslint.config.mjs` — `@shadcn/lint`. **Errors** (`no-unknown-classes`, `no-raw-colors`, `require-static-classes`): classes that emit no CSS or off-theme colors; always fix. **Warnings** (`no-restyle`, `no-arbitrary-values`, `no-inline-styles`): design contracts; never add new ones. `components/ui/**` is exempt from the contract rules; inline styles are only linted in `app/**`, `components/sections/**`, `components/layout/**`. Plain-CSS classes (phone widgets, `pen-underline`, `threeui-background`) are allow-listed in the config — add new non-Tailwind class names there. The shadcn `note` lists the `@theme` brand tokens (mirrors DESIGN.md; `brand-navy` = legacy alias of `brand-ink`). Ignored: `.kilo/**` worktree copies, `hive/**` (agent office runtime), `docs/components/**` (parked copies of removed components).
-- `scripts/ktg-lint.mjs` — hand-rolled regex checks: `.home-page` track ≥ 10000px in `globals.css`, no THREE listeners without teardown. Missing dirs (e.g. `components/`) are skipped. GSAP is still live (`ScrollStory`, `SmoothScroll`, `Preloader`, `carousel/ring`) but its ScrollTrigger tripwires were removed because nothing trips them: `HomeScroll.tsx` is gone, and no file uses `toggleActions` or an unbounded `pin`. Re-add them if narrative motion returns.
+- `eslint.config.mjs` — `@shadcn/lint`. **Errors** (`no-unknown-classes`, `no-raw-colors`, `require-static-classes`): classes that emit no CSS or off-theme colors; always fix. **Warnings** (`no-restyle`, `no-arbitrary-values`, `no-inline-styles`): design contracts; never add new ones. `components/ui/**` is exempt from the contract rules; inline styles are only linted in `app/**`, `components/sections/**`, `components/layout/**`. Plain-CSS classes (phone widgets, `pen-underline`, `threeui-background`) are allow-listed in the config — add new non-Tailwind class names there. The shadcn `note` lists the `@theme` brand tokens (mirrors DESIGN.md; `brand-navy` = legacy alias of `brand-ink`). Ignored: `.kilo/**` worktree copies, `hive/**` (agent office runtime), `docs/components/**`.
+- `scripts/ktg-lint.mjs` — hand-rolled regex checks: `.home-page` track ≥ 10000px in `globals.css`, no THREE listeners without teardown. GSAP is live (`ScrollStory`, `SmoothScroll`, `Preloader`, `carousel/ring`) but its ScrollTrigger tripwires were removed because nothing trips them. Re-add them if narrative motion returns.
 
 ## Design source of truth
 
-- `DESIGN.md` (tokens/typography/components front-matter) and `BRAND.md`. Palette lives in `app/globals.css` `@theme`; legacy token names map: `brand-ink` = olive ink, `brand-paper` = paper, `brand-coral` = terracotta, `brand-eucalyptus` = sage.
-- **Do not use `app/tokens/*.css`** — different navy/coral/teal palette, not imported.
-- Fonts: Manrope (UI), Fraunces italic (emphasis), Vibes (handwritten). Spelling is `Good'Ai`.
-- Never invent testimonials, outcomes, pricing, or compliance claims.
+- Canonical palette: `app/goodai-tokens.css` (copy in `brand-guide/goodai-tokens.css`), imported in `app/layout.tsx`; `DESIGN.md`, `app/globals.css` `@theme` and `brand-guide/WEBSITE-DESIGN-TOKENS.md` are synced to it. `BRAND.md` for voice. Legacy token names: `brand-ink` = olive ink, `brand-paper` = paper, `brand-coral` = terracotta, `brand-eucalyptus` = sage.
+- `app/tokens/*.css` is an older navy/coral/teal palette. Only `effects.css` is imported (from `globals.css`); leave the rest out.
+- Fonts: Manrope (UI), Fraunces variable italic with `"SOFT" 100, "WONK" 1` (emphasis, `public/fonts/Fraunces/`, `app/studio-fonts.css`), Vibes (handwritten). Spelling is `Good'Ai`.
+- Never invent testimonials, outcomes, pricing, or compliance claims. The site publishes no prices at any layer, including `lib/services.ts`.
 - Motion: responsive, keyboard-focusable, honors `prefers-reduced-motion`. Scroll rules (Kevin): ~3 viewport heights per animation, held readable middle, nothing faster than ~1.5s, every ScrollTrigger states `start`/`end` with a comment.
 
 ## Architecture
 
-- `app/page.tsx` is the whole homepage, written as dense single-line JSX inside a `.home-page` container whose scroll height is set in `globals.css` (lint enforces ≥10000px). Order: PerthSketchbook intro → hero → promise strip → empathy → `ScrollStory` (pinned) → services list → workflow demo → approach → FAQ → contact.
-- Content is data-driven from `lib/services.ts` (5 services: voice agents, automation, custom assistants, AI integration, opportunity audit — slug, copy, items; no prices). Homepage rows and `app/services/[slug]/page.tsx` both read it; `serviceIcons` in `page.tsx` is index-matched to that array, so reordering services means reordering icons.
-- `lib/links.ts`: single source for CTA target (`SURVEY_URL` → `/contact`) and phone number. All CTAs must use these.
-- `components/studio/*` — current site components (ScrollStory, PerthSketchbook, HeroStudy, WorkflowPreview, voice widgets, Shell). `components/sections/*` and much of `components/ui/*` are carried over from the upstream Zenith template and mostly unused by the current home. `HeroTree.tsx`/`HomeScroll.tsx` are dead code on home (tree remains on `/lab`).
-- `src/shaders/` — ThreeUI sketchbook (WebGL in a sandboxed iframe; `sketchbookDocument.js` patches an upstream click bug; `next.config.ts` adds CORS for `/sketchbook/*.woff2`). Plates in `public/sketchbook/plates/`.
-- Voice: Trillet web SDK (`@trillet-ai/web-sdk`) via `components/studio/TrilletVoiceWidget.tsx` and `app/api/voice/call/route.ts`; mounted site-wide via `MascotWidget`.
-- `/contact` form posts to `app/api/contact/route.ts`, which sends via Resend to `CONTACT_TO_EMAIL` (default `hello@goodai.au`). Honeypot + in-process rate limit (`lib/rate-limit.ts`); on failure it shows the phone/email instead of fake success. No n8n.
+- `app/layout.tsx` mounts site-wide: `Preloader`, `StudioHeader`/`StudioFooter` (`components/studio/Shell.tsx`), `MascotWidget`, `SmoothScroll`, Vercel `Analytics`, LocalBusiness JSON-LD. CSP lives in `next.config.ts` — new third-party scripts/frames must be added there or they silently fail in production.
+- `app/page.tsx` is the whole homepage, dense single-line JSX inside `.home-page` (scroll height in `globals.css`, lint enforces ≥10000px). Order: `PerthSketchbook` intro → `Hero` (`components/sections/Hero.tsx`) → promise/empathy → `ScrollStory` (pinned) → services list → `WorkflowPreview` → approach → FAQ → contact.
+- Content is data-driven from `lib/services.ts` (5 services). Homepage rows and `app/services/[slug]/page.tsx` both read it; `serviceIcons` in `page.tsx` is index-matched to that array, so reordering services means reordering icons.
+- `lib/links.ts`: single source for CTA target (`SURVEY_URL` → `/contact`), phone `(08) 7741 4191`, and the hello/policy/privacy emails. All CTAs and contact details come from here.
+- `components/studio/*` — current site components. `components/sections/*` and much of `components/ui/*` are parked old-design components kept as reuse material (Kev, 2026-10-04); most are unimported and carry most lint warnings. `HeroTree.tsx` lives only on `/lab`.
+- `src/shaders/` — ThreeUI sketchbook (WebGL in a sandboxed iframe; `sketchbookDocument.js` patches an upstream click bug and riffle timing; `next.config.ts` adds CORS for `/sketchbook/*.woff2`). Plates in `public/sketchbook/plates/`.
+- **Voice (live):** `MascotWidget` ("Goodie", `page-mascot`) opens `ElevenLabsMascot`, the ElevenLabs ConvAI embed; agent ID and embed URL in `lib/elevenlabs.ts`. Any component can open it with `window.dispatchEvent(new CustomEvent("openVoiceWidget"))` (as `VoiceDemo.tsx` does).
+- **Trillet (retired):** `TrilletVoiceWidget.tsx` and `app/api/voice/call/route.ts` are still tracked but nothing mounts them (commit `bc1c84e` meant to delete them). `/demo` calls `notFound()`; `/api/chat/session` deliberately returns 503 (text chat not offered).
+- **Leads:** `app/api/contact/route.ts` + `lib/contact.ts` send via Resend (retries from `onboarding@resend.dev` on a 403 unverified domain) and/or Workspace Gmail SMTP (`GMAIL_USER`/`GMAIL_APP_PASSWORD`), to `CONTACT_TO_EMAIL` (default `hello@goodai.au`) plus Gmail recipients. Then a best-effort HMAC-signed webhook (`lib/lead-webhook.ts`, `LEAD_WEBHOOK_URL`/`LEAD_WEBHOOK_SECRET`). Honeypot + rate limit (`lib/rate-limit.ts`). Reports success only when a mail transport accepted it; otherwise shows phone/email.
 
 ## Planning state
 
-`.planning/ROADMAP.md` (single source of scope/phase order) and `.planning/STATE.md` (decisions, open questions) — read both before feature work; update STATE.md at end of a phase. `TASKS.md` points to the roadmap. One branch + PR per phase (`phase/NN-slug`).
+- `state/WEBSITE-STATE.md` — newest cross-workspace handoff (mirrored at `Documents/03/state/WEBSITE-STATE.md`); update it when you ship.
+- `.planning/ROADMAP.md` (scope/phase order) and `.planning/STATE.md` (decisions, open questions). STATE.md was last updated 2026-10-04 and predates launch — trust the code over it, and refresh it at the end of a phase.
+- `docs/JULES-HANDOFF-PLAN.md` — queue for Jules agents (they open `feat/ui-*` PRs). `TASKS.md` is stale.
 
 <!-- CODEGRAPH_START -->
 ## CodeGraph

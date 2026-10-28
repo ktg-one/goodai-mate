@@ -1,6 +1,7 @@
 "use client";
 
 import { m, useReducedMotion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import { SURVEY_URL } from "@/lib/links";
 
 const specs = [
@@ -76,8 +77,8 @@ export function TechSpecs() {
                             <h3 className="text-2xl font-bold">Bring us one stuck workflow.</h3>
                             <p className="text-brand-paper/70">We&apos;ll tell you what is worth fixing and what is better left alone.</p>
                         </div>
-                        <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer" className="px-8 py-4 rounded-full bg-brand-coral text-brand-ink font-medium hover:bg-brand-paper focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-coral transition-colors duration-1000">
-                            Tell us your problem
+                        <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer" className="button">
+                            Tell us your problem <ArrowUpRight size={17} />
                         </a>
                     </div>
                 </m.div>

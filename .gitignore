@@ -56,3 +56,8 @@ next-env.d.ts
 /docs/components/
 
 /.venv/
+
+# One package manager: bun (bun.lock). Vercel picks the build tool from the lockfile.
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
