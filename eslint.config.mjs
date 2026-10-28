@@ -73,6 +73,9 @@ const eslintConfig = defineConfig([
     ".kilo/**",
     // Agent office runtime (hive harness scripts), not site code.
     "hive/**",
+    // Agent skills (templates, render scripts), not site code.
+    ".claude/**",
+    ".agents/**",
     // Parked copies of removed components (incl. old GSAP VisualStory); not
     // imported or built.
     "docs/components/**",

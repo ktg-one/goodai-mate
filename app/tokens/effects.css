@@ -24,15 +24,6 @@
   }
 }
 
-/* New Requirements */
-section:nth-of-type(even),
-.bare-card {
-  background-image: url('/assets/shapes/shape-big-1.svg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-}
-
 @keyframes leafSway {
   0%, 100% {
     transform: translate3d(0px, 0px, 0) rotate(0deg) scale(1);

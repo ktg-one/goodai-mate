@@ -13,8 +13,8 @@ Marketing site. Keep `Good'Ai` spelling. Never invent testimonials, outcomes, pr
 ## Verify before handing off
 
 ```bash
-npm run lint    # 0 errors required
-npm run build   # must pass
+bun run lint    # 0 errors required
+bun run build   # must pass
 ```
 
 `@shadcn/lint` (in eslint.config.mjs): **errors** = broken classes/off-theme colors, always fix. **warnings** = design contracts (no-restyle, no-arbitrary-values, no-inline-styles) — don't add new ones.

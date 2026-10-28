@@ -118,6 +118,7 @@ The brand is "a lazy summer": a still plant shadow drifting as the sun crosses t
 - Scroll = time of day: shadow angle, length and softness shift, light warms from cool morning (top) to golden knock-off light (contact section). Occasional slow sway. GSAP ScrollTrigger scrub, synced with Lenis.
 - Reduced motion: one static shadow. No layout impact, no main-thread jank (transform/opacity/filter only).
 - Asset: Kevin's banner shadow source if available, otherwise a generated botanical silhouette.
+- **Demo-page background (2026-10-28):** Kevin has a finished background from another project (in his cloud storage, not in this repo). First home is `/demo` when that page comes back (`app/demo/page.tsx` calls `notFound()` today). Scope it to that page's own class — not a site-wide `section:nth-of-type(even)` rule. Jules's PR #320 added such a rule pointing at a deleted placeholder (`shape-big-1.svg`, a red circle); it was removed 2026-10-28 because it 404'd on every page.
 
 **Gate:** 60fps on a mid laptop; readable contrast everywhere the shadow passes; Kevin signs off on the look.
 

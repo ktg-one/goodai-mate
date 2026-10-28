@@ -903,12 +903,104 @@ em {
   color: var(--muted);
   font-size: 10px;
 }
-.is-complete .stage-icon {
+.workflow-progress {
+  height: 3px;
+  border-radius: 999px;
+  background: var(--wash);
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.workflow-progress > span {
+  display: block;
+  height: 100%;
+  background: var(--sage-deep);
+  transform-origin: left center;
+  transition: transform 1.6s cubic-bezier(.16, 1, .3, 1);
+}
+.workflow-stages li {
+  transition: opacity .6s ease;
+}
+.workflow-stages li[data-state=pending] {
+  opacity: .55;
+}
+.stage-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.stage-doing {
+  display: block;
+  overflow: hidden;
+  font-size: 11px;
+  color: var(--muted);
+}
+.workflow-stages li[data-state=running] .stage-icon {
+  background: var(--white);
+  color: var(--rust);
+  box-shadow: 0 0 0 1px var(--line);
+}
+.workflow-stages li[data-state=running] .stage-status {
+  color: var(--rust);
+}
+.workflow-stages li[data-state=done] .stage-icon {
   background: var(--sage);
   color: var(--success);
 }
-.is-complete .stage-status {
+.workflow-stages li[data-state=done] .stage-status {
   color: var(--success);
+}
+.workflow-result {
+  margin-top: 18px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--rust);
+  border-radius: 10px;
+  background: var(--white);
+}
+.workflow-result-kind {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--muted);
+}
+.workflow-result p {
+  margin: 8px 0 12px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.workflow-approve {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.workflow-approve:disabled {
+  background: var(--sage);
+  color: var(--success);
+  cursor: default;
+}
+.workflow-approve:focus-visible {
+  outline: 2px solid var(--rust);
+  outline-offset: 3px;
+}
+.demo-run:disabled {
+  cursor: progress;
+  opacity: .8;
+}
+@media (prefers-reduced-motion: reduce) {
+  .workflow-progress > span,
+  .workflow-stages li {
+    transition: none;
+  }
 }
 .workflow-bottom {
   display: flex;
