@@ -106,9 +106,10 @@
   },
   {
     "id": "empathy-beats",
-    "component": "app/page.tsx",
+    "component": "components/sections/EmpathyBeats.tsx",
     "type": "scroll/fade-in",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion scroll-triggered reveal animations for the empathy section heading, staggered beat articles, and handwritten note using GPU-accelerated opacity and translateY transforms, prefers-reduced-motion compliance via useReducedMotion, and smooth movement duration curves >= 1.0s."
   },
   {
     "id": "services-list",
