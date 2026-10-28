@@ -151,7 +151,7 @@ export function Hero() {
       <HeroStudy />
       <div ref={branchRef} className="hero-growing-branch" aria-hidden="true">
         <Image
-          src="/assets/branch.svg"
+          src="/images/drawings/branch.svg"
           alt=""
           width={260}
           height={800}

@@ -24,7 +24,7 @@ export type SketchbookProps = {
 };
 
 export function Sketchbook({
-  assetBaseUrl = "/sketchbook/",
+  assetBaseUrl = "/images/book/",
   className = "",
   pages,
   land,

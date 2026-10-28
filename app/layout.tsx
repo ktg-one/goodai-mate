@@ -47,13 +47,13 @@ export const metadata: Metadata = {
     siteName: "Good'Ai",
     locale: "en_AU",
     type: "website",
-    images: [{ url: "/brand/coastal-phone.webp", width: 1536, height: 1024, alt: "Good'Ai — Good work. More life." }],
+    images: [{ url: "/images/coastal-phone.webp", width: 1536, height: 1024, alt: "Good'Ai — Good work. More life." }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Good'Ai — Good work. More life.",
     description: "Less chasing. Less copying. More of the work you actually care about.",
-    images: ["/brand/coastal-phone.webp"],
+    images: ["/images/coastal-phone.webp"],
   },
 };
 const localBusinessJsonLd = {

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type CS
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Sketchbook, type SketchbookHandle, type SketchbookPage } from "@/src/shaders/sketchbook/Sketchbook";
 
-// ThreeUI sketchbook pointing at public/assets/sketches/ (1-sketch through 14-sketch).
+// ThreeUI sketchbook pointing at public/images/book/ (1-sketch through 14-sketch).
 const pages: SketchbookPage[] = [
   { file: "1-sketch.webp", title: "Missing heaps of calls?", place: "" },
   { file: "2-sketch.webp", title: "On top of your emails and bookings?", place: "" },
@@ -122,7 +122,7 @@ export function PerthSketchbook() {
         {finished ? "Into the site" : "Skip to the site"}
       </button>
       <span className="perth-sketchbook-count" aria-hidden="true">{page.i + 1} / {page.n}</span>
-      <Sketchbook assetBaseUrl="/assets/sketches/" pages={pages} land={0} title="Perth sketchbook" ref={book} gate onPage={onPage} onWheel={onWheel} />
+      <Sketchbook assetBaseUrl="/images/book/" pages={pages} land={0} title="Perth sketchbook" ref={book} gate onPage={onPage} onWheel={onWheel} />
       <div className="perth-sketchbook-progress" aria-hidden="true"><span style={{ "--p": (page.i + 1) / page.n } as CSSProperties} /></div>
     </dialog>
   );

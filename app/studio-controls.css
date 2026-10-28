@@ -149,8 +149,8 @@
   transform: scaleX(0) rotate(-1deg);
   transform-origin: left center;
   transition: transform 180ms ease-out;
-  -webkit-mask: url("/assets/pen-underline.svg") center / 100% 100% no-repeat;
-  mask: url("/assets/pen-underline.svg") center / 100% 100% no-repeat;
+  -webkit-mask: url("/images/drawings/pen-underline.svg") center / 100% 100% no-repeat;
+  mask: url("/images/drawings/pen-underline.svg") center / 100% 100% no-repeat;
 }
 
 .pen-underline:hover::after,

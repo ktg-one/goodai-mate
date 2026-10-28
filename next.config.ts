@@ -49,12 +49,7 @@ export default function config(phase: string): NextConfig {
     async headers() {
       return [
         {
-          source: "/sketchbook/:file*.woff2",
-          headers: [{ key: "Access-Control-Allow-Origin", value: "*" }],
-        },
-        {
-          // HOST_STYLE in sketchbookDocument.js loads Fraunces and Manrope from here
-          source: "/brand/:file*.ttf",
+          source: "/fonts/:path*",
           headers: [{ key: "Access-Control-Allow-Origin", value: "*" }],
         },
         {

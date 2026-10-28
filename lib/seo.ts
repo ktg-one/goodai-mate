@@ -3,7 +3,7 @@
 export const SITE_NAME = "Good'Ai";
 export const OG_LOCALE = "en_AU";
 export const OG_IMAGE = {
-  url: "/brand/coastal-phone.webp",
+  url: "/images/coastal-phone.webp",
   width: 1536,
   height: 1024,
   alt: "Good'Ai — Good work. More life.",
