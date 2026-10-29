@@ -227,11 +227,20 @@ em {
   top: 12px;
 }
 .site-header {
+  /* rust on ink is 1.9:1; this lighter rust is 4.6:1 for hover, focus and the wordmark marks */
+  --header-accent: color-mix(in srgb, var(--rust) 50%, var(--paper));
   position: sticky;
   top: 0;
   z-index: 20;
-  background: var(--paper);
-  border-bottom: 1px solid var(--line);
+  background: var(--ink);
+  color: var(--paper);
+  border-bottom: 1px solid color-mix(in srgb, var(--paper) 12%, var(--ink));
+}
+.site-header :focus-visible {
+  outline-color: var(--header-accent);
+}
+.site-header .brand-apostrophe,.site-header .brand-period {
+  color: var(--header-accent);
 }
 .header-inner {
   height: 100px;
@@ -271,7 +280,10 @@ em {
   gap: 4px;
   min-height: 44px;
 }
-.desktop-nav a:hover,.desktop-nav a:focus-visible,.text-link:hover,
+.desktop-nav a:hover,.desktop-nav a:focus-visible {
+  color: var(--header-accent);
+}
+.text-link:hover,
 .text-link:focus-visible {
   color: var(--rust);
 }
@@ -353,10 +365,10 @@ em {
   justify-content: space-between;
   align-items: center;
   min-height: 58px;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid color-mix(in srgb, var(--paper) 12%, var(--ink));
 }
 .mobile-nav a:hover,.mobile-nav a:focus-visible {
-  color: var(--rust);
+  color: var(--header-accent);
 }
 .hero {
   position: relative;

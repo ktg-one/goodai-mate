@@ -10,8 +10,8 @@
 .contact-phone { margin-top: 20px; }
 .voice-phone:hover strong, .voice-phone:focus-visible strong,
 .contact-phone:hover strong, .contact-phone:focus-visible strong,
-.footer-phone:hover, .footer-phone:focus-visible,
-.header-phone:hover, .header-phone:focus-visible { color: var(--rust); }
+.footer-phone:hover, .footer-phone:focus-visible { color: var(--rust); }
+.header-phone:hover, .header-phone:focus-visible { color: var(--header-accent); }
 .service-row { transition: background-color .25s ease; }
 .service-symbol, .service-arrow svg, .text-link svg { transition: transform .3s cubic-bezier(.16,1,.3,1); }
 .faq summary svg { transition: transform .25s ease; }
