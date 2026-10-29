@@ -553,7 +553,7 @@ em {
 .intro-side {
   max-width: 440px;
 }
-.intro-side>p,.demo-copy>p {
+.intro-side>p {
   color: var(--muted);
   line-height: 1.85;
   font-size: 15px;
@@ -668,40 +668,6 @@ em {
   min-height: 44px;
   text-decoration: underline;
   text-underline-offset: 4px;
-}
-.demo-section {
-  position: relative;
-  overflow: hidden;
-  background: var(--wash);
-  padding-block: 96px;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.demo-arch {
-  position: absolute;
-  left: -70px;
-  bottom: -30px;
-  width: 320px;
-  height: auto;
-  opacity: 0.18;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-  animation: blobFloatSlow 12s ease-in-out infinite;
-}
-.demo-grid {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: .9fr 1.1fr;
-  gap: 80px;
-  align-items: center;
-}
-.demo-copy>p {
-  margin-top: 25px;
-  max-width: 340px;
 }
 .workflow-preview {
   background: var(--white);
@@ -1444,9 +1410,6 @@ em {
   .intro {
     gap: 45px;
   }
-  .demo-grid {
-    gap: 40px;
-  }
   .workflow-preview {
     padding: 24px;
   }
@@ -1642,25 +1605,6 @@ em {
   }
   .pricing-note a {
     margin-top: 10px;
-  }
-  .demo-section {
-    padding-block: 60px;
-  }
-  .demo-arch {
-    width: 220px;
-    left: -50px;
-    bottom: -20px;
-  }
-  .demo-grid {
-    grid-template-columns: 1fr;
-    gap: 35px;
-  }
-  .demo-copy h2 {
-    font-size: 43px;
-  }
-  .demo-copy>p {
-    max-width: 440px;
-    font-size: 14px;
   }
   .workflow-preview {
     padding: 22px;
