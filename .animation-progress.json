@@ -106,9 +106,10 @@
   },
   {
     "id": "empathy-beats",
-    "component": "app/page.tsx",
+    "component": "components/sections/EmpathyBeats.tsx",
     "type": "scroll/fade-in",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion staggered scroll fade-in and slide-up animations using whileInView, opacity and transform properties, subtle card hover micro-interaction, prefers-reduced-motion compliance via useReducedMotion, and smooth >=1.0s duration curves."
   },
   {
     "id": "services-list",
