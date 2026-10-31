@@ -19,7 +19,7 @@ export type GenerativeTreeProps = {
   style?: CSSProperties;
 };
 
-export const GENERATIVE_TREE_DEFAULTS = {
+const GENERATIVE_TREE_DEFAULTS = {
   speed: 1,
   size: 1,
   particleAmount: 1,

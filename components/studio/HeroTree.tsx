@@ -99,7 +99,7 @@ export function HeroTree() {
       {!loaded && <div className="absolute inset-0 bg-brand-surface animate-pulse" />}
       {reduced ? (
         <img
-          src="/sketchbook/perth.png"
+          src="/images/book/14-sketch.webp"
           alt="Hero"
           loading="eager"
           className="absolute inset-0 w-full h-full object-cover"

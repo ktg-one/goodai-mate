@@ -6,7 +6,7 @@ import "./threeui.css";
 export function Scene() {
   return (
     <div className="shader-frame">
-      <Sketchbook assetBaseUrl="/sketchbook/" />
+      <Sketchbook assetBaseUrl="/images/book/" />
     </div>
   );
 }

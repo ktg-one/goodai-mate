@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { POLICY_EMAIL, POLICY_EMAIL_HREF } from "@/lib/links";
 import { ogDefaults, twitterDefaults } from "@/lib/seo";
+import { PolicyMeta } from "@/components/studio/PolicyMeta";
 
 export const metadata: Metadata = {
   title: "Terms",
@@ -32,14 +33,13 @@ export default function Terms() {
         <em>Clear from the start.</em>
       </h1>
 
-      <div className="text-sm opacity-80 space-y-1 mb-6">
-        <p><strong>Identifier:</strong> TOU-GAU-2026-V6 (Commercial AI Edition)</p>
-        <p><strong>Effective Date:</strong> 16 October 2026</p>
-        <p><strong>Website:</strong> <a href="https://goodai.au" target="_blank" rel="noopener noreferrer">https://goodai.au</a> (&quot;Site&quot;)</p>
-        <p><strong>Operator:</strong> Good AI (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;)</p>
-        <p><strong>Location:</strong> Perth, Western Australia</p>
-        <p><strong>Legal Enquiries &amp; Notices:</strong> <a href={POLICY_EMAIL_HREF}>{POLICY_EMAIL}</a></p>
-      </div>
+      <PolicyMeta
+        identifier="TOU-GAU-2026-V6 (Commercial AI Edition)"
+        effectiveDate="16 October 2026"
+        contactLabel="Legal Enquiries & Notices:"
+        email={POLICY_EMAIL}
+        emailHref={POLICY_EMAIL_HREF}
+      />
 
       <hr className="my-6 border-brand-paper/20" />
 

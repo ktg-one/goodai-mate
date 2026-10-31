@@ -119,7 +119,7 @@ type Scenario = {
   };
 };
 
-export const SCENARIOS: Scenario[] = [
+const SCENARIOS: Scenario[] = [
   {
     id: "speed-to-lead",
     title: "Speed-to-lead example",

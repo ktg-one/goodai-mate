@@ -787,7 +787,6 @@ export class Lab {
     this.ao = ao
     const bloom = new UnrealBloomPass(new THREE.Vector2(size.x / 2, size.y / 2), this.theme === 'paper' ? 0.22 : 0.42, 0.55, this.theme === 'paper' ? 1.6 : 1.0)
     comp.addPass(bloom); this.bloom = bloom
-    const out = new OutputPass(); comp.addPass(out)
     r.toneMapping = THREE.NeutralToneMapping
     const grade = new ShaderPass({
       uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uVig: { value: this.theme === 'paper' ? 0.1 : 0.32 }, uGrain: { value: this.theme === 'paper' ? 0.012 : 0.02 }, uSat: { value: this.o.saturation ?? 1.06 }, uRes: { value: new THREE.Vector2(size.x, size.y) } },
@@ -801,6 +800,7 @@ export class Lab {
           gl_FragColor = vec4(c, 1.0); }`,
     })
     comp.addPass(grade); this.grade = grade
+    const out = new OutputPass(); comp.addPass(out)
     this.composer = comp
     addEventListener('resize', () => this._resize())
   }
@@ -1312,7 +1312,7 @@ class Sparks {
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
       vertexShader: `attribute vec3 aV; attribute float aK; varying float vK; uniform float uSize, uPx;
         void main(){ vK = aK; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Position = projectionMatrix * mv; gl_PointSize = uSize * uPx / -mv.z * (0.4 + aK); }`,
-      fragmentShader: `varying float vK; void main(){ vec2 q = gl_PointCoord - 0.5; float a = smoothstep(0.5, 0.0, length(q)); vec3 c = mix(vec3(1.0, 0.25, 0.04), vec3(1.0, 0.85, 0.5), vK); gl_FragColor = vec4(c * 4.0 * a * vK, 1.0); }`,
+      fragmentShader: `varying float vK; void main(){ vec2 q = gl_PointCoord - 0.5; float a = 1.0 - smoothstep(0.0, 0.5, length(q)); vec3 c = mix(vec3(1.0, 0.25, 0.04), vec3(1.0, 0.85, 0.5), vK); gl_FragColor = vec4(c * 4.0 * a * vK, 1.0); }`,
     })
     this.pts = new THREE.Points(g, m); this.pts.frustumCulled = false; this.pts.layers.set(LAYER_FX)
     lab.scene.add(this.pts)
@@ -1468,8 +1468,8 @@ class Plume {
           float core = pow(f, 1.6);
           float turb = n3(vec3(vP.x * 3.0, y * 9.0 - uT * 14.0, vP.z * 3.0)) * 0.6 + n3(vec3(vP.x * 7.0, y * 22.0 - uT * 30.0, vP.z * 7.0)) * 0.4;
           float diam = 0.5 + 0.5 * cos(y * 6.2831 * uShock * 2.2);
-          float shock = pow(diam, 6.0) * smoothstep(0.75, 0.05, y) * core;
-          float fade = smoothstep(1.0, 0.25, y) * smoothstep(0.0, 0.02, y);
+          float shock = pow(diam, 6.0) * (1.0 - smoothstep(0.05, 0.75, y)) * core;
+          float fade = (1.0 - smoothstep(0.25, 1.0, y)) * smoothstep(0.0, 0.02, y);
           vec3 a = uKind > 0.5 ? vec3(0.55, 0.65, 1.0) : vec3(0.35, 0.45, 1.0);
           vec3 b = uKind > 0.5 ? vec3(1.0, 0.55, 0.25) : vec3(1.0, 0.45, 0.2);
           vec3 c = mix(a, b, smoothstep(0.05, 0.6, y)) * (0.35 + 0.9 * turb) * core * fade;

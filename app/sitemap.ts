@@ -1,9 +1,11 @@
 import type { MetadataRoute } from "next";
 import { services } from "@/lib/services";
+import { getPublishedPosts } from "@/lib/instatic";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://goodai.au";
   const now = new Date();
+  const posts = await getPublishedPosts();
 
   const coreRoutes: MetadataRoute.Sitemap = [
     {
@@ -17,6 +19,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/admin-engine`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/blog`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.8,
     },
     {
       url: `${siteUrl}/privacy`,
@@ -39,5 +53,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...coreRoutes, ...serviceRoutes];
+  const blogRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${siteUrl}/blog/${post.slug}`,
+    lastModified: post.publishDate ? new Date(post.publishDate) : now,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  return [...coreRoutes, ...serviceRoutes, ...blogRoutes];
 }

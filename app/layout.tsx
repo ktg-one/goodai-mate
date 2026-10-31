@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/next";
+import dynamic from "next/dynamic";
 
 import "./globals.css";
 import "./goodai-tokens.css";
 import "./studio-controls.css";
 import { StudioHeader, StudioFooter } from "@/components/studio/Shell";
-import { SmoothScroll } from "@/components/studio/SmoothScroll";
-import { Preloader } from "@/components/ui/Preloader";
 import { LazyMotionProvider } from "@/components/providers/LazyMotionProvider";
-import { MascotWidget } from "@/components/studio/MascotWidget";
 import { PHONE_E164, LEAD_EMAIL } from "@/lib/links";
+
+// Dynamic imports for client-only components (code-split but still SSR-safe)
+const Preloader = dynamic(() => import("@/components/ui/Preloader").then((m) => m.Preloader));
+const MascotWidget = dynamic(() => import("@/components/studio/MascotWidget").then((m) => m.MascotWidget));
+const SmoothScroll = dynamic(() => import("@/components/studio/SmoothScroll").then((m) => m.SmoothScroll));
+const Analytics = dynamic(() => import("@vercel/analytics/next").then((m) => m.Analytics));
 
 function resolveSiteUrl() {
   try {
@@ -44,13 +47,13 @@ export const metadata: Metadata = {
     siteName: "Good'Ai",
     locale: "en_AU",
     type: "website",
-    images: [{ url: "/brand/coastal-phone.webp", width: 1536, height: 1024, alt: "Good'Ai — Good work. More life." }],
+    images: [{ url: "/images/coastal-phone.webp", width: 1536, height: 1024, alt: "Good'Ai — Good work. More life." }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Good'Ai — Good work. More life.",
     description: "Less chasing. Less copying. More of the work you actually care about.",
-    images: ["/brand/coastal-phone.webp"],
+    images: ["/images/coastal-phone.webp"],
   },
 };
 const localBusinessJsonLd = {
@@ -65,5 +68,28 @@ const localBusinessJsonLd = {
   areaServed: "Perth, Western Australia",
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en-AU"><body><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd).replace(/</g, "\\u003c") }} /><LazyMotionProvider><Preloader /><a className="skip-link" href="#main">Skip to content</a><StudioHeader /><main id="main">{children}</main><StudioFooter /><MascotWidget /><SmoothScroll /></LazyMotionProvider><Analytics /></body></html>;
+  return (
+    <html lang="en-AU">
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(localBusinessJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+        <LazyMotionProvider>
+          <Preloader />
+          <a className="skip-link" href="#main">
+            Skip to content
+          </a>
+          <StudioHeader />
+          <main id="main">{children}</main>
+          <StudioFooter />
+          <MascotWidget />
+          <SmoothScroll />
+        </LazyMotionProvider>
+        <Analytics />
+      </body>
+    </html>
+  );
 }

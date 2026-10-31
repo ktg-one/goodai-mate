@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { PRIVACY_EMAIL, PRIVACY_EMAIL_HREF } from "@/lib/links";
 import { ogDefaults, twitterDefaults } from "@/lib/seo";
+import { PolicyMeta } from "@/components/studio/PolicyMeta";
 
 export const metadata: Metadata = {
   title: "Privacy",
@@ -32,14 +33,13 @@ export default function Privacy() {
         <em>Handled with care.</em>
       </h1>
 
-      <div className="text-sm opacity-80 space-y-1 mb-6">
-        <p><strong>Identifier:</strong> PRIV-GAU-2026-V6 (Commercial &amp; APP 8 Edition)</p>
-        <p><strong>Effective Date:</strong> 16 October 2026</p>
-        <p><strong>Website:</strong> <a href="https://goodai.au" target="_blank" rel="noopener noreferrer">https://goodai.au</a> (&quot;Site&quot;)</p>
-        <p><strong>Operator:</strong> Good AI (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;)</p>
-        <p><strong>Location:</strong> Perth, Western Australia</p>
-        <p><strong>Privacy Desk:</strong> <a href={PRIVACY_EMAIL_HREF}>{PRIVACY_EMAIL}</a></p>
-      </div>
+      <PolicyMeta
+        identifier="PRIV-GAU-2026-V6 (Commercial & APP 8 Edition)"
+        effectiveDate="16 October 2026"
+        contactLabel="Privacy Desk:"
+        email={PRIVACY_EMAIL}
+        emailHref={PRIVACY_EMAIL_HREF}
+      />
 
       <hr className="my-6 border-brand-paper/20" />
 
