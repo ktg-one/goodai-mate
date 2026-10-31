@@ -137,6 +137,11 @@ export const STACK_ARCHITECTURE: readonly StackPrinciple[] = [
 
 export const STACK_MODELS: readonly Vendor[] = [
   {
+    name: "Liquid AI",
+    href: "https://www.liquid.ai",
+    note: "LFM3 Omni · Self-hosted voice & text",
+  },
+  {
     name: "Gemini",
     href: "https://gemini.google.com",
     note: "Google",

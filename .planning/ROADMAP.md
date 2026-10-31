@@ -159,3 +159,26 @@ Folds in the old milestones (performance/accessibility, content audit).
 - Wire `@shadcn/lint` design contracts into `eslint.config.mjs` if not already done.
 
 **Gate:** all of the above recorded in `STATE.md`; Kevin signs off.
+
+
+## Phase 10 — Good'Ai Autonomous 8-Agent Company Harness (Empyre `#team` Model, Free on Vercel + Proxmox NAS)
+
+Reference: `https://www.empyre.dev/#team` — an 8-role autonomous agent workforce that builds, publishes, markets, tests, and operates the business continuously while keeping a named human (Kevin) in control with stop authority and $0-first cost discipline.
+
+### Architecture (Vercel Free Tier + Proxmox NAS `192.168.0.6` / `https://ktg-nas.blowfish-snares.ts.net`)
+
+| Role | Good'Ai Agent | Runtime / Tools | Core Responsibility |
+|---|---|---|---|
+| **1. CEO** | `god` (Orchestrator) | Antigravity / Hermes + `/_instatic/mcp` | Triages brain dumps, sets daily 1-deliverable focus, routes tasks across the team, and holds the human sign-off gate with Kevin. |
+| **2. CTO** | `Builder` (Engineering) | Free CLI Workers (`opencode`, `qodercli`) + GitHub + Vercel | Ships Next.js / TS / Three.js code, enforces `bun run test && bun run lint && bun run build`, and deploys previews/production on Vercel. |
+| **3. CMO** | `Growth & Field Notes` | `gai-instatic` (`/_instatic/mcp`) + `gai-n8n` | Converts research & build logs into published Field Notes (`/blog`) and distributes social drafts through `gai-n8n`. |
+| **4. CFO** | `Runway & Cost Guard` | `gai-omniroute` (`:20128`) + `gai-llama` (`:11434`) | Enforces $0-first inference (`LFM3-Omni-2B` on NAS RTX 3060 + 5070 Ti 28.2 GB VRAM pool), monitors token/subscription spend, and hard-caps paid API calls. |
+| **5. CSO** | `Sales & Lead Triage` | `gai-n8n` (`/webhook/goodai-lead`) + `gai-lightpanda` (`:9222`) | Receives `/api/contact` leads, runs bounded Phase 6 business deep-dives via headless browser, and stages plain-English reply drafts for approval. |
+| **6. CLO** | `Governance & Ethics` | `lib/stack.test.ts` + ISO 42001 SME Guardrails | Audits all public copy and workflows against Good'Ai's human-centric AI policy (no invented claims, certifications only on certifying vendors, least data needed). |
+| **7. Creative** | `Design & Motion` | GSAP + Three.js + `page-mascot` | Maintains Perth watercolour sketchbook, `/admin-engine` 3D machine, scroll-story drawings, and Goodie mascot atlases. |
+| **8. Tester** | `QA & Verification Gate` | Node test runner + `gai-lightpanda` + ESLint `@shadcn/lint` | Runs automated test suites (`44/44`), link/CSP checks, mobile/desktop viewport audits, and blocks regressions before merge. |
+
+### Deliverables to Complete Phase 10
+1. **Live `#team` Dashboard / Showcase Section (`/admin-engine` or `/team`):** Visualise Good'Ai's 8 autonomous agents running Good'Ai itself (with live status from `gai-n8n` + `gai-instatic` + `gai-llama` `LFM3-Omni-2B`).
+2. **Standing `gai-n8n` + MCP Agent Loops:** Connect the 8 role prompts as scheduled/webhook-triggered workflows on `gai-n8n` (`:5678`) backed by `LFM3-Omni-2B` (`https://ktg-nas.blowfish-snares.ts.net/v1`) and `/_instatic/mcp`.
+3. **Human Stop-Authority Gate:** Every outbound client communication, production deploy, or spend decision pauses at the approval queue for Kevin's one-tap sign-off.
