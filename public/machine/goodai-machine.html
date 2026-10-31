@@ -1552,7 +1552,7 @@ const C = { rust: '#a44328', rustDeep: '#8f3d31', sage: '#dce3cc', sageDeep: '#5
 
 const lab = new Lab({
   prompt: 'an enquiry goes in one end, a paid job comes out the other',
-  no: 1, title: 'Admin engine', sub: 'your back office',
+  no: 1, title: 'Good’Ai', sub: 'under the hood',
   size: 2.6,
   bg: C.paper,
   view: { az: 30, el: 15, dist: 1.7, target: [-0.08, 0.46, 0], fov: 30 },
@@ -1626,16 +1626,16 @@ function plateTex(draw, w = 256, h = 256) {
 }
 const plateMat = (draw, w, h) => MAT.enamel({ color: [1, 1, 1], map: plateTex(draw, w, h) })
 const ICON = {
-  mail: plateMat((g) => { g.strokeRect(46, 72, 164, 112); g.beginPath(); g.moveTo(46, 72); g.lineTo(128, 140); g.lineTo(210, 72); g.stroke() }),
-  card: plateMat((g) => { g.strokeRect(52, 62, 152, 132); g.font = '700 46px Manrope'; g.textAlign = 'center'; g.fillText('JOB', 128, 146) }),
-  text: plateMat((g) => { g.beginPath(); g.moveTo(58, 70); g.lineTo(198, 70); g.lineTo(198, 162); g.lineTo(112, 162); g.lineTo(76, 196); g.lineTo(84, 162); g.lineTo(58, 162); g.closePath(); g.stroke(); g.font = '700 40px Manrope'; g.textAlign = 'center'; g.fillText('TXT', 128, 130) }),
-  invoice: plateMat((g) => { g.strokeRect(70, 44, 116, 168); for (const y of [92, 122, 152]) { g.beginPath(); g.moveTo(92, y); g.lineTo(164, y); g.stroke() } g.font = '700 34px Manrope'; g.textAlign = 'center'; g.fillText('INV', 128, 80) }),
-  paid: plateMat((g) => { g.font = '700 150px Manrope'; g.textAlign = 'center'; g.fillText('$', 128, 180) }),
+  mail: plateMat((g) => { g.strokeRect(46, 56, 164, 144); g.font = '700 38px Manrope'; g.textAlign = 'center'; g.fillText('VOICE', 128, 142) }),
+  card: plateMat((g) => { g.strokeRect(46, 56, 164, 144); g.font = '700 42px Manrope'; g.textAlign = 'center'; g.fillText('FLOW', 128, 144) }),
+  text: plateMat((g) => { g.beginPath(); g.moveTo(58, 70); g.lineTo(198, 70); g.lineTo(198, 162); g.lineTo(112, 162); g.lineTo(76, 196); g.lineTo(84, 162); g.lineTo(58, 162); g.closePath(); g.stroke(); g.font = '700 40px Manrope'; g.textAlign = 'center'; g.fillText('ASK', 128, 130) }),
+  invoice: plateMat((g) => { g.strokeRect(54, 44, 148, 168); for (const y of [104, 134, 164]) { g.beginPath(); g.moveTo(80, y); g.lineTo(176, y); g.stroke() } g.font = '700 34px Manrope'; g.textAlign = 'center'; g.fillText('SYNC', 128, 82) }),
+  paid: plateMat((g) => { g.font = '700 120px Manrope'; g.textAlign = 'center'; g.fillText('✓', 128, 170) }),
 }
 const brandPlate = plateMat((g, w, h) => {
   g.lineWidth = 6; g.strokeRect(14, 14, w - 28, h - 28)
   g.font = "600 112px Fraunces"; g.textAlign = 'center'; g.fillStyle = C.ink; g.fillText("Good'Ai", w / 2, 132)
-  g.fillStyle = C.rust; g.font = '600 34px Manrope'; g.fillText('ADMIN ENGINE  ·  No. 01  ·  PERTH WA', w / 2, 196)
+  g.fillStyle = C.rust; g.font = '600 34px Manrope'; g.fillText('GOOD’AI ENGINE  ·  No. 01  ·  PERTH WA', w / 2, 196)
 }, 768, 240)
 
 // ------------------------------------------------------------------ geometry constants
@@ -1695,7 +1695,7 @@ shaft.add(new THREE.Mesh(along(GEO.disc(0.016, 2.0, 0.002)), steel))
 const shaftPulley = new THREE.Mesh(along(GEO.lathe([[0.016, -0.0125], [0.06, -0.0125], [0.06, -0.006], [0.052, 0], [0.06, 0.006], [0.06, 0.0125], [0.016, 0.0125]], 96)), MAT.aluminiumMachined())
 shaftPulley.position.x = -0.97; shaft.add(shaftPulley)
 lab.add(shaft, { name: 'Cam shaft' })
-lab.label(pillows, 'Cam shaft', { at: [0.4, SHAFT.y + 0.02, SHAFT.z], value: () => `${fmt(sim.shaftRpm, 1)} rpm · once per job` })
+lab.label(pillows, 'AI opportunity audit · blueprint', { at: [0.4, SHAFT.y + 0.02, SHAFT.z], value: () => `${fmt(sim.shaftRpm, 1)} rpm · maps the problem first` })
 
 // five eccentric cams, phased so each peaks as a slip reaches its station
 const cams = []
@@ -1835,9 +1835,9 @@ const hopper = tower(ST.hopper, 0.9, ICON.mail, -0.084)
 }
 const gate = new THREE.Group(); gate.position.set(ST.hopper, 0.733, -0.034); hopper.add(gate)
 { const flap = new THREE.Mesh(GEO.rbox(0.074, 0.005, 0.07, 0.002), inkPaint); flap.position.z = 0.035; gate.add(flap) }
-lab.add(hopper, { name: 'Inbox hopper', explode: [0, 0.42, -0.05], count: 6, label: 'Inbox hopper · email', at: [ST.hopper, 0.92, 0.09], value: () => `${fmt(sim.N * MIN.inbox / 60, 1)} h a week sorted` })
+lab.add(hopper, { name: 'Arm 01 · AI voice agents', explode: [0, 0.42, -0.05], count: 6, label: 'Arm 01 · AI voice agents', at: [ST.hopper, 0.92, 0.09], value: () => `${fmt(sim.N * MIN.inbox / 60, 1)} h a week answered` })
 
-// 2. job-card press (ServiceM8): a ram through the arm, platen comes down on the slip
+// 2. job-card press (Business automation): a ram through the arm, platen comes down on the slip
 const press = tower(ST.press, 0.9, ICON.card)
 {
   const bush = new THREE.Mesh(GEO.tube(0.03, 0.019, 0.07), inkPaint); bush.position.set(ST.press, 0.88, 0.0); press.add(bush)
@@ -1848,9 +1848,9 @@ const ram = new THREE.Group(); press.add(ram)
   const platen = new THREE.Mesh(GEO.rbox(0.13, 0.022, 0.1, 0.004), rustPaint); platen.position.set(ST.press, 0.691, 0); ram.add(platen)
   const die = new THREE.Mesh(GEO.rbox(0.04, 0.008, 0.03, 0.0015), darkSteel); die.position.set(ST.press - 0.025, 0.676, -0.016); ram.add(die)
 }
-lab.add(press, { name: 'Job-card press', explode: [0, 0.4, -0.05], count: 8, label: 'Job-card press · ServiceM8', at: [ST.press, 0.9, 0.0], value: () => `${fmt(sim.N * MIN.card / 60, 1)} h a week booked` })
+lab.add(press, { name: 'Arm 02 · Business automation', explode: [0, 0.4, -0.05], count: 8, label: 'Arm 02 · Business automation', at: [ST.press, 0.9, 0.0], value: () => `${fmt(sim.N * MIN.card / 60, 1)} h a week routed` })
 
-// 3. text bell (SMS): a brass bell on the arm, a hammer the cam trips
+// 3. text bell (Custom AI assistants): a brass bell on the arm, a hammer the cam trips
 const bell = tower(ST.bell, 0.8, ICON.text)
 const bellBody = new THREE.Group(); bellBody.position.set(ST.bell, 0.76, 0.0); bell.add(bellBody)
 {
@@ -1865,9 +1865,9 @@ const hammer = new THREE.Group(); hammer.position.set(ST.bell + 0.08, 0.76, 0); 
   const ball = new THREE.Mesh(GEO.lathe(Array.from({ length: 13 }, (_, i) => { const a = -Math.PI / 2 + (i / 12) * Math.PI; return [0.014 * Math.cos(a), 0.014 * Math.sin(a)] }), 32), darkSteel); ball.position.set(0, -0.07, 0); hammer.add(ball)
 }
 { const bracket = new THREE.Mesh(GEO.rbox(0.1, 0.016, 0.03, 0.004), inkPaint); bracket.position.set(ST.bell + 0.04, 0.768, 0); bell.add(bracket) }
-lab.add(bell, { name: 'Text bell', explode: [0, 0.38, -0.05], count: 9, label: 'Text bell · SMS', at: [ST.bell, 0.8, 0.0], value: () => `${fmt(sim.N * MIN.text / 60, 1)} h a week confirmed` })
+lab.add(bell, { name: 'Arm 03 · Custom AI assistants', explode: [0, 0.38, -0.05], count: 9, label: 'Arm 03 · Custom AI assistants', at: [ST.bell, 0.8, 0.0], value: () => `${fmt(sim.N * MIN.text / 60, 1)} h a week found in your docs` })
 
-// 4. invoice stamp (Xero): a drum on a yoke, lowered by the cam, rolls a band across the slip
+// 4. invoice stamp (AI integration projects): a drum on a yoke, lowered by the cam, rolls a band across the slip
 const stamp = tower(ST.stamp, 0.86, ICON.invoice)
 const yoke = new THREE.Group(); stamp.add(yoke)
 const drum = new THREE.Group(); drum.position.set(ST.stamp, 0.702, 0.024); yoke.add(drum)
@@ -1878,9 +1878,9 @@ const drum = new THREE.Group(); drum.position.set(ST.stamp, 0.702, 0.024); yoke.
   drum.add(new THREE.Mesh(across(GEO.disc(0.045, 0.13, 0.004)), sagePaint))
   const band = new THREE.Mesh(across(GEO.tube(0.0475, 0.044, 0.012)), stampSage); band.position.z = 0.0; drum.add(band)
 }
-lab.add(stamp, { name: 'Invoice stamp', explode: [0, 0.4, -0.05], count: 9, label: 'Invoice stamp · Xero', at: [ST.stamp, 0.86, 0.0], value: () => `${fmt(sim.N * MIN.invoice / 60, 1)} h a week billed` })
+lab.add(stamp, { name: 'Arm 04 · AI integration projects', explode: [0, 0.4, -0.05], count: 9, label: 'Arm 04 · AI integration projects', at: [ST.stamp, 0.86, 0.0], value: () => `${fmt(sim.N * MIN.invoice / 60, 1)} h a week synced across tools` })
 
-// 5. payment till (Stripe): slips go in the slot, the cam kicks the drawer, the counter rolls
+// 5. output till: slips go in the slot, the cam kicks the drawer, the counter rolls
 const TILL = { x0: 0.742, x1: 1.04, z: 0.17, top: DECK + 0.22 }
 const till = new THREE.Group()
 {
@@ -1890,7 +1890,7 @@ const till = new THREE.Group()
   const sign = new THREE.Mesh(GEO.rbox(0.07, 0.07, 0.006, 0.004), ICON.paid); sign.position.set(cx + 0.09, DECK + 0.135, TILL.z + 0.003); till.add(sign)
   const trim = new THREE.Mesh(GEO.rbox(w + 0.004, 0.014, 0.344, 0.005), inkPaint); trim.position.set(cx, DECK + 0.007, 0); till.add(trim)
 }
-lab.add(till, { name: 'Payment till', explode: [0.28, 0.32, 0], xray: 'shell', label: 'Payment till · Stripe', at: [0.89, 0.62, 0.17], value: () => `${fmt(sim.N * MIN.paid / 60, 1)} h a week chased` })
+lab.add(till, { name: 'Output · finished work', explode: [0.28, 0.32, 0], xray: 'shell', label: 'Output · finished work', at: [0.89, 0.62, 0.17], value: () => `${fmt(sim.N * MIN.paid / 60, 1)} h a week handed back` })
 const drawer = new THREE.Group()
 {
   const cx = (TILL.x0 + TILL.x1) / 2
@@ -1901,7 +1901,7 @@ const drawer = new THREE.Group()
 const drawerHolder = new THREE.Group(); drawerHolder.add(drawer)
 lab.add(drawerHolder, { name: 'Cash drawer', explode: [0.3, 0.3, 0.25], count: 3 })
 
-// counter: four digit drums in a housing on the till top (jobs paid)
+// counter: four digit drums in a housing on the till top (jobs completed)
 function digitTex() {
   const c = document.createElement('canvas'); c.width = 1280; c.height = 128
   const g = c.getContext('2d'); g.fillStyle = C.ink; g.fillRect(0, 0, 1280, 128)
@@ -1924,9 +1924,9 @@ const drums = []
     g.position.set(COUNT.x - 0.039 + i * 0.026, COUNT.y, COUNT.z + 0.005); counter.add(g); drums.push(g)
   }
 }
-lab.add(counter, { name: 'Counter', explode: [0.28, 0.44, 0.1], count: 10, label: 'Jobs paid', at: [COUNT.x, COUNT.y + 0.03, COUNT.z], value: () => `${fmt(sim.paid)} through` })
+lab.add(counter, { name: 'Counter', explode: [0.28, 0.44, 0.1], count: 10, label: 'Jobs completed', at: [COUNT.x, COUNT.y + 0.03, COUNT.z], value: () => `${fmt(sim.paid)} through` })
 
-// 6. like flag (reviews and socials): a heart on a sprung lever, pops on every paid job and on every like
+// 6. human sign-off flag: a heart on a sprung lever, pops on every finished job and on every like
 const heartShape = (() => {
   const s = new THREE.Shape(), k = 0.00078
   const P = (x, y) => [(x - 25) * k, -(y - 47) * k]
@@ -1947,7 +1947,7 @@ const lever = new THREE.Group(); lever.position.set(0.975, TILL.top + 0.012, 0.0
   const stick = new THREE.Mesh(GEO.disc(0.004, 0.06, 0.001), steel); stick.position.y = 0.03; lever.add(stick)
   const heart = new THREE.Mesh(GEO.extrude(heartShape, 0.012, 0.002), rustPaint); heart.position.y = 0.095; lever.add(heart)
 }
-lab.add(flag, { name: 'Like flag', explode: [0.28, 0.5, -0.1], count: 4, label: 'Like flag · reviews & socials', at: [0.975, TILL.top + 0.13, 0.0], value: () => `${fmt(sim.N * MIN.review / 60, 1)} h a week asking · ${sim.likes} from you` })
+lab.add(flag, { name: 'Human sign-off', explode: [0.28, 0.5, -0.1], count: 4, label: 'Human sign-off · your team in control', at: [0.975, TILL.top + 0.13, 0.0], value: () => `${fmt(sim.N * MIN.review / 60, 1)} h a week checked · ${sim.likes} from you` })
 
 // power lead to a floor box (the plug is what you pull)
 lab.mesh(GEO.pipe([[-1.05, 0.14, -0.16], [-1.085, 0.14, -0.16], [-1.11, 0.06, -0.15], [-1.13, 0.012, -0.13], [-1.17, 0.012, -0.11], [-1.2, 0.024, -0.1]], 0.0065), cable, { name: 'Power lead' })
@@ -2081,23 +2081,23 @@ lab.breakIt({
   reset() { sim.unplugged = false; sim.queue = 0 },
 })
 lab.how(
-  'Illustrative: nothing is connected and nothing is sent. Each station stands for one admin job a Good’Ai automation does for a trade business. The minutes saved per job are our estimates for a typical Perth tradie; yours will differ, and we work them out with you. The belt runs faster as jobs come in; the cam shaft turns once per job, so every station fires as a slip arrives.',
+  'Illustrative: nothing is connected and nothing is sent. The four arms stand for Good’Ai’s four build services — AI voice agents, Business automation, Custom AI assistants, and AI integration projects — driven by the cam shaft (our AI opportunity audit, which maps the problem before we touch a tool) and checked at the end by a named person on your team. The minutes saved per job are our estimates for a typical WA business; yours will differ, and we work them out with you.',
   [
     `H = N × ${PER_JOB} min ÷ 60   (h a week)`,
-    `${PER_JOB} min = ${MIN.inbox} inbox + ${MIN.card} job card + ${MIN.text} text + ${MIN.invoice} invoice + ${MIN.paid} payment + ${MIN.review} review`,
+    `${PER_JOB} min = ${MIN.inbox} voice + ${MIN.card} automation + ${MIN.text} assistant + ${MIN.invoice} integration + ${MIN.paid} output + ${MIN.review} human sign-off`,
     `on screen: f = 0.2 × N ÷ 25 jobs/s, v = f × ${fmt(PITCH, 3)} m`,
     `1 s here = ${WEEK_H} h × 3600 ÷ N × f s ≈ ${fmt(WEEK_H * 3600 * 0.2 / 25 / 60)} min of a working week`,
-    'cam shaft = 60 v ÷ p rpm · motor = shaft × 2.4 (V-belt)',
+    'cam shaft (opportunity audit) = 60 v ÷ p rpm · motor = shaft × 2.4 (V-belt)',
     'plug out: v → 0 (τ 0.6 s), enquiries still arrive at f, owed = queue × 40 min',
   ],
 )
 lab.autoFilm({
   sliderTo: 0.75,
-  runBeat: 'More jobs come in.', runSub: 'The engine keeps up. You stay on the tools.',
+  runBeat: 'More work comes in.', runSub: 'The four arms keep up. Your team stays in control.',
   breakBeat: 'Then pull the plug.', breakSub: 'It all lands back on you.',
 })
 {
-  const beats = { '01': ['Every job starts as an enquiry.', 'An enquiry in, a paid job out.'], '02': ['We build the engine around it.', 'One station for every admin job.'], '04': ['Look inside.', 'One cam shaft fires every station.'], '05': ['Take it apart.', 'Each job is its own part.'] }
+  const beats = { '01': ['Every job starts with a real problem.', 'Enquiry in, finished work out.'], '02': ['Four arms, four Good’Ai services.', 'Voice, automation, assistants, and integrations.'], '04': ['Look inside.', 'One opportunity audit cam shaft drives every arm.'], '05': ['Take it apart.', 'No mystery box — your team keeps stop authority.'] }
   for (const e of lab.films.main.events) if (e.beat && beats[e.beat[0]]) e.beat = [e.beat[0], ...beats[e.beat[0]]]
 }
 
@@ -2109,6 +2109,24 @@ if (window.parent !== window) {
 // phones: the machine sits in the top half, the readout panel below it
 const fitView = () => lab.setView(innerWidth < 760 ? { dist: innerWidth < 480 ? 4.3 : 3.1, target: [-0.1, innerWidth < 480 ? -0.55 : -0.32, 0], frameX: 0 } : {})
 if (!lab.filmMode) { fitView(); addEventListener('resize', fitView) }
+// tell the host page which mode buttons are on, so it can reveal the matching "under the hood" layer
+{
+  const MODES = ['labels', 'explode', 'cut', 'xray', 'slow']
+  const sync = lab._syncButtons.bind(lab)
+  lab._syncButtons = () => {
+    sync()
+    const on = {}
+    for (const k of MODES) on[k] = lab.target[k] > 0.5
+    try { if (window.parent !== window) window.parent.postMessage({ type: 'goodai-machine:state', on }, location.origin) } catch { /* standalone */ }
+  }
+  window.addEventListener('message', (e) => {
+    if (e.origin !== location.origin || !e.data || e.data.type !== 'goodai-machine:toggle') return
+    const k = e.data.layer
+    if (!MODES.includes(k)) return
+    lab.target[k] = typeof e.data.value === 'boolean' ? (e.data.value ? 1 : 0) : (lab.target[k] > 0.5 ? 0 : 1)
+    lab._syncButtons()
+  })
+}
 lab.start()
 </script>
 </body>

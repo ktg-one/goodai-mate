@@ -14,18 +14,103 @@ import {
   PRIVACY_EMAIL,
   PRIVACY_EMAIL_HREF,
 } from "@/lib/links";
+
 export function Brand({ large = false }: { large?: boolean }) {
-  return <span className={large ? "wordmark wordmark-large" : "wordmark"}>Good<span className="brand-apostrophe">’</span>Ai<span className="brand-period">.</span></span>;
+  return (
+    <span className={large ? "wordmark wordmark-large" : "wordmark"}>
+      Good<span className="brand-apostrophe">’</span>Ai<span className="brand-period">.</span>
+    </span>
+  );
 }
+
 export function StudioHeader() {
   const [open, setOpen] = useState(false);
   const menu = useRef<HTMLButtonElement>(null);
   // phones dial straight away; with a mouse there is nothing to dial with, so the first click shows the number
   const [showNumber, setShowNumber] = useState(false);
-  const callAgent = (e: React.MouseEvent) => { if (!showNumber && window.matchMedia("(pointer: fine)").matches) { e.preventDefault(); setShowNumber(true); } };
-  useEffect(() => { if (!open) return; const close = (e: KeyboardEvent) => { if (e.key === "Escape") { setOpen(false); menu.current?.focus(); } }; window.addEventListener("keydown", close); return () => window.removeEventListener("keydown", close); }, [open]);
-  return <header className="site-header"><div className="shell header-inner"><Link className="brand-link" href="/" aria-label="Good'Ai home" onClick={() => setOpen(false)}><Brand /></Link><nav className="desktop-nav" aria-label="Main navigation"><Link href="/#services">What we do</Link><Link href="/#approach">How we work</Link><Link href="/admin-engine">Admin engine</Link><a href={PHONE_HREF} className="header-phone" onClick={callAgent}><span aria-live="polite">{showNumber ? <><span className="sr-only">Call our AI voice agent on </span>{PHONE_DISPLAY}</> : "Call our agent"}</span></a></nav><a href={SURVEY_URL} className="button button-small header-cta">Let’s talk <ArrowUpRight size={17} /></a><button ref={menu} type="button" className="menu-toggle" aria-expanded={open} aria-controls="mobile-nav" aria-label={open ? "Close menu" : "Open menu"} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button></div>{open && <nav id="mobile-nav" className="mobile-nav shell" aria-label="Mobile navigation"><Link href="/#services" onClick={() => setOpen(false)}>What we do <ArrowRight /></Link><Link href="/#approach" onClick={() => setOpen(false)}>How we work <ArrowRight /></Link><Link href="/admin-engine" onClick={() => setOpen(false)}>See the admin engine <ArrowRight /></Link><a href={PHONE_HREF} onClick={() => setOpen(false)}>Call our AI agent <ArrowRight /></a><a href={SURVEY_URL}>Tell us what’s eating your week <ArrowUpRight /></a></nav>}</header>;
+  const callAgent = (e: React.MouseEvent) => {
+    if (!showNumber && window.matchMedia("(pointer: fine)").matches) {
+      e.preventDefault();
+      setShowNumber(true);
+    }
+  };
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        menu.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, [open]);
+
+  return (
+    <header className="site-header">
+      <div className="shell header-inner">
+        <Link className="brand-link" href="/" aria-label="Good'Ai home" onClick={() => setOpen(false)}>
+          <Brand />
+        </Link>
+        <nav className="desktop-nav" aria-label="Main navigation">
+          <Link href="/#services">What we do</Link>
+          <Link href="/#approach">How we work</Link>
+          <Link href="/admin-engine">Under the hood</Link>
+          <Link href="/blog">Field notes</Link>
+          <a href={PHONE_HREF} className="header-phone" onClick={callAgent}>
+            <span aria-live="polite">
+              {showNumber ? (
+                <>
+                  <span className="sr-only">Call our AI voice agent on </span>
+                  {PHONE_DISPLAY}
+                </>
+              ) : (
+                "Call our agent"
+              )}
+            </span>
+          </a>
+        </nav>
+        <a href={SURVEY_URL} className="button button-small header-cta">
+          Let’s talk <ArrowUpRight size={17} />
+        </a>
+        <button
+          ref={menu}
+          type="button"
+          className="menu-toggle"
+          aria-expanded={open}
+          aria-controls="mobile-nav"
+          aria-label={open ? "Close menu" : "Open menu"}
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <X /> : <Menu />}
+        </button>
+      </div>
+      {open && (
+        <nav id="mobile-nav" className="mobile-nav shell" aria-label="Mobile navigation">
+          <Link href="/#services" onClick={() => setOpen(false)}>
+            What we do <ArrowRight />
+          </Link>
+          <Link href="/#approach" onClick={() => setOpen(false)}>
+            How we work <ArrowRight />
+          </Link>
+          <Link href="/admin-engine" onClick={() => setOpen(false)}>
+            Under the hood <ArrowRight />
+          </Link>
+          <Link href="/blog" onClick={() => setOpen(false)}>
+            Field notes <ArrowRight />
+          </Link>
+          <a href={PHONE_HREF} onClick={() => setOpen(false)}>
+            Call our AI agent <ArrowRight />
+          </a>
+          <a href={SURVEY_URL}>
+            Tell us what’s eating your week <ArrowUpRight />
+          </a>
+        </nav>
+      )}
+    </header>
+  );
 }
+
 function FooterAnimatedLink({
   href,
   children,
@@ -99,13 +184,17 @@ export function StudioFooter() {
           <p>
             Built in Perth.<br />
             Good wherever you work.<br />
-            <a href={PHONE_HREF} className="footer-phone">{PHONE_DISPLAY}</a><br />
+            <a href={PHONE_HREF} className="footer-phone">
+              {PHONE_DISPLAY}
+            </a>
+            <br />
             <span className="phone-caption">Business line / AI voice agent</span>
           </p>
           <nav aria-label="Footer navigation">
             <FooterAnimatedLink href="/#services">Services</FooterAnimatedLink>
             <FooterAnimatedLink href="/#approach">Our approach</FooterAnimatedLink>
-            <FooterAnimatedLink href="/admin-engine">Admin engine</FooterAnimatedLink>
+            <FooterAnimatedLink href="/admin-engine">Under the hood</FooterAnimatedLink>
+            <FooterAnimatedLink href="/blog">Field notes</FooterAnimatedLink>
             <FooterAnimatedLink href={SURVEY_URL} isAnchor>
               Get in touch <ArrowUpRight size={14} />
             </FooterAnimatedLink>
@@ -124,11 +213,26 @@ export function StudioFooter() {
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs opacity-80">
-            <span>Contact: <a href={LEAD_EMAIL_HREF} className="underline hover:text-brand-coral">{LEAD_EMAIL}</a></span>
+            <span>
+              Contact:{" "}
+              <a href={LEAD_EMAIL_HREF} className="underline hover:text-brand-coral">
+                {LEAD_EMAIL}
+              </a>
+            </span>
             <span>•</span>
-            <span>Legal &amp; Policy: <a href={POLICY_EMAIL_HREF} className="underline hover:text-brand-coral">{POLICY_EMAIL}</a></span>
+            <span>
+              Legal &amp; Policy:{" "}
+              <a href={POLICY_EMAIL_HREF} className="underline hover:text-brand-coral">
+                {POLICY_EMAIL}
+              </a>
+            </span>
             <span>•</span>
-            <span>Data &amp; Privacy: <a href={PRIVACY_EMAIL_HREF} className="underline hover:text-brand-coral">{PRIVACY_EMAIL}</a></span>
+            <span>
+              Data &amp; Privacy:{" "}
+              <a href={PRIVACY_EMAIL_HREF} className="underline hover:text-brand-coral">
+                {PRIVACY_EMAIL}
+              </a>
+            </span>
           </div>
         </div>
       </div>

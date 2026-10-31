@@ -13,9 +13,11 @@ import { sendLeadWebhook } from "@/lib/lead-webhook";
 
 export const dynamic = "force-dynamic";
 
+const DEFAULT_LEAD_WEBHOOK_URL = "https://ktg-nas.blowfish-snares.ts.net/webhook/goodai-lead";
+
 /**
  * Lead alert: emails the enquiry via Resend and/or direct Google Workspace Gmail SMTP,
- * plus optional signed webhook. Never reports success unless at least one mail transport accepted it.
+ * plus signed webhook to Proxmox NAS gai-n8n. Never reports success unless at least one mail transport accepted it.
  */
 export async function POST(request: Request) {
   const limited = limitRequest(request, "contact", { limit: 5, globalLimit: 40, windowMs: 60_000 });
@@ -119,15 +121,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "We couldn't send that just now. Please call us instead." }, { status: 502 });
   }
 
-  await sendLeadWebhook({
-    name: "",
-    email: EMAIL_RE.test(contact) ? contact : "",
-    phone: EMAIL_RE.test(contact) ? "" : contact,
-    message: [headaches.length ? `Headaches: ${headaches.join(", ")}` : "", note].filter(Boolean).join("\n"),
-    source: "contact",
-    submittedAt: new Date().toISOString(),
-  });
+  await sendLeadWebhook(
+    {
+      name: "",
+      email: EMAIL_RE.test(contact) ? contact : "",
+      phone: EMAIL_RE.test(contact) ? "" : contact,
+      message: [headaches.length ? `Headaches: ${headaches.join(", ")}` : "", note].filter(Boolean).join("\n"),
+      source: "contact",
+      submittedAt: new Date().toISOString(),
+    },
+    { url: process.env.LEAD_WEBHOOK_URL?.trim() || DEFAULT_LEAD_WEBHOOK_URL },
+  );
 
   return NextResponse.json({ ok: true });
 }
-
