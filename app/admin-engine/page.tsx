@@ -5,7 +5,7 @@ import { MachineDemo } from "@/components/studio/MachineDemo";
 import { ogDefaults, twitterDefaults } from "@/lib/seo";
 
 const description =
-  "What's under Good'Ai's hood: an illustrative machine where the four arms represent our four build services, driven by an opportunity audit cam shaft, and each button opens up our ethics, underlying architecture, voices, and hosting.";
+  "The Good'Ai machine: an interactive 3D analogy for how we run your admin. A job moves from first phone call on the left to finished work in the till on the right, with openable layers showing our services, stack (OpenAI, Gemini, xAI, ElevenLabs, n8n, Google Cloud Sydney), and human-first policy.";
 
 export const metadata: Metadata = {
   title: "Under the hood",
@@ -24,11 +24,11 @@ export default function AdminEnginePage() {
           Back to Good’Ai
         </Link>
         <h1>
-          What’s under<br />
-          <em>our hood.</em>
+          The Good’Ai machine:<br />
+          <em>an analogy for how we run your admin.</em>
         </h1>
         <p>
-          This machine is Good’Ai. The four arms are our four build services — voice agents, business automation, custom assistants, and tool integrations — driven by the cam shaft underneath (our opportunity audit) and checked at the end by a human on your team. Press any button on the machine to open our services, ethics, underlying architecture, voices, and where it runs.
+          No, we don’t build conveyor belts — we just wanted to put a really cool 3D render on the site to show that we can, and this is our excuse. Think of the machine as a diagram of what Good’Ai sets up behind the scenes: the belt is a single job moving from the first phone call on the left to finished work in the till on the right, and each arm above it is one of our services. Hit <strong>Labels</strong> for what we do, <strong>Cut away</strong> for the stack we build with, <strong>Explode</strong> for our human-first policy, or <strong>Pull the plug</strong> to see what happens when every job lands back on you.
         </p>
       </div>
       <div className="full-demo">

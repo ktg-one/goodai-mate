@@ -7,8 +7,8 @@ import { STACK_LAYERS, type StackLayer } from "@/lib/stack";
 import { StackPanel, type StackState } from "@/components/studio/StackPanel";
 
 const MACHINE_SRC = "/machine/goodai-machine.html";
-const NO_LAYERS: StackState = {
-  labels: false,
+const INITIAL_LAYERS: StackState = {
+  labels: true,
   explode: false,
   cut: false,
   xray: false,
@@ -17,7 +17,7 @@ const NO_LAYERS: StackState = {
 
 export function MachineDemo() {
   const [likes, setLikes] = useState(0);
-  const [layers, setLayers] = useState<StackState>(NO_LAYERS);
+  const [layers, setLayers] = useState<StackState>(INITIAL_LAYERS);
   const frameRef = useRef<HTMLIFrameElement>(null);
 
   // Only the machine frame may report likes or mode changes, so identify it by
@@ -28,7 +28,7 @@ export function MachineDemo() {
       const data = e.data as { type?: string; likes?: number; on?: Record<string, unknown> } | null;
       if (data?.type === "goodai-machine:like" && typeof data.likes === "number") setLikes(data.likes);
       if (data?.type === "goodai-machine:state" && data.on) {
-        const next = { ...NO_LAYERS };
+        const next = { ...INITIAL_LAYERS };
         for (const l of STACK_LAYERS) next[l] = data.on[l] === true;
         setLayers(next);
       }
@@ -56,13 +56,13 @@ export function MachineDemo() {
         <iframe
           ref={frameRef}
           src={MACHINE_SRC}
-          title="The Good'Ai engine: an illustrative machine where four arms represent our four build services, driven by an opportunity audit cam shaft"
+          title="Good'Ai workbench automation model: conveyor belt representing a job moving through your business, with 3D labels for services, tool stack, and ethics"
           allow="fullscreen"
         />
       </div>
       <div className="machine-bar">
         <p>
-          Drag to turn it. Slide the jobs a week, open the layers, or pull the plug.
+          Drag to spin. Click <strong>Labels</strong> (services), <strong>Cut away</strong> (OpenAI, xAI, Gemini, ElevenLabs, n8n, GCP), <strong>Explode</strong> (our ethics policy), or <strong>Pull the plug</strong>.
           <span> Illustrative: nothing is connected, and the minutes saved are our estimates.</span>
         </p>
         <a className="text-link" href={MACHINE_SRC} target="_blank" rel="noopener noreferrer">

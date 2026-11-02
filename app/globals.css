@@ -1288,30 +1288,6 @@ em {
   text-transform: uppercase;
   color: var(--rust);
 }
-.stack-chips {
-  display: flex;
-  flex: 1;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.stack-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--ink);
-  font-size: 14px;
-}
-a.stack-chip:hover,
-a.stack-chip:focus-visible {
-  border-color: var(--ink);
-}
-.stack-chip small {
-  font-size: 12px;
-  color: var(--muted);
-}
 @keyframes stack-in {
   from {
     opacity: 0;
@@ -2589,10 +2565,6 @@ html:has(.perth-sketchbook[open]) { overflow: hidden; }
 }
 .stack-row-content {
   min-width: 0;
-}
-.stack-cut-group {
-  display: grid;
-  gap: 14px;
 }
 .stack-cards {
   display: grid;

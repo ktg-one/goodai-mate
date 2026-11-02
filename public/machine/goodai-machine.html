@@ -645,8 +645,8 @@ export class Lab {
     this.labels = []
     this.tickers = []
     this.ghosts = []
-    this.state = { explode: 0, cut: 0, xray: 0, slow: 0, labels: 0, broken: 0 }
-    this.target = { explode: 0, cut: 0, xray: 0, slow: 0, labels: 0 }
+    this.state = { explode: 0, cut: 0, xray: 0, slow: 0, labels: 1, broken: 0 }
+    this.target = { explode: 0, cut: 0, xray: 0, slow: 0, labels: 1 }
     this.broken = false
     this.brokenAt = -1
     this.metrics = {}
@@ -920,11 +920,13 @@ export class Lab {
   /** keep moving parts in sync: set obj.position via lab.place(obj, x, y, z) so explode offsets still apply */
   place(obj, x, y, z) { const p = this.parts.find((q) => q.obj === obj); if (p) p.base.set(x, y, z); else obj.position.set(x, y, z) }
 
-  /** a pinned label with a leader line: lab.label(obj, 'HP turbine', { at:[x,y,z] in obj frame, value:()=>'1,712 K' }) */
+  /** a pinned label with a leader line: lab.label(obj, 'HP turbine', { at:[x,y,z] in obj frame, value:()=>'1,240 rpm', tag:'01', layer:'services'|'stack'|'ethics', dy:-70 }) */
   label(obj, text, o = {}) {
-    const el = document.createElement('div'); el.className = 'lab-lab'; el.innerHTML = `${text}<small></small>`
+    const el = document.createElement('div'); el.className = 'lab-lab'
+    const tagHtml = o.tag ? `<span class="lab-tag">${o.tag}</span>` : ''
+    el.innerHTML = `${tagHtml}<strong>${text}</strong><small></small>`
     this.$('.lab-labels').appendChild(el)
-    const L = { obj, at: new THREE.Vector3(...(o.at ?? [0, 0, 0])), el, small: el.querySelector('small'), value: o.value, side: o.side }
+    const L = { obj, at: new THREE.Vector3(...(o.at ?? [0, 0, 0])), el, small: el.querySelector('small'), value: o.value, side: o.side, layer: o.layer ?? 'services', dy: o.dy ?? -68, dx: o.dx ?? 0 }
     this.labels.push(L)
     return L
   }
@@ -1030,37 +1032,27 @@ export class Lab {
     }
   }
   _updateLabels() {
-    const on = this.state.labels
     const W = innerWidth, H = innerHeight
     const svg = this.$('.lab-labels svg')
     let lines = ''
-    const ctr = new THREE.Vector3().setFromMatrixPosition(this.machine.matrixWorld).project(this.camera)
-    const items = []
+    const activeLayer = this.state.explode > 0.25 ? 'ethics' : (this.state.cut > 0.25 || this.state.xray > 0.25) ? 'stack' : 'services'
+    const layerAlpha = activeLayer === 'ethics' ? this.state.explode : activeLayer === 'stack' ? Math.max(this.state.cut, this.state.xray) : this.state.labels
     for (const L of this.labels) {
       const p = L.at.clone(); L.obj.updateWorldMatrix(true, false); p.applyMatrix4(L.obj.matrixWorld)
       const s = p.project(this.camera)
-      const vis = on > 0.01 && s.z < 1 && L.obj.visible !== false
-      if (!vis) { L.el.style.opacity = '0'; continue }
+      const vis = L.layer === activeLayer && layerAlpha > 0.02 && s.z < 1 && L.obj.visible !== false
+      if (!vis) { L.el.style.opacity = '0'; L.el.style.pointerEvents = 'none'; continue }
       const x = (s.x * 0.5 + 0.5) * W, y = (-s.y * 0.5 + 0.5) * H
-      const side = L.side ?? (s.x < ctr.x ? 'left' : 'right')
-      items.push({ L, x, y, side })
-    }
-    // spread labels vertically per side so they never overlap
-    for (const side of ['left', 'right']) {
-      const list = items.filter((i) => i.side === side).sort((a, b) => a.y - b.y)
-      const gap = Math.max(34, H * 0.045)
-      let last = -1e9
-      for (const it of list) { it.ly = Math.max(it.y, last + gap); last = it.ly }
-      const xs = side === 'left' ? Math.min(...list.map((i) => i.x)) - W * 0.06 : Math.max(...list.map((i) => i.x)) + W * 0.06
-      for (const it of list) it.lx = clamp(xs, W * 0.05, W * 0.7)
-    }
-    for (const it of items) {
-      const { L, x, y, lx, ly, side } = it
-      L.el.className = 'lab-lab' + (side === 'left' ? ' left' : '')
-      L.el.style.left = `${lx + (side === 'left' ? -8 : 8)}px`; L.el.style.top = `${ly}px`; L.el.style.opacity = String(on)
-      if (L.value) L.small.textContent = L.value()
-      const ink = this.theme === 'paper' ? '20,20,20' : '240,238,232'
-      lines += `<path d="M${x.toFixed(1)},${y.toFixed(1)} L${(lx + (side === 'left' ? 12 : -12)).toFixed(1)},${ly.toFixed(1)} L${lx.toFixed(1)},${ly.toFixed(1)}" stroke="rgba(${ink},${(0.55 * on).toFixed(3)})" stroke-width="1" fill="none"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="rgba(${ink},${on.toFixed(3)})" stroke="${this.theme === 'paper' ? '#fff' : '#000'}" stroke-width="1.2"/>`
+      const lx = clamp(x + (L.dx ?? 0), 95, W - 95)
+      const ly = clamp(y + (L.dy ?? -68), 46, H - 56)
+      L.el.className = `lab-lab lab-layer-${L.layer}`
+      L.el.style.left = `${lx.toFixed(1)}px`
+      L.el.style.top = `${ly.toFixed(1)}px`
+      L.el.style.opacity = String(clamp(layerAlpha * 1.15))
+      if (L.value) L.small.textContent = typeof L.value === 'function' ? L.value() : L.value
+      const strokeCol = L.layer === 'ethics' ? '164,67,40' : L.layer === 'stack' ? '95,112,88' : '51,59,50'
+      const a = (0.72 * clamp(layerAlpha)).toFixed(3)
+      lines += `<path d="M${x.toFixed(1)},${y.toFixed(1)} L${lx.toFixed(1)},${ly.toFixed(1)}" stroke="rgba(${strokeCol},${a})" stroke-width="1.6" stroke-dasharray="${L.layer === 'services' ? 'none' : '3,3'}" fill="none"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.2" fill="rgb(${strokeCol})" stroke="#fcfaf4" stroke-width="1.6" fill-opacity="${a}"/>`
     }
     svg.innerHTML = lines
   }
@@ -1551,16 +1543,16 @@ const { THREE, Lab, MAT, GEO, clamp, lerp, approach, fmt, rng, smoothstep } = wi
 const C = { rust: '#a44328', rustDeep: '#8f3d31', sage: '#dce3cc', sageDeep: '#5f7058', ink: '#333b32', paper: '#eceee4', white: '#fcfaf4', success: '#42583b', muted: '#5c665e' }
 
 const lab = new Lab({
-  prompt: 'an enquiry goes in one end, a paid job comes out the other',
-  no: 1, title: 'Good’Ai', sub: 'under the hood',
+  prompt: 'a job moving through a sorted business — call in on the left, finished work in the till on the right',
+  no: 1, title: 'The Good’Ai', sub: 'machine.',
   size: 2.6,
   bg: C.paper,
-  view: { az: 30, el: 15, dist: 1.7, target: [-0.08, 0.46, 0], fov: 30 },
+  view: { az: 30, el: 15, dist: 1.72, target: [-0.08, 0.46, 0], fov: 30 },
   cut: { a: [0, 0, 1], b: [0, -1, 0], center: [0, 0.4505, 0.05], reach: 0.5 },
-  pills: ['Illustrative', 'Estimates', 'Nothing sent'],
+  pills: ['Interactive analogy', 'Your tools', 'Human in control'],
 })
 
-// Good'Ai type and colour on the kit's editorial layer
+// Good'Ai type and colour on the kit's editorial layer + floating 3D callouts
 {
   const st = document.createElement('style')
   st.textContent = `
@@ -1568,31 +1560,68 @@ const lab = new Lab({
     --serif:'Fraunces',Georgia,serif; --sans:'Manrope',system-ui,sans-serif }
   .lab-title { font-variation-settings:'SOFT' 100, 'WONK' 1; letter-spacing:-0.02em }
   .lab-title i { color:${C.sageDeep} }
-  .lab-big { font-variation-settings:'SOFT' 100 }
-  .lab-big i { color:${C.muted} }
   .lab-bar > div { background:${C.sageDeep} }
   .lab-prompt b { color:${C.rust} }
   .lab-modes button.brk { border-color:rgba(164,67,40,0.35) }
-  .gm-like { display:inline-flex; align-items:center; gap:0.55em; margin-top:clamp(14px,2.6vh,30px); font:inherit; font-size:clamp(12px,1vw,18px); font-weight:600; color:${C.white}; background:${C.rust}; border:0; border-radius:999px; padding:0.7em 1.25em; cursor:pointer; transition:background .2s, transform .2s }
+  /* Editorial side column: explains the analogy ("A Good'Ai business") without fake hours math or mechanical rpm */
+  .lab-side {
+    width:clamp(250px, 22vw, 360px);
+    background:rgba(236,238,228,0.82); backdrop-filter:blur(6px);
+    padding:16px 18px; border-radius:18px; border:1px solid rgba(214,214,200,0.8);
+  }
+  .lab-no { font-weight:700; letter-spacing:0.12em; text-transform:uppercase; font-size:11px !important; color:${C.rust} !important; margin-bottom:0.45em }
+  .lab-title { font-size:clamp(30px, 3.1vw, 54px) !important; line-height:0.98 }
+  .lab-metric { margin-top:14px !important }
+  .lab-metric .lbl, .lab-big { display:none !important }
+  .lab-bar { margin:0.4em 0 0.85em !important }
+  .lab-sub { font-size:clamp(12.5px, 0.95vw, 15.5px) !important; color:${C.ink} !important; line-height:1.55 !important; font-weight:500 }
+  .lab-ctl { margin-top:16px !important }
+  /* Floating 3D typography callouts hovering directly above the machine parts */
+  .lab-lab {
+    background:rgba(252,250,244,0.95); backdrop-filter:blur(6px);
+    border:1.5px solid ${C.ink}; border-radius:12px; padding:6px 11px;
+    transform:translate(-50%, -100%); text-align:left !important;
+    box-shadow:0 10px 24px -10px rgba(51,59,50,0.24);
+    max-width:205px; pointer-events:none;
+  }
+  .lab-lab .lab-tag {
+    display:block; font-family:var(--serif); font-style:italic; font-weight:600;
+    font-variation-settings:'SOFT' 100, 'WONK' 1;
+    font-size:11px; line-height:1.1; color:${C.rust}; margin-bottom:2px;
+  }
+  .lab-lab strong {
+    display:block; font-family:var(--sans); font-size:12.5px; font-weight:700;
+    line-height:1.2; color:${C.ink}; letter-spacing:-0.01em;
+  }
+  .lab-lab small {
+    display:block; font-family:var(--sans); font-size:11px; font-weight:500;
+    line-height:1.25; color:${C.muted}; margin-top:2px; font-variant-numeric:tabular-nums;
+  }
+  .lab-lab.lab-layer-stack { border-color:${C.sageDeep}; background:rgba(252,250,244,0.97) }
+  .lab-lab.lab-layer-stack .lab-tag { color:${C.sageDeep} }
+  .lab-lab.lab-layer-ethics { border-color:${C.rust}; background:rgba(252,250,244,0.97) }
+  .lab-lab.lab-layer-ethics .lab-tag { color:${C.rust} }
+  .gm-like { display:inline-flex; align-items:center; gap:0.5em; margin-top:12px; font:inherit; font-size:12.5px; font-weight:600; color:${C.white}; background:${C.rust}; border:0; border-radius:999px; padding:0.55em 1.1em; cursor:pointer; transition:background .2s, transform .2s }
   .gm-like:hover { background:${C.rustDeep} }
   .gm-like:active { transform:translateY(2px) }
   .gm-like:focus-visible { outline:2px solid ${C.ink}; outline-offset:3px }
   .gm-like svg { width:1.1em; height:1.1em }
-  .gm-like b { font-weight:500; opacity:0.8; font-variant-numeric:tabular-nums }
-  .gm-note { margin-top:0.7em; font-size:clamp(11px,0.85vw,15px); color:${C.muted} }
+  .gm-like b { font-weight:500; opacity:0.85; font-variant-numeric:tabular-nums }
   @media (prefers-reduced-motion: reduce) { .gm-like { transition:none } }
   @media (max-width: 1500px) { .lab-pills { display:none } }
-  @media (max-height: 760px) and (min-width: 761px) { .gm-note { display:none } .lab-metric { margin-top:14px } .lab-ctl { margin-top:12px } }
   @media (max-width: 760px) {
     .lab-prompt { display:none }
-    .lab-side { bottom:calc(16px + 5.6em); padding-top:18px; background:linear-gradient(to bottom, rgba(236,238,228,0), ${C.paper} 22px) }
-    .lab-title { font-size:30px } .lab-title i { display:inline; margin-left:0.25em }
-    .lab-metric { margin-top:8px } .lab-big { font-size:46px } .lab-sub { font-size:12px }
-    .lab-ctl { margin-top:10px } .lab-ctl .ends, .gm-note { display:none }
-    .gm-like { margin-top:6px; padding:0.55em 1.05em }
+    .lab-side { top:auto !important; bottom:calc(14px + 5.2em) !important; left:14px !important; right:14px !important; width:auto !important; padding:12px 14px }
+    .lab-title { font-size:26px !important } .lab-title i { display:inline; margin-left:0.22em }
+    .lab-ctl .ends { display:none }
+    .lab-lab { padding:4px 8px; max-width:155px }
+    .lab-lab strong { font-size:11px }
+    .lab-lab small { font-size:9.5px }
   }`
   document.head.appendChild(st)
   lab.$('.lab-prompt b').textContent = "Good'Ai"
+  lab.$('.lab-no').textContent = 'Visual analogy · Each part = one service'
+  lab.$('.lab-how summary').textContent = 'How the analogy works'
 }
 await Promise.all([document.fonts.load('600 80px Fraunces'), document.fonts.load('600 40px Manrope')]).catch(() => {})
 
@@ -1695,7 +1724,6 @@ shaft.add(new THREE.Mesh(along(GEO.disc(0.016, 2.0, 0.002)), steel))
 const shaftPulley = new THREE.Mesh(along(GEO.lathe([[0.016, -0.0125], [0.06, -0.0125], [0.06, -0.006], [0.052, 0], [0.06, 0.006], [0.06, 0.0125], [0.016, 0.0125]], 96)), MAT.aluminiumMachined())
 shaftPulley.position.x = -0.97; shaft.add(shaftPulley)
 lab.add(shaft, { name: 'Cam shaft' })
-lab.label(pillows, 'AI opportunity audit · blueprint', { at: [0.4, SHAFT.y + 0.02, SHAFT.z], value: () => `${fmt(sim.shaftRpm, 1)} rpm · maps the problem first` })
 
 // five eccentric cams, phased so each peaks as a slip reaches its station
 const cams = []
@@ -1736,7 +1764,7 @@ const motorSpin = new THREE.Group(); motorSpin.position.x = -0.13; motor.add(mot
 motorSpin.add(new THREE.Mesh(along(GEO.disc(0.008, 0.06, 0.001)), steel))
 const motorPulley = new THREE.Mesh(along(GEO.lathe([[0.008, -0.0125], [0.025, -0.0125], [0.025, -0.006], [0.019, 0], [0.025, 0.006], [0.025, 0.0125], [0.008, 0.0125]], 64)), MAT.aluminiumMachined())
 motorPulley.position.x = -0.0; motorSpin.add(motorPulley)
-lab.add(motor, { name: 'Main motor', explode: [0, 0, 0.32], count: 14, label: 'Main motor', at: [0, 0.06, 0.03], value: () => `${fmt(sim.motorRpm, 0)} rpm` })
+lab.add(motor, { name: 'Main motor', explode: [0, 0, 0.32], count: 14 })
 
 // V-belt: an open belt tangent to both pulleys, in the plane x = -0.97
 function vbelt(c1, r1, c2, r2) {
@@ -1786,7 +1814,6 @@ for (const [x, name] of [[BELT.xt, 'Tail roller'], [BELT.xh, 'Drum motor']]) {
     conveyor.add(new THREE.Mesh(GEO.pipe([[x, BELT.yc - 0.025, 0.172], [x + 0.004, DECK + 0.03, 0.19], [x + 0.03, DECK + 0.005, 0.205], [x + 0.07, DECK + 0.004, 0.205]], 0.005), cable))
   }
 }
-lab.label(rollers[1].parent, 'Drum motor', { at: [0, 0.04, 0.16], value: () => `belt ${fmt(sim.v * 100, 1)} cm/s` })
 // cleats ride the loop, one per slip
 function loopAt(s) {
   s = ((s % LOOP) + LOOP) % LOOP
@@ -1826,7 +1853,7 @@ function tower(x, top, icon, armEnd = 0.04) {
   return g
 }
 
-// 1. inbox hopper (email): a square funnel on the arm, with a gate the cam opens
+// 1. inbox hopper (Voice agent): a square funnel on the arm, with a gate the cam opens
 const hopper = tower(ST.hopper, 0.9, ICON.mail, -0.084)
 {
   const prof = [[0.13, 0.94], [0.13, 0.9], [0.05, 0.76], [0.05, 0.735]]
@@ -1835,7 +1862,7 @@ const hopper = tower(ST.hopper, 0.9, ICON.mail, -0.084)
 }
 const gate = new THREE.Group(); gate.position.set(ST.hopper, 0.733, -0.034); hopper.add(gate)
 { const flap = new THREE.Mesh(GEO.rbox(0.074, 0.005, 0.07, 0.002), inkPaint); flap.position.z = 0.035; gate.add(flap) }
-lab.add(hopper, { name: 'Arm 01 · AI voice agents', explode: [0, 0.42, -0.05], count: 6, label: 'Arm 01 · AI voice agents', at: [ST.hopper, 0.92, 0.09], value: () => `${fmt(sim.N * MIN.inbox / 60, 1)} h a week answered` })
+lab.add(hopper, { name: 'Arm 01 · Voice agents', explode: [0, 0.42, -0.05], count: 6 })
 
 // 2. job-card press (Business automation): a ram through the arm, platen comes down on the slip
 const press = tower(ST.press, 0.9, ICON.card)
@@ -1848,9 +1875,9 @@ const ram = new THREE.Group(); press.add(ram)
   const platen = new THREE.Mesh(GEO.rbox(0.13, 0.022, 0.1, 0.004), rustPaint); platen.position.set(ST.press, 0.691, 0); ram.add(platen)
   const die = new THREE.Mesh(GEO.rbox(0.04, 0.008, 0.03, 0.0015), darkSteel); die.position.set(ST.press - 0.025, 0.676, -0.016); ram.add(die)
 }
-lab.add(press, { name: 'Arm 02 · Business automation', explode: [0, 0.4, -0.05], count: 8, label: 'Arm 02 · Business automation', at: [ST.press, 0.9, 0.0], value: () => `${fmt(sim.N * MIN.card / 60, 1)} h a week routed` })
+lab.add(press, { name: 'Arm 02 · Business automation', explode: [0, 0.4, -0.05], count: 8 })
 
-// 3. text bell (Custom AI assistants): a brass bell on the arm, a hammer the cam trips
+// 3. text bell (Custom assistants): a brass bell on the arm, a hammer the cam trips
 const bell = tower(ST.bell, 0.8, ICON.text)
 const bellBody = new THREE.Group(); bellBody.position.set(ST.bell, 0.76, 0.0); bell.add(bellBody)
 {
@@ -1865,9 +1892,9 @@ const hammer = new THREE.Group(); hammer.position.set(ST.bell + 0.08, 0.76, 0); 
   const ball = new THREE.Mesh(GEO.lathe(Array.from({ length: 13 }, (_, i) => { const a = -Math.PI / 2 + (i / 12) * Math.PI; return [0.014 * Math.cos(a), 0.014 * Math.sin(a)] }), 32), darkSteel); ball.position.set(0, -0.07, 0); hammer.add(ball)
 }
 { const bracket = new THREE.Mesh(GEO.rbox(0.1, 0.016, 0.03, 0.004), inkPaint); bracket.position.set(ST.bell + 0.04, 0.768, 0); bell.add(bracket) }
-lab.add(bell, { name: 'Arm 03 · Custom AI assistants', explode: [0, 0.38, -0.05], count: 9, label: 'Arm 03 · Custom AI assistants', at: [ST.bell, 0.8, 0.0], value: () => `${fmt(sim.N * MIN.text / 60, 1)} h a week found in your docs` })
+lab.add(bell, { name: 'Arm 03 · Custom assistants', explode: [0, 0.38, -0.05], count: 9 })
 
-// 4. invoice stamp (AI integration projects): a drum on a yoke, lowered by the cam, rolls a band across the slip
+// 4. invoice stamp (Tool integrations): a drum on a yoke, lowered by the cam, rolls a band across the slip
 const stamp = tower(ST.stamp, 0.86, ICON.invoice)
 const yoke = new THREE.Group(); stamp.add(yoke)
 const drum = new THREE.Group(); drum.position.set(ST.stamp, 0.702, 0.024); yoke.add(drum)
@@ -1878,7 +1905,7 @@ const drum = new THREE.Group(); drum.position.set(ST.stamp, 0.702, 0.024); yoke.
   drum.add(new THREE.Mesh(across(GEO.disc(0.045, 0.13, 0.004)), sagePaint))
   const band = new THREE.Mesh(across(GEO.tube(0.0475, 0.044, 0.012)), stampSage); band.position.z = 0.0; drum.add(band)
 }
-lab.add(stamp, { name: 'Arm 04 · AI integration projects', explode: [0, 0.4, -0.05], count: 9, label: 'Arm 04 · AI integration projects', at: [ST.stamp, 0.86, 0.0], value: () => `${fmt(sim.N * MIN.invoice / 60, 1)} h a week synced across tools` })
+lab.add(stamp, { name: 'Arm 04 · Tool integrations', explode: [0, 0.4, -0.05], count: 9 })
 
 // 5. output till: slips go in the slot, the cam kicks the drawer, the counter rolls
 const TILL = { x0: 0.742, x1: 1.04, z: 0.17, top: DECK + 0.22 }
@@ -1890,7 +1917,7 @@ const till = new THREE.Group()
   const sign = new THREE.Mesh(GEO.rbox(0.07, 0.07, 0.006, 0.004), ICON.paid); sign.position.set(cx + 0.09, DECK + 0.135, TILL.z + 0.003); till.add(sign)
   const trim = new THREE.Mesh(GEO.rbox(w + 0.004, 0.014, 0.344, 0.005), inkPaint); trim.position.set(cx, DECK + 0.007, 0); till.add(trim)
 }
-lab.add(till, { name: 'Output · finished work', explode: [0.28, 0.32, 0], xray: 'shell', label: 'Output · finished work', at: [0.89, 0.62, 0.17], value: () => `${fmt(sim.N * MIN.paid / 60, 1)} h a week handed back` })
+lab.add(till, { name: 'Output · finished work', explode: [0.28, 0.32, 0], xray: 'shell' })
 const drawer = new THREE.Group()
 {
   const cx = (TILL.x0 + TILL.x1) / 2
@@ -1924,7 +1951,7 @@ const drums = []
     g.position.set(COUNT.x - 0.039 + i * 0.026, COUNT.y, COUNT.z + 0.005); counter.add(g); drums.push(g)
   }
 }
-lab.add(counter, { name: 'Counter', explode: [0.28, 0.44, 0.1], count: 10, label: 'Jobs completed', at: [COUNT.x, COUNT.y + 0.03, COUNT.z], value: () => `${fmt(sim.paid)} through` })
+lab.add(counter, { name: 'Counter', explode: [0.28, 0.44, 0.1], count: 10 })
 
 // 6. human sign-off flag: a heart on a sprung lever, pops on every finished job and on every like
 const heartShape = (() => {
@@ -1947,7 +1974,29 @@ const lever = new THREE.Group(); lever.position.set(0.975, TILL.top + 0.012, 0.0
   const stick = new THREE.Mesh(GEO.disc(0.004, 0.06, 0.001), steel); stick.position.y = 0.03; lever.add(stick)
   const heart = new THREE.Mesh(GEO.extrude(heartShape, 0.012, 0.002), rustPaint); heart.position.y = 0.095; lever.add(heart)
 }
-lab.add(flag, { name: 'Human sign-off', explode: [0.28, 0.5, -0.1], count: 4, label: 'Human sign-off · your team in control', at: [0.975, TILL.top + 0.13, 0.0], value: () => `${fmt(sim.N * MIN.review / 60, 1)} h a week checked · ${sim.likes} from you` })
+lab.add(flag, { name: 'Human sign-off', explode: [0.28, 0.5, -0.1], count: 4 })
+
+// ------------------------------------------------------------------ 3-Layer Floating 3D Typography Callouts
+// Layer 1 (Default / Labels): The 4 helper arms on your job belt + camshaft blueprint + human sign-off
+lab.label(hopper, 'Voice agents', { layer: 'services', tag: 'Arm 01 · Incoming call', at: [ST.hopper, 0.94, 0.0], dy: -66, dx: -18, value: 'Answers calls when hands are full' })
+lab.label(press, 'Business automation', { layer: 'services', tag: 'Arm 02 · Workflow', at: [ST.press, 0.9, 0.0], dy: -26, dx: -6, value: 'Writes up & routes the job card' })
+lab.label(bell, 'Custom assistants', { layer: 'services', tag: 'Arm 03 · Your docs', at: [ST.bell, 0.82, 0.0], dy: -66, dx: 4, value: 'Finds answers in your own manuals' })
+lab.label(stamp, 'Tool integrations', { layer: 'services', tag: 'Arm 04 · Sync', at: [ST.stamp, 0.86, 0.0], dy: -26, dx: 10, value: 'Connects Xero, calendar & CRM once' })
+lab.label(flag, 'Human sign-off', { layer: 'services', tag: 'Step 05 · You in control', at: [0.92, TILL.top + 0.11, 0.0], dy: -62, dx: 24, value: 'Your team checks the till at the end' })
+lab.label(pillows, 'Opportunity audit', { layer: 'services', tag: 'Blueprint · Camshaft', at: [-0.08, SHAFT.y - 0.03, SHAFT.z], dy: 48, dx: 0, value: 'Maps your workflow before we build' })
+
+// Layer 2 (Cut away / X-ray): What we build with (OpenAI, xAI/Grok, Gemini, ElevenLabs, n8n, Google Cloud GCP)
+lab.label(hopper, 'ElevenLabs', { layer: 'stack', tag: 'Voice layer', at: [ST.hopper, 0.92, 0.0], dy: -60, dx: -14, value: 'Low-latency natural voice calls' })
+lab.label(press, 'OpenAI · Gemini · xAI', { layer: 'stack', tag: 'Model layer', at: [ST.press + 0.18, 0.88, 0.0], dy: -64, dx: 0, value: 'Matched to the task, never one-size-fits-all' })
+lab.label(pillows, 'n8n automation', { layer: 'stack', tag: 'Orchestration', at: [0.05, SHAFT.y, SHAFT.z], dy: 50, dx: 12, value: 'Event-driven steps with scoped permissions' })
+lab.label(motor, 'Google Cloud (GCP Sydney)', { layer: 'stack', tag: 'Infrastructure', at: [0, 0.04, 0.03], dy: 52, dx: -16, value: 'Australian residency & isolated PostgreSQL' })
+lab.label(stamp, 'Your existing tools', { layer: 'stack', tag: 'APIs & webhooks', at: [ST.stamp + 0.1, 0.84, 0.0], dy: -46, dx: 16, value: 'Xero · ServiceM8 · Microsoft 365 · Google' })
+
+// Layer 3 (Explode): Good'Ai Ethics & Humancentric Policy
+lab.label(flag, 'Human holds the off-switch', { layer: 'ethics', tag: 'Policy 01 · Stop authority', at: [0.92, TILL.top + 0.1, 0.0], dy: -60, dx: 18, value: 'Named person in control · 30-sec stop' })
+lab.label(bell, 'Grounded, never fabricated', { layer: 'ethics', tag: 'Policy 02 · Honesty', at: [ST.bell, 0.82, 0.0], dy: -62, dx: 0, value: 'Cites your own uploaded docs · no guessing' })
+lab.label(pillows, 'No mystery box', { layer: 'ethics', tag: 'Policy 03 · Ownership', at: [-0.05, SHAFT.y, SHAFT.z], dy: 50, dx: 0, value: 'Built in your accounts with plain handover' })
+lab.label(front, 'Traffic-light data privacy', { layer: 'ethics', tag: 'Policy 04 · Privacy', at: [-0.52, 0.25, 0.27], dy: 46, dx: -12, value: 'Your business data never trains public models' })
 
 // power lead to a floor box (the plug is what you pull)
 lab.mesh(GEO.pipe([[-1.05, 0.14, -0.16], [-1.085, 0.14, -0.16], [-1.11, 0.06, -0.15], [-1.13, 0.012, -0.13], [-1.17, 0.012, -0.11], [-1.2, 0.024, -0.1]], 0.0065), cable, { name: 'Power lead' })
@@ -1959,18 +2008,15 @@ lab.add(plug, { name: 'Plug' })
 void powerBox; void grommet
 
 // ------------------------------------------------------------------ the solver
-const MIN = { inbox: 5, card: 10, text: 3, invoice: 10, paid: 10, review: 2 }   // Good'Ai estimates, minutes per job
-const PER_JOB = Object.values(MIN).reduce((a, b) => a + b, 0)                     // 40 min
-const WEEK_H = 38
 const sim = { N: 25, f: 0.2, v: 0, s: 0, shaftRpm: 0, motorRpm: 0, paid: 0, queue: 0, likes: 0, unplugged: false, pop: 0, popV: 0, popT: 0, popTo: 0, ring: 0, lastTill: -1 }
 
-lab.hero({ label: 'Admin handed back each week', unit: 'h', max: 70, digits: 1 })
-const jobs = lab.slider({ id: 'jobs', label: 'Jobs a week', min: 5, max: 100, value: 25, step: 1, ends: ['Quiet', 'Flat out'] })
+lab.hero({ label: 'A Good’Ai business', unit: '', max: 100, digits: 0 })
+const jobs = lab.slider({ id: 'jobs', label: 'How busy is the week?', min: 5, max: 100, value: 25, step: 1, ends: ['Quiet week', 'Flat out'] })
 
 // the like button sits under the slider; it tells the page around it (if any) so it can show the socials
 {
   const wrap = document.createElement('div'); wrap.className = 'on'
-  wrap.innerHTML = `<button type="button" class="gm-like" aria-label="Like this machine"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.6 4.5c2.1 0 3.6 1.2 4.4 2.5.8-1.3 2.3-2.5 4.4-2.5 3.6 0 5.7 3.8 4.2 7.2C19.5 16.4 12 21 12 21Z"/></svg>Like it <b>0</b></button><div class="gm-note">Illustrative. Minutes saved are estimates.</div>`
+  wrap.innerHTML = `<button type="button" class="gm-like" aria-label="Like this machine"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.6 4.5c2.1 0 3.6 1.2 4.4 2.5.8-1.3 2.3-2.5 4.4-2.5 3.6 0 5.7 3.8 4.2 7.2C19.5 16.4 12 21 12 21Z"/></svg>Pop the heart <b>0</b></button>`
   lab.$('.lab-side').appendChild(wrap)
   const btn = wrap.querySelector('button'), n = wrap.querySelector('b')
   btn.addEventListener('click', () => {
@@ -1981,7 +2027,6 @@ const jobs = lab.slider({ id: 'jobs', label: 'Jobs a week', min: 5, max: 100, va
 }
 function pop(to, hold) { sim.popTo = Math.max(sim.popTo, to); sim.popT = Math.max(sim.popT, hold) }
 
-const sideCol = lab.$('.lab-side')
 const rngPile = rng(11)
 const pile = []
 for (let i = 0; i < 24; i++) {
@@ -2040,7 +2085,7 @@ lab.onTick((dt, lab) => {
       sl.userData.inv.visible = xs > ST.stamp + 0.02
     }
   }
-  // a slip reaches the till: counted as paid, the flag asks for a review
+  // a slip reaches the till: counted as completed, the flag pops
   const tillPhase = Math.floor((sim.s - (ST.till - SLIP_AHEAD - BELT.xt)) / PITCH)
   if (sim.lastTill < 0) sim.lastTill = tillPhase
   if (tillPhase > sim.lastTill) { sim.paid += tillPhase - sim.lastTill; sim.lastTill = tillPhase; pop(0.45, 0.5) }
@@ -2057,16 +2102,12 @@ lab.onTick((dt, lab) => {
   const shown = Math.min(pile.length, Math.floor(sim.queue))
   pile.forEach((m, i) => { m.visible = i < shown; if (m.visible) { const [x, y, z, r] = m.userData.p; m.position.set(x, y, z); m.rotation.y = r } })
 
-  sideCol.style.opacity = String(1 - 0.7 * lab.state.labels)
-
-  // hero
-  const H = sim.N * PER_JOB / 60
+  // plain-English analogy story in the right-hand editorial column
   if (sim.unplugged) {
     const n = Math.floor(sim.queue)
-    lab.setHero(H, { state: 'all back on you', bad: true, sub: `<span class="bad">${n ? `${fmt(n)} ${n === 1 ? 'enquiry' : 'enquiries'} waiting · ${fmt(n * PER_JOB)} min of admin piling up` : 'the next enquiry lands on you'}</span>` })
+    lab.setHero(sim.N, { state: 'unplugged', bad: true, sub: `<span class="bad">${n ? `Plug pulled — ${fmt(n)} ${n === 1 ? 'enquiry' : 'enquiries'} piling up on your desk.` : 'Plug pulled — the belt stops.'} Without the systems running, every call, job card, and invoice lands back on you tonight.</span>` })
   } else {
-    const st = Math.abs(sim.v - vTarget) > 0.004 ? (sim.v < vTarget ? 'spooling up' : 'easing off') : sim.N > 70 ? 'flat out' : 'ticking over'
-    lab.setHero(H, { state: st, sub: `${fmt(sim.N)} jobs a week · ${PER_JOB} min each · 1 s here ≈ ${fmt(WEEK_H * 3600 / sim.N * sim.f / 60)} min of your week` })
+    lab.setHero(sim.N, { state: 'running', sub: `The belt is a single job moving through your week — from the first phone call to money in the till. The arms above it are the systems we bolt on so you can knock off on time.` })
   }
 })
 
@@ -2081,23 +2122,22 @@ lab.breakIt({
   reset() { sim.unplugged = false; sim.queue = 0 },
 })
 lab.how(
-  'Illustrative: nothing is connected and nothing is sent. The four arms stand for Good’Ai’s four build services — AI voice agents, Business automation, Custom AI assistants, and AI integration projects — driven by the cam shaft (our AI opportunity audit, which maps the problem before we touch a tool) and checked at the end by a named person on your team. The minutes saved per job are our estimates for a typical WA business; yours will differ, and we work them out with you.',
+  'Think of this workbench as a Good’Ai business in motion. A job slip drops onto the belt on the left when a customer calls, gets written up, checked against your docs, synced with your tools, and lands in the till on the right with a human sign-off.',
   [
-    `H = N × ${PER_JOB} min ÷ 60   (h a week)`,
-    `${PER_JOB} min = ${MIN.inbox} voice + ${MIN.card} automation + ${MIN.text} assistant + ${MIN.invoice} integration + ${MIN.paid} output + ${MIN.review} human sign-off`,
-    `on screen: f = 0.2 × N ÷ 25 jobs/s, v = f × ${fmt(PITCH, 3)} m`,
-    `1 s here = ${WEEK_H} h × 3600 ÷ N × f s ≈ ${fmt(WEEK_H * 3600 * 0.2 / 25 / 60)} min of a working week`,
-    'cam shaft (opportunity audit) = 60 v ÷ p rpm · motor = shaft × 2.4 (V-belt)',
-    'plug out: v → 0 (τ 0.6 s), enquiries still arrive at f, owed = queue × 40 min',
+    'Belt = a single job moving from first enquiry to finished work',
+    'Camshaft underneath = our opportunity audit (maps your workflow first)',
+    'Four arms above = voice, workflow automation, custom assistant, and tool sync',
+    'Cut away = the stack we build with (OpenAI, Gemini, xAI, ElevenLabs, n8n, GCP Sydney)',
+    'Explode = our Humancentric policy (human off-switch, grounded answers, no mystery box)',
   ],
 )
 lab.autoFilm({
   sliderTo: 0.75,
   runBeat: 'More work comes in.', runSub: 'The four arms keep up. Your team stays in control.',
-  breakBeat: 'Then pull the plug.', breakSub: 'It all lands back on you.',
+  breakBeat: 'Then pull the plug.', breakSub: 'It all lands back on your desk.',
 })
 {
-  const beats = { '01': ['Every job starts with a real problem.', 'Enquiry in, finished work out.'], '02': ['Four arms, four Good’Ai services.', 'Voice, automation, assistants, and integrations.'], '04': ['Look inside.', 'One opportunity audit cam shaft drives every arm.'], '05': ['Take it apart.', 'No mystery box — your team keeps stop authority.'] }
+  const beats = { '01': ['A Good’Ai business in motion.', 'Call in on the left, finished work out on the right.'], '02': ['Four arms, four Good’Ai helpers.', 'Voice, automation, assistants, and tool integrations.'], '04': ['Cut it open: what we build with.', 'OpenAI, Gemini, xAI, ElevenLabs, n8n & Google Cloud Sydney.'], '05': ['Explode it: our ethics & policy.', 'Human holds the off-switch · grounded · no mystery box.'] }
   for (const e of lab.films.main.events) if (e.beat && beats[e.beat[0]]) e.beat = [e.beat[0], ...beats[e.beat[0]]]
 }
 
