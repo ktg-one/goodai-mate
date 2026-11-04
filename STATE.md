@@ -7,16 +7,16 @@ surface: goodai-studio
 Full rewrite every time it's updated: current truth only, no history. History lives in git, `memory/` and the weekly catch-ups. Max ~300 words. Detailed feature map: `state/WEBSITE-STATE.md`.
 
 ## Now
-goodai.au (Next 16, Vercel `goodai-mate`). Work sits on branch `feat/under-the-hood` (`c6735f5` pushed, **not merged to main**). `bun run check` + `bun run build` green: 0 lint errors, 43/43 tests.
+goodai.au (Next 16, Vercel `goodai-mate`). Work sits on branch `feat/under-the-hood` (`b4a2a6a` pushed, **not merged to main**). `bun run check` + `bun run build` green: 0 lint errors, 43/43 tests.
 
 ## Shipped (on the branch)
-- Customised CTA buttons per context instead of generic "Suss the fuss": Hero (`"Sign me up"`), ScrollStory (`"I’m sold"`), Goodie mascot (`"Yes, please"`), Blog footer (`"Subscribe to newsletter"`), TechSpecs/CTA (`"Improve my life"`), Services/Mobile nav (`"Sign me up"`) | `Hero.tsx`, `ScrollStory.tsx`, `MascotWidget.tsx`, `app/blog/[slug]/page.tsx`, `TechSpecs.tsx`, `CTA.tsx`, `Shell.tsx`, `app/services/[slug]/page.tsx` (uncommitted)
-- `/admin-engine` "Under the hood" fresh-eyes framing: H1 `"The Good’Ai machine: an analogy for how we run your admin."` + dry intro + 3D card header + aligned stack panel | `c6735f5`
-- Self-hosted LFM3-Omni-2B voice/chat in Goodie | `1e2eeb3`
+- Redesigned `/blog` & `/blog/[slug]` with the lazy-summer Perth workbench aesthetic (`#2f3a33` / `#ab4b3d` / `#f6f3ea` / `#d8dfca`, Fraunces Soft Wonk 800, Manrope 800 rounded pill labels, large arch + 3 organic blobs + terracotta sun crop + botanical branch, 3-line wavy dividers for `<hr>`, Good'Ai sketchbook art `1-sketch.webp`..`14-sketch.webp` on every card & header, markdown table rendering, Hostinger fallback) | `app/blog/page.tsx`, `app/blog/[slug]/page.tsx`, `lib/instatic.ts`, `app/globals.css` (uncommitted)
+- Customised CTA buttons per context (`Sign me up`, `I’m sold`, `Yes, please`, `Subscribe to newsletter`, `Improve my life`) + merged `origin/main` PRs #327 & #315 | `b4a2a6a`
+- `/admin-engine` "Under the hood" fresh-eyes analogy framing + aligned stack panel | `c6735f5`
 
 ## Open (max 5)
-- Optional: wire inline 1-field email input on `/blog` & `/blog/[slug]` ("Subscribe to newsletter" -> posts `{ contact, headaches: ["Newsletter"] }` to existing `/api/contact` SMTP/n8n pipeline)
-- Commit and push copy tweaks on `feat/under-the-hood`, then merge to `main`
+- Commit and push blog redesign on `feat/under-the-hood`, then merge `feat/under-the-hood` → `main` so live `goodai.au` gets all updates
+- Optional: wire inline 1-field email input on `/blog` & `/blog/[slug]` ("Subscribe to newsletter" -> posts to `/api/contact`)
 - Untracked `.agents/skills/*`, `.claude/skills/*`, `agent/` (~250 files from `bunx skills add`) | gitignore vs commit
 - Vendor logos/branding for the stack layer (Trillet certs, Liquid LFM3) | later, per Kev
 - Anatomy skill (wheresryan22/anatomy, MIT): candidate for empty homepage slot where workflow demo was
@@ -31,4 +31,4 @@ goodai.au (Next 16, Vercel `goodai-mate`). Work sits on branch `feat/under-the-h
 - Next new site uses motionsites; goodai.au isn't redesigned
 
 ## Next action
-Finish any remaining site tweaks from Kev, optionally wire the inline blog newsletter email field, then commit, push, and merge `feat/under-the-hood` to `main`.
+Commit & push the `/blog` redesign on `feat/under-the-hood` and merge to `main`.

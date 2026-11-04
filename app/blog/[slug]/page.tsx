@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { getPublishedPostBySlug, getPublishedPosts } from "@/lib/instatic";
@@ -42,21 +43,51 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
+function WavyRule() {
+  return (
+    <div className="blog-wavy-divider blog-hr" role="separator">
+      <svg viewBox="0 0 600 28" fill="none" preserveAspectRatio="none" aria-hidden="true">
+        <path
+          d="M0 8 C 75 2, 150 15, 225 8 C 300 1, 375 15, 450 8 C 525 1, 565 13, 600 7"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinecap="round"
+        />
+        <path
+          d="M0 16 C 80 22, 160 9, 240 16 C 320 23, 400 10, 480 16 C 540 21, 575 12, 600 15"
+          stroke="currentColor"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          className="wave-accent"
+        />
+        <path
+          d="M40 23 C 130 18, 210 26, 300 22 C 390 18, 470 25, 560 21"
+          stroke="currentColor"
+          strokeWidth="0.9"
+          strokeLinecap="round"
+          opacity="0.45"
+        />
+      </svg>
+    </div>
+  );
+}
+
 function renderInline(text: string): ReactNode[] {
+  const cleaned = text.replace(/\\\*/g, "*");
   const nodes: ReactNode[] = [];
   const tokenRe = /(\*\*([^*]+)\*\*|\*([^*]+)\*|`([^`]+)`|\[([^\]]+)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\))/g;
   let lastIndex = 0;
   let match: RegExpExecArray | null;
   let key = 0;
 
-  while ((match = tokenRe.exec(text)) !== null) {
+  while ((match = tokenRe.exec(cleaned)) !== null) {
     if (match.index > lastIndex) {
-      nodes.push(text.slice(lastIndex, match.index));
+      nodes.push(cleaned.slice(lastIndex, match.index));
     }
     if (match[2] !== undefined) {
-      nodes.push(<strong key={key++}>{match[2]}</strong>);
+      nodes.push(<strong key={key++}>{match[2].trim()}</strong>);
     } else if (match[3] !== undefined) {
-      nodes.push(<em key={key++}>{match[3]}</em>);
+      nodes.push(<em key={key++}>{match[3].trim()}</em>);
     } else if (match[4] !== undefined) {
       nodes.push(<code key={key++}>{match[4]}</code>);
     } else if (match[5] !== undefined && match[6] !== undefined) {
@@ -78,14 +109,42 @@ function renderInline(text: string): ReactNode[] {
     lastIndex = tokenRe.lastIndex;
   }
 
-  if (lastIndex < text.length) {
-    nodes.push(text.slice(lastIndex));
+  if (lastIndex < cleaned.length) {
+    nodes.push(cleaned.slice(lastIndex));
   }
   return nodes;
 }
 
-function renderMarkdownBlocks(markdown: string): ReactNode[] {
-  const lines = markdown.replace(/\r\n/g, "\n").split("\n");
+const isRuleLine = (s: string) => /^(-{3,}|\*{3,}|_{3,}|={3,}|─{3,})$/.test(s.trim());
+const isTableLine = (s: string) => /^\|.*\|$/.test(s.trim());
+const isTableSep = (s: string) => /^\|[\s:-]+(\|[\s:-]+)+\|?$/.test(s.trim());
+
+function normalizeMarkdown(markdown: string, title: string): string[] {
+  const cutRecirc = markdown.split(/\nCurated by\[/)[0] ?? markdown;
+  const rawLines = cutRecirc
+    .replace(/\r\n/g, "\n")
+    .replace(/^(?:---|\*\*\*|===+)\s*(#+\s+)/gm, "---\n$1")
+    .split("\n");
+
+  // Drop a leading H1 if it duplicates the post title already rendered in the article header
+  let skippedTitle = false;
+  const out: string[] = [];
+  for (const line of rawLines) {
+    const t = line.trim();
+    if (!skippedTitle && t.startsWith("# ")) {
+      const h1Text = t.slice(2).trim().toLowerCase();
+      if (h1Text === title.trim().toLowerCase() || out.every((l) => l.trim() === "")) {
+        skippedTitle = true;
+        continue;
+      }
+    }
+    out.push(line);
+  }
+  return out;
+}
+
+function renderMarkdownBlocks(markdown: string, title: string, fallbackSketch: string): ReactNode[] {
+  const lines = normalizeMarkdown(markdown, title);
   const blocks: ReactNode[] = [];
   let i = 0;
   let key = 0;
@@ -115,18 +174,67 @@ function renderMarkdownBlocks(markdown: string): ReactNode[] {
       continue;
     }
 
-    if (/^(-{3,}|\*{3,}|_{3,})$/.test(trimmed)) {
-      blocks.push(<hr key={key++} className="blog-hr" />);
+    if (isRuleLine(trimmed)) {
+      blocks.push(<WavyRule key={key++} />);
       i++;
+      continue;
+    }
+
+    if (isTableLine(trimmed)) {
+      const tableRows: string[][] = [];
+      while (i < lines.length && isTableLine(lines[i].trim())) {
+        const rowLine = lines[i].trim();
+        if (!isTableSep(rowLine)) {
+          const cells = rowLine
+            .replace(/^\|/, "")
+            .replace(/\|$/, "")
+            .split("|")
+            .map((c) => c.trim());
+          tableRows.push(cells);
+        }
+        i++;
+      }
+      if (tableRows.length > 0) {
+        const [head, ...body] = tableRows;
+        blocks.push(
+          <div key={key++} className="blog-table-wrap">
+            <table className="blog-table">
+              {head && (
+                <thead>
+                  <tr>
+                    {head.map((cell, cIdx) => (
+                      <th key={cIdx}>{renderInline(cell)}</th>
+                    ))}
+                  </tr>
+                </thead>
+              )}
+              {body.length > 0 && (
+                <tbody>
+                  {body.map((row, rIdx) => (
+                    <tr key={rIdx}>
+                      {row.map((cell, cIdx) => (
+                        <td key={cIdx}>{renderInline(cell)}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              )}
+            </table>
+          </div>,
+        );
+      }
       continue;
     }
 
     const imgMatch = /^!\[([^\]]*)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)$/.exec(trimmed);
     if (imgMatch) {
+      const rawSrc = imgMatch[2];
+      const useFallback = rawSrc.includes("hostingersite.com");
+      const src = useFallback ? fallbackSketch : rawSrc;
       blocks.push(
         <figure key={key++} className="blog-figure">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={imgMatch[2]} alt={imgMatch[1] || "Article illustration"} loading="lazy" />
+          <img src={src} alt={imgMatch[1] || "Field note illustration"} loading="lazy" />
           {imgMatch[1] && <figcaption>{imgMatch[1]}</figcaption>}
         </figure>,
       );
@@ -134,6 +242,11 @@ function renderMarkdownBlocks(markdown: string): ReactNode[] {
       continue;
     }
 
+    if (trimmed.startsWith("#### ")) {
+      blocks.push(<h4 key={key++}>{renderInline(trimmed.slice(5))}</h4>);
+      i++;
+      continue;
+    }
     if (trimmed.startsWith("### ")) {
       blocks.push(<h3 key={key++}>{renderInline(trimmed.slice(4))}</h3>);
       i++;
@@ -195,9 +308,11 @@ function renderMarkdownBlocks(markdown: string): ReactNode[] {
       !lines[i].trim().startsWith("#") &&
       !lines[i].trim().startsWith("```") &&
       !lines[i].trim().startsWith(">") &&
+      !isTableLine(lines[i].trim()) &&
+      !isRuleLine(lines[i].trim()) &&
+      !/^!\[([^\]]*)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)$/.test(lines[i].trim()) &&
       !/^[-*]\s+/.test(lines[i].trim()) &&
-      !/^\d+\.\s+/.test(lines[i].trim()) &&
-      !/^(-{3,}|\*{3,}|_{3,})$/.test(lines[i].trim())
+      !/^\d+\.\s+/.test(lines[i].trim())
     ) {
       paraLines.push(lines[i].trim());
       i++;
@@ -217,7 +332,7 @@ export default async function BlogPostPage({ params }: Props) {
   const post = await getPublishedPostBySlug(slug);
   if (!post) notFound();
 
-  const bodyBlocks = post.body ? renderMarkdownBlocks(post.body) : [];
+  const bodyBlocks = post.body ? renderMarkdownBlocks(post.body, post.title, post.sketchImage) : [];
 
   return (
     <article className="detail-page shell blog-article">
@@ -227,20 +342,49 @@ export default async function BlogPostPage({ params }: Props) {
       </Link>
 
       <header className="blog-article-header">
-        <div className="blog-card-meta">
-          <span className="step-number">{post.category || "Field note"}</span>
-          {post.publishDate && <time dateTime={post.publishDate}>{post.publishDate}</time>}
+        <div>
+          <div className="blog-pill-row">
+            <span className="blog-pill blog-pill-coral">{post.category.toLowerCase()}</span>
+            {post.publishDate && (
+              <time className="blog-pill" dateTime={post.publishDate}>
+                {post.publishDate}
+              </time>
+            )}
+            <span className="blog-pill blog-pill-sage">{post.readMinutes} min read</span>
+          </div>
+          <h1>{post.title}</h1>
+          {post.excerpt && <p className="detail-lead blog-lead">{post.excerpt}</p>}
         </div>
-        <h1>{post.title}</h1>
-        {post.excerpt && <p className="detail-lead blog-lead">{post.excerpt}</p>}
+
+        <div className="blog-article-art" aria-hidden="true">
+          <span className="blog-sun-crop" />
+          <div className="blog-article-arch">
+            <Image
+              src={post.sketchImage}
+              alt=""
+              width={320}
+              height={320}
+              className="blog-arch-sketch"
+            />
+          </div>
+        </div>
       </header>
+
+      <WavyRule />
 
       <div className="blog-body">{bodyBlocks}</div>
 
+      <WavyRule />
+
       <aside className="detail-aside blog-cta">
-        <p className="step-number">More field notes like this?</p>
-        <h2>Practical notes from the workbench.</h2>
-        <p>Get straight-talking field reports on what actually works in business AI — no spam, no hype.</p>
+        <div className="blog-pill-row">
+          <span className="blog-pill blog-pill-coral">Field notes</span>
+          <span className="blog-pill blog-pill-sage">No waffle</span>
+        </div>
+        <h2>More notes from the workbench?</h2>
+        <p>
+          Whenever we find a simpler way to sort the boring stuff and knock off early, we write it up. Straight to your inbox, never any spam.
+        </p>
         <a className="button" href={SURVEY_URL}>
           Subscribe to newsletter
           <ArrowUpRight size={17} />

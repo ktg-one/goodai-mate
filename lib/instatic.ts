@@ -33,9 +33,12 @@ export interface BlogPost {
   author: string;
   category: string;
   publishDate: string;
+  sketchImage: string;
+  readMinutes: number;
 }
 
 const DEFAULT_INSTATIC_URL = "https://ktg-nas.blowfish-snares.ts.net";
+const SKETCH_COUNT = 14;
 
 export function getInstaticBaseUrl(): string {
   const raw =
@@ -45,15 +48,29 @@ export function getInstaticBaseUrl(): string {
   return raw.replace(/\/+$/, "");
 }
 
-function normalizePost(entry: InstaticEntry<InstaticPostCells>): BlogPost {
+function cleanExcerptText(raw: string): string {
+  return raw
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, "")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/^#+\s+.*$/gm, "")
+    .replace(/^\|.*\|$/gm, "")
+    .replace(/={3,}|-{3,}|\*{3,}/g, " ")
+    .replace(/[*_`>#\[\]|]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizePost(entry: InstaticEntry<InstaticPostCells>, index: number): BlogPost {
   const cells = entry.cells ?? {};
   const title = String(cells.title || entry.slug || "Untitled");
   const body = String(cells.body || "");
-  const excerpt = String(
-    cells.excerpt ||
-      cells.seoDescription ||
-      body.replace(/^#+\s+.*$/gm, "").replace(/[*_`>#\[\]]/g, "").trim().slice(0, 180)
-  );
+  const rawExcerpt = String(cells.excerpt || cells.seoDescription || body);
+  const cleaned = cleanExcerptText(rawExcerpt);
+  const excerpt = cleaned.length > 170 ? `${cleaned.slice(0, 167).trimEnd()}…` : cleaned;
+  const wordCount = body.trim().split(/\s+/).filter(Boolean).length;
+  const readMinutes = Math.max(2, Math.round(wordCount / 220));
+  const sketchIndex = (index % SKETCH_COUNT) + 1;
+
   return {
     id: entry.id,
     slug: String(entry.slug || cells.slug || ""),
@@ -63,11 +80,13 @@ function normalizePost(entry: InstaticEntry<InstaticPostCells>): BlogPost {
     seoTitle: String(cells.seoTitle || title),
     seoDescription: String(cells.seoDescription || excerpt),
     author: String(cells.author || "Good’Ai"),
-    category: String(cells.category || "Field Notes"),
+    category: String(cells.category || "Field notes"),
     publishDate: String(
       cells.publishDate ||
         (entry.publishedAt ? entry.publishedAt.slice(0, 10) : "")
     ),
+    sketchImage: `/images/book/${sketchIndex}-sketch.webp`,
+    readMinutes,
   };
 }
 
@@ -87,7 +106,7 @@ export async function getPublishedPosts(): Promise<BlogPost[]> {
     if (!Array.isArray(data.entries)) return [];
     return data.entries
       .filter((entry) => Boolean(entry.slug || entry.cells?.slug))
-      .map(normalizePost);
+      .map((entry, idx) => normalizePost(entry, idx));
   } catch {
     return [];
   }
