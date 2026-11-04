@@ -70,6 +70,7 @@ export function MachineDemo() {
           src={MACHINE_SRC}
           title="Good'Ai workbench automation model: conveyor belt representing a job moving through your business, with 3D labels for services, tool stack, and ethics"
           allow="fullscreen"
+          sandbox="allow-scripts allow-same-origin allow-popups"
         />
       </div>
       <div className="machine-bar">
