@@ -101,3 +101,14 @@ test("sendViaGmailSmtp rejects invalid credentials before opening a socket", asy
   assert.equal(res.ok, false);
 });
 
+test("formatLeadPayload sanitizes spreadsheet formula triggers in contact, note, and headaches", () => {
+  const result = formatLeadPayload({
+    contact: "=1+1@example.com",
+    headaches: ["+CMD|' /C calc'!A1", "@SUM(1,2)"],
+    note: "-1+1\n\tTAB_FORMULA",
+  });
+
+  assert.equal(result.contact, "'=1+1@example.com");
+  assert.deepEqual(result.headaches, ["'+CMD|' /C calc'!A1", "'@SUM(1,2)"]);
+  assert.equal(result.note, "'-1+1\n'\tTAB_FORMULA");
+});
