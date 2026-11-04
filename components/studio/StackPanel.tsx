@@ -12,7 +12,13 @@ import {
 
 export type StackState = Record<StackLayer, boolean>;
 
-function LabelCard({ label }: { label: MachineLabel }) {
+function LabelCard({
+  label,
+  onHover,
+}: {
+  label: MachineLabel;
+  onHover?: (title: string | null) => void;
+}) {
   const body = (
     <>
       <span className="stack-card-station">{label.tag}</span>
@@ -22,27 +28,37 @@ function LabelCard({ label }: { label: MachineLabel }) {
       <span>{label.detail}</span>
     </>
   );
+  const events = {
+    onMouseEnter: () => onHover?.(label.title),
+    onMouseLeave: () => onHover?.(null),
+    onFocus: () => onHover?.(label.title),
+    onBlur: () => onHover?.(null),
+  };
   return label.href ? (
-    <Link href={label.href} className="stack-card">
+    <Link href={label.href} className="stack-card" {...events}>
       {body}
     </Link>
   ) : (
-    <div className="stack-card">{body}</div>
+    <div className="stack-card" {...events}>
+      {body}
+    </div>
   );
 }
 
 export function StackPanel({
   on,
   onToggle,
+  onHoverLabel,
 }: {
   on: StackState;
   onToggle?: (layer: StackLayer) => void;
+  onHoverLabel?: (title: string | null) => void;
 }) {
   const shown = shownLayer(on);
   return (
     <section className="stack-panel" aria-label="What is under the hood" aria-live="polite">
       <div className="stack-controls" role="group" aria-label="Inspect machine layers">
-        <span className="stack-controls-label">Inspect a layer:</span>
+        <span className="stack-controls-label">Layer:</span>
         {LAYER_BUTTONS.map((b) => (
           <button
             key={b.layer}
@@ -56,7 +72,7 @@ export function StackPanel({
         ))}
       </div>
       {shown === null ? (
-        <p className="stack-hint">Press Labels, Cut away or Explode on the machine, or tap a layer above.</p>
+        <p className="stack-hint">Select Labels, Cut away, or Explode to inspect a layer.</p>
       ) : (
         <div className="stack-layer">
           <div className="stack-row">
@@ -67,7 +83,7 @@ export function StackPanel({
             <div className="stack-row-content">
               <div className="stack-cards">
                 {MACHINE_LABELS[shown].map((label) => (
-                  <LabelCard key={label.title} label={label} />
+                  <LabelCard key={label.title} label={label} onHover={onHoverLabel} />
                 ))}
               </div>
             </div>

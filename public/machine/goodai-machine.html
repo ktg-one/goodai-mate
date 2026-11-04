@@ -920,13 +920,23 @@ export class Lab {
   /** keep moving parts in sync: set obj.position via lab.place(obj, x, y, z) so explode offsets still apply */
   place(obj, x, y, z) { const p = this.parts.find((q) => q.obj === obj); if (p) p.base.set(x, y, z); else obj.position.set(x, y, z) }
 
-  /** a pinned label with a leader line: lab.label(obj, 'HP turbine', { at:[x,y,z] in obj frame, value:()=>'1,240 rpm', tag:'01', layer:'services'|'stack'|'ethics', dy:-70 }) */
+  /** a pinned label with a leader line (hover fx): lab.label(obj, 'HP turbine', { at:[x,y,z] in obj frame, value:()=>'1,240 rpm', tag:'01', layer:'services'|'stack'|'ethics', dy:-70 }) */
   label(obj, text, o = {}) {
-    const el = document.createElement('div'); el.className = 'lab-lab'
+    const el = document.createElement('div'); el.className = 'lab-lab on'
+    el.tabIndex = 0
     const tagHtml = o.tag ? `<span class="lab-tag">${o.tag}</span>` : ''
-    el.innerHTML = `${tagHtml}<strong>${text}</strong><small></small>`
+    el.innerHTML = `<strong>${text}</strong><div class="lab-lab-more">${tagHtml}<small></small></div>`
     this.$('.lab-labels').appendChild(el)
-    const L = { obj, at: new THREE.Vector3(...(o.at ?? [0, 0, 0])), el, small: el.querySelector('small'), value: o.value, side: o.side, layer: o.layer ?? 'services', dy: o.dy ?? -68, dx: o.dx ?? 0 }
+    const L = { obj, title: text, at: new THREE.Vector3(...(o.at ?? [0, 0, 0])), el, small: el.querySelector('small'), value: o.value, side: o.side, layer: o.layer ?? 'services', dy: o.dy ?? -68, dx: o.dx ?? 0 }
+    el.addEventListener('pointerenter', () => { this.hoveredLabel = L })
+    el.addEventListener('pointerleave', () => { if (this.hoveredLabel === L && this.pinnedLabel !== L) this.hoveredLabel = null })
+    el.addEventListener('focus', () => { this.hoveredLabel = L })
+    el.addEventListener('blur', () => { if (this.hoveredLabel === L && this.pinnedLabel !== L) this.hoveredLabel = null })
+    el.addEventListener('click', (e) => {
+      e.stopPropagation()
+      this.pinnedLabel = this.pinnedLabel === L ? null : L
+      this.hoveredLabel = this.pinnedLabel
+    })
     this.labels.push(L)
     return L
   }
@@ -1037,22 +1047,29 @@ export class Lab {
     let lines = ''
     const activeLayer = this.state.explode > 0.25 ? 'ethics' : (this.state.cut > 0.25 || this.state.xray > 0.25) ? 'stack' : 'services'
     const layerAlpha = activeLayer === 'ethics' ? this.state.explode : activeLayer === 'stack' ? Math.max(this.state.cut, this.state.xray) : this.state.labels
+    const activeHover = this.hoveredLabel && this.hoveredLabel.layer === activeLayer ? this.hoveredLabel : null
     for (const L of this.labels) {
       const p = L.at.clone(); L.obj.updateWorldMatrix(true, false); p.applyMatrix4(L.obj.matrixWorld)
       const s = p.project(this.camera)
       const vis = L.layer === activeLayer && layerAlpha > 0.02 && s.z < 1 && L.obj.visible !== false
-      if (!vis) { L.el.style.opacity = '0'; L.el.style.pointerEvents = 'none'; continue }
+      if (!vis) {
+        L.el.style.opacity = '0'
+        L.el.style.pointerEvents = 'none'
+        continue
+      }
       const x = (s.x * 0.5 + 0.5) * W, y = (-s.y * 0.5 + 0.5) * H
       const lx = clamp(x + (L.dx ?? 0), 95, W - 95)
       const ly = clamp(y + (L.dy ?? -68), 46, H - 56)
-      L.el.className = `lab-lab lab-layer-${L.layer}`
+      const isHovered = activeHover === L
+      L.el.className = `lab-lab on lab-layer-${L.layer}${isHovered ? ' is-open' : ''}`
       L.el.style.left = `${lx.toFixed(1)}px`
       L.el.style.top = `${ly.toFixed(1)}px`
-      L.el.style.opacity = String(clamp(layerAlpha * 1.15))
+      L.el.style.opacity = String(clamp(layerAlpha * (isHovered ? 1.15 : 0.92)))
+      L.el.style.pointerEvents = 'auto'
       if (L.value) L.small.textContent = typeof L.value === 'function' ? L.value() : L.value
       const strokeCol = L.layer === 'ethics' ? '164,67,40' : L.layer === 'stack' ? '95,112,88' : '51,59,50'
-      const a = (0.72 * clamp(layerAlpha)).toFixed(3)
-      lines += `<path d="M${x.toFixed(1)},${y.toFixed(1)} L${lx.toFixed(1)},${ly.toFixed(1)}" stroke="rgba(${strokeCol},${a})" stroke-width="1.6" stroke-dasharray="${L.layer === 'services' ? 'none' : '3,3'}" fill="none"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.2" fill="rgb(${strokeCol})" stroke="#fcfaf4" stroke-width="1.6" fill-opacity="${a}"/>`
+      const a = ((isHovered ? 0.9 : 0.45) * clamp(layerAlpha)).toFixed(3)
+      lines += `<path d="M${x.toFixed(1)},${y.toFixed(1)} L${lx.toFixed(1)},${ly.toFixed(1)}" stroke="rgba(${strokeCol},${a})" stroke-width="${isHovered ? '1.8' : '1.2'}" stroke-dasharray="${L.layer === 'services' ? 'none' : '3,3'}" fill="none"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${isHovered ? '4.8' : '3.4'}" fill="rgb(${strokeCol})" stroke="#fcfaf4" stroke-width="1.5" fill-opacity="${a}"/>`
     }
     svg.innerHTML = lines
   }
@@ -1576,13 +1593,64 @@ const lab = new Lab({
   .lab-bar { margin:0.4em 0 0.85em !important }
   .lab-sub { font-size:clamp(12.5px, 0.95vw, 15.5px) !important; color:${C.ink} !important; line-height:1.55 !important; font-weight:500 }
   .lab-ctl { margin-top:16px !important }
-  /* Floating 3D typography callouts hovering directly above the machine parts */
+  .lab-prompt, .lab-pills, .lab-how { display:none !important }
+  /* Hotspot pins on the 3D machine parts + hover-revealed floating callouts */
+  .lab-pin {
+    position:absolute; transform:translate(-50%, -50%);
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(252,250,244,0.92); backdrop-filter:blur(4px);
+    border:1.5px solid ${C.ink}; border-radius:999px;
+    padding:4px 9px 4px 7px; cursor:pointer;
+    box-shadow:0 4px 12px -4px rgba(51,59,50,0.28);
+    transition:transform .2s cubic-bezier(.22,1,.36,1), background .2s, border-color .2s, box-shadow .2s;
+  }
+  .lab-pin-dot {
+    width:7px; height:7px; border-radius:999px; background:${C.rust}; flex-shrink:0;
+    transition:transform .2s, background .2s;
+  }
+  .lab-pin-pill {
+    font-family:var(--sans); font-size:11px; font-weight:700; line-height:1;
+    color:${C.ink}; letter-spacing:-0.01em; white-space:nowrap;
+  }
+  .lab-pin.lab-layer-stack { border-color:${C.sageDeep} }
+  .lab-pin.lab-layer-stack .lab-pin-dot { background:${C.sageDeep} }
+  .lab-pin.lab-layer-ethics { border-color:${C.rust} }
+  .lab-pin:hover, .lab-pin:focus-visible, .lab-pin.is-active {
+    transform:translate(-50%, -50%) scale(1.08);
+    background:${C.ink}; border-color:${C.ink};
+    box-shadow:0 8px 20px -6px rgba(51,59,50,0.4);
+    outline:none;
+  }
+  .lab-pin:hover .lab-pin-pill, .lab-pin:focus-visible .lab-pin-pill, .lab-pin.is-active .lab-pin-pill {
+    color:${C.white};
+  }
+  .lab-pin:hover .lab-pin-dot, .lab-pin:focus-visible .lab-pin-dot, .lab-pin.is-active .lab-pin-dot {
+    background:#e89b84; transform:scale(1.2);
+  }
+  /* Floating 3D typography callouts: compact pill by default, expands details on hover */
   .lab-lab {
-    background:rgba(252,250,244,0.95); backdrop-filter:blur(6px);
-    border:1.5px solid ${C.ink}; border-radius:12px; padding:6px 11px;
+    background:rgba(252,250,244,0.94); backdrop-filter:blur(6px);
+    border:1.5px solid ${C.ink}; border-radius:999px; padding:5px 11px;
     transform:translate(-50%, -100%); text-align:left !important;
-    box-shadow:0 10px 24px -10px rgba(51,59,50,0.24);
-    max-width:205px; pointer-events:none;
+    box-shadow:0 8px 18px -8px rgba(51,59,50,0.22);
+    max-width:215px; cursor:pointer;
+    transition:opacity .2s ease, transform .22s cubic-bezier(.22,1,.36,1), border-radius .2s ease, padding .2s ease, box-shadow .2s ease;
+    z-index:4;
+  }
+  .lab-lab .lab-lab-more {
+    display:grid; grid-template-rows:0fr; opacity:0;
+    transition:grid-template-rows .22s cubic-bezier(.22,1,.36,1), opacity .18s ease, margin-top .2s ease;
+    overflow:hidden;
+  }
+  .lab-lab .lab-lab-more > * { min-height:0 }
+  .lab-lab:hover, .lab-lab:focus-visible, .lab-lab.is-open {
+    border-radius:14px; padding:8px 12px;
+    transform:translate(-50%, calc(-100% - 4px)) scale(1.03);
+    box-shadow:0 14px 28px -10px rgba(51,59,50,0.32);
+    z-index:10; outline:none;
+  }
+  .lab-lab:hover .lab-lab-more, .lab-lab:focus-visible .lab-lab-more, .lab-lab.is-open .lab-lab-more {
+    grid-template-rows:1fr; opacity:1; margin-top:3px;
   }
   .lab-lab .lab-tag {
     display:block; font-family:var(--serif); font-style:italic; font-weight:600;
@@ -1595,11 +1663,11 @@ const lab = new Lab({
   }
   .lab-lab small {
     display:block; font-family:var(--sans); font-size:11px; font-weight:500;
-    line-height:1.25; color:${C.muted}; margin-top:2px; font-variant-numeric:tabular-nums;
+    line-height:1.25; color:${C.muted}; margin-top:3px; font-variant-numeric:tabular-nums;
   }
-  .lab-lab.lab-layer-stack { border-color:${C.sageDeep}; background:rgba(252,250,244,0.97) }
+  .lab-lab.lab-layer-stack { border-color:${C.sageDeep}; background:rgba(252,250,244,0.98) }
   .lab-lab.lab-layer-stack .lab-tag { color:${C.sageDeep} }
-  .lab-lab.lab-layer-ethics { border-color:${C.rust}; background:rgba(252,250,244,0.97) }
+  .lab-lab.lab-layer-ethics { border-color:${C.rust}; background:rgba(252,250,244,0.98) }
   .lab-lab.lab-layer-ethics .lab-tag { color:${C.rust} }
   .gm-like { display:inline-flex; align-items:center; gap:0.5em; margin-top:12px; font:inherit; font-size:12.5px; font-weight:600; color:${C.white}; background:${C.rust}; border:0; border-radius:999px; padding:0.55em 1.1em; cursor:pointer; transition:background .2s, transform .2s }
   .gm-like:hover { background:${C.rustDeep} }
@@ -1620,7 +1688,7 @@ const lab = new Lab({
   }`
   document.head.appendChild(st)
   lab.$('.lab-prompt b').textContent = "Good'Ai"
-  lab.$('.lab-no').textContent = 'Visual analogy · Each part = one service'
+  lab.$('.lab-no').textContent = 'Good’Ai'
   lab.$('.lab-how summary').textContent = 'How the analogy works'
 }
 await Promise.all([document.fonts.load('600 80px Fraunces'), document.fonts.load('600 40px Manrope')]).catch(() => {})
@@ -1862,7 +1930,7 @@ const hopper = tower(ST.hopper, 0.9, ICON.mail, -0.084)
 }
 const gate = new THREE.Group(); gate.position.set(ST.hopper, 0.733, -0.034); hopper.add(gate)
 { const flap = new THREE.Mesh(GEO.rbox(0.074, 0.005, 0.07, 0.002), inkPaint); flap.position.z = 0.035; gate.add(flap) }
-lab.add(hopper, { name: 'Arm 01 · Voice agents', explode: [0, 0.42, -0.05], count: 6 })
+lab.add(hopper, { name: 'Voice agents', explode: [0, 0.42, -0.05], count: 6 })
 
 // 2. job-card press (Business automation): a ram through the arm, platen comes down on the slip
 const press = tower(ST.press, 0.9, ICON.card)
@@ -1875,7 +1943,7 @@ const ram = new THREE.Group(); press.add(ram)
   const platen = new THREE.Mesh(GEO.rbox(0.13, 0.022, 0.1, 0.004), rustPaint); platen.position.set(ST.press, 0.691, 0); ram.add(platen)
   const die = new THREE.Mesh(GEO.rbox(0.04, 0.008, 0.03, 0.0015), darkSteel); die.position.set(ST.press - 0.025, 0.676, -0.016); ram.add(die)
 }
-lab.add(press, { name: 'Arm 02 · Business automation', explode: [0, 0.4, -0.05], count: 8 })
+lab.add(press, { name: 'Business automation', explode: [0, 0.4, -0.05], count: 8 })
 
 // 3. text bell (Custom assistants): a brass bell on the arm, a hammer the cam trips
 const bell = tower(ST.bell, 0.8, ICON.text)
@@ -1892,7 +1960,7 @@ const hammer = new THREE.Group(); hammer.position.set(ST.bell + 0.08, 0.76, 0); 
   const ball = new THREE.Mesh(GEO.lathe(Array.from({ length: 13 }, (_, i) => { const a = -Math.PI / 2 + (i / 12) * Math.PI; return [0.014 * Math.cos(a), 0.014 * Math.sin(a)] }), 32), darkSteel); ball.position.set(0, -0.07, 0); hammer.add(ball)
 }
 { const bracket = new THREE.Mesh(GEO.rbox(0.1, 0.016, 0.03, 0.004), inkPaint); bracket.position.set(ST.bell + 0.04, 0.768, 0); bell.add(bracket) }
-lab.add(bell, { name: 'Arm 03 · Custom assistants', explode: [0, 0.38, -0.05], count: 9 })
+lab.add(bell, { name: 'Custom assistants', explode: [0, 0.38, -0.05], count: 9 })
 
 // 4. invoice stamp (Tool integrations): a drum on a yoke, lowered by the cam, rolls a band across the slip
 const stamp = tower(ST.stamp, 0.86, ICON.invoice)
@@ -1905,7 +1973,7 @@ const drum = new THREE.Group(); drum.position.set(ST.stamp, 0.702, 0.024); yoke.
   drum.add(new THREE.Mesh(across(GEO.disc(0.045, 0.13, 0.004)), sagePaint))
   const band = new THREE.Mesh(across(GEO.tube(0.0475, 0.044, 0.012)), stampSage); band.position.z = 0.0; drum.add(band)
 }
-lab.add(stamp, { name: 'Arm 04 · Tool integrations', explode: [0, 0.4, -0.05], count: 9 })
+lab.add(stamp, { name: 'Tool integrations', explode: [0, 0.4, -0.05], count: 9 })
 
 // 5. output till: slips go in the slot, the cam kicks the drawer, the counter rolls
 const TILL = { x0: 0.742, x1: 1.04, z: 0.17, top: DECK + 0.22 }
@@ -1978,12 +2046,12 @@ lab.add(flag, { name: 'Human sign-off', explode: [0.28, 0.5, -0.1], count: 4 })
 
 // ------------------------------------------------------------------ 3-Layer Floating 3D Typography Callouts
 // Layer 1 (Default / Labels): The 4 helper arms on your job belt + camshaft blueprint + human sign-off
-lab.label(hopper, 'Voice agents', { layer: 'services', tag: 'Arm 01 · Incoming call', at: [ST.hopper, 0.94, 0.0], dy: -66, dx: -18, value: 'Answers calls when hands are full' })
-lab.label(press, 'Business automation', { layer: 'services', tag: 'Arm 02 · Workflow', at: [ST.press, 0.9, 0.0], dy: -26, dx: -6, value: 'Writes up & routes the job card' })
-lab.label(bell, 'Custom assistants', { layer: 'services', tag: 'Arm 03 · Your docs', at: [ST.bell, 0.82, 0.0], dy: -66, dx: 4, value: 'Finds answers in your own manuals' })
-lab.label(stamp, 'Tool integrations', { layer: 'services', tag: 'Arm 04 · Sync', at: [ST.stamp, 0.86, 0.0], dy: -26, dx: 10, value: 'Connects Xero, calendar & CRM once' })
-lab.label(flag, 'Human sign-off', { layer: 'services', tag: 'Step 05 · You in control', at: [0.92, TILL.top + 0.11, 0.0], dy: -62, dx: 24, value: 'Your team checks the till at the end' })
-lab.label(pillows, 'Opportunity audit', { layer: 'services', tag: 'Blueprint · Camshaft', at: [-0.08, SHAFT.y - 0.03, SHAFT.z], dy: 48, dx: 0, value: 'Maps your workflow before we build' })
+lab.label(hopper, 'Voice agents', { layer: 'services', tag: 'Incoming call', at: [ST.hopper, 0.94, 0.0], dy: -66, dx: -18, value: 'Answers calls when hands are full' })
+lab.label(press, 'Business automation', { layer: 'services', tag: 'Workflow', at: [ST.press, 0.9, 0.0], dy: -26, dx: -6, value: 'Writes up & routes the job card' })
+lab.label(bell, 'Custom assistants', { layer: 'services', tag: 'Your docs', at: [ST.bell, 0.82, 0.0], dy: -66, dx: 4, value: 'Finds answers in your own manuals' })
+lab.label(stamp, 'Tool integrations', { layer: 'services', tag: 'Sync', at: [ST.stamp, 0.86, 0.0], dy: -26, dx: 10, value: 'Connects Xero, calendar & CRM once' })
+lab.label(flag, 'Human sign-off', { layer: 'services', tag: 'You in control', at: [0.92, TILL.top + 0.11, 0.0], dy: -62, dx: 24, value: 'Your team checks the till at the end' })
+lab.label(pillows, 'Opportunity audit', { layer: 'services', tag: 'Camshaft', at: [-0.08, SHAFT.y - 0.03, SHAFT.z], dy: 48, dx: 0, value: 'Maps your workflow before we build' })
 
 // Layer 2 (Cut away / X-ray): What we build with (OpenAI, xAI/Grok, Gemini, ElevenLabs, n8n, Google Cloud GCP)
 lab.label(hopper, 'ElevenLabs', { layer: 'stack', tag: 'Voice layer', at: [ST.hopper, 0.92, 0.0], dy: -60, dx: -14, value: 'Low-latency natural voice calls' })
@@ -1993,10 +2061,10 @@ lab.label(motor, 'Google Cloud (GCP Sydney)', { layer: 'stack', tag: 'Infrastruc
 lab.label(stamp, 'Your existing tools', { layer: 'stack', tag: 'APIs & webhooks', at: [ST.stamp + 0.1, 0.84, 0.0], dy: -46, dx: 16, value: 'Xero · ServiceM8 · Microsoft 365 · Google' })
 
 // Layer 3 (Explode): Good'Ai Ethics & Humancentric Policy
-lab.label(flag, 'Human holds the off-switch', { layer: 'ethics', tag: 'Policy 01 · Stop authority', at: [0.92, TILL.top + 0.1, 0.0], dy: -60, dx: 18, value: 'Named person in control · 30-sec stop' })
-lab.label(bell, 'Grounded, never fabricated', { layer: 'ethics', tag: 'Policy 02 · Honesty', at: [ST.bell, 0.82, 0.0], dy: -62, dx: 0, value: 'Cites your own uploaded docs · no guessing' })
-lab.label(pillows, 'No mystery box', { layer: 'ethics', tag: 'Policy 03 · Ownership', at: [-0.05, SHAFT.y, SHAFT.z], dy: 50, dx: 0, value: 'Built in your accounts with plain handover' })
-lab.label(front, 'Traffic-light data privacy', { layer: 'ethics', tag: 'Policy 04 · Privacy', at: [-0.52, 0.25, 0.27], dy: 46, dx: -12, value: 'Your business data never trains public models' })
+lab.label(flag, 'Human holds the off-switch', { layer: 'ethics', tag: 'Stop authority', at: [0.92, TILL.top + 0.1, 0.0], dy: -60, dx: 18, value: 'Named person in control · 30-sec stop' })
+lab.label(bell, 'Grounded, never fabricated', { layer: 'ethics', tag: 'Honesty', at: [ST.bell, 0.82, 0.0], dy: -62, dx: 0, value: 'Cites your own uploaded docs · no guessing' })
+lab.label(pillows, 'No mystery box', { layer: 'ethics', tag: 'Ownership', at: [-0.05, SHAFT.y, SHAFT.z], dy: 50, dx: 0, value: 'Built in your accounts with plain handover' })
+lab.label(front, 'Traffic-light data privacy', { layer: 'ethics', tag: 'Privacy', at: [-0.52, 0.25, 0.27], dy: 46, dx: -12, value: 'Your business data never trains public models' })
 
 // power lead to a floor box (the plug is what you pull)
 lab.mesh(GEO.pipe([[-1.05, 0.14, -0.16], [-1.085, 0.14, -0.16], [-1.11, 0.06, -0.15], [-1.13, 0.012, -0.13], [-1.17, 0.012, -0.11], [-1.2, 0.024, -0.1]], 0.0065), cable, { name: 'Power lead' })
@@ -2102,12 +2170,12 @@ lab.onTick((dt, lab) => {
   const shown = Math.min(pile.length, Math.floor(sim.queue))
   pile.forEach((m, i) => { m.visible = i < shown; if (m.visible) { const [x, y, z, r] = m.userData.p; m.position.set(x, y, z); m.rotation.y = r } })
 
-  // plain-English analogy story in the right-hand editorial column
+  // concise status line in the right-hand column
   if (sim.unplugged) {
     const n = Math.floor(sim.queue)
-    lab.setHero(sim.N, { state: 'unplugged', bad: true, sub: `<span class="bad">${n ? `Plug pulled — ${fmt(n)} ${n === 1 ? 'enquiry' : 'enquiries'} piling up on your desk.` : 'Plug pulled — the belt stops.'} Without the systems running, every call, job card, and invoice lands back on you tonight.</span>` })
+    lab.setHero(sim.N, { state: 'unplugged', bad: true, sub: `<span class="bad">${n ? `Plug pulled — ${fmt(n)} ${n === 1 ? 'enquiry' : 'enquiries'} backed up.` : 'Plug pulled — belt stopped.'}</span>` })
   } else {
-    lab.setHero(sim.N, { state: 'running', sub: `The belt is a single job moving through your week — from the first phone call to money in the till. The arms above it are the systems we bolt on so you can knock off on time.` })
+    lab.setHero(sim.N, { state: 'running', sub: `Call in on the left, paid job out on the right.` })
   }
 })
 
@@ -2137,7 +2205,7 @@ lab.autoFilm({
   breakBeat: 'Then pull the plug.', breakSub: 'It all lands back on your desk.',
 })
 {
-  const beats = { '01': ['A Good’Ai business in motion.', 'Call in on the left, finished work out on the right.'], '02': ['Four arms, four Good’Ai helpers.', 'Voice, automation, assistants, and tool integrations.'], '04': ['Cut it open: what we build with.', 'OpenAI, Gemini, xAI, ElevenLabs, n8n & Google Cloud Sydney.'], '05': ['Explode it: our ethics & policy.', 'Human holds the off-switch · grounded · no mystery box.'] }
+  const beats = { '01': ['A Good’Ai business in motion.', 'Call in on the left, finished work out on the right.'], '02': ['How a job moves through.', 'Voice, automation, assistants, and tool integrations.'], '04': ['Cut it open: what we build with.', 'OpenAI, Gemini, xAI, ElevenLabs, n8n & Google Cloud Sydney.'], '05': ['Explode it: our ethics & policy.', 'Human holds the off-switch · grounded · no mystery box.'] }
   for (const e of lab.films.main.events) if (e.beat && beats[e.beat[0]]) e.beat = [e.beat[0], ...beats[e.beat[0]]]
 }
 
@@ -2160,8 +2228,42 @@ function initHostBridge() {
     for (const k of MODES) on[k] = lab.target[k] > 0.5
     try { if (window.parent !== window) window.parent.postMessage({ type: 'goodai-machine:state', on }, window.location.origin) } catch { /* standalone */ }
   }
+  // 3D mesh raycast hover so hovering any part on the machine pops its callout card
+  const raycaster = new THREE.Raycaster()
+  const pointer = new THREE.Vector2()
+  const glCanvas = lab.renderer.domElement
+  glCanvas.addEventListener('pointermove', (e) => {
+    const rect = glCanvas.getBoundingClientRect()
+    pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
+    pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
+    raycaster.setFromCamera(pointer, lab.camera)
+    const activeLayer = lab.state.explode > 0.25 ? 'ethics' : (lab.state.cut > 0.25 || lab.state.xray > 0.25) ? 'stack' : 'services'
+    const candidates = lab.labels.filter((l) => l.layer === activeLayer)
+    let matched = null
+    for (const L of candidates) {
+      const hits = raycaster.intersectObject(L.obj, true)
+      if (hits.length > 0) { matched = L; break }
+    }
+    if (matched) {
+      lab.hoveredLabel = matched
+      glCanvas.style.cursor = 'pointer'
+    } else if (!lab.pinnedLabel) {
+      lab.hoveredLabel = null
+      glCanvas.style.cursor = ''
+    }
+  })
+  glCanvas.addEventListener('click', () => {
+    if (lab.pinnedLabel) { lab.pinnedLabel = null; lab.hoveredLabel = null }
+  })
+
   window.addEventListener('message', (e) => {
-    if (e.origin !== window.location.origin || !e.data || e.data.type !== 'goodai-machine:toggle') return
+    if (e.origin !== window.location.origin || !e.data) return
+    if (e.data.type === 'goodai-machine:hover') {
+      const activeLayer = lab.state.explode > 0.25 ? 'ethics' : (lab.state.cut > 0.25 || lab.state.xray > 0.25) ? 'stack' : 'services'
+      lab.hoveredLabel = e.data.title ? (lab.labels.find((l) => l.layer === activeLayer && l.title === e.data.title) ?? null) : (lab.pinnedLabel ?? null)
+      return
+    }
+    if (e.data.type !== 'goodai-machine:toggle') return
     const k = e.data.layer
     if (!MODES.includes(k)) return
     lab.target[k] = typeof e.data.value === 'boolean' ? (e.data.value ? 1 : 0) : (lab.target[k] > 0.5 ? 0 : 1)

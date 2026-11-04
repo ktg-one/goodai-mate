@@ -50,6 +50,17 @@ export function MachineDemo() {
     }
   };
 
+  const handleHoverLabel = (title: string | null) => {
+    try {
+      frameRef.current?.contentWindow?.postMessage(
+        { type: "goodai-machine:hover", title },
+        window.location.origin,
+      );
+    } catch {
+      /* standalone fallback */
+    }
+  };
+
   return (
     <div>
       <div className="machine-frame">
@@ -63,14 +74,13 @@ export function MachineDemo() {
       </div>
       <div className="machine-bar">
         <p>
-          Drag to spin. Click <strong>Labels</strong> (services), <strong>Cut away</strong> (OpenAI, xAI, Gemini, ElevenLabs, n8n, GCP), <strong>Explode</strong> (our ethics policy), or <strong>Pull the plug</strong>.
-          <span> Illustrative: nothing is connected, and the minutes saved are our estimates.</span>
+          Drag to spin · hover any part or pin to inspect.
         </p>
         <a className="text-link" href={MACHINE_SRC} target="_blank" rel="noopener noreferrer">
           Full screen <Maximize2 size={15} aria-hidden="true" />
         </a>
       </div>
-      <StackPanel on={layers} onToggle={handleToggle} />
+      <StackPanel on={layers} onToggle={handleToggle} onHoverLabel={handleHoverLabel} />
       {likes > 0 && (
         <div className="machine-thanks" role="status">
           <Heart size={18} aria-hidden="true" />
@@ -85,9 +95,9 @@ export function MachineDemo() {
             </>
           ) : (
             <>
-              <span>Thanks for the like. Want one of these running your admin?</span>
+              <span>Thanks for the like.</span>
               <a href={SURVEY_URL}>
-                Tell us about your business <ArrowUpRight size={14} aria-hidden="true" />
+                Get in touch <ArrowUpRight size={14} aria-hidden="true" />
               </a>
             </>
           )}

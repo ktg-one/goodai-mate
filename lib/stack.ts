@@ -29,19 +29,19 @@ export const LAYER_BUTTONS: readonly { layer: StackLayer; shows: LabelLayer; lab
 
 /** Headings: the machine's film beats 02, 04 and 05. */
 export const LAYER_COPY: Record<LabelLayer, { title: string; body: string }> = {
-  services: { title: "Four arms, four Good’Ai helpers.", body: "Voice, automation, assistants, and tool integrations." },
+  services: { title: "How a job moves through.", body: "Voice, automation, assistants, and tool integrations." },
   stack: { title: "Cut it open: what we build with.", body: "OpenAI, Gemini, xAI, ElevenLabs, n8n & Google Cloud Sydney." },
   ethics: { title: "Explode it: our ethics & policy.", body: "Human holds the off-switch · grounded · no mystery box." },
 };
 
 export const MACHINE_LABELS: Record<LabelLayer, readonly MachineLabel[]> = {
   services: [
-    { tag: "Arm 01 · Incoming call", title: "Voice agents", detail: "Answers calls when hands are full", href: "/services/voice-agents" },
-    { tag: "Arm 02 · Workflow", title: "Business automation", detail: "Writes up & routes the job card", href: "/services/business-automation" },
-    { tag: "Arm 03 · Your docs", title: "Custom assistants", detail: "Finds answers in your own manuals", href: "/services/custom-assistants" },
-    { tag: "Arm 04 · Sync", title: "Tool integrations", detail: "Connects Xero, calendar & CRM once", href: "/services/ai-integration" },
-    { tag: "Step 05 · You in control", title: "Human sign-off", detail: "Your team checks the till at the end" },
-    { tag: "Blueprint · Camshaft", title: "Opportunity audit", detail: "Maps your workflow before we build", href: "/services/opportunity-audit" },
+    { tag: "Incoming call", title: "Voice agents", detail: "Answers calls when hands are full", href: "/services/voice-agents" },
+    { tag: "Workflow", title: "Business automation", detail: "Writes up & routes the job card", href: "/services/business-automation" },
+    { tag: "Your docs", title: "Custom assistants", detail: "Finds answers in your own manuals", href: "/services/custom-assistants" },
+    { tag: "Sync", title: "Tool integrations", detail: "Connects Xero, calendar & CRM once", href: "/services/ai-integration" },
+    { tag: "You in control", title: "Human sign-off", detail: "Your team checks the till at the end" },
+    { tag: "Camshaft", title: "Opportunity audit", detail: "Maps your workflow before we build", href: "/services/opportunity-audit" },
   ],
   stack: [
     { tag: "Voice layer", title: "ElevenLabs", detail: "Low-latency natural voice calls" },
@@ -51,10 +51,10 @@ export const MACHINE_LABELS: Record<LabelLayer, readonly MachineLabel[]> = {
     { tag: "APIs & webhooks", title: "Your existing tools", detail: "Xero · ServiceM8 · Microsoft 365 · Google" },
   ],
   ethics: [
-    { tag: "Policy 01 · Stop authority", title: "Human holds the off-switch", detail: "Named person in control · 30-sec stop" },
-    { tag: "Policy 02 · Honesty", title: "Grounded, never fabricated", detail: "Cites your own uploaded docs · no guessing" },
-    { tag: "Policy 03 · Ownership", title: "No mystery box", detail: "Built in your accounts with plain handover" },
-    { tag: "Policy 04 · Privacy", title: "Traffic-light data privacy", detail: "Your business data never trains public models" },
+    { tag: "Stop authority", title: "Human holds the off-switch", detail: "Named person in control · 30-sec stop" },
+    { tag: "Honesty", title: "Grounded, never fabricated", detail: "Cites your own uploaded docs · no guessing" },
+    { tag: "Ownership", title: "No mystery box", detail: "Built in your accounts with plain handover" },
+    { tag: "Privacy", title: "Traffic-light data privacy", detail: "Your business data never trains public models" },
   ],
 };
 
