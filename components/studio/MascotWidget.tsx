@@ -120,7 +120,7 @@ export function MascotWidget() {
                   onClick={() => setOpen(false)}
                 >
                   <MessageSquare size={13} />
-                  <span>Suss the fuss</span>
+                  <span>Yes, please</span>
                 </Link>
               </div>
             </div>

@@ -103,7 +103,7 @@ export function StudioHeader() {
             Call our AI agent <ArrowRight />
           </a>
           <a href={SURVEY_URL}>
-            Tell us what’s eating your week <ArrowUpRight />
+            Sign me up <ArrowUpRight />
           </a>
         </nav>
       )}

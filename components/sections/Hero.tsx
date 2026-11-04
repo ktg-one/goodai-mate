@@ -129,7 +129,7 @@ export function Hero() {
         </p>
         <Magnetic strength={0.35}>
           <Link href={SURVEY_URL} className="button hero-button">
-            Let’s suss the fuss <ArrowUpRight size={20} />
+            Sign me up <ArrowUpRight size={20} />
           </Link>
         </Magnetic>
 

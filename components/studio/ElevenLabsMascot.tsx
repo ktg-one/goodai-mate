@@ -118,7 +118,7 @@ export function ElevenLabsMascot({ onClose }: ElevenLabsMascotProps) {
       const reply =
         data.reply ||
         data.error ||
-        "Give us a bell on (08) 6102 3566 or use Suss the fuss and we'll sort it out.";
+        "Give us a bell on (08) 6102 3566 or head to /contact and we'll sort it out.";
       setTurns((prev) => [...prev, { role: "assistant", content: reply }]);
       speakText(reply);
     } catch {
@@ -126,7 +126,7 @@ export function ElevenLabsMascot({ onClose }: ElevenLabsMascotProps) {
         ...prev,
         {
           role: "assistant",
-          content: "Couldn't reach the Perth engine just now — call (08) 6102 3566 or use Suss the fuss.",
+          content: "Couldn't reach the Perth engine just now — call (08) 6102 3566 or head to /contact.",
         },
       ]);
     } finally {

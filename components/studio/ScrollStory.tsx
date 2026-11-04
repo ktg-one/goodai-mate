@@ -76,7 +76,7 @@ export function ScrollStory() {
       <div className="chapter-copy"><h3>{chapter.title}</h3><p>{chapter.copy}</p><span className="handwritten chapter-note">{chapter.note}</span></div>
       <div className="story-mobile-art" aria-hidden="true"><StoryDrawing scene={index}/><span className="drawing-caption">{chapter.caption}</span></div>
     </article>)}</div><div className="story-canvas" aria-hidden="true">{chapters.map((chapter, index) => <div data-scene={index} key={chapter.title}><StoryDrawing scene={index}/><span className="drawing-caption">{chapter.caption}</span></div>)}</div></div>
-    <Link href="/contact" className="text-link story-next">We’ll suss the fuss <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M12 3v17m-6-6 6 6 6-6"/></svg></Link>
+    <Link href="/contact" className="text-link story-next">I’m sold <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M12 3v17m-6-6 6 6 6-6"/></svg></Link>
   </section>;
 }
 

@@ -16,7 +16,7 @@ const SYSTEM_PROMPT = [
   "5. AI opportunity audit (starts with the problem first before touching a tool).",
   "Our ethics: humans stay in control with stop authority, no mystery boxes, grounded answers, and least data needed.",
   "Never invent prices, compliance certifications, or fake guarantees. Scope is agreed before we build.",
-  "Keep replies warm, concise (1 to 3 short sentences), and natural when spoken aloud. Invite them to use 'Suss the fuss' (/contact) or call (08) 6102 3566 if they want us to look at their business.",
+  "Keep replies warm, concise (1 to 3 short sentences), and natural when spoken aloud. Invite them to use the contact form (/contact) or call (08) 6102 3566 if they want us to look at their business.",
 ].join(" ");
 
 type ChatTurn = {
@@ -114,7 +114,7 @@ export async function POST(request: Request) {
     };
     const reply =
       data.choices?.[0]?.message?.content?.trim() ||
-      "G'day! Tell us what admin is eating your week via Suss the fuss and we'll help sort it out.";
+      "G'day! Tell us what admin is eating your week on our contact page and we'll help sort it out.";
 
     return NextResponse.json(
       {

@@ -238,11 +238,11 @@ export default async function BlogPostPage({ params }: Props) {
       <div className="blog-body">{bodyBlocks}</div>
 
       <aside className="detail-aside blog-cta">
-        <p className="step-number">Want a straight answer for your business?</p>
-        <h2>Let’s suss out what’s worth automating.</h2>
-        <p>Tell us where the admin is piling up and we’ll come back with a plain-English plan.</p>
+        <p className="step-number">More field notes like this?</p>
+        <h2>Practical notes from the workbench.</h2>
+        <p>Get straight-talking field reports on what actually works in business AI — no spam, no hype.</p>
         <a className="button" href={SURVEY_URL}>
-          Suss out your fuss
+          Subscribe to newsletter
           <ArrowUpRight size={17} />
         </a>
       </aside>

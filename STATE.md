@@ -1,5 +1,5 @@
 ---
-updated: 2026-11-02
+updated: 2026-11-04
 by: gemini-4-argon (Antigravity)
 surface: goodai-studio
 ---
@@ -7,20 +7,19 @@ surface: goodai-studio
 Full rewrite every time it's updated: current truth only, no history. History lives in git, `memory/` and the weekly catch-ups. Max ~300 words. Detailed feature map: `state/WEBSITE-STATE.md`.
 
 ## Now
-goodai.au (Next 16, Vercel `goodai-mate`). Work sits on branch `feat/under-the-hood` (pushed, **not merged to main**). `bun run check` + `bun run build` green: 0 lint errors, 43/43 tests.
+goodai.au (Next 16, Vercel `goodai-mate`). Work sits on branch `feat/under-the-hood` (`c6735f5` pushed, **not merged to main**). `bun run check` + `bun run build` green: 0 lint errors, 43/43 tests.
 
-## Shipped (on the branch, part uncommitted)
-- `/admin-engine` "Under the hood" fresh-eyes framing: H1 `"The Good’Ai machine: an analogy for how we run your admin."` + dry intro (`"No, we don’t build conveyor belts — we just wanted to put a really cool 3D render on the site to show that we can, and this is our excuse..."`) + 3D card header (`"Visual analogy · Each part = one service"` / `"The Good’Ai machine."`) | `app/admin-engine/page.tsx`, `public/machine/goodai-machine.html`
-- Page panel mirrors the machine's labels word for word (3 layers: Labels / Cut away / Explode); a test parses the machine HTML and fails if they drift | `lib/stack.ts`, `lib/stack.test.ts`, `components/studio/StackPanel.tsx`
-- Estimates disclaimer restored under the machine | `components/studio/MachineDemo.tsx`
+## Shipped (on the branch)
+- Customised CTA buttons per context instead of generic "Suss the fuss": Hero (`"Sign me up"`), ScrollStory (`"I’m sold"`), Goodie mascot (`"Yes, please"`), Blog footer (`"Subscribe to newsletter"`), TechSpecs/CTA (`"Improve my life"`), Services/Mobile nav (`"Sign me up"`) | `Hero.tsx`, `ScrollStory.tsx`, `MascotWidget.tsx`, `app/blog/[slug]/page.tsx`, `TechSpecs.tsx`, `CTA.tsx`, `Shell.tsx`, `app/services/[slug]/page.tsx` (uncommitted)
+- `/admin-engine` "Under the hood" fresh-eyes framing: H1 `"The Good’Ai machine: an analogy for how we run your admin."` + dry intro + 3D card header + aligned stack panel | `c6735f5`
 - Self-hosted LFM3-Omni-2B voice/chat in Goodie | `1e2eeb3`
 
 ## Open (max 5)
-- Commit the machine + panel alignment + fresh-eyes copy | ready once check + build finish
-- Vendor logos/branding for the stack layer (Trillet certs, Liquid LFM3) | later, per Kev; add to machine labels first, page follows
-- Anatomy skill (wheresryan22/anatomy, MIT, v1.0 2026-10-10): invents a machine that maps 1:1 onto an idea, as an isometric figure | candidate for the empty homepage slot where the workflow demo was (BRAIN-DUMP); install per-project: `bunx skills add wheresryan22/anatomy -a claude-code`
-- Merge `feat/under-the-hood` → main | preview check first
-- Untracked `.agents/skills/*`, `.claude/skills/*`, `agent/` | agent decides commit vs gitignore
+- Optional: wire inline 1-field email input on `/blog` & `/blog/[slug]` ("Subscribe to newsletter" -> posts `{ contact, headaches: ["Newsletter"] }` to existing `/api/contact` SMTP/n8n pipeline)
+- Commit and push copy tweaks on `feat/under-the-hood`, then merge to `main`
+- Untracked `.agents/skills/*`, `.claude/skills/*`, `agent/` (~250 files from `bunx skills add`) | gitignore vs commit
+- Vendor logos/branding for the stack layer (Trillet certs, Liquid LFM3) | later, per Kev
+- Anatomy skill (wheresryan22/anatomy, MIT): candidate for empty homepage slot where workflow demo was
 
 ## Blocked
 - About page (founder talk on human-centric AI policy) | needs Kev's policy draft | nothing tried yet
@@ -32,4 +31,4 @@ goodai.au (Next 16, Vercel `goodai-mate`). Work sits on branch `feat/under-the-h
 - Next new site uses motionsites; goodai.au isn't redesigned
 
 ## Next action
-Commit the machine + panel alignment + fresh-eyes copy on `feat/under-the-hood` and verify preview before merging to `main`.
+Finish any remaining site tweaks from Kev, optionally wire the inline blog newsletter email field, then commit, push, and merge `feat/under-the-hood` to `main`.
