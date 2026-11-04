@@ -58,6 +58,7 @@ export function MachineDemo() {
           src={MACHINE_SRC}
           title="The Good'Ai engine: an illustrative machine where four arms represent our four build services, driven by an opportunity audit cam shaft"
           allow="fullscreen"
+          sandbox="allow-scripts allow-same-origin allow-popups"
         />
       </div>
       <div className="machine-bar">
