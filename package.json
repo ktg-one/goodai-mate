@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "lint:motion": "node scripts/ktg-lint.mjs",
     "check": "bun run lint && bun run lint:motion && bun run test",
-    "test": "node --test --experimental-strip-types \"lib/*.test.ts\"",
+    "test": "node --test --experimental-strip-types \"lib/*.test.ts\" \"tests/*.test.ts\"",
     "doctor": "bunx react-doctor@latest"
   },
   "dependencies": {

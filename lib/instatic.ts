@@ -84,7 +84,7 @@ function resolveCmsImageUrl(
   return candidate;
 }
 
-function normalizePost(entry: InstaticEntry<InstaticPostCells>, baseUrl: string): BlogPost {
+export function normalizePost(entry: InstaticEntry<InstaticPostCells>, baseUrl: string): BlogPost {
   const cells = entry.cells ?? {};
   const title = String(cells.title || entry.slug || "Untitled");
   const body = String(cells.body || "");

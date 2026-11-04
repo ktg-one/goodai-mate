@@ -6,7 +6,8 @@ Marketing site. Keep `Good'Ai` spelling. Never invent testimonials, outcomes, pr
 ## Rules
 
 - Don't revert user changes or touch unrelated files.
-- Reuse `components/ui/`, `lib/`, and brand tokens: `brand-ink`, `brand-paper`, `brand-coral`, `brand-eucalyptus`.
+- Reuse `components/ui/`, `lib/`, `schemas/`, and brand tokens: `brand-ink`, `brand-paper`, `brand-coral`, `brand-eucalyptus`.
+- Check `schemas/site-contracts.ts` and `tests/site-contracts.test.ts` before changing navigation, `/blog`, `/admin-engine`, or `/api/chat/session`.
 - Any motion work: responsive, keyboard-focusable, works with `prefers-reduced-motion`.
 - `ProductDemo.tsx` uses example data — never present it as live operational data.
 
