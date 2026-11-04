@@ -1,8 +1,6 @@
 // What's under the hood, shown on /admin-engine under the machine. The machine
 // (public/machine/goodai-machine.html) is the source: every label here is copied word for word
 // from its lab.label() calls and film beats, and lib/stack.test.ts fails if the two drift.
-// Vendor logos and links come later (Kev, 2026-11-02); for now the page stays general.
-// Claims: no compliance wording about Good'Ai. Residency (Kev, 2026-10-31): GCP Sydney.
 
 /** The machine's mode buttons, as it reports them in goodai-machine:state. */
 export type StackLayer = "labels" | "explode" | "cut" | "xray" | "slow";
@@ -11,7 +9,15 @@ export const STACK_LAYERS: readonly StackLayer[] = ["labels", "explode", "cut", 
 /** The machine's three label sets. */
 export type LabelLayer = "services" | "stack" | "ethics";
 
-export type MachineLabel = { tag: string; title: string; detail: string; href?: string };
+export type StackLogoId = "elevenlabs" | "openai" | "gemini" | "xai" | "n8n" | "googlecloud";
+
+export type MachineLabel = {
+  tag: string;
+  title: string;
+  detail: string;
+  href?: string;
+  logos?: readonly StackLogoId[];
+};
 
 /** Same rule as the machine: Explode beats Cut away/X-ray, which beat Labels. */
 export function shownLayer(on: Record<StackLayer, boolean>): LabelLayer | null {
@@ -29,9 +35,9 @@ export const LAYER_BUTTONS: readonly { layer: StackLayer; shows: LabelLayer; lab
 
 /** Headings: the machine's film beats 02, 04 and 05. */
 export const LAYER_COPY: Record<LabelLayer, { title: string; body: string }> = {
-  services: { title: "How a job moves through.", body: "Voice, automation, assistants, and tool integrations." },
-  stack: { title: "Cut it open: what we build with.", body: "OpenAI, Gemini, xAI, ElevenLabs, n8n & Google Cloud Sydney." },
-  ethics: { title: "Explode it: our ethics & policy.", body: "Human holds the off-switch · grounded · no mystery box." },
+  services: { title: "How a job moves through.", body: "Voice, automation, assistants, and integrations." },
+  stack: { title: "Underlying architecture.", body: "OpenAI, Gemini, xAI, ElevenLabs, n8n & Google Cloud." },
+  ethics: { title: "Our ethics & policy.", body: "Human holds the off-switch · grounded · no mystery box." },
 };
 
 export const MACHINE_LABELS: Record<LabelLayer, readonly MachineLabel[]> = {
@@ -39,16 +45,14 @@ export const MACHINE_LABELS: Record<LabelLayer, readonly MachineLabel[]> = {
     { tag: "Incoming call", title: "Voice agents", detail: "Answers calls when hands are full", href: "/services/voice-agents" },
     { tag: "Workflow", title: "Business automation", detail: "Writes up & routes the job card", href: "/services/business-automation" },
     { tag: "Your docs", title: "Custom assistants", detail: "Finds answers in your own manuals", href: "/services/custom-assistants" },
-    { tag: "Sync", title: "Tool integrations", detail: "Connects Xero, calendar & CRM once", href: "/services/ai-integration" },
+    { tag: "Sync", title: "Tool integrations", detail: "Connects the software you already use", href: "/services/ai-integration" },
     { tag: "You in control", title: "Human sign-off", detail: "Your team checks the till at the end" },
-    { tag: "Camshaft", title: "Opportunity audit", detail: "Maps your workflow before we build", href: "/services/opportunity-audit" },
   ],
   stack: [
-    { tag: "Voice layer", title: "ElevenLabs", detail: "Low-latency natural voice calls" },
-    { tag: "Model layer", title: "OpenAI · Gemini · xAI", detail: "Matched to the task, never one-size-fits-all" },
-    { tag: "Orchestration", title: "n8n automation", detail: "Event-driven steps with scoped permissions" },
-    { tag: "Infrastructure", title: "Google Cloud (GCP Sydney)", detail: "Australian residency & isolated PostgreSQL" },
-    { tag: "APIs & webhooks", title: "Your existing tools", detail: "Xero · ServiceM8 · Microsoft 365 · Google" },
+    { tag: "Voice", title: "ElevenLabs", detail: "", logos: ["elevenlabs"] },
+    { tag: "Models", title: "OpenAI · Gemini · xAI", detail: "", logos: ["openai", "gemini", "xai"] },
+    { tag: "Automation", title: "n8n", detail: "", logos: ["n8n"] },
+    { tag: "Cloud", title: "Google Cloud", detail: "", logos: ["googlecloud"] },
   ],
   ethics: [
     { tag: "Stop authority", title: "Human holds the off-switch", detail: "Named person in control · 30-sec stop" },

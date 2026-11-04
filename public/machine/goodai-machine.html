@@ -924,8 +924,16 @@ export class Lab {
   label(obj, text, o = {}) {
     const el = document.createElement('div'); el.className = 'lab-lab on'
     el.tabIndex = 0
+    const STACK_LOGOS = {
+      'ElevenLabs': '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><rect x="6.5" y="4" width="3.5" height="16" rx="1"/><rect x="14" y="4" width="3.5" height="16" rx="1"/></svg>',
+      'OpenAI · Gemini · xAI': '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.5"/></svg><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12 2c0 5.52 4.48 10 10 10-5.52 0-10 4.48-10 10 0-5.52-4.48-10-10-10 5.52 0 10-4.48 10-10Z"/></svg><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M4.2 4h3.9l4.8 6.8L17.6 4h2.2l-5.8 8.2L20.2 20h-3.9l-5.1-7.2L6.2 20H4l6.1-8.6L4.2 4Z"/></svg>',
+      'n8n': '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#a44328" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="7.5" r="2.2"/><circle cx="19" cy="7.5" r="2.2"/><circle cx="19" cy="16.5" r="2.2"/><path d="M7.2 11.2 9.9 8.6M14.3 7.5h2.4M7.2 12.8l9.6 3.1"/></svg>',
+      'Google Cloud': '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.2 18.5h9.8a4.2 4.2 0 0 0 .5-8.37A5.8 5.8 0 0 0 6.2 8.7 4.9 4.9 0 0 0 7.2 18.5Z"/></svg>'
+    }
+    const logoSvg = o.layer === 'stack' && STACK_LOGOS[text] ? `<span class="lab-logos">${STACK_LOGOS[text]}</span>` : ''
     const tagHtml = o.tag ? `<span class="lab-tag">${o.tag}</span>` : ''
-    el.innerHTML = `<strong>${text}</strong><div class="lab-lab-more">${tagHtml}<small></small></div>`
+    const hasDetail = Boolean(o.value)
+    el.innerHTML = `<span class="lab-head">${logoSvg}<strong>${text}</strong></span><div class="lab-lab-more">${tagHtml}${hasDetail ? '<small></small>' : ''}</div>`
     this.$('.lab-labels').appendChild(el)
     const L = { obj, title: text, at: new THREE.Vector3(...(o.at ?? [0, 0, 0])), el, small: el.querySelector('small'), value: o.value, side: o.side, layer: o.layer ?? 'services', dy: o.dy ?? -68, dx: o.dx ?? 0 }
     el.addEventListener('pointerenter', () => { this.hoveredLabel = L })
@@ -1657,8 +1665,10 @@ const lab = new Lab({
     font-variation-settings:'SOFT' 100, 'WONK' 1;
     font-size:11px; line-height:1.1; color:${C.rust}; margin-bottom:2px;
   }
+  .lab-head { display:inline-flex; align-items:center; gap:6px }
+  .lab-logos { display:inline-flex; align-items:center; gap:4px; color:#333b32 }
   .lab-lab strong {
-    display:block; font-family:var(--sans); font-size:12.5px; font-weight:700;
+    display:inline-block; font-family:var(--sans); font-size:12.5px; font-weight:700;
     line-height:1.2; color:${C.ink}; letter-spacing:-0.01em;
   }
   .lab-lab small {
@@ -2045,20 +2055,18 @@ const lever = new THREE.Group(); lever.position.set(0.975, TILL.top + 0.012, 0.0
 lab.add(flag, { name: 'Human sign-off', explode: [0.28, 0.5, -0.1], count: 4 })
 
 // ------------------------------------------------------------------ 3-Layer Floating 3D Typography Callouts
-// Layer 1 (Default / Labels): The 4 helper arms on your job belt + camshaft blueprint + human sign-off
+// Layer 1 (Default / Labels): The 4 stations on the belt + human sign-off at the till
 lab.label(hopper, 'Voice agents', { layer: 'services', tag: 'Incoming call', at: [ST.hopper, 0.94, 0.0], dy: -66, dx: -18, value: 'Answers calls when hands are full' })
 lab.label(press, 'Business automation', { layer: 'services', tag: 'Workflow', at: [ST.press, 0.9, 0.0], dy: -26, dx: -6, value: 'Writes up & routes the job card' })
 lab.label(bell, 'Custom assistants', { layer: 'services', tag: 'Your docs', at: [ST.bell, 0.82, 0.0], dy: -66, dx: 4, value: 'Finds answers in your own manuals' })
-lab.label(stamp, 'Tool integrations', { layer: 'services', tag: 'Sync', at: [ST.stamp, 0.86, 0.0], dy: -26, dx: 10, value: 'Connects Xero, calendar & CRM once' })
+lab.label(stamp, 'Tool integrations', { layer: 'services', tag: 'Sync', at: [ST.stamp, 0.86, 0.0], dy: -26, dx: 10, value: 'Connects the software you already use' })
 lab.label(flag, 'Human sign-off', { layer: 'services', tag: 'You in control', at: [0.92, TILL.top + 0.11, 0.0], dy: -62, dx: 24, value: 'Your team checks the till at the end' })
-lab.label(pillows, 'Opportunity audit', { layer: 'services', tag: 'Camshaft', at: [-0.08, SHAFT.y - 0.03, SHAFT.z], dy: 48, dx: 0, value: 'Maps your workflow before we build' })
 
-// Layer 2 (Cut away / X-ray): What we build with (OpenAI, xAI/Grok, Gemini, ElevenLabs, n8n, Google Cloud GCP)
-lab.label(hopper, 'ElevenLabs', { layer: 'stack', tag: 'Voice layer', at: [ST.hopper, 0.92, 0.0], dy: -60, dx: -14, value: 'Low-latency natural voice calls' })
-lab.label(press, 'OpenAI · Gemini · xAI', { layer: 'stack', tag: 'Model layer', at: [ST.press + 0.18, 0.88, 0.0], dy: -64, dx: 0, value: 'Matched to the task, never one-size-fits-all' })
-lab.label(pillows, 'n8n automation', { layer: 'stack', tag: 'Orchestration', at: [0.05, SHAFT.y, SHAFT.z], dy: 50, dx: 12, value: 'Event-driven steps with scoped permissions' })
-lab.label(motor, 'Google Cloud (GCP Sydney)', { layer: 'stack', tag: 'Infrastructure', at: [0, 0.04, 0.03], dy: 52, dx: -16, value: 'Australian residency & isolated PostgreSQL' })
-lab.label(stamp, 'Your existing tools', { layer: 'stack', tag: 'APIs & webhooks', at: [ST.stamp + 0.1, 0.84, 0.0], dy: -46, dx: 16, value: 'Xero · ServiceM8 · Microsoft 365 · Google' })
+// Layer 2 (Cut away / X-ray): Underlying architecture (logos + names only)
+lab.label(hopper, 'ElevenLabs', { layer: 'stack', tag: 'Voice', at: [ST.hopper, 0.92, 0.0], dy: -60, dx: -14, value: '' })
+lab.label(press, 'OpenAI · Gemini · xAI', { layer: 'stack', tag: 'Models', at: [ST.press + 0.18, 0.88, 0.0], dy: -64, dx: 0, value: '' })
+lab.label(pillows, 'n8n', { layer: 'stack', tag: 'Automation', at: [0.05, SHAFT.y, SHAFT.z], dy: 50, dx: 12, value: '' })
+lab.label(motor, 'Google Cloud', { layer: 'stack', tag: 'Cloud', at: [0, 0.04, 0.03], dy: 52, dx: -16, value: '' })
 
 // Layer 3 (Explode): Good'Ai Ethics & Humancentric Policy
 lab.label(flag, 'Human holds the off-switch', { layer: 'ethics', tag: 'Stop authority', at: [0.92, TILL.top + 0.1, 0.0], dy: -60, dx: 18, value: 'Named person in control · 30-sec stop' })
@@ -2205,7 +2213,7 @@ lab.autoFilm({
   breakBeat: 'Then pull the plug.', breakSub: 'It all lands back on your desk.',
 })
 {
-  const beats = { '01': ['A Good’Ai business in motion.', 'Call in on the left, finished work out on the right.'], '02': ['How a job moves through.', 'Voice, automation, assistants, and tool integrations.'], '04': ['Cut it open: what we build with.', 'OpenAI, Gemini, xAI, ElevenLabs, n8n & Google Cloud Sydney.'], '05': ['Explode it: our ethics & policy.', 'Human holds the off-switch · grounded · no mystery box.'] }
+  const beats = { '01': ['A Good’Ai business in motion.', 'Call in on the left, finished work out on the right.'], '02': ['How a job moves through.', 'Voice, automation, assistants, and integrations.'], '04': ['Underlying architecture.', 'OpenAI, Gemini, xAI, ElevenLabs, n8n & Google Cloud.'], '05': ['Our ethics & policy.', 'Human holds the off-switch · grounded · no mystery box.'] }
   for (const e of lab.films.main.events) if (e.beat && beats[e.beat[0]]) e.beat = [e.beat[0], ...beats[e.beat[0]]]
 }
 

@@ -5,8 +5,8 @@ import { LAYER_COPY, MACHINE_LABELS, STACK_FOOTNOTE, shownLayer, type LabelLayer
 
 const html = readFileSync(new URL("../public/machine/goodai-machine.html", import.meta.url), "utf8");
 
-// lab.label(obj, 'Title', { layer: 'services', tag: 'Arm 01 · …', … value: 'Detail' })
-const machineLabels = [...html.matchAll(/lab\.label\(\w+, '([^']+)', \{ layer: '(\w+)', tag: '([^']+)'.*?value: '([^']+)' \}\)/g)].map(
+// lab.label(obj, 'Title', { layer: 'services', tag: 'Incoming call', … value: 'Detail' })
+const machineLabels = [...html.matchAll(/lab\.label\(\w+, '([^']+)', \{ layer: '(\w+)', tag: '([^']+)'.*?value: '([^']*)' \}\)/g)].map(
   ([, title, layer, tag, detail]) => ({ layer, tag, title, detail }),
 );
 
