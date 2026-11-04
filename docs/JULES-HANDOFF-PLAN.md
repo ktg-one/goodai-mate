@@ -4,8 +4,9 @@
 > - Canonical tokens live in `app/goodai-tokens.css` (and `brand-guide/goodai-tokens.css`) + `DESIGN.md` / `brand-guide/WEBSITE-DESIGN-TOKENS.md`.
 > - Keep `Good'Ai` spelling. Never invent testimonials, outcomes, pricing, or certifications.
 > - All CTAs must use centralized links from `lib/links.ts`.
-> - Run `node docs/validate-design.cjs`, `npm run lint`, and `npm run build` after each step.
+> - Run `node docs/validate-design.cjs`, `bun run lint`, and `bun run build` after each step. Use bun only (`bun install`, `bun add`); never commit `package-lock.json` or `pnpm-lock.yaml`.
 > - **Do not** redraw `busy-desk.svg`, `connected-work.svg`, or `knock-off-early.svg` yet (parked).
+> - Only work on components a page actually renders (trace the import from `app/`). Most of `components/sections/*` is parked and unmounted — e.g. `VisualStory.tsx` renders nowhere, so animating it changes nothing on the site. The live homepage story is `components/studio/ScrollStory.tsx`.
 
 ---
 
@@ -66,3 +67,4 @@
      - `03` — **Hand over in plain English.** `"You get a live working system, clear documentation, a team walkthrough, and direct support if anything changes."`
 2. **`components/studio/MascotWidget.tsx`** (Optional — gated by `NEXT_PUBLIC_CHAT_ENABLED=1`):
    - Wire `components/studio/GoodAiChat.tsx` into `MascotWidget.tsx` when `process.env.NEXT_PUBLIC_CHAT_ENABLED === "1"` so visitors who cannot talk out loud can type a question inside Goodie's drawer.
+

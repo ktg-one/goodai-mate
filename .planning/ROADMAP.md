@@ -118,6 +118,23 @@ The brand is "a lazy summer": a still plant shadow drifting as the sun crosses t
 - Scroll = time of day: shadow angle, length and softness shift, light warms from cool morning (top) to golden knock-off light (contact section). Occasional slow sway. GSAP ScrollTrigger scrub, synced with Lenis.
 - Reduced motion: one static shadow. No layout impact, no main-thread jank (transform/opacity/filter only).
 - Asset: Kevin's banner shadow source if available, otherwise a generated botanical silhouette.
+- **Admin engine at `/admin-engine` (2026-10-28, branch `chore/bun-only`):** interactive invented machine (inbox hopper, job-card press, text bell, invoice stamp, payment till, like flag), linked from header, mobile menu, footer and sitemap. Tool names stay (Kev: we connect Gmail, ServiceM8, SMS, Xero, Stripe). `/demo` stays hidden for a future voice demo. Open: Kev's real social handles for `SOCIAL_LINKS`.
+  - **Parked (Kev, 2026-10-28): rename the machine to Good'Ai's real delivery process once Kev finishes his AI policy and procedure.** Don't start it before then. Direction so far:
+    - Stations walk the client through the phases: problem discovery → tool selection tweaked for the client → implementation → training → testing → iterative feedback → evaluation against the business. Kev says risk measurement and the AIMS (ISO 42001 management system) are still missing from that list.
+    - Main motor = the Good'Ai engine. The process line gets a name too.
+    - The tools differ per client, so show them as examples ("yours will differ"), not as fixed stations.
+    - Use the data section to reassure clients about their data (who owns it, where it goes, whether it's kept or trained on, least data needed).
+    - Human-centred, per Kev's ISO 42001 SME mapping: AI only where required (Levels 0–4), a named person accountable with stop authority, and the line never runs faster than people can check.
+    - Sources: `Documents/03/01-ADMIN/Good-AI-Policy-v0.2-COMBINED.md`, `Documents/03/01-ADMIN/iso42001/`, and the "Problem Runtime and Risk Record" and "AI Problem Discovery Runtime" drafts Kev pasted on 2026-10-28.
+  - **Layers by mode (Kev, 2026-10-28):** each view mode shows a deeper layer, so the client's tools and Good'Ai's process don't fight over the same stations.
+    - Running: what the client sees, their tools doing the admin (examples).
+    - Cut away: Good'Ai's engine inside, the phases, risk measurement and the AIMS.
+    - X-ray: the data layer (what moves, where, who owns it, least data).
+    - Explode: one phase per part, with its named owner.
+    - Break: the failure the policy guards against (e.g. running faster than people can check).
+    - Mechanism: label values and side-panel text switch on `lab.state.cut` / `xray` / `explode`.
+  - Agreed, not built yet: icons on the station plates (Gmail, Xero and Stripe from Simple Icons, CC0; ServiceM8 has none there, so use a drawn mark) and a Good'Ai hub with leads to every station that pulses as each job passes.
+- **Demo-page background (2026-10-28):** Kevin has a finished background from another project (in his cloud storage, not in this repo). First home is `/demo` when that page comes back (`app/demo/page.tsx` calls `notFound()` today). Scope it to that page's own class — not a site-wide `section:nth-of-type(even)` rule. Jules's PR #320 added such a rule pointing at a deleted placeholder (`shape-big-1.svg`, a red circle); it was removed 2026-10-28 because it 404'd on every page.
 
 **Gate:** 60fps on a mid laptop; readable contrast everywhere the shadow passes; Kevin signs off on the look.
 
@@ -142,3 +159,26 @@ Folds in the old milestones (performance/accessibility, content audit).
 - Wire `@shadcn/lint` design contracts into `eslint.config.mjs` if not already done.
 
 **Gate:** all of the above recorded in `STATE.md`; Kevin signs off.
+
+
+## Phase 10 — Good'Ai Autonomous 8-Agent Company Harness (Empyre `#team` Model, Free on Vercel + Proxmox NAS)
+
+Reference: `https://www.empyre.dev/#team` — an 8-role autonomous agent workforce that builds, publishes, markets, tests, and operates the business continuously while keeping a named human (Kevin) in control with stop authority and $0-first cost discipline.
+
+### Architecture (Vercel Free Tier + Proxmox NAS `192.168.0.6` / `https://ktg-nas.blowfish-snares.ts.net`)
+
+| Role | Good'Ai Agent | Runtime / Tools | Core Responsibility |
+|---|---|---|---|
+| **1. CEO** | `god` (Orchestrator) | Antigravity / Hermes + `/_instatic/mcp` | Triages brain dumps, sets daily 1-deliverable focus, routes tasks across the team, and holds the human sign-off gate with Kevin. |
+| **2. CTO** | `Builder` (Engineering) | Free CLI Workers (`opencode`, `qodercli`) + GitHub + Vercel | Ships Next.js / TS / Three.js code, enforces `bun run test && bun run lint && bun run build`, and deploys previews/production on Vercel. |
+| **3. CMO** | `Growth & Field Notes` | `gai-instatic` (`/_instatic/mcp`) + `gai-n8n` | Converts research & build logs into published Field Notes (`/blog`) and distributes social drafts through `gai-n8n`. |
+| **4. CFO** | `Runway & Cost Guard` | `gai-omniroute` (`:20128`) + `gai-llama` (`:11434`) | Enforces $0-first inference (`LFM3-Omni-2B` on NAS RTX 3060 + 5070 Ti 28.2 GB VRAM pool), monitors token/subscription spend, and hard-caps paid API calls. |
+| **5. CSO** | `Sales & Lead Triage` | `gai-n8n` (`/webhook/goodai-lead`) + `gai-lightpanda` (`:9222`) | Receives `/api/contact` leads, runs bounded Phase 6 business deep-dives via headless browser, and stages plain-English reply drafts for approval. |
+| **6. CLO** | `Governance & Ethics` | `lib/stack.test.ts` + ISO 42001 SME Guardrails | Audits all public copy and workflows against Good'Ai's human-centric AI policy (no invented claims, certifications only on certifying vendors, least data needed). |
+| **7. Creative** | `Design & Motion` | GSAP + Three.js + `page-mascot` | Maintains Perth watercolour sketchbook, `/admin-engine` 3D machine, scroll-story drawings, and Goodie mascot atlases. |
+| **8. Tester** | `QA & Verification Gate` | Node test runner + `gai-lightpanda` + ESLint `@shadcn/lint` | Runs automated test suites (`44/44`), link/CSP checks, mobile/desktop viewport audits, and blocks regressions before merge. |
+
+### Deliverables to Complete Phase 10
+1. **Live `#team` Dashboard / Showcase Section (`/admin-engine` or `/team`):** Visualise Good'Ai's 8 autonomous agents running Good'Ai itself (with live status from `gai-n8n` + `gai-instatic` + `gai-llama` `LFM3-Omni-2B`).
+2. **Standing `gai-n8n` + MCP Agent Loops:** Connect the 8 role prompts as scheduled/webhook-triggered workflows on `gai-n8n` (`:5678`) backed by `LFM3-Omni-2B` (`https://ktg-nas.blowfish-snares.ts.net/v1`) and `/_instatic/mcp`.
+3. **Human Stop-Authority Gate:** Every outbound client communication, production deploy, or spend decision pauses at the approval queue for Kevin's one-tap sign-off.

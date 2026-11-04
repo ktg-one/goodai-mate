@@ -13,9 +13,9 @@
   },
   
   "verification": {
-    "lint_command": "npm run lint",
-    "build_command": "npm run build",
-    "test_command": "npm run test",
+    "lint_command": "bun run lint",
+    "build_command": "bun run build",
+    "test_command": "bun run test",
     "typecheck_command": null,
     "verify_before_commit": true
   },
@@ -24,7 +24,7 @@
     "language": "TypeScript",
     "framework": "Next.js 16",
     "styling": "Tailwind CSS v4",
-    "package_manager": "npm",
+    "package_manager": "bun",
     "monorepo": false,
     "has_git": true
   },
@@ -62,7 +62,7 @@
   
   "environment": {
     "node_version": ">=20.9.0",
-    "npm_version": "10+"
+    "bun_version": "1.4+"
   },
   
   "links": {

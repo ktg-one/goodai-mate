@@ -9,9 +9,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 const PAGE = { top: 12.7, height: 77.1, width: 47.8, leftOuter: 2.2 };
 
 const spreads = [
-  { src: "/sketchbook/perth-.png", alt: "Watercolour spread of the Perth skyline and Swan River from Kings Park at sunset", caption: "Kings Park, looking east" },
-  { src: "/sketchbook/perth2.png", alt: "Watercolour spread of families on Cottesloe Beach at sunset", caption: "Cottesloe, after work" },
-  { src: "/sketchbook/perth3.png", alt: "Watercolour spread of a busy harbourside brewery hall at golden hour", caption: "Fremantle, Friday arvo" },
+  { src: "/images/book/14-sketch.webp", alt: "Watercolour spread of the Perth skyline and Swan River from Kings Park at sunset", caption: "Kings Park, looking east" },
+  { src: "/images/book/12-sketch.webp", alt: "Watercolour spread of families on Cottesloe Beach at sunset", caption: "Cottesloe, after work" },
+  { src: "/images/book/11-sketch.webp", alt: "Watercolour spread of a busy harbourside brewery hall at golden hour", caption: "Fremantle, Friday arvo" },
 ];
 
 const SIZES = "(max-width: 1100px) 100vw, 1100px";

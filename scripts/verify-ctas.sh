@@ -29,7 +29,7 @@ fi
 # Check for hardcoded tel: links
 echo ""
 echo "Checking for hardcoded tel: links (should only be in lib/links.ts):"
-grep -r "tel:" --include="*.tsx" --include="*.ts" --include="*.jsx" --include="*.js" . | grep -v node_modules | grep -v ".next" | grep -v "lib/links.ts" | grep -v "scripts/"
+grep -r "tel:" --include="*.tsx" --include="*.ts" --include="*.jsx" --include="*.js" . | grep -v node_modules | grep -v ".next" | grep -v "lib/links.ts" | grep -v "scripts/" | grep -v ".test.ts:"
 if [ $? -eq 0 ]; then
     echo "WARNING: Found hardcoded tel: links outside lib/links.ts"
     exit 1

@@ -18,26 +18,26 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(/brand/font-6.ttf) format('truetype');
+  src: url(/fonts/Manrope/Manrope-Regular.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(/brand/font-7.ttf) format('truetype');
+  src: url(/fonts/Manrope/Manrope-Medium.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(/brand/font-5.ttf) format('truetype');
+  src: url(/fonts/Manrope/Manrope-SemiBold.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url(/brand/font-4.ttf) format('truetype');
+  src: url(/fonts/Manrope/Manrope-Bold.ttf) format('truetype');
 }
