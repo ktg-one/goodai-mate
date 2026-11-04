@@ -2,7 +2,6 @@ import { generateText } from "ai";
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { NextResponse } from "next/server";
 import { limitRequest } from "@/lib/rate-limit";
-
 import { PHONE_DISPLAY, LEAD_EMAIL, SURVEY_URL } from "@/lib/links";
 
 export const dynamic = "force-dynamic";
@@ -24,10 +23,10 @@ const SYSTEM_PROMPT = [
   "- What we build for small businesses and tradies:",
   "  1) Multilingual phone receptionists (answers missed calls in a natural Aussie voice or switches languages automatically, screens the job, texts a clean English summary, and books into reserved calendar windows).",
   "  2) Photo-enquiry and support assistants (collects job or kitchen/site photos, spots missing labels or details upfront, and hands the team a clean job card).",
-  "  3) Business automation and integrations (connects calendars, Google Workspace, Xero, ServiceM8, Tradify, and job workflows so you stop copy-pasting at night).",
+  "  3) Business automation and integrations (connects calendars, Google Workspace, and the software you already use so you stop copy-pasting at night).",
   "  4) Fast, one-off custom websites and brand kits (zero monthly website retainer; once paid for, the client owns 100% of the code and design).",
   "  5) Opportunity audits and Digital Health Checks (maps where calls, quotes, or admin are leaking before building anything).",
-  "- Private stack: This chat runs on our own private self-hosted Perth hardware (The Nest), keeping data local.",
+  "- Private stack: This chat runs on our own private self-hosted Perth hardware, keeping data local.",
   "- Pricing rule: We never publish or guess prices in chat ('We quote after we understand the work'). Every build has a written scope and fixed quote agreed before work starts.",
   "- Boundaries: Humans always stay in control of quoting, trade safety, and final bookings. Never invent client names, testimonials, savings numbers, or compliance certificates.",
   "",
@@ -48,6 +47,26 @@ type ChatTurn = {
 function resolveOmniBaseUrl() {
   const raw = process.env.LFM_OMNI_URL?.trim() || DEFAULT_LFM_OMNI_BASE_URL;
   return raw.replace(/\/chat\/completions\/?$/i, "");
+}
+
+function buildSmartFallbackReply(message: string): string {
+  const q = message.toLowerCase();
+  if (/(price|cost|how much|quote|pricing|fee|retainer|\$)/.test(q)) {
+    return `No worries — we don't do cookie-cutter price tiers because every business runs differently. We have a quick yarn first to see what's slowing you down, then give you a clear fixed quote in writing before work starts (and our websites have zero monthly retainer). Pop a note into ${SURVEY_URL} or call ${PHONE_DISPLAY} and we'll scope it out with you.`;
+  }
+  if (/(call|phone|voice|ring|reception|answer|missed)/.test(q)) {
+    return `Too easy — we build custom phone receptionists that answer missed calls when your hands are full, qualify the job in a natural Aussie voice (or switch languages automatically), and text you a clean summary. You can test our live voice line right now on ${PHONE_DISPLAY} or book a chat at ${SURVEY_URL}.`;
+  }
+  if (/(web|site|website|design|landing)/.test(q)) {
+    return `We build fast, custom websites and brand kits as a clean one-off build — once it's paid for, you own 100% of the code with zero monthly website retainer. Drop your details at ${SURVEY_URL} or call ${PHONE_DISPLAY} and we'll sort it out.`;
+  }
+  if (/(photo|picture|image|assistant|doc|manual|support)/.test(q)) {
+    return `We build custom assistants trained on your own business docs and photo-enquiry workflows that collect job photos upfront before handing your team a clean job card. Tell us what you're looking to build at ${SURVEY_URL} or call ${PHONE_DISPLAY}.`;
+  }
+  if (/(how.*work|setup|start|audit|process|step)/.test(q)) {
+    return `We keep it simple: first we find the friction in your week, then we build and test the workflow around the software you already use, and finally we hand it over cleanly so your team stays in control. Head to ${SURVEY_URL} or give us a ring on ${PHONE_DISPLAY} to get started.`;
+  }
+  return `G'day! We help Perth tradies and small businesses knock off on time by sorting out missed calls, repetitive admin, custom assistants, and one-off websites. Tell us what's eating your week at ${SURVEY_URL} or give our live line a ring on ${PHONE_DISPLAY}.`;
 }
 
 /**
@@ -99,7 +118,8 @@ export async function POST(request: Request) {
     apiKey: process.env.LFM_OMNI_API_KEY,
   });
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 12_000);
+  // Allow 25s so gai-llama (--sleep-idle-seconds 300) can wake from idle without aborting
+  const timeout = setTimeout(() => controller.abort(), 25_000);
 
   try {
     const result = await generateText({
@@ -110,9 +130,7 @@ export async function POST(request: Request) {
       temperature: 0.4,
       abortSignal: controller.signal,
     });
-    const reply =
-      result.text.trim() ||
-      "G'day! Tell us what admin is eating your week on our contact page and we'll help sort it out.";
+    const reply = result.text.trim() || buildSmartFallbackReply(rawMessage);
 
     return NextResponse.json(
       {
@@ -123,18 +141,28 @@ export async function POST(request: Request) {
       { headers: NO_STORE },
     );
   } catch (error) {
-    console.error("Private AI chat session failed", error);
+    console.warn("Private AI endpoint unreachable or waking, serving Goodie fallback:", error);
     return NextResponse.json(
-      { error: "Could not reach LFM3 Omni right now. Please try again or call us." },
-      { status: 503, headers: NO_STORE },
+      {
+        ok: true,
+        model: modelId,
+        reply: buildSmartFallbackReply(rawMessage),
+      },
+      { headers: NO_STORE },
     );
   } finally {
     clearTimeout(timeout);
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   const modelId = process.env.LFM_OMNI_MODEL?.trim() || DEFAULT_LFM_OMNI_MODEL;
+  const url = new URL(request.url);
+  if (url.searchParams.get("warm") === "1") {
+    const endpoint = resolveOmniBaseUrl();
+    // Fire-and-forget wakeup ping so gai-llama loads into VRAM before user submits
+    void fetch(`${endpoint}/models`, { method: "GET" }).catch(() => null);
+  }
   return NextResponse.json(
     { ok: true, model: modelId, status: "ready" },
     { status: 200, headers: NO_STORE },
