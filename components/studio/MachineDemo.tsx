@@ -53,6 +53,7 @@ export function MachineDemo() {
   return (
     <div>
       <div className="machine-frame">
+        {/* oxlint-disable-next-line react-doctor/iframe-missing-sandbox -- same-origin /machine/goodai-machine.html requires unsandboxed origin for fonts and postMessage */}
         <iframe
           ref={frameRef}
           src={MACHINE_SRC}

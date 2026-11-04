@@ -202,18 +202,18 @@ function renderMarkdownBlocks(markdown: string, title: string, fallbackSketch: s
               {head && (
                 <thead>
                   <tr>
-                    {head.map((cell, cIdx) => (
-                      <th key={cIdx}>{renderInline(cell)}</th>
+                    {head.map((cell) => (
+                      <th key={`th-${cell}`}>{renderInline(cell)}</th>
                     ))}
                   </tr>
                 </thead>
               )}
               {body.length > 0 && (
                 <tbody>
-                  {body.map((row, rIdx) => (
-                    <tr key={rIdx}>
-                      {row.map((cell, cIdx) => (
-                        <td key={cIdx}>{renderInline(cell)}</td>
+                  {body.map((row) => (
+                    <tr key={`tr-${row.join("|")}`}>
+                      {row.map((cell) => (
+                        <td key={`td-${row[0]}-${cell}`}>{renderInline(cell)}</td>
                       ))}
                     </tr>
                   ))}
@@ -277,8 +277,8 @@ function renderMarkdownBlocks(markdown: string, title: string, fallbackSketch: s
       }
       blocks.push(
         <ul key={key++}>
-          {items.map((item, idx) => (
-            <li key={idx}>{renderInline(item)}</li>
+          {items.map((item) => (
+            <li key={`ul-${item}`}>{renderInline(item)}</li>
           ))}
         </ul>,
       );
@@ -293,8 +293,8 @@ function renderMarkdownBlocks(markdown: string, title: string, fallbackSketch: s
       }
       blocks.push(
         <ol key={key++}>
-          {items.map((item, idx) => (
-            <li key={idx}>{renderInline(item)}</li>
+          {items.map((item) => (
+            <li key={`ol-${item}`}>{renderInline(item)}</li>
           ))}
         </ol>,
       );

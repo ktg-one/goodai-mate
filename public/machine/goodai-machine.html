@@ -1519,7 +1519,7 @@ export default LabKit
 </script>
 <!-- lab-kit:end -->
 <script type="module">
-const { THREE, Lab, MAT, GEO, clamp, lerp, approach, fmt, rng, smoothstep } = window.LabKit
+const { THREE, Lab, MAT, GEO, clamp, lerp, approach, fmt, rng, smoothstep } = (typeof window !== 'undefined' ? window.LabKit : globalThis.LabKit)
 
 // ------------------------------------------------------------------ the brief
 // "an enquiry goes in one end, a paid job comes out the other": Good'Ai's admin loop for a
@@ -2142,31 +2142,33 @@ lab.autoFilm({
 }
 
 // embedded in the site: no wheel zoom (it would trap page scroll), and on touch screens leave the swipe to the page
-if (window.parent !== window) {
-  lab.controlsOrbit.enableZoom = false
-  if (matchMedia('(pointer: coarse)').matches) { lab.controlsOrbit.enableRotate = false; lab.renderer.domElement.style.touchAction = 'pan-y' }
-}
-// phones: the machine sits in the top half, the readout panel below it
-const fitView = () => lab.setView(innerWidth < 760 ? { dist: innerWidth < 480 ? 4.3 : 3.1, target: [-0.1, innerWidth < 480 ? -0.55 : -0.32, 0], frameX: 0 } : {})
-if (!lab.filmMode) { fitView(); addEventListener('resize', fitView) }
-// tell the host page which mode buttons are on, so it can reveal the matching "under the hood" layer
-{
+function initHostBridge() {
+  if (typeof window === 'undefined') return
+  if (window.parent !== window) {
+    lab.controlsOrbit.enableZoom = false
+    if (window.matchMedia('(pointer: coarse)').matches) { lab.controlsOrbit.enableRotate = false; lab.renderer.domElement.style.touchAction = 'pan-y' }
+  }
+  // phones: the machine sits in the top half, the readout panel below it
+  const fitView = () => lab.setView(window.innerWidth < 760 ? { dist: window.innerWidth < 480 ? 4.3 : 3.1, target: [-0.1, window.innerWidth < 480 ? -0.55 : -0.32, 0], frameX: 0 } : {})
+  if (!lab.filmMode) { fitView(); window.addEventListener('resize', fitView) }
+  // tell the host page which mode buttons are on, so it can reveal the matching "under the hood" layer
   const MODES = ['labels', 'explode', 'cut', 'xray', 'slow']
   const sync = lab._syncButtons.bind(lab)
   lab._syncButtons = () => {
     sync()
     const on = {}
     for (const k of MODES) on[k] = lab.target[k] > 0.5
-    try { if (window.parent !== window) window.parent.postMessage({ type: 'goodai-machine:state', on }, location.origin) } catch { /* standalone */ }
+    try { if (window.parent !== window) window.parent.postMessage({ type: 'goodai-machine:state', on }, window.location.origin) } catch { /* standalone */ }
   }
   window.addEventListener('message', (e) => {
-    if (e.origin !== location.origin || !e.data || e.data.type !== 'goodai-machine:toggle') return
+    if (e.origin !== window.location.origin || !e.data || e.data.type !== 'goodai-machine:toggle') return
     const k = e.data.layer
     if (!MODES.includes(k)) return
     lab.target[k] = typeof e.data.value === 'boolean' ? (e.data.value ? 1 : 0) : (lab.target[k] > 0.5 ? 0 : 1)
     lab._syncButtons()
   })
 }
+initHostBridge()
 lab.start()
 </script>
 </body>

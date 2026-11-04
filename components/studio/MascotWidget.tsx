@@ -18,11 +18,13 @@ const ElevenLabsMascot = dynamic(
 export function MascotWidget() {
   const [open, setOpen] = useState(false);
   const [voiceOpen, setVoiceOpen] = useState(false);
+  const [assistantMode, setAssistantMode] = useState<"voice" | "private">("voice");
   const panelRef = useRef<HTMLDivElement>(null);
   const mascotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleOpenVoice = () => {
+      setAssistantMode("voice");
       setVoiceOpen(true);
       setOpen(false);
     };
@@ -63,23 +65,28 @@ export function MascotWidget() {
     <>
       {/* Voice Assistant Panel - rendered seamlessly without a colliding duplicate button */}
       {voiceOpen && (
-        <ElevenLabsMascot onClose={() => setVoiceOpen(false)} />
+        <ElevenLabsMascot
+          initialMode={assistantMode}
+          onClose={() => {
+            setVoiceOpen(false);
+            setAssistantMode("voice");
+          }}
+        />
       )}
 
       {/* Mascot Companion */}
       {!voiceOpen && (
-        <aside 
+        <aside
           aria-label="Good'Ai Companion"
           className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 select-none"
         >
           {/* Speech bubble on toggle */}
           {open && (
-            <div 
+            <div
               ref={panelRef}
               id="goodie-panel"
               tabIndex={-1}
-              role="dialog"
-              aria-modal="false"
+              role="region"
               aria-label="Goodie quick actions"
               className="p-4 rounded-2xl shadow-xl border max-w-72 text-xs font-sans flex flex-col gap-2.5 bg-brand-paper text-brand-ink border-brand-eucalyptus/40 backdrop-blur-sm"
             >
@@ -88,7 +95,7 @@ export function MascotWidget() {
                   <span className="w-2 h-2 rounded-full bg-brand-eucalyptus motion-safe:animate-pulse" />
                   Goodie
                 </span>
-                <button 
+                <button
                   type="button"
                   onClick={() => {
                     setOpen(false);
@@ -104,16 +111,29 @@ export function MascotWidget() {
                 G&apos;day! Need a hand with voice agents or automating your business?
               </p>
               <div className="flex flex-col gap-1.5 pt-1">
-                <button 
+                <button
                   type="button"
                   onClick={() => {
                     setOpen(false);
+                    setAssistantMode("voice");
                     setVoiceOpen(true);
                   }}
                   className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-brand-ink text-brand-paper font-medium hover:bg-brand-coral hover:text-brand-ink transition text-xs cursor-pointer shadow-sm"
                 >
                   <Mic size={13} className="text-brand-coral" />
                   <span>Talk with our AI voice agent</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    setAssistantMode("private");
+                    setVoiceOpen(true);
+                  }}
+                  className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-brand-ink/25 bg-brand-paper text-brand-ink font-medium hover:border-brand-coral transition text-xs cursor-pointer"
+                >
+                  <MessageSquare size={13} />
+                  <span>Chat with private AI</span>
                 </button>
                 <p className="text-xs text-brand-ink/70 leading-tight">
                   Notice: Voice streams processed ephemerally via ElevenLabs; not retained for biometric ID.
@@ -124,8 +144,8 @@ export function MascotWidget() {
                 >
                   <Phone size={13} />
                   <span>Call {PHONE_DISPLAY}</span>
-                </a>
-                <Link 
+                </a >
+                <Link
                   href="/contact"
                   className="flex items-center justify-center gap-2 py-1.5 px-3 rounded-lg border border-brand-ink/20 font-medium hover:opacity-80 transition text-xs text-brand-ink"
                   onClick={() => setOpen(false)}
