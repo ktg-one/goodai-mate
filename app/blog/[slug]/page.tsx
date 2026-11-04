@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { getPublishedPostBySlug, getPublishedPosts } from "@/lib/instatic";
@@ -23,7 +22,7 @@ export async function generateMetadata({ params }: Props) {
   const post = await getPublishedPostBySlug(slug);
   if (!post) return {};
 
-  const description = post.seoDescription || post.excerpt || `${post.title} — Good'Ai field notes from Perth.`;
+  const description = post.seoDescription || post.excerpt || `${post.title} — Good'Ai blog from Perth.`;
   return {
     title: post.seoTitle || post.title,
     description,
@@ -100,7 +99,7 @@ function renderInline(text: string): ReactNode[] {
         );
       } else {
         nodes.push(
-          <Link key={key++} href={href}>
+          <Link key={key++} href={href || "/contact"}>
             {match[5]}
           </Link>,
         );
@@ -115,43 +114,39 @@ function renderInline(text: string): ReactNode[] {
   return nodes;
 }
 
-const isRuleLine = (s: string) => /^(-{3,}|\*{3,}|_{3,}|={3,}|─{3,})$/.test(s.trim());
-const isTableLine = (s: string) => /^\|.*\|$/.test(s.trim());
-const isTableSep = (s: string) => /^\|[\s:-]+(\|[\s:-]+)+\|?$/.test(s.trim());
-
-function normalizeMarkdown(markdown: string, title: string): string[] {
-  const cutRecirc = markdown.split(/\nCurated by\[/)[0] ?? markdown;
-  const rawLines = cutRecirc
-    .replace(/\r\n/g, "\n")
-    .replace(/^(?:---|\*\*\*|===+)\s*(#+\s+)/gm, "---\n$1")
-    .split("\n");
-
-  // Drop a leading H1 if it duplicates the post title already rendered in the article header
-  let skippedTitle = false;
-  const out: string[] = [];
-  for (const line of rawLines) {
-    const t = line.trim();
-    if (!skippedTitle && t.startsWith("# ")) {
-      const h1Text = t.slice(2).trim().toLowerCase();
-      if (h1Text === title.trim().toLowerCase() || out.every((l) => l.trim() === "")) {
-        skippedTitle = true;
-        continue;
-      }
-    }
-    out.push(line);
+function normalizeRawMarkdown(raw: string, postTitle: string): string {
+  let text = raw.replace(/\r\n/g, "\n");
+  text = text.replace(/\n*={3,}\s*Curated by[\s\S]*$/i, "");
+  text = text.replace(/([-=*]{3,})(#{1,4}\s+)/g, "$1\n\n$2");
+  const lines = text.split("\n");
+  if (lines.length > 0 && lines[0].trim().replace(/^#+\s*/, "").toLowerCase() === postTitle.trim().toLowerCase()) {
+    lines.shift();
   }
-  return out;
+  return lines.join("\n").trim();
 }
 
-function renderMarkdownBlocks(markdown: string, title: string, fallbackSketch: string): ReactNode[] {
-  const lines = normalizeMarkdown(markdown, title);
+function isRuleLine(trimmed: string): boolean {
+  return /^(?:[-*_]\s*){3,}$/.test(trimmed) || /^={3,}$/.test(trimmed);
+}
+
+function isTableLine(trimmed: string): boolean {
+  return trimmed.startsWith("|") && trimmed.endsWith("|") && trimmed.split("|").length >= 3;
+}
+
+function isTableSep(trimmed: string): boolean {
+  return /^\|[\s:|-]+\|$/.test(trimmed);
+}
+
+function renderMarkdownBlocks(markdown: string, postTitle: string): ReactNode[] {
+  const normalized = normalizeRawMarkdown(markdown, postTitle);
+  const lines = normalized.split("\n");
   const blocks: ReactNode[] = [];
   let i = 0;
   let key = 0;
 
   while (i < lines.length) {
-    const raw = lines[i];
-    const trimmed = raw.trim();
+    const rawLine = lines[i];
+    const trimmed = rawLine.trim();
 
     if (!trimmed) {
       i++;
@@ -167,7 +162,7 @@ function renderMarkdownBlocks(markdown: string, title: string, fallbackSketch: s
       }
       if (i < lines.length) i++;
       blocks.push(
-        <pre key={key++} className="blog-code">
+        <pre key={key++}>
           <code>{codeLines.join("\n")}</code>
         </pre>,
       );
@@ -229,12 +224,14 @@ function renderMarkdownBlocks(markdown: string, title: string, fallbackSketch: s
     const imgMatch = /^!\[([^\]]*)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)$/.exec(trimmed);
     if (imgMatch) {
       const rawSrc = imgMatch[2];
-      const useFallback = rawSrc.includes("hostingersite.com");
-      const src = useFallback ? fallbackSketch : rawSrc;
+      if (rawSrc.includes("hostingersite.com")) {
+        i++;
+        continue;
+      }
       blocks.push(
         <figure key={key++} className="blog-figure">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={src} alt={imgMatch[1] || "Field note illustration"} loading="lazy" />
+          <img src={rawSrc} alt={imgMatch[1] || "Blog illustration"} loading="lazy" />
           {imgMatch[1] && <figcaption>{imgMatch[1]}</figcaption>}
         </figure>,
       );
@@ -311,8 +308,8 @@ function renderMarkdownBlocks(markdown: string, title: string, fallbackSketch: s
       !isTableLine(lines[i].trim()) &&
       !isRuleLine(lines[i].trim()) &&
       !/^!\[([^\]]*)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)$/.test(lines[i].trim()) &&
-      !/^[-*]\s+/.test(lines[i].trim()) &&
-      !/^\d+\.\s+/.test(lines[i].trim())
+      !/^[-*]\s+/.test(trimmed) &&
+      !/^\d+\.\s+/.test(trimmed)
     ) {
       paraLines.push(lines[i].trim());
       i++;
@@ -332,16 +329,16 @@ export default async function BlogPostPage({ params }: Props) {
   const post = await getPublishedPostBySlug(slug);
   if (!post) notFound();
 
-  const bodyBlocks = post.body ? renderMarkdownBlocks(post.body, post.title, post.sketchImage) : [];
+  const bodyBlocks = post.body ? renderMarkdownBlocks(post.body, post.title) : [];
 
   return (
     <article className="detail-page shell blog-article">
       <Link href="/blog" className="back-link">
         <ArrowLeft size={17} />
-        All field notes
+        All blog posts
       </Link>
 
-      <header className="blog-article-header">
+      <header className={`blog-article-header${post.coverImage ? "" : " blog-article-header-no-art"}`}>
         <div>
           <div className="blog-pill-row">
             <span className="blog-pill blog-pill-coral">{post.category.toLowerCase()}</span>
@@ -356,18 +353,19 @@ export default async function BlogPostPage({ params }: Props) {
           {post.excerpt && <p className="detail-lead blog-lead">{post.excerpt}</p>}
         </div>
 
-        <div className="blog-article-art" aria-hidden="true">
-          <span className="blog-sun-crop" />
-          <div className="blog-article-arch">
-            <Image
-              src={post.sketchImage}
-              alt=""
-              width={320}
-              height={320}
-              className="blog-arch-sketch"
-            />
+        {post.coverImage && (
+          <div className="blog-article-art">
+            <span className="blog-sun-crop" aria-hidden="true" />
+            <div className="blog-article-arch">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={post.coverImage}
+                alt={post.title}
+                className="blog-arch-sketch"
+              />
+            </div>
           </div>
-        </div>
+        )}
       </header>
 
       <WavyRule />
@@ -378,10 +376,10 @@ export default async function BlogPostPage({ params }: Props) {
 
       <aside className="detail-aside blog-cta">
         <div className="blog-pill-row">
-          <span className="blog-pill blog-pill-coral">Field notes</span>
+          <span className="blog-pill blog-pill-coral">Blog</span>
           <span className="blog-pill blog-pill-sage">No waffle</span>
         </div>
-        <h2>More notes from the workbench?</h2>
+        <h2>More posts from the workbench?</h2>
         <p>
           Whenever we find a simpler way to sort the boring stuff and knock off early, we write it up. Straight to your inbox, never any spam.
         </p>

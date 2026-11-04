@@ -8,7 +8,8 @@ export interface InstaticPostCells {
   author?: string;
   category?: string;
   publishDate?: string;
-  featuredMedia?: string | null;
+  featuredMedia?: string | { url?: string; src?: string } | null;
+  coverImage?: string | { url?: string; src?: string } | null;
 }
 
 export interface InstaticEntry<TCells = Record<string, unknown>> {
@@ -33,12 +34,11 @@ export interface BlogPost {
   author: string;
   category: string;
   publishDate: string;
-  sketchImage: string;
+  coverImage: string | null;
   readMinutes: number;
 }
 
 const DEFAULT_INSTATIC_URL = "https://ktg-nas.blowfish-snares.ts.net";
-const SKETCH_COUNT = 14;
 
 export function getInstaticBaseUrl(): string {
   const raw =
@@ -60,7 +60,31 @@ function cleanExcerptText(raw: string): string {
     .trim();
 }
 
-function normalizePost(entry: InstaticEntry<InstaticPostCells>, index: number): BlogPost {
+function resolveCmsImageUrl(
+  media: string | { url?: string; src?: string } | null | undefined,
+  body: string,
+  baseUrl: string,
+): string | null {
+  let candidate = "";
+  if (typeof media === "string" && media.trim()) {
+    candidate = media.trim();
+  } else if (media && typeof media === "object") {
+    candidate = String(media.url || media.src || "").trim();
+  }
+  if (!candidate) {
+    const match = /!\[[^\]]*\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/.exec(body);
+    if (match?.[1] && !match[1].includes("hostingersite.com")) {
+      candidate = match[1];
+    }
+  }
+  if (!candidate || candidate.includes("hostingersite.com")) return null;
+  if (candidate.startsWith("/admin/") || candidate.startsWith("/uploads/")) {
+    return `${baseUrl}${candidate}`;
+  }
+  return candidate;
+}
+
+function normalizePost(entry: InstaticEntry<InstaticPostCells>, baseUrl: string): BlogPost {
   const cells = entry.cells ?? {};
   const title = String(cells.title || entry.slug || "Untitled");
   const body = String(cells.body || "");
@@ -69,7 +93,7 @@ function normalizePost(entry: InstaticEntry<InstaticPostCells>, index: number): 
   const excerpt = cleaned.length > 170 ? `${cleaned.slice(0, 167).trimEnd()}…` : cleaned;
   const wordCount = body.trim().split(/\s+/).filter(Boolean).length;
   const readMinutes = Math.max(2, Math.round(wordCount / 220));
-  const sketchIndex = (index % SKETCH_COUNT) + 1;
+  const coverImage = resolveCmsImageUrl(cells.featuredMedia ?? cells.coverImage, body, baseUrl);
 
   return {
     id: entry.id,
@@ -80,12 +104,12 @@ function normalizePost(entry: InstaticEntry<InstaticPostCells>, index: number): 
     seoTitle: String(cells.seoTitle || title),
     seoDescription: String(cells.seoDescription || excerpt),
     author: String(cells.author || "Good’Ai"),
-    category: String(cells.category || "Field notes"),
+    category: String(cells.category || "Blog"),
     publishDate: String(
       cells.publishDate ||
         (entry.publishedAt ? entry.publishedAt.slice(0, 10) : "")
     ),
-    sketchImage: `/images/book/${sketchIndex}-sketch.webp`,
+    coverImage,
     readMinutes,
   };
 }
@@ -106,7 +130,7 @@ export async function getPublishedPosts(): Promise<BlogPost[]> {
     if (!Array.isArray(data.entries)) return [];
     return data.entries
       .filter((entry) => Boolean(entry.slug || entry.cells?.slug))
-      .map((entry, idx) => normalizePost(entry, idx));
+      .map((entry) => normalizePost(entry, baseUrl));
   } catch {
     return [];
   }

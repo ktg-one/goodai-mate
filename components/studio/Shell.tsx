@@ -56,7 +56,7 @@ export function StudioHeader() {
           <Link href="/#services">What we do</Link>
           <Link href="/#approach">How we work</Link>
           <Link href="/admin-engine">Under the hood</Link>
-          <Link href="/blog">Field notes</Link>
+          <Link href="/blog">Blog</Link>
           <a href={PHONE_HREF} className="header-phone" onClick={callAgent}>
             <span aria-live="polite">
               {showNumber ? (
@@ -97,7 +97,7 @@ export function StudioHeader() {
             Under the hood <ArrowRight />
           </Link>
           <Link href="/blog" onClick={() => setOpen(false)}>
-            Field notes <ArrowRight />
+            Blog <ArrowRight />
           </Link>
           <a href={PHONE_HREF} onClick={() => setOpen(false)}>
             Call our AI agent <ArrowRight />
@@ -194,7 +194,7 @@ export function StudioFooter() {
             <FooterAnimatedLink href="/#services">Services</FooterAnimatedLink>
             <FooterAnimatedLink href="/#approach">Our approach</FooterAnimatedLink>
             <FooterAnimatedLink href="/admin-engine">Under the hood</FooterAnimatedLink>
-            <FooterAnimatedLink href="/blog">Field notes</FooterAnimatedLink>
+            <FooterAnimatedLink href="/blog">Blog</FooterAnimatedLink>
             <FooterAnimatedLink href={SURVEY_URL} isAnchor>
               Get in touch <ArrowUpRight size={14} />
             </FooterAnimatedLink>

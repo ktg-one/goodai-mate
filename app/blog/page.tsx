@@ -8,19 +8,19 @@ import { ogDefaults, twitterDefaults } from "@/lib/seo";
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Field notes",
-  description: "Practical notes from the workbench on systems that save your week, written in Perth by Good'Ai.",
+  title: "Blog",
+  description: "Practical articles on business automation, voice agents, and systems that save your week — written in Perth by Good'Ai.",
   alternates: { canonical: "/blog" },
   openGraph: {
     ...ogDefaults,
-    title: "Field notes — Good'Ai",
-    description: "Practical notes from the workbench on systems that save your week, written in Perth by Good'Ai.",
+    title: "Blog — Good'Ai",
+    description: "Practical articles on business automation, voice agents, and systems that save your week — written in Perth by Good'Ai.",
     url: "/blog",
   },
   twitter: {
     ...twitterDefaults,
-    title: "Field notes — Good'Ai",
-    description: "Practical notes from the workbench on systems that save your week, written in Perth by Good'Ai.",
+    title: "Blog — Good'Ai",
+    description: "Practical articles on business automation, voice agents, and systems that save your week — written in Perth by Good'Ai.",
   },
 };
 
@@ -67,12 +67,12 @@ export default async function BlogIndexPage() {
       <header className="blog-hero">
         <div className="blog-hero-copy">
           <div className="blog-pill-row">
-            <span className="blog-pill blog-pill-coral">Field notes</span>
-            <span className="blog-pill blog-pill-sage">Perth workbench</span>
-            <span className="blog-pill">{posts.length} notes published</span>
+            <span className="blog-pill blog-pill-coral">Blog</span>
+            <span className="blog-pill blog-pill-sage">Perth, WA</span>
+            <span className="blog-pill">{posts.length} posts</span>
           </div>
           <h1>
-            Notes from the workbench.
+            The Good’Ai blog.
             <br />
             <em>We test it first.</em>
           </h1>
@@ -94,15 +94,6 @@ export default async function BlogIndexPage() {
             className="blog-arch-bg"
             unoptimized
           />
-          <div className="blog-arch-frame">
-            <Image
-              src="/images/book/1-sketch.webp"
-              alt=""
-              width={420}
-              height={420}
-              className="blog-arch-sketch"
-            />
-          </div>
           <Image
             src="/images/drawings/branch.svg"
             alt=""
@@ -118,26 +109,31 @@ export default async function BlogIndexPage() {
 
       {posts.length === 0 ? (
         <div className="blog-empty">
-          <p>We’re writing up our next set of field notes. Check back shortly.</p>
+          <p>We’re writing up our next blog post. Check back shortly.</p>
         </div>
       ) : (
         <>
           {featured && (
-            <section className="blog-featured" aria-label="Latest field note">
-              <Link href={`/blog/${featured.slug}`} className="blog-featured-card">
-                <div className="blog-featured-media">
-                  <span className="blog-sun-crop" aria-hidden="true" />
-                  <Image
-                    src={featured.sketchImage}
-                    alt={featured.title}
-                    width={640}
-                    height={440}
-                    className="blog-card-img"
-                  />
-                </div>
+            <section className="blog-featured" aria-label="Latest blog post">
+              <Link
+                href={`/blog/${featured.slug}`}
+                className={`blog-featured-card${featured.coverImage ? "" : " blog-featured-card-no-art"}`}
+              >
+                {featured.coverImage && (
+                  <div className="blog-featured-media">
+                    <span className="blog-sun-crop" aria-hidden="true" />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={featured.coverImage}
+                      alt={featured.title}
+                      className="blog-card-img"
+                      loading="eager"
+                    />
+                  </div>
+                )}
                 <div className="blog-featured-body">
                   <div className="blog-pill-row">
-                    <span className="blog-pill blog-pill-coral">Latest note</span>
+                    <span className="blog-pill blog-pill-coral">Latest post</span>
                     <span className="blog-pill blog-pill-sage">{featured.category.toLowerCase()}</span>
                     {featured.publishDate && (
                       <time className="blog-pill" dateTime={featured.publishDate}>
@@ -149,7 +145,7 @@ export default async function BlogIndexPage() {
                   <h2>{featured.title}</h2>
                   {featured.excerpt && <p>{featured.excerpt}</p>}
                   <span className="blog-card-link">
-                    Read this note <ArrowUpRight size={17} />
+                    Read post <ArrowUpRight size={17} />
                   </span>
                 </div>
               </Link>
@@ -160,16 +156,18 @@ export default async function BlogIndexPage() {
             {rest.map((post) => (
               <Link href={`/blog/${post.slug}`} key={post.id} className="blog-card">
                 <div>
-                  <div className="blog-card-art">
-                    <span className="blog-card-sun" aria-hidden="true" />
-                    <Image
-                      src={post.sketchImage}
-                      alt={post.title}
-                      width={420}
-                      height={280}
-                      className="blog-card-img"
-                    />
-                  </div>
+                  {post.coverImage && (
+                    <div className="blog-card-art">
+                      <span className="blog-card-sun" aria-hidden="true" />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={post.coverImage}
+                        alt={post.title}
+                        className="blog-card-img"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
                   <div className="blog-pill-row">
                     <span className="blog-pill blog-pill-sage">{post.category.toLowerCase()}</span>
                     {post.publishDate && (
@@ -183,7 +181,7 @@ export default async function BlogIndexPage() {
                   {post.excerpt && <p>{post.excerpt}</p>}
                 </div>
                 <span className="blog-card-link">
-                  Read note <ArrowUpRight size={16} />
+                  Read post <ArrowUpRight size={16} />
                 </span>
               </Link>
             ))}
@@ -197,9 +195,9 @@ export default async function BlogIndexPage() {
         <div className="blog-pill-row">
           <span className="blog-pill blog-pill-coral">Stay in the loop</span>
         </div>
-        <h2>Practical notes, straight to your inbox.</h2>
+        <h2>New posts, straight to your inbox.</h2>
         <p>
-          When we find a better way to handle calls, quotes, or Sunday-night paperwork, we send a short note. No waffle, no spam.
+          When we find a better way to handle calls, quotes, or Sunday-night paperwork, we send a short email. No waffle, no spam.
         </p>
         <a className="button" href={SURVEY_URL}>
           Subscribe to newsletter
