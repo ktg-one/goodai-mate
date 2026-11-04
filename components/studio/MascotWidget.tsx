@@ -31,7 +31,17 @@ export function MascotWidget() {
   }, []);
 
   useEffect(() => {
-    if (open) panelRef.current?.focus();
+    if (open) {
+      panelRef.current?.focus();
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          setOpen(false);
+          mascotRef.current?.querySelector("button")?.focus();
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => window.removeEventListener("keydown", handleKeyDown);
+    }
   }, [open]);
 
   // page-mascot owns the button and takes no ARIA props, so set the disclosure state on it.
@@ -68,20 +78,23 @@ export function MascotWidget() {
               ref={panelRef}
               id="goodie-panel"
               tabIndex={-1}
-              role="region"
+              role="dialog"
+              aria-modal="false"
               aria-label="Goodie quick actions"
-              className="p-4 rounded-2xl shadow-xl border max-w-72 text-xs font-sans flex flex-col gap-2.5 backdrop-blur-sm"
-              style={{ background: "#f6f3ea", color: "#2f3a33", borderColor: "#d8dfca" }}
+              className="p-4 rounded-2xl shadow-xl border max-w-72 text-xs font-sans flex flex-col gap-2.5 bg-brand-paper text-brand-ink border-brand-eucalyptus/40 backdrop-blur-sm"
             >
               <div className="flex items-center justify-between font-bold text-sm">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-brand-eucalyptus animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-brand-eucalyptus motion-safe:animate-pulse" />
                   Goodie
                 </span>
                 <button 
                   type="button"
-                  onClick={() => setOpen(false)}
-                  className="p-1 -mr-1 hover:opacity-70 transition cursor-pointer"
+                  onClick={() => {
+                    setOpen(false);
+                    mascotRef.current?.querySelector("button")?.focus();
+                  }}
+                  className="p-1 -mr-1 hover:opacity-70 transition cursor-pointer focus-visible:outline-2 focus-visible:outline-brand-coral outline-none rounded"
                   aria-label="Close dialog"
                 >
                   <X size={14} />
@@ -107,16 +120,14 @@ export function MascotWidget() {
                 </p>
                 <a
                   href={PHONE_HREF}
-                  className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-white font-medium hover:opacity-90 transition text-xs"
-                  style={{ background: "#ab4b3d" }}
+                  className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-brand-coral text-brand-ink font-medium hover:opacity-90 transition text-xs"
                 >
                   <Phone size={13} />
                   <span>Call {PHONE_DISPLAY}</span>
                 </a>
                 <Link 
                   href="/contact"
-                  className="flex items-center justify-center gap-2 py-1.5 px-3 rounded-lg border border-brand-ink/20 font-medium hover:opacity-80 transition text-xs"
-                  style={{ borderColor: "#2f3a33" }}
+                  className="flex items-center justify-center gap-2 py-1.5 px-3 rounded-lg border border-brand-ink/20 font-medium hover:opacity-80 transition text-xs text-brand-ink"
                   onClick={() => setOpen(false)}
                 >
                   <MessageSquare size={13} />
