@@ -5,6 +5,7 @@ import { ArrowUpRight, Plus, Check, Headphones, Workflow, MessagesSquare, Networ
 import { SURVEY_URL, PHONE_DISPLAY, PHONE_HREF } from "@/lib/links";
 import { services } from "@/lib/services";
 import { Hero } from "@/components/sections/Hero";
+import { EmpathyBeats } from "@/components/sections/EmpathyBeats";
 
 // Dynamic imports for GSAP-heavy components
 // Note: These are client-only components, so they'll only load on the client
@@ -18,6 +19,12 @@ export default function Home() {
     <PerthSketchbook />
     <Hero />
     <div className="promise-strip"><div className="shell"><span>Less chasing.</span><Asterisk className="small-spark" aria-hidden="true"/><span>Less copying.</span><Asterisk className="small-spark" aria-hidden="true"/><span>More getting on with it.</span></div></div>
+    <section className="empathy shell" id="been-tough">
+      <Image src="/images/drawings/branch.svg" alt="" width={280} height={850} className="empathy-branch h-auto" unoptimized aria-hidden="true" />
+      <div className="section-heading"><h2>It’s been a lot,<br /><span className="pen-stroke"><em>hasn’t it?</em></span></h2><p>The quotes you chase. The details you type twice.<br />The phone you answer after hours.</p></div>
+      <EmpathyBeats />
+      <p className="handwritten empathy-note">You’ve carried it long enough.</p>
+    </section>
     <ScrollStory />
     <section className="services-section shell" id="services"><div className="section-heading"><h2>A little less on<br /><em>your plate.</em></h2><p>Workflows take the admin off your hands. A voice agent answers the calls. A consult finds the first thing worth fixing. Integrations make the systems talk.</p></div><div className="service-list">{services.map((service, index) => {const Icon = serviceIcons[index];return <Link href={`/services/${service.slug}`} className="service-row" key={service.slug}><div className="service-symbol" aria-hidden="true"><Icon strokeWidth={1.25}/></div><div className="service-name"><h3>{service.name}</h3><p>{service.line}</p></div><div className="service-price"><strong>Talk to us</strong></div><span className="service-arrow"><ArrowUpRight size={25} /></span></Link>})}</div><p className="pricing-note" id="pricing">Scope is agreed before we build. <Link href={SURVEY_URL}>Talk to us <ArrowUpRight size={14} /></Link></p></section>
     <section className="approach shell" id="approach">
