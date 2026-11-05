@@ -40,7 +40,7 @@ function SecondarySurveyButton({ shouldReduceMotion }: { shouldReduceMotion: boo
         >
             <Button asChild size="lg" variant="secondary">
                 <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer">
-                    <span>Tell us what&apos;s eating your time</span>
+                    <span>Improve my life</span>
                     <ArrowRight size={16} />
                 </a>
             </Button>

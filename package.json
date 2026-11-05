@@ -10,10 +10,11 @@
     "lint": "eslint .",
     "lint:motion": "node scripts/ktg-lint.mjs",
     "check": "bun run lint && bun run lint:motion && bun run test",
-    "test": "node --test --experimental-strip-types \"lib/*.test.ts\"",
+    "test": "node --test --experimental-strip-types \"lib/*.test.ts\" \"tests/*.test.ts\"",
     "doctor": "bunx react-doctor@latest"
   },
   "dependencies": {
+    "@ai-sdk/openai-compatible": "^3.0.84",
     "@designcodeio/threeui": "^1.2.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-avatar": "^1.1.11",
@@ -24,6 +25,7 @@
     "@radix-ui/react-tabs": "^1.1.13",
     "@trillet-ai/web-sdk": "^1.9.1",
     "@vercel/analytics": "^2.0.1",
+    "ai": "^7.0.162",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.26",

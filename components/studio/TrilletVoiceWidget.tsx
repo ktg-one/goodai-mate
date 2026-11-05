@@ -313,7 +313,7 @@ export function TrilletVoiceWidget({
     eventName: string,
     handler: (...args: unknown[]) => void,
   ) => {
-    agent.on(eventName, handler);
+    const subscribe = agent.on.bind(agent); subscribe(eventName, handler);
     listenerCleanupRef.current.push(() => {
       (agent as TrilletAgentType & { off?: (event: string, cb: (...args: unknown[]) => void) => void }).off?.(eventName, handler);
     });

@@ -1,92 +1,113 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import {
-  STACK_ARCHITECTURE,
-  STACK_ARMS,
-  STACK_COPY,
-  STACK_ETHICS,
+  LAYER_BUTTONS,
+  LAYER_COPY,
+  MACHINE_LABELS,
   STACK_FOOTNOTE,
-  STACK_LAYERS,
-  STACK_MODELS,
-  STACK_RUNTIME,
-  STACK_VOICES,
+  shownLayer,
+  type MachineLabel,
   type StackLayer,
-  type Vendor,
+  type StackLogoId,
 } from "@/lib/stack";
 
 export type StackState = Record<StackLayer, boolean>;
 
-function VendorChip({ vendor }: { vendor: Vendor }) {
-  return (
-    <a className="stack-chip" href={vendor.href} target="_blank" rel="noopener noreferrer">
-      {vendor.icon && (
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-          <path d={vendor.icon} />
-        </svg>
-      )}
-      <b>{vendor.name}</b>
-      {vendor.note && <small>{vendor.note}</small>}
-      <ArrowUpRight size={12} aria-hidden="true" />
-    </a>
-  );
+function BrandLogo({ id }: { id: StackLogoId }) {
+  switch (id) {
+    case "elevenlabs":
+      return (
+        <span className="stack-logo-badge" title="ElevenLabs">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+            <rect x="6.5" y="4" width="3.5" height="16" rx="1" />
+            <rect x="14" y="4" width="3.5" height="16" rx="1" />
+          </svg>
+        </span>
+      );
+    case "openai":
+      return (
+        <span className="stack-logo-badge" title="OpenAI">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 3.2c2.2 0 4.1 1.4 4.7 3.5 2 .4 3.5 2.2 3.5 4.3 0 1.2-.5 2.3-1.3 3.1.3 2.1-.9 4.2-2.9 4.9-1 .4-2.1.3-3-.2-1 1.3-2.6 2-4.3 1.7-1.9-.3-3.4-1.8-3.7-3.7-1.6-1-2.4-2.9-1.9-4.8.3-1.1 1-2.1 2-2.7-.1-2.1 1.2-4.1 3.3-4.6.5-.2 1.1-.3 1.6-.3Z" />
+            <circle cx="12" cy="12" r="2.6" />
+          </svg>
+        </span>
+      );
+    case "gemini":
+      return (
+        <span className="stack-logo-badge" title="Google Gemini">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+            <path d="M12 2c0 5.52 4.48 10 10 10-5.52 0-10 4.48-10 10 0-5.52-4.48-10-10-10 5.52 0 10-4.48 10-10Z" />
+          </svg>
+        </span>
+      );
+    case "xai":
+      return (
+        <span className="stack-logo-badge" title="xAI">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+            <path d="M4.2 4h3.9l4.8 6.8L17.6 4h2.2l-5.8 8.2L20.2 20h-3.9l-5.1-7.2L6.2 20H4l6.1-8.6L4.2 4Z" />
+          </svg>
+        </span>
+      );
+    case "n8n":
+      return (
+        <span className="stack-logo-badge stack-logo-badge-coral" title="n8n">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="5" cy="12" r="2.3" />
+            <circle cx="12" cy="7.5" r="2.3" />
+            <circle cx="19" cy="7.5" r="2.3" />
+            <circle cx="19" cy="16.5" r="2.3" />
+            <path d="M7.2 11.2 9.9 8.6M14.3 7.5h2.4M7.2 12.8l9.6 3.1" />
+          </svg>
+        </span>
+      );
+    case "googlecloud":
+      return (
+        <span className="stack-logo-badge" title="Google Cloud">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M7.2 18.5h9.8a4.2 4.2 0 0 0 .5-8.37A5.8 5.8 0 0 0 6.2 8.7 4.9 4.9 0 0 0 7.2 18.5Z" />
+          </svg>
+        </span>
+      );
+  }
 }
 
-function LayerBody({ layer }: { layer: StackLayer }) {
-  if (layer === "labels") {
-    return (
-      <div className="stack-cards">
-        {STACK_ARMS.map((arm) => (
-          <Link key={arm.name} href={arm.href} className="stack-card">
-            <span className="stack-card-station">{arm.station}</span>
-            <strong>
-              {arm.name} <ArrowUpRight size={14} aria-hidden="true" />
-            </strong>
-            <span>{arm.detail}</span>
-          </Link>
-        ))}
-      </div>
-    );
-  }
-
-  if (layer === "explode") {
-    return (
-      <div className="stack-cards">
-        {STACK_ETHICS.map((item) => (
-          <div key={item.title} className="stack-card">
-            <strong>{item.title}</strong>
-            <span>{item.detail}</span>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
-  if (layer === "cut") {
-    return (
-      <div className="stack-cut-group">
-        <div className="stack-cards">
-          {STACK_ARCHITECTURE.map((item) => (
-            <div key={item.title} className="stack-card">
-              <strong>{item.title}</strong>
-              <span>{item.detail}</span>
-            </div>
+function LabelCard({
+  label,
+  onHover,
+}: {
+  label: MachineLabel;
+  onHover?: (title: string | null) => void;
+}) {
+  const body = (
+    <>
+      <span className="stack-card-station">{label.tag}</span>
+      {label.logos && label.logos.length > 0 && (
+        <div className="stack-card-logos" aria-hidden="true">
+          {label.logos.map((id) => (
+            <BrandLogo key={id} id={id} />
           ))}
         </div>
-        <div className="stack-chips">
-          {STACK_MODELS.map((v) => (
-            <VendorChip key={v.name} vendor={v} />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  const vendors = layer === "xray" ? STACK_VOICES : STACK_RUNTIME;
-  return (
-    <div className="stack-chips">
-      {vendors.map((v) => (
-        <VendorChip key={v.name} vendor={v} />
-      ))}
+      )}
+      <strong>
+        {label.title} {label.href && <ArrowUpRight size={14} aria-hidden="true" />}
+      </strong>
+      {label.detail ? <span>{label.detail}</span> : null}
+    </>
+  );
+  const events = {
+    onMouseEnter: () => onHover?.(label.title),
+    onMouseLeave: () => onHover?.(null),
+    onFocus: () => onHover?.(label.title),
+    onBlur: () => onHover?.(null),
+  };
+  return label.href ? (
+    <Link href={label.href} className="stack-card" {...events}>
+      {body}
+    </Link>
+  ) : (
+    <div className="stack-card" {...events}>
+      {body}
     </div>
   );
 }
@@ -94,44 +115,46 @@ function LayerBody({ layer }: { layer: StackLayer }) {
 export function StackPanel({
   on,
   onToggle,
+  onHoverLabel,
 }: {
   on: StackState;
   onToggle?: (layer: StackLayer) => void;
+  onHoverLabel?: (title: string | null) => void;
 }) {
-  const active = STACK_LAYERS.filter((l) => on[l]);
+  const shown = shownLayer(on);
   return (
     <section className="stack-panel" aria-label="What is under the hood" aria-live="polite">
       <div className="stack-controls" role="group" aria-label="Inspect machine layers">
-        <span className="stack-controls-label">Inspect a layer:</span>
-        {STACK_LAYERS.map((layer) => (
+        <span className="stack-controls-label">Layer:</span>
+        {LAYER_BUTTONS.map((b) => (
           <button
-            key={layer}
+            key={b.layer}
             type="button"
             className="stack-toggle"
-            aria-pressed={on[layer]}
-            onClick={() => onToggle?.(layer)}
+            aria-pressed={shown === b.shows}
+            onClick={() => onToggle?.(b.layer)}
           >
-            {STACK_COPY[layer].button}
+            {b.label}
           </button>
         ))}
       </div>
-      {active.length === 0 ? (
-        <p className="stack-hint">
-          Press any button on the machine — or tap a layer above — to open our services, ethics, underlying architecture, voices, and where it runs.
-        </p>
+      {shown === null ? (
+        <p className="stack-hint">Select Labels, Cut away, or Explode to inspect a layer.</p>
       ) : (
         <div className="stack-layer">
-          {active.map((layer) => (
-            <div key={layer} className="stack-row">
-              <div className="stack-row-head">
-                <p className="stack-kicker">{STACK_COPY[layer].title}</p>
-                <p className="stack-body">{STACK_COPY[layer].body}</p>
-              </div>
-              <div className="stack-row-content">
-                <LayerBody layer={layer} />
+          <div className="stack-row">
+            <div className="stack-row-head">
+              <p className="stack-kicker">{LAYER_COPY[shown].title}</p>
+              <p className="stack-body">{LAYER_COPY[shown].body}</p>
+            </div>
+            <div className="stack-row-content">
+              <div className="stack-cards">
+                {MACHINE_LABELS[shown].map((label) => (
+                  <LabelCard key={label.title} label={label} onHover={onHoverLabel} />
+                ))}
               </div>
             </div>
-          ))}
+          </div>
         </div>
       )}
       <p className="stack-footnote">{STACK_FOOTNOTE}</p>

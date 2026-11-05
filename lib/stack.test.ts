@@ -1,65 +1,45 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {
-  STACK_ARCHITECTURE,
-  STACK_ARMS,
-  STACK_COPY,
-  STACK_ETHICS,
-  STACK_FOOTNOTE,
-  STACK_HOSTING,
-  STACK_LAYERS,
-  STACK_MODELS,
-  STACK_RUNTIME,
-  STACK_SERVICES,
-  STACK_VOICES,
-} from "./stack.ts";
+import { readFileSync } from "node:fs";
+import { LAYER_COPY, MACHINE_LABELS, STACK_FOOTNOTE, shownLayer, type LabelLayer } from "./stack.ts";
 
-const vendors = [...STACK_MODELS, ...STACK_VOICES, ...STACK_RUNTIME];
-// Trillet's note carries its own certifications; everything else must stay claim-free.
-const ownText = vendors.map((v) => (v.name === "Trillet" ? { ...v, note: "" } : v));
-const allText = JSON.stringify({
-  STACK_COPY,
-  STACK_SERVICES,
-  STACK_ARMS,
-  STACK_ETHICS,
-  STACK_ARCHITECTURE,
-  ownText,
-  STACK_FOOTNOTE,
+const html = readFileSync(new URL("../public/machine/goodai-machine.html", import.meta.url), "utf8");
+
+// lab.label(obj, 'Title', { layer: 'services', tag: 'Incoming call', … value: 'Detail' })
+const machineLabels = [...html.matchAll(/lab\.label\(\w+, '([^']+)', \{ layer: '(\w+)', tag: '([^']+)'.*?value: '([^']*)' \}\)/g)].map(
+  ([, title, layer, tag, detail]) => ({ layer, tag, title, detail }),
+);
+
+test("page labels match the machine's labels word for word", () => {
+  assert.ok(machineLabels.length > 0, "no lab.label() calls parsed from the machine");
+  const page = (Object.entries(MACHINE_LABELS) as [LabelLayer, typeof MACHINE_LABELS.services][]).flatMap(([layer, labels]) =>
+    labels.map(({ tag, title, detail }) => ({ layer, tag, title, detail })),
+  );
+  assert.deepEqual(page, machineLabels);
 });
 
-test("every layer has copy and a button label", () => {
-  for (const l of STACK_LAYERS) {
-    assert.ok(STACK_COPY[l].title && STACK_COPY[l].body && STACK_COPY[l].button, l);
+test("panel headings are the machine's film beats", () => {
+  for (const [layer, beat] of [["services", "02"], ["stack", "04"], ["ethics", "05"]] as const) {
+    const { title, body } = LAYER_COPY[layer];
+    assert.ok(html.includes(`'${beat}': ['${title}', '${body}']`), `beat ${beat} ≠ ${layer} heading`);
   }
 });
 
-test("the four arms and cam shaft map to all five Good'Ai services", () => {
-  assert.equal(STACK_ARMS.length, 5);
-  for (const arm of STACK_ARMS) {
-    assert.match(arm.href, /^\/services\//, arm.name);
-    assert.ok(STACK_SERVICES.includes(arm.name as (typeof STACK_SERVICES)[number]), arm.name);
-  }
+test("panel shows the same layer the machine does", () => {
+  const off = { labels: false, explode: false, cut: false, xray: false, slow: false };
+  assert.equal(shownLayer(off), null);
+  assert.equal(shownLayer({ ...off, labels: true }), "services");
+  assert.equal(shownLayer({ ...off, labels: true, xray: true }), "stack");
+  assert.equal(shownLayer({ ...off, cut: true, explode: true }), "ethics");
 });
 
-test("ethics and architecture layers have clear principles", () => {
-  assert.ok(STACK_ETHICS.length >= 4);
-  assert.ok(STACK_ARCHITECTURE.length >= 3);
-  for (const p of [...STACK_ETHICS, ...STACK_ARCHITECTURE]) {
-    assert.ok(p.title && p.detail, p.title);
-  }
+test("service labels link to a service page", () => {
+  for (const l of MACHINE_LABELS.services) if (l.href) assert.match(l.href, /^\/services\/[a-z-]+$/, l.title);
 });
 
-test("every vendor links out over https", () => {
-  for (const v of vendors) assert.match(v.href, /^https:\/\//, v.name);
-});
-
-test("no prices or compliance claims outside the certifying vendor's note", () => {
-  assert.doesNotMatch(allText, /\$\s?\d|PRIS|ISO\s?\d|SOC\s?2|HIPAA|GDPR|certified|compliant|guarantee/i);
-});
-
-test("the Sydney claim covers hosting and models, not the voice vendors", () => {
-  assert.equal(STACK_HOSTING.note, "Sydney");
-  for (const v of STACK_VOICES) assert.doesNotMatch(v.note ?? "", /sydney|australia/i, v.name);
+test("no prices or compliance claims about Good'Ai", () => {
+  const text = JSON.stringify({ MACHINE_LABELS, LAYER_COPY, STACK_FOOTNOTE });
+  assert.doesNotMatch(text, /\$\s?\d|ISO\s?\d|SOC\s?2|HIPAA|GDPR|certified|compliant|guarantee/i);
 });
 
 test("footnote disclaims affiliation", () => {

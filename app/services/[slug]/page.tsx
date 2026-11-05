@@ -77,7 +77,7 @@ export default async function ServicePage({
           <h2>Scoped to your business.</h2>
           <p>We quote after we understand the work. No public price list.</p>
           <Link href={SURVEY_URL} className="button">
-            Tell us what you need <ArrowUpRight size={20} />
+            Sign me up <ArrowUpRight size={20} />
           </Link>
           <p>
             Start with our short business enquiry form. We’ll use what you share

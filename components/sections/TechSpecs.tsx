@@ -78,7 +78,7 @@ export function TechSpecs() {
                             <p className="text-brand-paper/70">We&apos;ll tell you what is worth fixing and what is better left alone.</p>
                         </div>
                         <a href={SURVEY_URL} target="_blank" rel="noopener noreferrer" className="button">
-                            Tell us your problem <ArrowUpRight size={17} />
+                            Improve my life <ArrowUpRight size={17} />
                         </a>
                     </div>
                 </m.div>

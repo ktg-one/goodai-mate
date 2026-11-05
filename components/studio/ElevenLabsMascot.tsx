@@ -7,9 +7,11 @@ import { ELEVENLABS_AGENT_ID, ELEVENLABS_EMBED_SRC } from "@/lib/elevenlabs";
 
 interface ElevenLabsMascotProps {
   onClose?: () => void;
+  initialMode?: "voice" | "private";
 }
 
 type Turn = {
+  id: string;
   role: "user" | "assistant";
   content: string;
 };
@@ -25,216 +27,244 @@ type SpeechRecognitionLike = {
   stop: () => void;
 };
 
-function encodeMonoWavBase64(samples: Float32Array, sampleRate: number): string {
-  const buffer = new ArrayBuffer(44 + samples.length * 2);
-  const view = new DataView(buffer);
-  const writeStr = (offset: number, str: string) => {
-    for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
-  };
-  writeStr(0, "RIFF");
-  view.setUint32(4, 36 + samples.length * 2, true);
-  writeStr(8, "WAVE");
-  writeStr(12, "fmt ");
-  view.setUint32(16, 16, true);
-  view.setUint16(20, 1, true);
-  view.setUint16(22, 1, true);
-  view.setUint32(24, sampleRate, true);
-  view.setUint32(28, sampleRate * 2, true);
-  view.setUint16(32, 2, true);
-  view.setUint16(34, 16, true);
-  writeStr(36, "data");
-  view.setUint32(40, samples.length * 2, true);
-  let offset = 44;
-  for (let i = 0; i < samples.length; i++, offset += 2) {
-    const s = Math.max(-1, Math.min(1, samples[i]));
-    view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+const STARTER_TURNS: Turn[] = [
+  {
+    id: "starter-0",
+    role: "assistant",
+    content:
+      "G'day! We run this private chat on our own Perth hardware so your questions stay local. Tap Talk or type a question below.",
+  },
+];
+
+const QUICK_QUESTIONS = [
+  "What do you build?",
+  "How does setup work?",
+  "Can you automate my calls?",
+] as const;
+
+function speakAussieReply(text: string, enabled: boolean) {
+  if (!enabled || typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "en-AU";
+    utter.rate = 1.02;
+    window.speechSynthesis.speak(utter);
+  } catch {
+    /* speech synthesis unavailable */
   }
-  const bytes = new Uint8Array(buffer);
-  let binary = "";
-  for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
-  return btoa(binary);
 }
 
-export function ElevenLabsMascot({ onClose }: ElevenLabsMascotProps) {
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-  const [turns, setTurns] = useState<Turn[]>([
-    {
-      role: "assistant",
-      content:
-        "G'day! I'm Goodie, running on our self-hosted Liquid LFM3 Omni model in Perth. Tap the mic to talk or type a question below.",
-    },
-  ]);
+function createSpeechRecognizer(
+  onTranscript: (text: string) => void,
+  onEnd: () => void,
+): SpeechRecognitionLike | null {
+  if (typeof window === "undefined") return null;
+  const win = window as unknown as Record<string, unknown>;
+  const Ctor = win.SpeechRecognition ?? win.webkitSpeechRecognition;
+  if (typeof Ctor !== "function") return null;
+  try {
+    const rec = new (Ctor as new () => SpeechRecognitionLike)();
+    rec.lang = "en-AU";
+    rec.interimResults = false;
+    rec.continuous = false;
+    rec.onresult = (e) => {
+      const text = e.results?.[0]?.[0]?.transcript?.trim() || "";
+      if (text) onTranscript(text);
+    };
+    rec.onerror = onEnd;
+    rec.onend = onEnd;
+    rec.start();
+    return rec;
+  } catch {
+    return null;
+  }
+}
+
+function PrivateAiChatSection({ voiceReplyOn }: { voiceReplyOn: boolean }) {
+  const [turns, setTurns] = useState<Turn[]>(STARTER_TURNS);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [listening, setListening] = useState(false);
-  const [voiceReplyOn, setVoiceReplyOn] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const turnSeq = useRef(1);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const chunksRef = useRef<Float32Array[]>([]);
 
-  useEffect(() => {
-    if (!scriptLoaded) return;
-    const timer = setTimeout(() => {
-      document.dispatchEvent(
-        new CustomEvent("elevenlabs-agent:expand", { detail: { action: "expand" } }),
-      );
-    }, 150);
-    return () => clearTimeout(timer);
-  }, [scriptLoaded]);
-
-  const speakText = (text: string) => {
-    if (!voiceReplyOn || typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    try {
-      window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = "en-AU";
-      utter.rate = 1.02;
-      window.speechSynthesis.speak(utter);
-    } catch {
-      /* browser speech synthesis unavailable */
-    }
+  const nextId = () => {
+    const id = `turn-${turnSeq.current}`;
+    turnSeq.current += 1;
+    return id;
   };
 
-  const sendToLfmOmni = async (messageText: string, audioBase64?: string) => {
+  const sendToPrivateAi = async (messageText: string) => {
     const clean = messageText.trim();
-    if (!clean && !audioBase64) return;
-    const displayUser = clean || "🎤 Voice message";
-    const nextHistory = [...turns, { role: "user" as const, content: displayUser }];
-    setTurns(nextHistory);
+    if (!clean || loading) return;
+
+    setError(null);
     setInput("");
+    const userTurn: Turn = { id: nextId(), role: "user", content: clean };
+    setTurns((prev) => [...prev, userTurn]);
     setLoading(true);
+
     try {
       const res = await fetch("/api/chat/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: clean,
-          audioBase64,
-          history: turns.slice(-6),
+          history: turns.slice(-6).map(({ role, content }) => ({ role, content })),
         }),
       });
-      const data = (await res.json().catch(() => ({}))) as { reply?: string; error?: string };
+
+      if (!res.ok) {
+        const errData = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(errData.error || "Private assistant is unavailable right now.");
+      }
+
+      const data = (await res.json().catch(() => ({}))) as { reply?: string };
       const reply =
         data.reply ||
-        data.error ||
-        "Give us a bell on (08) 6102 3566 or use Suss the fuss and we'll sort it out.";
-      setTurns((prev) => [...prev, { role: "assistant", content: reply }]);
-      speakText(reply);
-    } catch {
-      setTurns((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: "Couldn't reach the Perth engine just now — call (08) 6102 3566 or use Suss the fuss.",
-        },
-      ]);
+        "G'day! Tell us what admin is eating your week on our contact page and we'll help sort it out.";
+      const assistantTurn: Turn = { id: nextId(), role: "assistant", content: reply };
+      setTurns((prev) => [...prev, assistantTurn]);
+      speakAussieReply(reply, voiceReplyOn);
+    } catch (caughtError) {
+      setError(
+        caughtError instanceof Error
+          ? caughtError.message
+          : "Could not reach private AI right now. Try again in a moment.",
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const stopListening = async () => {
-    setListening(false);
-    try {
-      recognitionRef.current?.stop();
-    } catch {
-      /* ignore */
-    }
-    let wavB64: string | undefined;
-    if (chunksRef.current.length > 0) {
-      const total = chunksRef.current.reduce((acc, c) => acc + c.length, 0);
-      const merged = new Float32Array(total);
-      let offset = 0;
-      for (const c of chunksRef.current) {
-        merged.set(c, offset);
-        offset += c.length;
-      }
-      chunksRef.current = [];
-      if (total > 1600) {
-        wavB64 = encodeMonoWavBase64(merged, 16000);
-      }
-    }
-    try {
-      streamRef.current?.getTracks().forEach((t) => t.stop());
-      await audioCtxRef.current?.close();
-    } catch {
-      /* ignore */
-    }
-    streamRef.current = null;
-    audioCtxRef.current = null;
-    if (input.trim() || wavB64) {
-      await sendToLfmOmni(input, wavB64);
-    }
-  };
-
-  const startListening = async () => {
+  const toggleListening = () => {
     if (listening) {
-      await stopListening();
+      recognitionRef.current?.stop();
+      setListening(false);
       return;
     }
+    const rec = createSpeechRecognizer(
+      (transcript) => void sendToPrivateAi(transcript),
+      () => setListening(false),
+    );
+    if (!rec) {
+      setError("Voice input isn't supported in this browser — type your question below.");
+      return;
+    }
+    recognitionRef.current = rec;
     setListening(true);
-    chunksRef.current = [];
+  };
 
-    const win = window as unknown as {
-      SpeechRecognition?: new () => SpeechRecognitionLike;
-      webkitSpeechRecognition?: new () => SpeechRecognitionLike;
-    };
-    const SR = win.SpeechRecognition || win.webkitSpeechRecognition;
-    if (SR) {
-      try {
-        const rec = new SR();
-        rec.lang = "en-AU";
-        rec.interimResults = true;
-        rec.continuous = false;
-        let transcript = "";
-        rec.onresult = (e) => {
-          let built = "";
-          for (let i = 0; i < e.results.length; i++) {
-            built += e.results[i][0]?.transcript || "";
-          }
-          transcript = built.trim();
-          setInput(transcript);
-        };
-        rec.onend = () => {
-          setListening(false);
-          if (transcript.trim()) {
-            void sendToLfmOmni(transcript.trim());
-          }
-        };
-        rec.onerror = () => setListening(false);
-        recognitionRef.current = rec;
-        rec.start();
-        return;
-      } catch {
-        /* fallback to raw WAV capture for LFM3-Omni multimodal audio */
-      }
-    }
+  return (
+    <section aria-label="Private AI chat" className="flex flex-col gap-2.5">
+      <div className="max-h-64 overflow-y-auto flex flex-col gap-2 pr-1 text-sm leading-relaxed">
+        {turns.map((turn) => (
+          <div
+            key={turn.id}
+            className={
+              turn.role === "user"
+                ? "self-end rounded-xl bg-brand-ink text-brand-paper px-3 py-2 max-w-72"
+                : "self-start rounded-xl bg-brand-eucalyptus/20 border border-brand-ink/15 text-brand-ink px-3 py-2 max-w-80"
+            }
+          >
+            {turn.content}
+          </div>
+        ))}
+        {loading && (
+          <div className="self-start rounded-xl bg-brand-eucalyptus/20 border border-brand-ink/15 px-3 py-2 text-brand-ink/80">
+            Goodie is thinking...
+          </div>
+        )}
+      </div>
 
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      streamRef.current = stream;
-      const ctx = new AudioContext({ sampleRate: 16000 });
-      audioCtxRef.current = ctx;
-      const source = ctx.createMediaStreamSource(stream);
-      const processor = ctx.createScriptProcessor(4096, 1, 1);
-      processor.onaudioprocess = (e) => {
-        const channel = e.inputBuffer.getChannelData(0);
-        chunksRef.current.push(new Float32Array(channel));
-      };
-      source.connect(processor);
-      processor.connect(ctx.destination);
-    } catch {
-      setListening(false);
-    }
+      <div className="flex flex-wrap gap-1.5">
+        {QUICK_QUESTIONS.map((q) => (
+          <button
+            key={q}
+            type="button"
+            disabled={loading}
+            onClick={() => void sendToPrivateAi(q)}
+            className="rounded-full border border-brand-ink/20 bg-brand-paper px-2.5 py-1 text-xs text-brand-ink hover:border-brand-coral disabled:opacity-60 cursor-pointer"
+          >
+            {q}
+          </button>
+        ))}
+      </div>
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          void sendToPrivateAi(input);
+        }}
+        className="flex items-center gap-1.5"
+      >
+        <button
+          type="button"
+          onClick={toggleListening}
+          disabled={loading}
+          className={
+            listening
+              ? "flex items-center gap-1 rounded-xl bg-brand-coral px-2.5 py-2 text-xs font-semibold text-brand-ink cursor-pointer"
+              : "flex items-center gap-1 rounded-xl bg-brand-ink px-2.5 py-2 text-xs font-semibold text-brand-paper hover:bg-brand-coral hover:text-brand-ink cursor-pointer"
+          }
+          aria-label={listening ? "Stop listening" : "Speak to Private AI"}
+        >
+          {listening ? <MicOff className="h-3.5 w-3.5" /> : <Mic className="h-3.5 w-3.5" />}
+          <span>{listening ? "Stop" : "Talk"}</span>
+        </button>
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onFocus={() => void fetch("/api/chat/session?warm=1").catch(() => null)}
+          placeholder="Type your question..."
+          aria-label="Message private AI"
+          className="flex-1 rounded-xl border border-brand-ink/20 bg-brand-paper px-3 py-2 text-sm text-brand-ink placeholder:text-brand-ink/55 focus:outline-none focus:border-brand-coral"
+        />
+        <button
+          type="submit"
+          disabled={loading || !input.trim()}
+          className="rounded-xl bg-brand-ink p-2 text-brand-paper hover:bg-brand-coral hover:text-brand-ink disabled:opacity-40 cursor-pointer"
+          aria-label="Send message"
+        >
+          <Send className="h-4 w-4" />
+        </button>
+      </form>
+      {error && <p className="text-xs text-brand-coral">{error}</p>}
+      <p className="text-xs leading-tight text-brand-ink/75">
+        Private AI runs on our self-hosted Perth stack. Avoid sharing sensitive personal or financial data.
+      </p>
+    </section>
+  );
+}
+
+export function ElevenLabsMascot({ onClose, initialMode = "voice" }: ElevenLabsMascotProps) {
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+  const [mode, setMode] = useState<"voice" | "private">(initialMode);
+  const [voiceReplyOn, setVoiceReplyOn] = useState(true);
+
+  useEffect(() => {
+    if (!scriptLoaded || mode !== "voice") return;
+    const timer = setTimeout(() => {
+      document.dispatchEvent(
+        new CustomEvent("elevenlabs-agent:expand", { detail: { action: "expand" } }),
+      );
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [scriptLoaded, mode]);
+
+  const switchToPrivate = () => {
+    setMode("private");
+    void fetch("/api/chat/session?warm=1").catch(() => null);
   };
 
   return (
     <aside
-      aria-label="Good'Ai Voice Agent"
+      aria-label="Good'Ai Assistant"
       className="fixed bottom-6 right-4 z-50 flex flex-col items-end gap-2 sm:bottom-8 sm:right-6"
     >
-      {/* Loads the ElevenLabs custom element definition once per page load. */}
       <Script
         src={ELEVENLABS_EMBED_SRC}
         strategy="afterInteractive"
@@ -242,30 +272,35 @@ export function ElevenLabsMascot({ onClose }: ElevenLabsMascotProps) {
         onReady={() => setScriptLoaded(true)}
       />
 
-      <div className="w-80 sm:w-96 rounded-2xl border border-brand-line bg-brand-paper text-brand-ink shadow-xl p-4 flex flex-col gap-3">
-        <div className="flex items-center justify-between border-b border-brand-line pb-2.5">
-          <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-brand-eucalyptus animate-pulse" />
-            <div>
-              <p className="text-sm font-bold leading-none">Goodie · LFM3 Omni</p>
-              <p className="text-xs text-brand-ink/70 mt-0.5">Self-hosted Perth voice &amp; chat</p>
-            </div>
+      <div
+        className={`w-80 sm:w-96 rounded-2xl border border-brand-ink/15 bg-brand-paper text-brand-ink shadow-2xl p-4 flex flex-col gap-3 ${
+          mode === "voice" ? "mb-20" : ""
+        }`}
+      >
+        <div className="flex items-center justify-between border-b border-brand-ink/15 pb-2.5">
+          <div>
+            <p className="text-sm font-bold leading-none">Goodie Assistant</p>
+            <p className="text-xs text-brand-ink/80 mt-0.5">
+              {mode === "voice" ? "Live ElevenLabs voice demo" : "Private AI on our Perth stack"}
+            </p>
           </div>
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={() => setVoiceReplyOn((v) => !v)}
-              className="rounded-lg p-1.5 text-brand-ink/70 hover:bg-brand-ink/10 cursor-pointer"
-              aria-label={voiceReplyOn ? "Mute spoken replies" : "Unmute spoken replies"}
-              title={voiceReplyOn ? "Spoken replies on" : "Spoken replies muted"}
-            >
-              {voiceReplyOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
-            </button>
+          <div className="flex items-center gap-1.5">
+            {mode === "private" && (
+              <button
+                type="button"
+                onClick={() => setVoiceReplyOn((v) => !v)}
+                className="rounded-lg p-1.5 text-brand-ink/70 hover:bg-brand-ink/10 cursor-pointer"
+                aria-label={voiceReplyOn ? "Mute spoken replies" : "Unmute spoken replies"}
+                title={voiceReplyOn ? "Spoken replies on" : "Spoken replies muted"}
+              >
+                {voiceReplyOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+              </button>
+            )}
             <button
               type="button"
               onClick={onClose}
-              className="flex items-center gap-1 rounded-full bg-brand-ink px-2.5 py-1 text-xs font-medium text-brand-paper hover:bg-brand-coral hover:text-brand-ink cursor-pointer"
-              aria-label="Close voice panel"
+              className="flex items-center gap-1 rounded-full bg-brand-ink px-2.5 py-1 text-xs font-medium text-brand-paper hover:bg-brand-coral hover:text-brand-ink cursor-pointer focus-visible:outline-2 focus-visible:outline-brand-coral"
+              aria-label="Close assistant panel"
             >
               <X className="h-3.5 w-3.5" />
               <span>Close</span>
@@ -273,91 +308,65 @@ export function ElevenLabsMascot({ onClose }: ElevenLabsMascotProps) {
           </div>
         </div>
 
-        <div className="max-h-60 overflow-y-auto flex flex-col gap-2 pr-1 text-xs leading-relaxed">
-          {turns.map((t, idx) => (
-            <div
-              key={idx}
-              className={
-                t.role === "user"
-                  ? "self-end rounded-xl bg-brand-ink text-brand-paper px-3 py-2 max-w-64"
-                  : "self-start rounded-xl bg-brand-surface border border-brand-line text-brand-ink px-3 py-2 max-w-72"
-              }
-            >
-              {t.content}
-            </div>
-          ))}
-          {loading && (
-            <div className="self-start rounded-xl bg-brand-surface border border-brand-line px-3 py-2 text-brand-ink/70">
-              Goodie is thinking…
-            </div>
-          )}
-        </div>
-
-        <div className="flex flex-wrap gap-1.5">
-          {["What do you build?", "How do voice agents work?", "How do we start?"].map((q) => (
-            <button
-              key={q}
-              type="button"
-              disabled={loading}
-              onClick={() => void sendToLfmOmni(q)}
-              className="rounded-full border border-brand-line bg-brand-surface px-2.5 py-1 text-xs text-brand-ink hover:border-brand-coral cursor-pointer"
-            >
-              {q}
-            </button>
-          ))}
-        </div>
-
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            void sendToLfmOmni(input);
-          }}
-          className="flex items-center gap-1.5"
+        <div
+          role="tablist"
+          aria-label="Assistant mode"
+          className="grid grid-cols-2 gap-1 rounded-xl bg-brand-ink/8 p-1"
         >
           <button
             type="button"
-            onClick={() => void startListening()}
-            disabled={loading}
-            className={
-              listening
-                ? "flex items-center gap-1 rounded-xl bg-brand-coral px-3 py-2 text-xs font-semibold text-brand-ink cursor-pointer"
-                : "flex items-center gap-1 rounded-xl bg-brand-ink px-3 py-2 text-xs font-semibold text-brand-paper hover:bg-brand-coral hover:text-brand-ink cursor-pointer"
-            }
-            aria-label={listening ? "Stop recording and send" : "Speak to Goodie"}
+            role="tab"
+            aria-selected={mode === "voice"}
+            onClick={() => setMode("voice")}
+            className={`rounded-lg px-3 py-2 text-xs font-semibold cursor-pointer transition ${
+              mode === "voice"
+                ? "bg-brand-paper text-brand-ink shadow-sm"
+                : "text-brand-ink/75 hover:text-brand-ink"
+            }`}
           >
-            {listening ? <MicOff className="h-3.5 w-3.5" /> : <Mic className="h-3.5 w-3.5" />}
-            <span>{listening ? "Send" : "Talk"}</span>
+            ElevenLabs voice
           </button>
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Or type to Goodie…"
-            aria-label="Message Goodie"
-            className="flex-1 rounded-xl border border-brand-line bg-brand-surface px-3 py-2 text-xs text-brand-ink placeholder:text-brand-ink/50 focus:outline-none focus:border-brand-coral"
-          />
           <button
-            type="submit"
-            disabled={loading || !input.trim()}
-            className="rounded-xl bg-brand-ink p-2 text-brand-paper hover:bg-brand-coral hover:text-brand-ink disabled:opacity-40 cursor-pointer"
-            aria-label="Send message"
+            type="button"
+            role="tab"
+            aria-selected={mode === "private"}
+            onClick={switchToPrivate}
+            className={`rounded-lg px-3 py-2 text-xs font-semibold cursor-pointer transition ${
+              mode === "private"
+                ? "bg-brand-paper text-brand-ink shadow-sm"
+                : "text-brand-ink/75 hover:text-brand-ink"
+            }`}
           >
-            <Send className="h-3.5 w-3.5" />
+            Private AI
           </button>
-        </form>
-
-        <div className="sr-only" aria-hidden="true">
-          <elevenlabs-convai agent-id={ELEVENLABS_AGENT_ID} />
         </div>
 
-        <div className="text-xs text-brand-ink/70 leading-tight">
-          Powered by Liquid LFM3 Omni on our Perth stack. Do not share sensitive personal or financial information.
-        </div>
+        {mode === "voice" ? (
+          <section aria-label="ElevenLabs voice demo" className="flex flex-col gap-1.5">
+            <p className="text-xs leading-relaxed text-brand-ink/85">
+              Tap the phone button below to talk live with our voice receptionist, or switch to{" "}
+              <button
+                type="button"
+                onClick={switchToPrivate}
+                className="font-semibold underline hover:text-brand-coral cursor-pointer"
+              >
+                Private AI
+              </button>{" "}
+              to chat with our self-hosted model.
+            </p>
+          </section>
+        ) : (
+          <PrivateAiChatSection voiceReplyOn={voiceReplyOn} />
+        )}
       </div>
 
-      {!scriptLoaded && (
+      <div className={mode === "voice" ? "block" : "hidden"}>
+        <elevenlabs-convai agent-id={ELEVENLABS_AGENT_ID} />
+      </div>
+
+      {!scriptLoaded && mode === "voice" && (
         <span className="sr-only" role="status">
-          Loading voice agent…
+          Loading voice assistant...
         </span>
       )}
     </aside>

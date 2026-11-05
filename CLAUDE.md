@@ -62,6 +62,7 @@ Two linters, both encode the design:
 
 ## Planning state
 
+- `STATE.md` (root) — current truth, full rewrite per Kev's template (`~/Documents/_USER-BRAIN/vault/templates/state-template.md`); read first.
 - `state/WEBSITE-STATE.md` — newest cross-workspace handoff (mirrored at `Documents/03/state/WEBSITE-STATE.md`); update it when you ship.
 - `.planning/ROADMAP.md` (scope/phase order) and `.planning/STATE.md` (decisions, open questions). STATE.md was last updated 2026-10-04 and predates launch — trust the code over it, and refresh it at the end of a phase.
 - `docs/JULES-HANDOFF-PLAN.md` — queue for Jules agents (they open `feat/ui-*` PRs). `TASKS.md` is stale.
