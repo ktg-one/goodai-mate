@@ -113,9 +113,10 @@
   },
   {
     "id": "services-list",
-    "component": "app/page.tsx",
+    "component": "components/sections/ServicesList.tsx",
     "type": "hover/card-scale",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion whileHover/whileTap card scale and x-offset transitions for service rows, staggered scroll reveal with whileInView, duration curves >= 1.0s (1.0s cubic-bezier ease), and prefers-reduced-motion accessibility support via useReducedMotion."
   },
   {
     "id": "approach-steps",
