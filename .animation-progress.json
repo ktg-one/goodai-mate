@@ -120,8 +120,9 @@
   },
   {
     "id": "approach-steps",
-    "component": "app/page.tsx",
+    "component": "components/sections/ApproachSteps.tsx",
     "type": "scroll/slide-in",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion staggered scroll slide-in and fade-in animations for approach steps, section heading, and principle note, card hover micro-interaction translateY, smooth >=1.0s duration curves (1.0s cubic-bezier ease), and prefers-reduced-motion accessibility compliance via useReducedMotion."
   }
 ]

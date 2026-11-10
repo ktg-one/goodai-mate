@@ -5,6 +5,7 @@ import { ArrowUpRight, Plus, Check, Asterisk } from "lucide-react";
 import { SURVEY_URL, PHONE_DISPLAY, PHONE_HREF } from "@/lib/links";
 import { Hero } from "@/components/sections/Hero";
 import { ServicesList } from "@/components/sections/ServicesList";
+import { ApproachSteps } from "@/components/sections/ApproachSteps";
 
 // Dynamic imports for GSAP-heavy components
 // Note: These are client-only components, so they'll only load on the client
@@ -18,10 +19,7 @@ export default function Home() {
     <div className="promise-strip"><div className="shell"><span>Less chasing.</span><Asterisk className="small-spark" aria-hidden="true"/><span>Less copying.</span><Asterisk className="small-spark" aria-hidden="true"/><span>More getting on with it.</span></div></div>
     <ScrollStory />
     <ServicesList />
-    <section className="approach shell" id="approach">
-      <Image src="/images/drawings/mandala-green.svg" alt="" width={440} height={440} className="approach-mandala h-auto" unoptimized aria-hidden="true" />
-      <div className="section-heading"><h2>Good people.<br /><em>Useful technology.</em></h2><p>Workflows, a voice agent, a consult, or an integration.<br />You get a system that makes sense.</p></div><div className="approach-steps" id="story">{[{n:"01",title:"Find the friction.",text:"We start with your day, your tools and the work that keeps getting in the way. Then we pick a useful place to start."},{n:"02",title:"Make it work.",text:"We agree the scope, build the workflow and test the awkward bits with the people who will actually use it."},{n:"03",title:"Make it yours.",text:"Clear documentation. A team walkthrough. Human hand-off when it matters. Ongoing support if you need it."}].map(step=><article key={step.n}><span className="step-number">{step.n}</span><h3>{step.title}</h3><p>{step.text}</p></article>)}</div><div className="principle-note"><Check size={20} /><p>Your tools where possible. Your people in control. No mystery box.</p></div>
-    </section>
+    <ApproachSteps />
     <section className="faq shell" id="faq"><h2>A few<br /><em>fair questions.</em></h2><div>{[{q:"Do we need to replace our current tools?",a:"Usually, no. We start with what already works and connect or replace only what is causing the problem. The right solution may be a simple workflow change rather than more software."},{q:"What happens when the AI gets it wrong?",a:"We define when a person needs to review, approve or take over. We test the likely failure cases and make those boundaries part of the system, rather than treating AI as infallible."},{q:"Where should we start?",a:"Tell us about one task that gets copied, chased or done twice. If it needs a closer look, we start with a consult: one session, a written plan, the first thing worth fixing."},{q:"Can you help after the build?",a:"Yes. We can stay on after the build to keep the system running and fix what breaks. Talk to us about what that looks like."}].map(item=><details key={item.q}><summary>{item.q}<Plus size={20} /></summary><p>{item.a}</p></details>)}</div></section>
     <section className="contact-section" id="contact">
       <Image src="/images/drawings/branch.svg" alt="" width={300} height={910} className="contact-branch h-auto" unoptimized aria-hidden="true" />
