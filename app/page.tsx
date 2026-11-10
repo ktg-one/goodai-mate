@@ -1,17 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { ArrowUpRight, Plus, Check, Headphones, Workflow, MessagesSquare, Network, ScanSearch, Asterisk } from "lucide-react";
+import { ArrowUpRight, Plus, Check, Asterisk } from "lucide-react";
 import { SURVEY_URL, PHONE_DISPLAY, PHONE_HREF } from "@/lib/links";
-import { services } from "@/lib/services";
 import { Hero } from "@/components/sections/Hero";
+import { ServicesList } from "@/components/sections/ServicesList";
 
 // Dynamic imports for GSAP-heavy components
 // Note: These are client-only components, so they'll only load on the client
 const ScrollStory = dynamic(() => import("@/components/studio/ScrollStory").then((m) => m.ScrollStory));
 const PerthSketchbook = dynamic(() => import("@/components/studio/PerthSketchbook").then((m) => m.PerthSketchbook));
-
-const serviceIcons = [Headphones, Workflow, MessagesSquare, Network, ScanSearch];
 
 export default function Home() {
   return <div className="home-page">
@@ -19,7 +17,7 @@ export default function Home() {
     <Hero />
     <div className="promise-strip"><div className="shell"><span>Less chasing.</span><Asterisk className="small-spark" aria-hidden="true"/><span>Less copying.</span><Asterisk className="small-spark" aria-hidden="true"/><span>More getting on with it.</span></div></div>
     <ScrollStory />
-    <section className="services-section shell" id="services"><div className="section-heading"><h2>A little less on<br /><em>your plate.</em></h2><p>Workflows take the admin off your hands. A voice agent answers the calls. A consult finds the first thing worth fixing. Integrations make the systems talk.</p></div><div className="service-list">{services.map((service, index) => {const Icon = serviceIcons[index];return <Link href={`/services/${service.slug}`} className="service-row" key={service.slug}><div className="service-symbol" aria-hidden="true"><Icon strokeWidth={1.25}/></div><div className="service-name"><h3>{service.name}</h3><p>{service.line}</p></div><div className="service-price"><strong>Talk to us</strong></div><span className="service-arrow"><ArrowUpRight size={25} /></span></Link>})}</div><p className="pricing-note" id="pricing">Scope is agreed before we build. <Link href={SURVEY_URL}>Talk to us <ArrowUpRight size={14} /></Link></p></section>
+    <ServicesList />
     <section className="approach shell" id="approach">
       <Image src="/images/drawings/mandala-green.svg" alt="" width={440} height={440} className="approach-mandala h-auto" unoptimized aria-hidden="true" />
       <div className="section-heading"><h2>Good people.<br /><em>Useful technology.</em></h2><p>Workflows, a voice agent, a consult, or an integration.<br />You get a system that makes sense.</p></div><div className="approach-steps" id="story">{[{n:"01",title:"Find the friction.",text:"We start with your day, your tools and the work that keeps getting in the way. Then we pick a useful place to start."},{n:"02",title:"Make it work.",text:"We agree the scope, build the workflow and test the awkward bits with the people who will actually use it."},{n:"03",title:"Make it yours.",text:"Clear documentation. A team walkthrough. Human hand-off when it matters. Ongoing support if you need it."}].map(step=><article key={step.n}><span className="step-number">{step.n}</span><h3>{step.title}</h3><p>{step.text}</p></article>)}</div><div className="principle-note"><Check size={20} /><p>Your tools where possible. Your people in control. No mystery box.</p></div>
