@@ -120,8 +120,9 @@
   },
   {
     "id": "approach-steps",
-    "component": "app/page.tsx",
+    "component": "components/sections/ApproachSteps.tsx",
     "type": "scroll/slide-in",
-    "status": "pending"
+    "status": "completed",
+    "notes": "Implemented Framer Motion scroll slide-in animations using whileInView, staggered step card reveal with >= 1.0s movement duration curves ([0.16, 1, 0.3, 1] cubic-bezier ease), interactive hover elevation, and prefers-reduced-motion accessibility compliance via useReducedMotion."
   }
 ]
