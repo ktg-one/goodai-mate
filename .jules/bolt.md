@@ -22,3 +22,7 @@
 ## 2026-10-17 - Optimize Sliding Window Timestamp Pruning and Client IP Parsing in Rate Limiter
 **Learning:** Calling `.filter()` on monotonically sorted timestamp arrays in sliding-window rate limiters creates $O(N)$ array allocations on every request check and sweep cycle. Because timestamps are pushed chronologically, expired entries are guaranteed to be at the array head, making in-place queue pruning (`shift()`) $O(1)$ for active windows with zero array allocation overhead. Additionally, parsing multi-hop proxy headers with `.map()` and `.filter()` creates unnecessary heap allocations per request compared to single-pass reverse iteration.
 **Action:** Replace `.filter()` array allocations with in-place queue `shift()` operations in rate limiting checks and sweep routines, and iterate backwards over `x-forwarded-for` header splits to extract client IP without intermediate array allocations.
+
+## 2026-10-26 - Eliminate Heap Allocation Churn in High-Frequency Text Scramble Animation Loop
+**Learning:** Calling `.split("").map(...).join("")` inside high-frequency timer callbacks (such as 40ms interval ticks in text scramble animations) creates two array allocations per frame, leading to heap allocation churn and garbage collection pressure during continuous animations.
+**Action:** Replace `.split().map().join()` with a direct string accumulation loop over cached string length and character set boundaries to achieve $O(1)$ intermediate heap allocations per tick.
