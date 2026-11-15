@@ -17,3 +17,7 @@ Apply `public/assets/shapes/shape-big-*.svg` as backgrounds to every 2nd viewpor
 ## 2024-09-10 - Missing Focus Rings on Framer Motion Buttons
 **Learning:** Custom interactive UI components built with wrappers like Framer Motion (`<motion.button>`) or generic primitives (`SheetClose` without default focus styles) often lack default browser focus rings.
 **Action:** Always append explicit `focus-visible` utility classes (e.g., `focus-visible:outline-2 focus-visible:outline-brand-coral outline-none`) to these custom components to maintain keyboard accessibility.
+
+## 2024-09-12 - Missing Keyboard Dismissal on Floating Mascot Widget
+**Learning:** Floating widget panels and speech bubble popovers often lack `Escape` key dismissal support (WCAG 2.1 Dismissable Content 1.4.13) and accurate `role="dialog"` semantics, leaving keyboard-only users unable to quickly dismiss overlaying panels.
+**Action:** Always register an `Escape` key listener on `window` when floating panels open, and ensure non-modal popovers declare `role="dialog"` and `aria-modal="false"`.

@@ -33,17 +33,16 @@ export function MascotWidget() {
   }, []);
 
   useEffect(() => {
-    if (open) {
-      panelRef.current?.focus();
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Escape") {
-          setOpen(false);
-          mascotRef.current?.querySelector("button")?.focus();
-        }
-      };
-      window.addEventListener("keydown", handleKeyDown);
-      return () => window.removeEventListener("keydown", handleKeyDown);
-    }
+    if (!open) return;
+    panelRef.current?.focus();
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        mascotRef.current?.querySelector("button")?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [open]);
 
   // page-mascot owns the button and takes no ARIA props, so set the disclosure state on it.
@@ -101,7 +100,7 @@ export function MascotWidget() {
                     setOpen(false);
                     mascotRef.current?.querySelector("button")?.focus();
                   }}
-                  className="p-1 -mr-1 hover:opacity-70 transition cursor-pointer focus-visible:outline-2 focus-visible:outline-brand-coral outline-none rounded"
+                  className="p-1 -mr-1 rounded-sm hover:opacity-70 focus-visible:outline-2 focus-visible:outline-brand-coral focus-visible:outline-offset-1 transition cursor-pointer outline-none"
                   aria-label="Close dialog"
                 >
                   <X size={14} />
