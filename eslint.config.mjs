@@ -79,6 +79,8 @@ const eslintConfig = defineConfig([
     // Parked copies of removed components (incl. old GSAP VisualStory); not
     // imported or built.
     "docs/components/**",
+    // Brand canon export (vendored viewer script), not site code.
+    "public/BRAND-CANON-JULY2026/**",
   ]),
 ]);
 

@@ -37,7 +37,7 @@ export function VisualStory() {
         return storySteps.map((step, index) => (
             <div
                 key={step.title}
-                className={`story-text-section story-text-${index} min-h-[100dvh] flex flex-col justify-center px-8 md:px-20`}
+                className={`story-text-section story-text-${index} min-h-dvh flex flex-col justify-center px-8 md:px-20`}
             >
                 <span className="text-sm font-mono text-brand-coral mb-4">0{index + 1}</span>
                 <h3 className="text-4xl md:text-6xl font-bold mb-6 tracking-wide">{step.title}</h3>
@@ -118,9 +118,9 @@ export function VisualStory() {
                 </div>
 
                 {/* Right Side: Sticky Visual */}
-                <div ref={visualRef} className="hidden md:flex story-visual w-1/2 h-[100dvh] min-h-[100dvh] sticky top-0 bg-brand-paper border-l border-brand-ink items-center justify-center overflow-hidden">
+                <div ref={visualRef} className="hidden md:flex story-visual w-1/2 h-dvh min-h-dvh sticky top-0 bg-brand-paper border-l border-brand-ink items-center justify-center overflow-hidden">
                     {/* Chapter Visuals */}
-                    <div className="sticky top-0 h-[100dvh] min-h-[100dvh] w-full flex items-center justify-center p-8">
+                    <div className="sticky top-0 h-dvh min-h-dvh w-full flex items-center justify-center p-8">
                         <m.div
                             whileHover={prefersReducedMotion ? undefined : { scale: 1.02, transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] } }}
                             whileTap={prefersReducedMotion ? undefined : { scale: 0.98, transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] } }}

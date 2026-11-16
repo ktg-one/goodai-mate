@@ -50,7 +50,7 @@ export function TechSpecs() {
                             </div>
 
                             {/* Animated Underline / Separator Path */}
-                            <div className="mt-6 relative w-full h-[2px] overflow-hidden">
+                            <div className="mt-6 relative w-full h-0.5 overflow-hidden">
                                 <div className="absolute inset-0 bg-brand-paper/20" />
                                 <m.div
                                     initial={{ scaleX: 0 }}

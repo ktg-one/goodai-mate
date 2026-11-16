@@ -12,7 +12,7 @@ export const metadata = {
 
 export default function LabPage() {
   return (
-    <main className="min-h-[100dvh] py-16 px-4 bg-brand-paper text-brand-ink">
+    <main className="min-h-dvh py-16 px-4 bg-brand-paper text-brand-ink">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <Link

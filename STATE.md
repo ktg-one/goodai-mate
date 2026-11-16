@@ -1,32 +1,38 @@
 ---
-updated: 2026-11-05
-by: gemini-4-argon (Antigravity)
+updated: 2026-11-16
+by: claude-fable-5-2 (Claude Code, WSL)
 surface: goodai-studio
 ---
 # STATE: goodai-studio
-Full rewrite every time it's updated: current truth only, no history. History lives in git, `memory/` and the weekly catch-ups. Max ~300 words. Detailed feature map: `state/WEBSITE-STATE.md`.
+Full rewrite on every update. Feature map: `state/WEBSITE-STATE.md`.
 
 ## Now
-goodai.au (Next 16, Vercel `goodai-mate`). Merged `feat/under-the-hood` into `main` and pushed. `bun run check`, `bun run build`, and `bun x react-doctor@latest .` (100/100, 0 issues) green: 0 lint errors, **52/52 tests** (including `tests/site-contracts.test.ts` enforcing `schemas/site-contracts.ts`).
+goodai.au (Next 16.4.3, Vercel `goodai-mate`). The site now builds in WSL at `~/projects/sites/goodai-mate`. `main` equals `origin/main` (`ae3e4cf`). Work sits on local branch `chore/wsl-harness-align`, not pushed. On that branch: `bun run check` green (0 lint errors, 45 warnings, 55/55 tests) and `bun run build` green.
 
-## Shipped (on `main`)
-- Dedicated `schemas/site-contracts.ts` and `tests/site-contracts.test.ts` locking in site invariants (no homepage sketch images in blog posts, `"Blog"` nav label, `/admin-engine` forbidden strings + brand logo cards, and `/api/chat/session` 25s NAS wake-up timeout + zero-503 fallback)
-- Renamed `"Field notes"` / `"Notes"` to `"Blog"` across `Shell.tsx`, `app/blog/page.tsx`, `app/blog/[slug]/page.tsx`, and `lib/instatic.ts`, and removed `/images/book/*-sketch.webp` fallbacks so blog posts only render `coverImage` when set in the Instatic CMS
-- Hardened `/api/chat/session` (`25_000`ms timeout for NAS `gai-llama` wake-up, `?warm=1` pre-warm ping, and `buildSmartFallbackReply` zero-503 fallback) + fixed `<elevenlabs-convai>` widget overlap in `ElevenLabsMascot.tsx`
-- Trimmed `/admin-engine` header to `The Good’Ai machine.` + `A depiction of our process.`, hover-expand 3D labels, inline SVG brand logos (`ElevenLabs`, `OpenAI`, `Gemini`, `xAI`, `n8n`, `Google Cloud`), and removed `GCP Sydney`, `Your existing tools`, `APIs & webhooks`, and `Opportunity audit`
-- AI SDK (`ai` + `@ai-sdk/openai-compatible`) + ElevenLabs/Private AI switch at **React Doctor 100 / 100**
+## Shipped (branch only, not on `main`)
+- WSL install fixed: `node_modules` was a stale Next 15.5 tree; `bun install --frozen-lockfile` restored the locked versions.
+- Harness template v2 installed (adds only). `python3 scripts/harness_lint.py .` is clean.
+- `CLAUDE.md` is now the pointer `@AGENTS.md`; its guidance moved verbatim to `docs/AGENT-GUIDE.md`; `AGENTS.md` gained a Production section.
+- ESLint ignores `public/BRAND-CANON-JULY2026/**` (source of the only 2 lint errors); eight arbitrary Tailwind classes swapped for exact equivalents (warnings 62 to 45).
 
 ## Open (max 5)
-- Upload blog cover images directly in the Instatic CMS (`https://ktg-nas.blowfish-snares.ts.net/admin`) for posts that want artwork
-- Optional: wire inline 1-field email input on `/blog` & `/blog/[slug]` ("Subscribe to newsletter" -> posts to `/api/contact`)
-- Untracked `.agents/skills/*`, `.claude/skills/*`, `agent/` (~250 files from `bunx skills add`) | gitignore vs commit
+- Review and merge `chore/wsl-harness-align` | Kev's call, `main` is production
+- Harness files are untracked (`agents/`, `tasks/`, `templates/`, `memory/`, `_outbox/`, harness `scripts/*.py`, `.claude/`, `.agents/skills/*`) | gitignore vs commit
+- Untracked `public/BRAND-CANON-JULY2026/`, `public/assets/`, `public/_merge-shots/`, `archive/`, `.planning/tmp-*` | keep, ignore or delete
+- Optional: one-field newsletter input on `/blog` posting to `/api/contact`
+- Blog cover images: upload in Instatic
 
-## In the works...
-- About page (founder talk on human-centric AI policy) | needs Kev's policy draft | nothing tried yet
+## Blocked
+None.
 
 ## Decisions
-- `schemas/site-contracts.ts` + `tests/site-contracts.test.ts` are enforced by `bun run test` / `bun run check` so agents cannot regress blog imagery, nav labels, `/admin-engine` copy, or chatbot reliability
-- Blog images come exclusively from Instatic CMS (`coverImage: string | null`), never homepage scroll-story sketches
+- `schemas/site-contracts.ts` and `tests/site-contracts.test.ts` guard nav labels, blog imagery, `/admin-engine` copy and chat reliability.
+- Blog images come only from Instatic (`coverImage`), never homepage sketches.
+- Free workers execute from cards in `_outbox/<task>/`; a different CLI checks. Log: `_outbox/delegation-log.md`.
 
 ## Next action
-Upload any desired blog cover images in Instatic CMS (`https://ktg-nas.blowfish-snares.ts.net/admin`).
+Kev reviews the branch diff, then decides merge and the gitignore question.
+
+## Questions for Kev
+- Commit the harness files into this repo, or gitignore them?
+- Is `public/BRAND-CANON-JULY2026/` meant to ship with the site? It is in `public/`, so a commit would publish it.

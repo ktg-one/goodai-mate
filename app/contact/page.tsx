@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="min-h-[100dvh] bg-brand-paper text-brand-ink py-16 px-4">
+    <main className="min-h-dvh bg-brand-paper text-brand-ink py-16 px-4">
       <div className="mx-auto max-w-5xl">
         <Link href="/" className="back-link">
           <ArrowLeft size={17} />
