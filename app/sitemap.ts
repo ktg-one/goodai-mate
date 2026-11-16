@@ -3,7 +3,7 @@ import { services } from "@/lib/services";
 import { getPublishedPosts } from "@/lib/instatic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://goodai.au";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.goodai.au";
   const now = new Date();
   const posts = await getPublishedPosts();
 

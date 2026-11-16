@@ -16,10 +16,10 @@ const Analytics = dynamic(() => import("@vercel/analytics/next").then((m) => m.A
 
 function resolveSiteUrl() {
   try {
-    const raw = process.env.NEXT_PUBLIC_SITE_URL || "https://goodai.au";
+    const raw = process.env.NEXT_PUBLIC_SITE_URL || "https://www.goodai.au";
     return new URL(raw).toString();
   } catch {
-    return "https://goodai.au";
+    return "https://www.goodai.au";
   }
 }
 

@@ -6,6 +6,7 @@ import { SussTheFussCard } from "@/components/studio/SussTheFussCard";
 export const metadata = {
   title: "Contact Good'Ai",
   description: "Tell us what’s taking up your afternoons and where to send the fix.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {
