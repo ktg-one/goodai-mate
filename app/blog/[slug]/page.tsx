@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { getPublishedPostBySlug, getPublishedPosts } from "@/lib/instatic";
+import { localBlogImage } from "@/lib/blog-images";
 import { SURVEY_URL } from "@/lib/links";
 import { ogDefaults, twitterDefaults } from "@/lib/seo";
 
@@ -231,7 +232,7 @@ function renderMarkdownBlocks(markdown: string, postTitle: string): ReactNode[] 
       blocks.push(
         <figure key={key++} className="blog-figure">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={rawSrc} alt={imgMatch[1] || "Blog illustration"} loading="lazy" />
+          <img src={localBlogImage(rawSrc)} alt={imgMatch[1] || "Blog illustration"} loading="lazy" />
           {imgMatch[1] && <figcaption>{imgMatch[1]}</figcaption>}
         </figure>,
       );
@@ -359,7 +360,7 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="blog-article-arch">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={post.coverImage}
+                src={localBlogImage(post.coverImage)}
                 alt={post.title}
                 className="blog-arch-sketch"
               />
