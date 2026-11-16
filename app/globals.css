@@ -2085,7 +2085,7 @@ em {
 
 @font-face {
   font-family: "Vibes";
-  src: url("/fonts/Vibes/Vibes-Regular.ttf") format("truetype");
+  src: url("/fonts/Vibes/Vibes-Regular.woff2") format("woff2"), url("/fonts/Vibes/Vibes-Regular.ttf") format("truetype");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -3051,6 +3051,12 @@ a.stack-card:focus-visible {
   padding: 2px 6px;
   border-radius: 6px;
   background: var(--blog-sage);
+  /* Long unbroken runs (rule lines, paths) wrap instead of widening the page. */
+  overflow-wrap: anywhere;
+}
+.blog-body pre {
+  max-width: 100%;
+  overflow-x: auto;
 }
 .blog-code {
   padding: 18px 22px;

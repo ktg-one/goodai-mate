@@ -11,6 +11,12 @@ Marketing site. Keep `Good'Ai` spelling. Never invent testimonials, outcomes, pr
 - Any motion work: responsive, keyboard-focusable, works with `prefers-reduced-motion`.
 - `ProductDemo.tsx` uses example data — never present it as live operational data.
 
+## Production
+
+- `main` is production (https://www.goodai.au, Vercel project `goodai-mate`). Work on a branch; merge only after `bun run check` and `bun run build` pass.
+- Package manager is bun only. Never add `package-lock.json` or `pnpm-lock.yaml`.
+- Commands, lint contract, design tokens, architecture and planning state: read `docs/AGENT-GUIDE.md` before changing code.
+
 ## Verify before handing off
 
 ```bash

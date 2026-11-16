@@ -52,7 +52,7 @@ export function CTA() {
     const shouldReduceMotion = useReducedMotion();
 
     return (
-        <section className="min-h-[100dvh] flex flex-col justify-center py-24 px-6 bg-brand-ink text-brand-paper overflow-hidden relative border-y border-brand-paper/20">
+        <section className="min-h-dvh flex flex-col justify-center py-24 px-6 bg-brand-ink text-brand-paper overflow-hidden relative border-y border-brand-paper/20">
             <div className="max-w-4xl mx-auto text-center relative z-10 w-full">
                 <m.div
                     {...getFadeUpProps(shouldReduceMotion, 15)}

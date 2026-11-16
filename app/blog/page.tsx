@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { getPublishedPosts } from "@/lib/instatic";
+import { localBlogImage } from "@/lib/blog-images";
 import { SURVEY_URL } from "@/lib/links";
 import { ogDefaults, twitterDefaults } from "@/lib/seo";
 
@@ -124,7 +125,7 @@ export default async function BlogIndexPage() {
                     <span className="blog-sun-crop" aria-hidden="true" />
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={featured.coverImage}
+                      src={localBlogImage(featured.coverImage)}
                       alt={featured.title}
                       className="blog-card-img"
                       loading="eager"
@@ -161,7 +162,7 @@ export default async function BlogIndexPage() {
                       <span className="blog-card-sun" aria-hidden="true" />
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={post.coverImage}
+                        src={localBlogImage(post.coverImage)}
                         alt={post.title}
                         className="blog-card-img"
                         loading="lazy"

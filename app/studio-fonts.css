@@ -3,14 +3,14 @@
   font-style: italic;
   font-weight: 100 900;
   font-display: swap;
-  src: url('/fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf') format('truetype');
+  src: url('/fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.woff2') format('woff2'), url('/fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Fraunces';
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
-  src: url('/fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf') format('truetype');
+  src: url('/fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.woff2') format('woff2'), url('/fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf') format('truetype');
 }
 
 @font-face {
@@ -18,26 +18,26 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(/fonts/Manrope/Manrope-Regular.ttf) format('truetype');
+  src: url(/fonts/Manrope/Manrope-Regular.woff2) format('woff2'), url(/fonts/Manrope/Manrope-Regular.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(/fonts/Manrope/Manrope-Medium.ttf) format('truetype');
+  src: url(/fonts/Manrope/Manrope-Medium.woff2) format('woff2'), url(/fonts/Manrope/Manrope-Medium.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(/fonts/Manrope/Manrope-SemiBold.ttf) format('truetype');
+  src: url(/fonts/Manrope/Manrope-SemiBold.woff2) format('woff2'), url(/fonts/Manrope/Manrope-SemiBold.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url(/fonts/Manrope/Manrope-Bold.ttf) format('truetype');
+  src: url(/fonts/Manrope/Manrope-Bold.woff2) format('woff2'), url(/fonts/Manrope/Manrope-Bold.ttf) format('truetype');
 }

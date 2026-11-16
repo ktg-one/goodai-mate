@@ -12,6 +12,8 @@ import { ApproachSteps } from "@/components/sections/ApproachSteps";
 const ScrollStory = dynamic(() => import("@/components/studio/ScrollStory").then((m) => m.ScrollStory));
 const PerthSketchbook = dynamic(() => import("@/components/studio/PerthSketchbook").then((m) => m.PerthSketchbook));
 
+export const metadata = { alternates: { canonical: "/" } };
+
 export default function Home() {
   return <div className="home-page">
     <PerthSketchbook />
