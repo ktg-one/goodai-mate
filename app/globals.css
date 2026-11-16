@@ -3051,6 +3051,12 @@ a.stack-card:focus-visible {
   padding: 2px 6px;
   border-radius: 6px;
   background: var(--blog-sage);
+  /* Long unbroken runs (rule lines, paths) wrap instead of widening the page. */
+  overflow-wrap: anywhere;
+}
+.blog-body pre {
+  max-width: 100%;
+  overflow-x: auto;
 }
 .blog-code {
   padding: 18px 22px;

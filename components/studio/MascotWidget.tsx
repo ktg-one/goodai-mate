@@ -164,8 +164,8 @@ export function MascotWidget() {
             title="Say g'day to Goodie!"
           >
             <Mascot
-              directions="/mascots/goodie/directions.png"
-              reactions="/mascots/goodie/reactions.png"
+              directions="/mascots/goodie/directions.webp"
+              reactions="/mascots/goodie/reactions.webp"
               size={110}
               label="Goodie — quick actions"
             />
