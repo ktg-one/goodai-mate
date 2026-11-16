@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { services } from "@/lib/services";
 import { getPublishedPosts } from "@/lib/instatic";
 
+export const revalidate = 60; // Re-run like /blog: an empty CMS answer must not stick in the cache.
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.goodai.au";
   const now = new Date();

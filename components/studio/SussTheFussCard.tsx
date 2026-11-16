@@ -83,7 +83,7 @@ export function SussTheFussCard() {
           <span className="step-label">
             <strong>1.</strong> What’s taking up your afternoons?
           </span>
-          <div className="suss-chips" role="group" aria-label="Common business headaches">
+          <div className="suss-chips pr-24 md:pr-0" role="group" aria-label="Common business headaches">
             {HEADACHES.map((h) => {
               const isSelected = selected.includes(h.id);
               const Icon = h.icon;

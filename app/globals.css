@@ -2085,7 +2085,7 @@ em {
 
 @font-face {
   font-family: "Vibes";
-  src: url("/fonts/Vibes/Vibes-Regular.ttf") format("truetype");
+  src: url("/fonts/Vibes/Vibes-Regular.woff2") format("woff2"), url("/fonts/Vibes/Vibes-Regular.ttf") format("truetype");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
